@@ -15,7 +15,6 @@ public enum ProjectLayer: String {
     case InjectionManager
     case Infrastructure
 
-    case Base
     case Feature
     case Data
     case Domain
@@ -26,6 +25,7 @@ public enum ProjectLayer: String {
 
 // MARK: - Domain
 public enum ProjectDomain: String {
+    case Base
     case Splash
     case Onboarding
     case Home
@@ -37,12 +37,12 @@ public extension TargetDependency {
     enum Project {
         public struct InjectionManager {}
         public struct Infrastructure {}
-        public struct Base {}
         public enum Feature {
             public struct Data {}
             public struct Domain {}
             public struct Presentation {}
         }
+
         public struct LibraryManager {}
     }
 }
@@ -59,29 +59,16 @@ public extension TargetDependency.Project.Infrastructure {
     )
 }
 
-// MARK: - Base
-public extension TargetDependency.Project.Base {
-    static let Data: TargetDependency = .project(
-        layer: .Base,
-        name: "BaseData"
-    )
-
-    static let Domain: TargetDependency = .project(
-        layer: .Base,
-        name: "BaseDomain"
-    )
-
-    static let Presentation: TargetDependency = .project(
-        layer: .Base,
-        name: "BasePresentation"
-    )
-}
-
 // MARK: - Feature
 public extension TargetDependency.Project.Feature {
     static let Features: TargetDependency = .project(
         layer: .Feature,
         name: "Features"
+    )
+    
+    static let Base: TargetDependency = .project(
+        layer: .Feature,
+        name: "Base"
     )
 
     static let Splash: TargetDependency = .project(
@@ -111,6 +98,12 @@ public extension TargetDependency.Project.Feature {
 
 // MARK: - Data
 public extension TargetDependency.Project.Feature.Data {
+    static let BaseData: TargetDependency = .project(
+        domain: .Base,
+        layer: .Data,
+        name: "BaseData"
+    )
+
     static let SplashData: TargetDependency = .project(
         domain: .Splash,
         layer: .Data,
@@ -138,6 +131,12 @@ public extension TargetDependency.Project.Feature.Data {
 
 // MARK: - Domain
 public extension TargetDependency.Project.Feature.Domain {
+    static let BaseDomain: TargetDependency = .project(
+        domain: .Base,
+        layer: .Domain,
+        name: "BaseDomain"
+    )
+
     static let SplashDomain: TargetDependency = .project(
         domain: .Splash,
         layer: .Domain,
@@ -165,6 +164,12 @@ public extension TargetDependency.Project.Feature.Domain {
 
 // MARK: - Presentation
 public extension TargetDependency.Project.Feature.Presentation {
+    static let BasePresentation: TargetDependency = .project(
+        domain: .Base,
+        layer: .Presentation,
+        name: "BasePresentation"
+    )
+
     static let SplashPresentation: TargetDependency = .project(
         domain: .Splash,
         layer: .Presentation,

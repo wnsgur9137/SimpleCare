@@ -3,6 +3,7 @@ import PackageDescription
 
 #if TUIST
     import ProjectDescription
+    import ProjectDescriptionHelpers
 
     let packageSettings = PackageSettings(
         productTypes: [
