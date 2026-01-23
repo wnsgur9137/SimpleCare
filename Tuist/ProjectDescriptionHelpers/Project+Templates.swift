@@ -59,6 +59,147 @@ public let defaultSettings: Settings = .settings(
 
 // MARK: - Project
 public extension Project {
+    static func feature(
+        name: String,
+        destinations: Destinations = .iOS,
+        product: Product = .staticFramework,
+        organizationName: String = TuistConstants.organizationName,
+        deploymentTargets: DeploymentTargets? = TuistConstants.deploymentTarget,
+        dataDependencies: [TargetDependency] = [],
+        domainDependencies: [TargetDependency] = [],
+        presentationDependencies: [TargetDependency] = [],
+        hasAggregator: Bool = true,
+        hasTest: Bool = false,
+        hasDemoApp: Bool = false
+    ) -> Project {
+        let settings: Settings = defaultSettings
+
+        let domainTarget: Target = .target(
+            name: "\(name)Domain",
+            destinations: destinations,
+            product: product,
+            bundleId: "\(organizationName).\(name)Domain",
+            deploymentTargets: deploymentTargets,
+            infoPlist: .default,
+            sources: ["Domain/Sources/**"],
+            dependencies: domainDependencies,
+            settings: settings
+        )
+
+        let dataTarget: Target = .target(
+            name: "\(name)Data",
+            destinations: destinations,
+            product: product,
+            bundleId: "\(organizationName).\(name)Data",
+            deploymentTargets: deploymentTargets,
+            infoPlist: .default,
+            sources: ["Data/Sources/**"],
+            dependencies: [.target(name: "\(name)Domain")] + dataDependencies,
+            settings: settings
+        )
+
+        let presentationTarget: Target = .target(
+            name: "\(name)Presentation",
+            destinations: destinations,
+            product: product,
+            bundleId: "\(organizationName).\(name)Presentation",
+            deploymentTargets: deploymentTargets,
+            infoPlist: .default,
+            sources: ["Presentation/Sources/**"],
+            dependencies: [.target(name: "\(name)Domain")] + presentationDependencies,
+            settings: settings
+        )
+
+        var targets: [Target] = [dataTarget, domainTarget, presentationTarget]
+
+        if hasAggregator {
+            let aggregatorTarget: Target = .target(
+                name: name,
+                destinations: destinations,
+                product: product,
+                bundleId: "\(organizationName).\(name)",
+                deploymentTargets: deploymentTargets,
+                infoPlist: .default,
+                sources: ["Sources/**"],
+                dependencies: [
+                    .target(name: "\(name)Data"),
+                    .target(name: "\(name)Domain"),
+                    .target(name: "\(name)Presentation")
+                ],
+                settings: settings
+            )
+            targets.append(aggregatorTarget)
+        }
+
+        let demoAppTarget: Target = .target(
+            name: "\(name)DemoApp",
+            destinations: destinations,
+            product: .app,
+            bundleId: "\(organizationName).\(name)DemoApp",
+            deploymentTargets: deploymentTargets,
+            infoPlist: .extendingDefault(with: defaultInfoPlist),
+            sources: ["Demo/**"],
+            resources: ["Demo/Resources/**"],
+            dependencies: hasAggregator
+                ? [.target(name: name)]
+                : [
+                    .target(name: "\(name)Data"),
+                    .target(name: "\(name)Domain"),
+                    .target(name: "\(name)Presentation")
+                ],
+            settings: settings
+        )
+
+        let testTargetDependencies: [TargetDependency] = hasDemoApp
+            ? [.target(name: "\(name)DemoApp")]
+            : hasAggregator
+            ? [.target(name: name)]
+            : [
+                .target(name: "\(name)Data"),
+                .target(name: "\(name)Domain"),
+                .target(name: "\(name)Presentation")
+            ]
+
+        let testTarget: Target = .target(
+            name: "\(name)Tests",
+            destinations: destinations,
+            product: .unitTests,
+            bundleId: "\(organizationName).\(name)Tests",
+            deploymentTargets: deploymentTargets,
+            infoPlist: .default,
+            sources: ["Tests/**"],
+            dependencies: testTargetDependencies
+        )
+
+        let schemes: [Scheme] = hasDemoApp
+            ? [
+                .makeScheme(target: .DEV, name: name),
+                .makeDemoScheme(target: .DEV, name: name)
+            ]
+            : [
+                .makeScheme(target: .DEV, name: name)
+            ]
+
+        if hasTest {
+            targets.append(testTarget)
+        }
+        if hasDemoApp {
+            targets.append(demoAppTarget)
+        }
+
+        return Project(
+            name: name,
+            organizationName: organizationName,
+            options: .options(
+                defaultKnownRegions: TuistConstants.defaultKnownRegions,
+                developmentRegion: TuistConstants.developmentRegion
+            ),
+            settings: settings,
+            targets: targets,
+            schemes: schemes
+        )
+    }
+
     static func project(
         name: String,
         destinations: Destinations = .iOS,

@@ -16,9 +16,6 @@ public enum ProjectLayer: String {
     case Infrastructure
 
     case Feature
-    case Data
-    case Domain
-    case Presentation
 
     case LibraryManager
 }
@@ -65,32 +62,23 @@ public extension TargetDependency.Project.Feature {
         layer: .Feature,
         name: "Features"
     )
-    
-    static let Base: TargetDependency = .project(
-        layer: .Feature,
-        name: "Base"
-    )
 
     static let Splash: TargetDependency = .project(
-        layer: .Feature,
         domain: .Splash,
         name: "Splash"
     )
 
     static let Onboarding: TargetDependency = .project(
-        layer: .Feature,
         domain: .Onboarding,
         name: "Onboarding"
     )
 
     static let Home: TargetDependency = .project(
-        layer: .Feature,
         domain: .Home,
         name: "Home"
     )
 
     static let Settings: TargetDependency = .project(
-        layer: .Feature,
         domain: .Settings,
         name: "Settings"
     )
@@ -100,31 +88,26 @@ public extension TargetDependency.Project.Feature {
 public extension TargetDependency.Project.Feature.Data {
     static let BaseData: TargetDependency = .project(
         domain: .Base,
-        layer: .Data,
         name: "BaseData"
     )
 
     static let SplashData: TargetDependency = .project(
         domain: .Splash,
-        layer: .Data,
         name: "SplashData"
     )
 
     static let OnboardingData: TargetDependency = .project(
         domain: .Onboarding,
-        layer: .Data,
         name: "OnboardingData"
     )
 
     static let HomeData: TargetDependency = .project(
         domain: .Home,
-        layer: .Data,
         name: "HomeData"
     )
 
     static let SettingsData: TargetDependency = .project(
         domain: .Settings,
-        layer: .Data,
         name: "SettingsData"
     )
 }
@@ -133,31 +116,26 @@ public extension TargetDependency.Project.Feature.Data {
 public extension TargetDependency.Project.Feature.Domain {
     static let BaseDomain: TargetDependency = .project(
         domain: .Base,
-        layer: .Domain,
         name: "BaseDomain"
     )
 
     static let SplashDomain: TargetDependency = .project(
         domain: .Splash,
-        layer: .Domain,
         name: "SplashDomain"
     )
 
     static let OnboardingDomain: TargetDependency = .project(
         domain: .Onboarding,
-        layer: .Domain,
         name: "OnboardingDomain"
     )
 
     static let HomeDomain: TargetDependency = .project(
         domain: .Home,
-        layer: .Domain,
         name: "HomeDomain"
     )
 
     static let SettingsDomain: TargetDependency = .project(
         domain: .Settings,
-        layer: .Domain,
         name: "SettingsDomain"
     )
 }
@@ -166,31 +144,26 @@ public extension TargetDependency.Project.Feature.Domain {
 public extension TargetDependency.Project.Feature.Presentation {
     static let BasePresentation: TargetDependency = .project(
         domain: .Base,
-        layer: .Presentation,
         name: "BasePresentation"
     )
 
     static let SplashPresentation: TargetDependency = .project(
         domain: .Splash,
-        layer: .Presentation,
         name: "SplashPresentation"
     )
 
     static let OnboardingPresentation: TargetDependency = .project(
         domain: .Onboarding,
-        layer: .Presentation,
         name: "OnboardingPresentation"
     )
 
     static let HomePresentation: TargetDependency = .project(
         domain: .Home,
-        layer: .Presentation,
         name: "HomePresentation"
     )
 
     static let SettingsPresentation: TargetDependency = .project(
         domain: .Settings,
-        layer: .Presentation,
         name: "SettingsPresentation"
     )
 }
@@ -242,31 +215,12 @@ public extension TargetDependency {
     }
 
     static func project(
-        layer: ProjectLayer,
         domain: ProjectDomain,
         name: String
     ) -> Self {
         return .project(
             target: name,
-            path: .relative(
-                to: layer,
-                domain: domain,
-                name: name
-            )
-        )
-    }
-
-    static func project(
-        domain: ProjectDomain,
-        layer: ProjectLayer,
-        name: String
-    ) -> Self {
-        return .project(
-            target: name,
-            path: .relative(
-                domain: domain,
-                layer: layer
-            )
+            path: .relativeFeature(domain: domain)
         )
     }
 

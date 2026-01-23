@@ -9,11 +9,15 @@ import Foundation
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project: Project = .project(
-    name: "OnboardingPresentation",
-    product: .staticFramework,
-    dependencies: [
+let project: Project = .feature(
+    name: "Home",
+    dataDependencies: [
+        .Project.Feature.Data.BaseData,
+    ],
+    domainDependencies: [
+        .Project.Feature.Domain.BaseDomain,
+    ],
+    presentationDependencies: [
         .Project.Feature.Presentation.BasePresentation,
-        .Project.Feature.Domain.OnboardingDomain,
     ]
 )
