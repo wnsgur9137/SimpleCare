@@ -1,0 +1,153 @@
+{
+  "reviewRules": {
+    "projectName": "${PROJECT_NAME:-iOS Project}",
+    "projectType": "${PROJECT_TYPE:-ios-swift}",
+    "architecture": "${ARCHITECTURE:-clean-architecture}",
+    "patterns": ["${PATTERN_1:-coordinator}", "${PATTERN_2:-mvvm}", "${PATTERN_3:-di-container}"],
+    "swiftConventions": {
+      "naming": {
+        "classesStructs": "PascalCase",
+        "variablesFunctions": "camelCase",
+        "enumCases": "camelCase",
+        "constants": "camelCase",
+        "protocols": "PascalCase"
+      },
+      "prohibitedPatterns": [
+        "forEach.*addSubview",
+        "hardcoded_strings_in_ui",
+        "force_unwrap_in_production",
+        "strong_retain_cycles"
+      ],
+      "recommendedPatterns": [
+        "individual_addsubview_calls",
+        "weak_delegate_references",
+        "proper_error_handling"
+      ]
+    },
+    "cleanArchitecture": {
+      "enforceLayerSeparation": "${ENFORCE_LAYERS:-true}",
+      "dataLayer": ["Repository", "DataSource", "DTO", "Model"],
+      "domainLayer": ["UseCase", "Entity", "Repository", "Service"],
+      "presentationLayer": ["ViewController", "ViewModel", "Reactor", "View", "Coordinator"],
+      "dependencyDirection": "data->domain<-presentation",
+      "allowedCrossLayerImports": {
+        "data": ["Foundation", "Combine", "RxSwift"],
+        "domain": ["Foundation", "Combine", "RxSwift"],
+        "presentation": ["UIKit", "SwiftUI", "Foundation", "Combine", "RxSwift"]
+      }
+    },
+    "designSystem": {
+      "enforceConsistency": "${DESIGN_CONSISTENCY:-true}",
+      "brandingColors": "${BRANDING_COLORS:-true}",
+      "consistentStyling": "${CONSISTENT_STYLING:-true}",
+      "componentLibrary": "${COMPONENT_LIBRARY:-true}",
+      "customRules": {
+        "shadowEffects": "consistent_shadow_patterns",
+        "cornerRadius": "standardized_corner_radius",
+        "spacing": "8pt_grid_system",
+        "typography": "consistent_font_usage"
+      }
+    },
+    "localization": {
+      "requireNSLocalizedString": "${REQUIRE_LOCALIZATION:-true}",
+      "noHardcodedStrings": "${NO_HARDCODED_STRINGS:-true}",
+      "supportedLocales": ["${LOCALE_1:-en_US}", "${LOCALE_2:-ko_KR}"],
+      "localizationKeys": {
+        "format": "snake_case",
+        "structure": "module.screen.element"
+      }
+    },
+    "memoryManagement": {
+      "weakDelegates": "${WEAK_DELEGATES:-true}",
+      "avoidRetainCycles": "${AVOID_RETAIN_CYCLES:-true}",
+      "properDisposal": "${PROPER_DISPOSAL:-true}",
+      "memoryLeakDetection": "${MEMORY_LEAK_DETECTION:-true}"
+    },
+    "testing": {
+      "businessLogicTests": "${BUSINESS_LOGIC_TESTS:-true}",
+      "mockUsage": "${MOCK_USAGE:-true}",
+      "coverageThreshold": "${COVERAGE_THRESHOLD:-70}",
+      "testingFrameworks": ["XCTest", "${TESTING_FRAMEWORK_2:-Quick}", "${TESTING_FRAMEWORK_3:-Nimble}"],
+      "testCategories": {
+        "unit": "business_logic_domain_layer",
+        "integration": "repository_network_layer",
+        "ui": "critical_user_flows_only"
+      }
+    },
+    "performance": {
+      "imageOptimization": "${IMAGE_OPTIMIZATION:-true}",
+      "networkCaching": "${NETWORK_CACHING:-true}",
+      "memoryUsage": "${MEMORY_MONITORING:-true}",
+      "batteryEfficiency": "${BATTERY_EFFICIENCY:-true}",
+      "loadTimeTargets": {
+        "appLaunch": "${LAUNCH_TIME:-2000}ms",
+        "screenTransition": "${TRANSITION_TIME:-300}ms"
+      }
+    },
+    "security": {
+      "noSecretsInCode": "${NO_SECRETS:-true}",
+      "secureDataHandling": "${SECURE_DATA:-true}",
+      "keychain": "${KEYCHAIN_USAGE:-true}",
+      "networkSecurity": "${NETWORK_SECURITY:-true}"
+    }
+  },
+  "reviewCriteria": {
+    "architectureCompliance": {
+      "weight": "${ARCHITECTURE_WEIGHT:-30}",
+      "checks": [
+        "layer_separation",
+        "dependency_injection",
+        "pattern_consistency",
+        "solid_principles"
+      ]
+    },
+    "codeQuality": {
+      "weight": "${CODE_QUALITY_WEIGHT:-25}",
+      "checks": [
+        "swift_conventions",
+        "code_readability",
+        "error_handling",
+        "performance_optimization"
+      ]
+    },
+    "uiConsistency": {
+      "weight": "${UI_WEIGHT:-20}",
+      "checks": [
+        "design_system_compliance",
+        "responsive_design",
+        "accessibility",
+        "user_experience"
+      ]
+    },
+    "maintainability": {
+      "weight": "${MAINTAINABILITY_WEIGHT:-15}",
+      "checks": [
+        "localization",
+        "documentation",
+        "test_coverage",
+        "code_modularity"
+      ]
+    },
+    "security": {
+      "weight": "${SECURITY_WEIGHT:-10}",
+      "checks": [
+        "data_protection",
+        "memory_safety",
+        "network_security",
+        "authentication"
+      ]
+    }
+  },
+  "automationRules": {
+    "autoReviewTriggers": ["pull_request", "push_to_main"],
+    "reviewDepth": "${REVIEW_DEPTH:-comprehensive}",
+    "commentStyle": "${COMMENT_STYLE:-constructive}",
+    "includeExamples": "${INCLUDE_EXAMPLES:-true}",
+    "severityLevels": {
+      "critical": ["security_vulnerabilities", "crashes", "data_loss"],
+      "high": ["architecture_violations", "memory_leaks", "performance_issues"],
+      "medium": ["code_style_violations", "missing_tests", "accessibility_issues"],
+      "low": ["documentation_gaps", "minor_optimizations", "formatting"]
+    }
+  }
+}
