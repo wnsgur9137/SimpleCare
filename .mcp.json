@@ -8,6 +8,21 @@
         "https://sosumi.ai/mcp"
       ]
     },
+    "github": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${WNSGUR9137_GITHUB_TOKEN}"
+      }
+    },
     "shrimp-task-manager": {
       "command": "node",
       "args": ["/mcp-shrimp-task-manager/dist/index.js"],
