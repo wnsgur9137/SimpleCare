@@ -10,10 +10,12 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 // MARK: - Scripts
-fileprivate let scripts: [TargetScript] = []
+private let scripts: [TargetScript] = [
+    .swiftLint
+]
 
 // MARK: - Targets
-fileprivate let targets: [Target] = [
+private let targets: [Target] = [
     .target(
         name: TuistConstants.projectName,
         destinations: .iOS,
@@ -98,7 +100,7 @@ fileprivate let targets: [Target] = [
                         "PRODUCT_NAME": "\(TuistConstants.projectName)Tests"
                     ],
                     xcconfig: .xcconfig(.PROD)
-                ),
+                )
             ]
         ),
         launchArguments: [
@@ -111,7 +113,7 @@ fileprivate let targets: [Target] = [
 ]
 
 // MARK: - Schemes
-fileprivate let schemes: [Scheme] = []
+private let schemes: [Scheme] = []
 
 // MARK: - Project
 let project: Project = .init(
@@ -126,4 +128,3 @@ let project: Project = .init(
     schemes: schemes,
     additionalFiles: []
 )
-

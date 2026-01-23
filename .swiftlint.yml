@@ -1,0 +1,88 @@
+# SwiftLint Configuration for SimpleCare
+# https://realm.github.io/SwiftLint/rule-directory.html
+
+# 포함할 디렉토리
+included:
+  - Projects
+
+# 제외할 디렉토리
+excluded:
+  - Pods
+  - Frameworks
+  - .build
+  - Derived
+  - DerivedData
+  - .tuist
+
+# 비활성화할 규칙
+disabled_rules:
+  - trailing_whitespace
+  - todo
+  - force_cast
+  - force_try
+
+# 선택적으로 활성화할 규칙
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - explicit_init
+  - first_where
+  - sorted_first_last
+  - modifier_order
+  - closure_spacing
+  - operator_usage_whitespace
+
+# 규칙 설정
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+  ignores_urls: true
+
+file_length:
+  warning: 500
+  error: 1000
+
+type_body_length:
+  warning: 300
+  error: 500
+
+function_body_length:
+  warning: 60
+  error: 100
+
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - id
+    - i
+    - j
+    - k
+    - x
+    - y
+    - z
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 50
+    error: 60
+
+# 커스텀 규칙
+# custom_rules: # 예시
+#   force_https:
+#     name: "Force HTTPS over HTTP"
+#     regex: "(http://)"
+#     match_kinds: string
+#     message: "HTTP 대신 HTTPS를 사용하세요"k
+#     severity: warning
+

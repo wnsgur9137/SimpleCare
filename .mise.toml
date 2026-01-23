@@ -1,2 +1,8 @@
+[settings]
+always_keep_download = false
+always_keep_install = false
+verbose = false
+
 [tools]
 tuist = "4.32.1"
+swiftlint = "latest"
