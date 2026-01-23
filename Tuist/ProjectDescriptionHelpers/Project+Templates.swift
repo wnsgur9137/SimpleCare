@@ -110,7 +110,11 @@ public extension Project {
             settings: settings
         )
 
-        var targets: [Target] = [dataTarget, domainTarget, presentationTarget]
+        var targets: [Target] = [
+            dataTarget,
+            domainTarget,
+            presentationTarget
+        ]
 
         if hasAggregator {
             let aggregatorTarget: Target = .target(
