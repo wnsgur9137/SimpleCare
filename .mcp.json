@@ -1,5 +1,13 @@
 {
   "mcpServers": {
+    "sosumi": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://sosumi.ai/mcp"
+      ]
+    },
     "shrimp-task-manager": {
       "command": "node",
       "args": ["/mcp-shrimp-task-manager/dist/index.js"],
