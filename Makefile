@@ -2,9 +2,12 @@
 
 GRAPH_DIR := graphs
 
-.PHONY: graph graph-clean common-graph splash-graph splash-graph onboarding-graph home-graph settings-graph
+.PHONY: generate graph graph-clean common-graph splash-graph splash-graph onboarding-graph home-graph settings-graph
 
 graph: common-graph splash-graph onboarding-graph home-graph settings-graph
+
+generate:
+	TUIST_ROOT_DIR=${PWD} tuist generate
 
 # 전체 타겟 그래프
 common-graph:
