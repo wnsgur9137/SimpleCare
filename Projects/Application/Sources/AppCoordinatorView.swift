@@ -12,6 +12,16 @@ struct AppCoordinatorView: View {
     @ObservedObject var coordinator: AppCoordinator
 
     var body: some View {
-        coordinator.start()
+        Group {
+            if !coordinator.isSplashCompleted {
+                coordinator.makeSplash()
+            } else if !coordinator.isOnboardingCompleted {
+                coordinator.makeOnboarding()
+            } else {
+                coordinator.makeTabCoordinator()
+            }
+        }
+        .animation(.easeInOut, value: coordinator.isSplashCompleted)
+        .animation(.easeInOut, value: coordinator.isOnboardingCompleted)
     }
 }
