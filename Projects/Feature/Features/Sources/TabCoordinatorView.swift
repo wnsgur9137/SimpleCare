@@ -15,9 +15,13 @@ struct TabCoordinatorView: View {
         Group {
             if !coordinator.isSplashCompleted {
                 coordinator.makeSplash()
+            } else if !coordinator.isOnboardingCompleted {
+                coordinator.makeOnboarding()
             } else {
                 MainTabView(coordinator: coordinator)
             }
         }
+        .animation(.easeInOut, value: coordinator.isSplashCompleted)
+        .animation(.easeInOut, value: coordinator.isOnboardingCompleted)
     }
 }
