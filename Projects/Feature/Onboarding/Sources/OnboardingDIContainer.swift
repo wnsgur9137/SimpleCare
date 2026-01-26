@@ -12,7 +12,7 @@ import ProfileData
 import OnboardingPresentation
 
 /// 온보딩 DI Container
-public final class OnboardingDIContainer: DIContainer, @MainActor OnboardingCoordinatorDependency {
+public final class OnboardingDIContainer: DIContainer, OnboardingCoordinatorDependency {
     public struct Dependencies {
         public init() {}
     }
@@ -35,10 +35,12 @@ public final class OnboardingDIContainer: DIContainer, @MainActor OnboardingCoor
         SaveUserProfileUseCase(repository: makeProfileRepository())
     }
 
-    // MARK: - ViewModels
+    // MARK: - TCA Dependencies
 
-    @MainActor
-    public func makeOnboardingViewModel() -> OnboardingViewModel {
-        OnboardingViewModel(saveProfileUseCase: makeSaveProfileUseCase())
+    public var saveUserProfile: @Sendable (UserProfile) async throws -> Void {
+        let useCase = makeSaveProfileUseCase()
+        return { profile in
+            try await useCase.execute(profile: profile)
+        }
     }
 }

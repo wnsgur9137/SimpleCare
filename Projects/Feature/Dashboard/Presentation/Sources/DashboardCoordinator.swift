@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import BasePresentation
+import DashboardDomain
 
 public protocol DashboardCoordinatorDependency {
-    @MainActor func makeDashboardViewModel() -> DashboardViewModel
+    var userProfileId: UUID { get }
+    var goalCalories: Int { get }
+    var getDailySummary: @Sendable (Date, UUID, Int) async throws -> DailySummary { get }
+    var generateDailyInsight: @Sendable (DailySummary, [String]) async throws -> DailyInsight { get }
 }
 
 /// Dashboard Coordinator
@@ -22,11 +27,51 @@ public final class DashboardCoordinator: ObservableObject, Coordinator {
 
     @MainActor @ViewBuilder
     public func start() -> some View {
-        makeDashboardView()
+        DashboardContainerView(
+            userProfileId: dependencies.userProfileId,
+            goalCalories: dependencies.goalCalories,
+            getDailySummary: dependencies.getDailySummary,
+            generateDailyInsight: dependencies.generateDailyInsight
+        )
+    }
+}
+
+// MARK: - Container View
+
+private struct DashboardContainerView: View {
+    let userProfileId: UUID
+    let goalCalories: Int
+    let getDailySummary: @Sendable (Date, UUID, Int) async throws -> DailySummary
+    let generateDailyInsight: @Sendable (DailySummary, [String]) async throws -> DailyInsight
+
+    @State private var store: StoreOf<DashboardFeature>
+
+    init(
+        userProfileId: UUID,
+        goalCalories: Int,
+        getDailySummary: @escaping @Sendable (Date, UUID, Int) async throws -> DailySummary,
+        generateDailyInsight: @escaping @Sendable (DailySummary, [String]) async throws -> DailyInsight
+    ) {
+        self.userProfileId = userProfileId
+        self.goalCalories = goalCalories
+        self.getDailySummary = getDailySummary
+        self.generateDailyInsight = generateDailyInsight
+        self._store = State(
+            initialValue: Store(
+                initialState: DashboardFeature.State(
+                    userProfileId: userProfileId,
+                    goalCalories: goalCalories
+                )
+            ) {
+                DashboardFeature()
+            } withDependencies: {
+                $0.getDailySummary = getDailySummary
+                $0.generateDailyInsight = generateDailyInsight
+            }
+        )
     }
 
-    @MainActor @ViewBuilder
-    private func makeDashboardView() -> some View {
-        DashboardView(viewModel: dependencies.makeDashboardViewModel())
+    var body: some View {
+        DashboardView(store: store)
     }
 }

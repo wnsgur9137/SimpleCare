@@ -12,7 +12,7 @@ import ProfileData
 import ProfilePresentation
 
 /// 프로필 DI Container
-public final class ProfileDIContainer: DIContainer, @MainActor ProfileCoordinatorDependency {
+public final class ProfileDIContainer: DIContainer, ProfileCoordinatorDependency {
     public struct Dependencies {
         public init() {}
     }
@@ -26,31 +26,40 @@ public final class ProfileDIContainer: DIContainer, @MainActor ProfileCoordinato
     // MARK: - Repository
 
     private func makeRepository() -> UserProfileRepositoryProtocol {
-        return ProfileRepository()
+        ProfileRepository()
     }
 
     // MARK: - Use Cases
 
     private func makeGetProfileUseCase() -> GetUserProfileUseCaseProtocol {
-        return GetUserProfileUseCase(repository: makeRepository())
+        GetUserProfileUseCase(repository: makeRepository())
     }
 
     private func makeSaveProfileUseCase() -> SaveUserProfileUseCaseProtocol {
-        return SaveUserProfileUseCase(repository: makeRepository())
+        SaveUserProfileUseCase(repository: makeRepository())
     }
 
     private func makeUpdateProfileUseCase() -> UpdateUserProfileUseCaseProtocol {
-        return UpdateUserProfileUseCase(repository: makeRepository())
+        UpdateUserProfileUseCase(repository: makeRepository())
     }
 
-    // MARK: - ViewModels
+    // MARK: - TCA Dependencies
 
-    @MainActor
-    public func makeProfileViewModel() -> ProfileViewModel {
-        return ProfileViewModel(
-            getProfileUseCase: makeGetProfileUseCase(),
-            saveProfileUseCase: makeSaveProfileUseCase(),
-            updateProfileUseCase: makeUpdateProfileUseCase()
+    public var profileClient: ProfileClient {
+        let getUseCase = makeGetProfileUseCase()
+        let saveUseCase = makeSaveProfileUseCase()
+        let updateUseCase = makeUpdateProfileUseCase()
+
+        return ProfileClient(
+            getProfile: {
+                try await getUseCase.execute()
+            },
+            saveProfile: { profile in
+                try await saveUseCase.execute(profile: profile)
+            },
+            updateProfile: { profile in
+                try await updateUseCase.execute(profile: profile)
+            }
         )
     }
 }

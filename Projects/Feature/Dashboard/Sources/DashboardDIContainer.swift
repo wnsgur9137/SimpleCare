@@ -12,7 +12,7 @@ import DashboardData
 import DashboardPresentation
 
 /// Dashboard DI Container
-public final class DashboardDIContainer: DIContainer, @MainActor DashboardCoordinatorDependency {
+public final class DashboardDIContainer: DIContainer, DashboardCoordinatorDependency {
     public struct Dependencies {
         public let userProfileId: UUID
         public let goalCalories: Int
@@ -27,6 +27,16 @@ public final class DashboardDIContainer: DIContainer, @MainActor DashboardCoordi
 
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
+    }
+
+    // MARK: - DashboardCoordinatorDependency
+
+    public var userProfileId: UUID {
+        dependencies.userProfileId
+    }
+
+    public var goalCalories: Int {
+        dependencies.goalCalories
     }
 
     // MARK: - Repository
@@ -45,15 +55,19 @@ public final class DashboardDIContainer: DIContainer, @MainActor DashboardCoordi
         GenerateDailyInsightUseCase(repository: makeDashboardRepository())
     }
 
-    // MARK: - ViewModels
+    // MARK: - TCA Dependencies
 
-    @MainActor
-    public func makeDashboardViewModel() -> DashboardViewModel {
-        DashboardViewModel(
-            getDailySummaryUseCase: makeGetDailySummaryUseCase(),
-            generateInsightUseCase: makeGenerateInsightUseCase(),
-            userProfileId: dependencies.userProfileId,
-            goalCalories: dependencies.goalCalories
-        )
+    public var getDailySummary: @Sendable (Date, UUID, Int) async throws -> DailySummary {
+        let useCase = makeGetDailySummaryUseCase()
+        return { date, userProfileId, goalCalories in
+            try await useCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
+        }
+    }
+
+    public var generateDailyInsight: @Sendable (DailySummary, [String]) async throws -> DailyInsight {
+        let useCase = makeGenerateInsightUseCase()
+        return { summary, mealNames in
+            try await useCase.execute(summary: summary, mealNames: mealNames)
+        }
     }
 }

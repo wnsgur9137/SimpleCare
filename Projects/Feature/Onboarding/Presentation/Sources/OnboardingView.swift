@@ -6,83 +6,81 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import OnboardingDomain
 import ProfileDomain
 
 /// 온보딩 메인 뷰
 public struct OnboardingView: View {
-    @StateObject private var viewModel: OnboardingViewModel
+    @Bindable var store: StoreOf<OnboardingFeature>
 
-    public init(viewModel: OnboardingViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    public init(store: StoreOf<OnboardingFeature>) {
+        self.store = store
     }
 
     public var body: some View {
         VStack(spacing: 0) {
             // Progress bar
-            ProgressView(value: viewModel.currentStep.progress)
+            ProgressView(value: store.currentStep.progress)
                 .tint(.blue)
                 .padding(.horizontal)
 
             // Step content
-            TabView(selection: Binding(
-                get: { viewModel.currentStep },
-                set: { viewModel.goToStep($0) }
-            )) {
+            TabView(selection: $store.currentStep.sending(\.goToStep)) {
                 WelcomeStepView()
                     .tag(OnboardingStep.welcome)
 
-                BasicInfoStepView(viewModel: viewModel)
+                BasicInfoStepView(store: store)
                     .tag(OnboardingStep.basicInfo)
 
-                BodyInfoStepView(viewModel: viewModel)
+                BodyInfoStepView(store: store)
                     .tag(OnboardingStep.bodyInfo)
 
-                GoalSettingStepView(viewModel: viewModel)
+                GoalSettingStepView(store: store)
                     .tag(OnboardingStep.goalSetting)
 
-                ActivityLevelStepView(viewModel: viewModel)
+                ActivityLevelStepView(store: store)
                     .tag(OnboardingStep.activityLevel)
 
-                SummaryStepView(viewModel: viewModel)
+                SummaryStepView(store: store)
                     .tag(OnboardingStep.summary)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .animation(.easeInOut, value: viewModel.currentStep)
+            .animation(.easeInOut, value: store.currentStep)
 
             // Navigation buttons
             HStack(spacing: 16) {
-                if !viewModel.currentStep.isFirst {
+                if !store.currentStep.isFirst {
                     Button("이전") {
-                        viewModel.previousStep()
+                        store.send(.previousStep)
                     }
                     .buttonStyle(.bordered)
                 }
 
                 Spacer()
 
-                Button(viewModel.currentStep.isLast ? "시작하기" : "다음") {
-                    viewModel.nextStep()
+                Button(store.currentStep.isLast ? "시작하기" : "다음") {
+                    store.send(.nextStep)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!viewModel.canProceed)
+                .disabled(!store.canProceed)
             }
             .padding()
         }
         .overlay {
-            if viewModel.isLoading {
+            if store.isLoading {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                 ProgressView()
                     .scaleEffect(1.5)
             }
         }
-        .alert("오류", isPresented: .constant(viewModel.error != nil)) {
+        .alert("오류", isPresented: .constant(store.error != nil)) {
             Button("확인") {
-                // Clear error
+                // Clear error handled by binding
             }
         } message: {
-            if let error = viewModel.error {
+            if let error = store.error {
                 Text(error)
             }
         }
@@ -152,7 +150,7 @@ struct FeatureRow: View {
 }
 
 struct BasicInfoStepView: View {
-    @ObservedObject var viewModel: OnboardingViewModel
+    @Bindable var store: StoreOf<OnboardingFeature>
 
     var body: some View {
         ScrollView {
@@ -165,26 +163,26 @@ struct BasicInfoStepView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("이름")
                         .font(.headline)
-                    TextField("이름을 입력하세요", text: $viewModel.name)
+                    TextField("이름을 입력하세요", text: $store.name)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                 }
 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("나이: \(viewModel.age)세")
+                    Text("나이: \(store.age)세")
                         .font(.headline)
-                    Stepper("", value: $viewModel.age, in: 10...120)
+                    Stepper("", value: $store.age, in: 10...120)
                         .labelsHidden()
                     Slider(value: Binding(
-                        get: { Double(viewModel.age) },
-                        set: { viewModel.age = Int($0) }
+                        get: { Double(store.age) },
+                        set: { store.age = Int($0) }
                     ), in: 10...120, step: 1)
                 }
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("성별")
                         .font(.headline)
-                    Picker("성별", selection: $viewModel.biologicalSex) {
+                    Picker("성별", selection: $store.biologicalSex) {
                         ForEach(BiologicalSex.allCases, id: \.self) { sex in
                             Text(sex.displayName).tag(sex)
                         }
@@ -200,7 +198,7 @@ struct BasicInfoStepView: View {
 }
 
 struct BodyInfoStepView: View {
-    @ObservedObject var viewModel: OnboardingViewModel
+    @Bindable var store: StoreOf<OnboardingFeature>
 
     var body: some View {
         ScrollView {
@@ -215,12 +213,12 @@ struct BodyInfoStepView: View {
                         Text("키")
                             .font(.headline)
                         Spacer()
-                        Text(String(format: "%.1f cm", viewModel.heightCm))
+                        Text(String(format: "%.1f cm", store.heightCm))
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundStyle(.blue)
                     }
-                    Slider(value: $viewModel.heightCm, in: 100...250, step: 0.5)
+                    Slider(value: $store.heightCm, in: 100...250, step: 0.5)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -228,12 +226,12 @@ struct BodyInfoStepView: View {
                         Text("현재 체중")
                             .font(.headline)
                         Spacer()
-                        Text(String(format: "%.1f kg", viewModel.currentWeightKg))
+                        Text(String(format: "%.1f kg", store.currentWeightKg))
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundStyle(.blue)
                     }
-                    Slider(value: $viewModel.currentWeightKg, in: 30...200, step: 0.1)
+                    Slider(value: $store.currentWeightKg, in: 30...200, step: 0.1)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -241,12 +239,12 @@ struct BodyInfoStepView: View {
                         Text("목표 체중")
                             .font(.headline)
                         Spacer()
-                        Text(String(format: "%.1f kg", viewModel.targetWeightKg))
+                        Text(String(format: "%.1f kg", store.targetWeightKg))
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundStyle(.green)
                     }
-                    Slider(value: $viewModel.targetWeightKg, in: 30...200, step: 0.1)
+                    Slider(value: $store.targetWeightKg, in: 30...200, step: 0.1)
                 }
 
                 Spacer()
@@ -257,7 +255,7 @@ struct BodyInfoStepView: View {
 }
 
 struct GoalSettingStepView: View {
-    @ObservedObject var viewModel: OnboardingViewModel
+    @Bindable var store: StoreOf<OnboardingFeature>
 
     var body: some View {
         ScrollView {
@@ -271,9 +269,9 @@ struct GoalSettingStepView: View {
                     ForEach(GoalType.allCases, id: \.self) { goal in
                         GoalOptionCard(
                             goal: goal,
-                            isSelected: viewModel.goalType == goal
+                            isSelected: store.goalType == goal
                         ) {
-                            viewModel.goalType = goal
+                            store.goalType = goal
                         }
                     }
                 }
@@ -334,7 +332,7 @@ struct GoalOptionCard: View {
 }
 
 struct ActivityLevelStepView: View {
-    @ObservedObject var viewModel: OnboardingViewModel
+    @Bindable var store: StoreOf<OnboardingFeature>
 
     var body: some View {
         ScrollView {
@@ -348,9 +346,9 @@ struct ActivityLevelStepView: View {
                     ForEach(ActivityLevel.allCases, id: \.self) { level in
                         ActivityLevelRow(
                             level: level,
-                            isSelected: viewModel.activityLevel == level
+                            isSelected: store.activityLevel == level
                         ) {
-                            viewModel.activityLevel = level
+                            store.activityLevel = level
                         }
                     }
                 }
@@ -393,7 +391,7 @@ struct ActivityLevelRow: View {
 }
 
 struct SummaryStepView: View {
-    @ObservedObject var viewModel: OnboardingViewModel
+    let store: StoreOf<OnboardingFeature>
 
     var body: some View {
         ScrollView {
@@ -404,14 +402,14 @@ struct SummaryStepView: View {
                 )
 
                 VStack(spacing: 16) {
-                    SummaryRow(label: "이름", value: viewModel.name)
-                    SummaryRow(label: "나이", value: "\(viewModel.age)세")
-                    SummaryRow(label: "성별", value: viewModel.biologicalSex.displayName)
-                    SummaryRow(label: "키", value: String(format: "%.1f cm", viewModel.heightCm))
-                    SummaryRow(label: "현재 체중", value: String(format: "%.1f kg", viewModel.currentWeightKg))
-                    SummaryRow(label: "목표 체중", value: String(format: "%.1f kg", viewModel.targetWeightKg))
-                    SummaryRow(label: "목표", value: viewModel.goalType.displayName)
-                    SummaryRow(label: "활동 수준", value: viewModel.activityLevel.displayName)
+                    SummaryRow(label: "이름", value: store.name)
+                    SummaryRow(label: "나이", value: "\(store.age)세")
+                    SummaryRow(label: "성별", value: store.biologicalSex.displayName)
+                    SummaryRow(label: "키", value: String(format: "%.1f cm", store.heightCm))
+                    SummaryRow(label: "현재 체중", value: String(format: "%.1f kg", store.currentWeightKg))
+                    SummaryRow(label: "목표 체중", value: String(format: "%.1f kg", store.targetWeightKg))
+                    SummaryRow(label: "목표", value: store.goalType.displayName)
+                    SummaryRow(label: "활동 수준", value: store.activityLevel.displayName)
                 }
                 .padding()
                 .background(Color(.systemGray6))
@@ -420,10 +418,10 @@ struct SummaryStepView: View {
                 VStack(spacing: 8) {
                     Text("일일 목표 칼로리")
                         .font(.headline)
-                    Text("\(viewModel.calculatedCalories) kcal")
+                    Text("\(store.calculatedCalories) kcal")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(.blue)
-                    Text("기초대사량 \(Int(viewModel.calculatedBMR)) kcal")
+                    Text("기초대사량 \(Int(store.calculatedBMR)) kcal")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -474,4 +472,12 @@ struct StepHeader: View {
         }
         .padding(.bottom)
     }
+}
+
+#Preview {
+    OnboardingView(
+        store: Store(initialState: OnboardingFeature.State()) {
+            OnboardingFeature()
+        }
+    )
 }

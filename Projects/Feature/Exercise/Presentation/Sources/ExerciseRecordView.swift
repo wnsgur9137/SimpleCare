@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import ExerciseDomain
 
 public struct ExerciseRecordView: View {
-    @StateObject private var viewModel: ExerciseRecordViewModel
+    @Bindable var store: StoreOf<ExerciseFeature>
     @Environment(\.dismiss) private var dismiss
 
-    public init(viewModel: ExerciseRecordViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    public init(store: StoreOf<ExerciseFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -21,15 +22,15 @@ public struct ExerciseRecordView: View {
             Form {
                 // 운동 종류 선택
                 Section("운동 종류") {
-                    Picker("카테고리", selection: .constant(viewModel.exerciseType.category)) {
+                    Picker("카테고리", selection: .constant(store.exerciseType.category)) {
                         ForEach(ExerciseCategory.allCases, id: \.self) { category in
                             Label(category.displayName, systemImage: category.icon)
                                 .tag(category)
                         }
                     }
 
-                    Picker("운동", selection: $viewModel.exerciseType) {
-                        ForEach(ExerciseType.allCases.filter { $0.category == viewModel.exerciseType.category }, id: \.self) { type in
+                    Picker("운동", selection: $store.exerciseType) {
+                        ForEach(ExerciseType.allCases.filter { $0.category == store.exerciseType.category }, id: \.self) { type in
                             Text(type.displayName).tag(type)
                         }
                     }
@@ -37,7 +38,7 @@ public struct ExerciseRecordView: View {
 
                 // 강도 선택
                 Section("강도") {
-                    Picker("강도", selection: $viewModel.intensity) {
+                    Picker("강도", selection: $store.intensity) {
                         ForEach(ExerciseIntensity.allCases, id: \.self) { intensity in
                             Text(intensity.displayName).tag(intensity)
                         }
@@ -47,15 +48,15 @@ public struct ExerciseRecordView: View {
 
                 // 시간 입력
                 Section("운동 시간") {
-                    Stepper("\(viewModel.durationMinutes)분", value: $viewModel.durationMinutes, in: 5...300, step: 5)
+                    Stepper("\(store.durationMinutes)분", value: $store.durationMinutes, in: 5...300, step: 5)
 
                     HStack {
                         ForEach([15, 30, 45, 60], id: \.self) { minutes in
                             Button("\(minutes)분") {
-                                viewModel.durationMinutes = minutes
+                                store.durationMinutes = minutes
                             }
                             .buttonStyle(.bordered)
-                            .tint(viewModel.durationMinutes == minutes ? .blue : .gray)
+                            .tint(store.durationMinutes == minutes ? .blue : .gray)
                         }
                     }
                 }
@@ -65,7 +66,7 @@ public struct ExerciseRecordView: View {
                     HStack {
                         Image(systemName: "flame.fill")
                             .foregroundStyle(.orange)
-                        Text("\(viewModel.estimatedCalories)")
+                        Text("\(store.estimatedCalories)")
                             .font(.title)
                             .fontWeight(.bold)
                         Text("kcal")
@@ -77,7 +78,7 @@ public struct ExerciseRecordView: View {
 
                 // 메모
                 Section("메모 (선택)") {
-                    TextField("운동 메모", text: $viewModel.notes, axis: .vertical)
+                    TextField("운동 메모", text: $store.notes, axis: .vertical)
                         .lineLimit(2...4)
                 }
             }
@@ -89,14 +90,27 @@ public struct ExerciseRecordView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") {
-                        Task {
-                            await viewModel.saveExercise()
-                            dismiss()
-                        }
+                        store.send(.saveExercise)
                     }
-                    .disabled(viewModel.isLoading)
+                    .disabled(store.isLoading)
                 }
+            }
+            .onChange(of: store.state) { _, _ in
+                // Check for delegate actions handled externally
             }
         }
     }
+}
+
+#Preview {
+    ExerciseRecordView(
+        store: Store(
+            initialState: ExerciseFeature.State(
+                userProfileId: UUID(),
+                userWeightKg: 70
+            )
+        ) {
+            ExerciseFeature()
+        }
+    )
 }
