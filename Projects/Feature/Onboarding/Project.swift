@@ -13,11 +13,15 @@ let project: Project = .feature(
     name: "Onboarding",
     dataDependencies: [
         .Project.Feature.Data.BaseData,
+        .Project.Feature.Data.ProfileData,
+        .Project.Infrastructure.Storage,
     ],
     domainDependencies: [
         .Project.Feature.Domain.BaseDomain,
+        .Project.Feature.Domain.ProfileDomain,
     ],
     presentationDependencies: [
         .Project.Feature.Presentation.BasePresentation,
+        .Project.Feature.Presentation.ProfilePresentation,
     ]
 )
