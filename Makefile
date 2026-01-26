@@ -2,19 +2,19 @@
 
 GRAPH_DIR := graphs
 
-.PHONY: generate graph graph-clean common-graph splash-graph splash-graph onboarding-graph home-graph settings-graph
+.PHONY: generate graph graph-clean common-graph splash-graph splash-graph onboarding-graph home-graph settings-graph dashboard-graph exercise-graph meal-graph profile-graph weight-graph
 
-graph: common-graph splash-graph onboarding-graph home-graph settings-graph
+graph: common-graph splash-graph onboarding-graph home-graph settings-graph dashboard-graph exercise-graph meal-graph profile-graph weight-graph
 
 generate:
 	TUIST_ROOT_DIR=${PWD} tuist generate
-	graph
+	make graph
 
 # 전체 타겟 그래프
 common-graph:
 	@mkdir -p $(GRAPH_DIR)
 	tuist graph -d -o $(GRAPH_DIR)
-	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/graph.png
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/common-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/graph.png"
 
 # Splash 타겟 그래프
@@ -44,6 +44,41 @@ settings-graph:
 	tuist graph -t Settings -d -o $(GRAPH_DIR)
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/settings-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/setting-graph.png"
+	
+# Dashboard 타겟 그래프
+dashboard-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Dashboard -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/dashboard-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/dashboard-graph.png"
+
+# Exercise 타겟 그래프
+exercise-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Exercise -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/exercise-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/exercise-graph.png"
+
+# Meal 타겟 그래프
+meal-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Meal -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/meal-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/meal-graph.png"
+
+# Profile 타겟 그래프
+profile-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Profile -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/profile-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/profile-graph.png"
+
+# Weight 타겟 그래프
+weight-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Weight -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/weight-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/weight-graph.png"
 
 # 정리
 graph-clean:

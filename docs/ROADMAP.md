@@ -1,0 +1,284 @@
+# SimpleCare 개발 로드맵
+
+## 목차
+1. [Phase 1: 기반 구축](#phase-1-기반-구축)
+2. [Phase 2: 핵심 기능](#phase-2-핵심-기능)
+3. [Phase 3: 확장 기능](#phase-3-확장-기능)
+4. [Phase 4: 연동 및 부가 기능](#phase-4-연동-및-부가-기능)
+5. [구현 상태](#구현-상태)
+
+---
+
+## Phase 1: 기반 구축
+
+### 목표
+프로젝트 인프라 및 사용자 기본 설정 기능 구현
+
+### 작업 목록
+
+#### Infrastructure
+- [x] Tuist 프로젝트 구조 설정
+- [x] StorageInfra (SwiftData) 구현
+  - [x] StorageContainer 싱글톤
+  - [x] UserProfileModel
+  - [x] UserProfileStorage
+- [x] NetworkInfra 기본 구조
+
+#### Profile Feature
+- [x] Domain Layer
+  - [x] UserProfile Entity
+  - [x] Gender, ActivityLevel, GoalType Enum
+  - [x] UserProfileRepositoryProtocol
+  - [x] SaveUserProfileUseCase
+  - [x] GetUserProfileUseCase
+- [x] Data Layer
+  - [x] UserProfileRepository
+- [x] Presentation Layer
+  - [x] ProfileViewModel
+  - [x] ProfileView
+  - [x] ProfileCoordinator
+  - [x] ProfileDIContainer
+
+#### Onboarding Feature
+- [x] Presentation Layer
+  - [x] OnboardingViewModel
+  - [x] OnboardingView (단계별 입력)
+  - [x] OnboardingCoordinator
+  - [x] OnboardingDIContainer
+
+#### Base Feature
+- [x] Coordinator 프로토콜
+- [x] DIContainer 프로토콜
+
+---
+
+## Phase 2: 핵심 기능
+
+### 목표
+식단 기록 및 AI 영양 분석, 대시보드 구현
+
+### 작업 목록
+
+#### AIServiceInfra
+- [x] OpenAI API 클라이언트
+- [x] NutritionEstimationService
+- [x] ImageAnalysisService
+- [x] API Key 관리 (XCConfig)
+
+#### Meal Feature
+- [x] Domain Layer
+  - [x] MealRecord, FoodItem Entity
+  - [x] MealType, EstimatedFoodItem
+  - [x] MealRepositoryProtocol
+  - [x] EstimateMealNutritionUseCase
+  - [x] AnalyzeMealImageUseCase
+  - [x] RecordMealUseCase
+- [x] Data Layer
+  - [x] MealRepository
+  - [x] MealRecordModel (SwiftData)
+  - [x] FoodItemModel (SwiftData)
+  - [x] MealStorage
+- [x] Presentation Layer
+  - [x] MealRecordViewModel
+  - [x] MealRecordView
+  - [x] MealCoordinator
+  - [x] MealDIContainer
+
+#### Dashboard Feature
+- [x] Domain Layer
+  - [x] DailySummary Entity
+  - [x] NutritionSummary Entity
+  - [x] DashboardRepositoryProtocol
+  - [x] GetDailySummaryUseCase
+- [x] Data Layer
+  - [x] DashboardRepository
+- [x] Presentation Layer
+  - [x] DashboardViewModel
+  - [x] DashboardView
+  - [x] 칼로리/영양소 차트 (Swift Charts)
+  - [x] DashboardCoordinator
+  - [x] DashboardDIContainer
+
+---
+
+## Phase 3: 확장 기능
+
+### 목표
+운동 기록 및 체중 관리 기능 구현
+
+### 작업 목록
+
+#### Exercise Feature
+- [x] Domain Layer
+  - [x] ExerciseRecord Entity
+  - [x] ExerciseType, ExerciseCategory
+  - [x] ExerciseIntensity
+  - [x] ExerciseRepositoryProtocol
+  - [x] RecordExerciseUseCase
+  - [x] EstimateCalorieBurnUseCase
+- [x] Data Layer
+  - [x] ExerciseRepository
+  - [x] ExerciseRecordModel (SwiftData)
+  - [x] ExerciseStorage
+- [x] Presentation Layer
+  - [x] ExerciseRecordViewModel
+  - [x] ExerciseRecordView
+  - [x] ExerciseCoordinator
+  - [x] ExerciseDIContainer
+
+#### Weight Feature
+- [x] Domain Layer
+  - [x] WeightRecord Entity
+  - [x] WeightRepositoryProtocol
+  - [x] RecordWeightUseCase
+  - [x] GetWeightHistoryUseCase
+  - [x] CalculateBMRUseCase
+  - [x] CalculateTDEEUseCase
+- [x] Data Layer
+  - [x] WeightRepository
+  - [x] WeightRecordModel (SwiftData)
+  - [x] WeightStorage
+- [x] Presentation Layer
+  - [x] WeightRecordViewModel
+  - [x] WeightRecordView
+  - [x] 체중 추세 차트 (Swift Charts)
+  - [x] WeightCoordinator
+  - [x] WeightDIContainer
+
+---
+
+## Phase 4: 연동 및 부가 기능
+
+### 목표
+HealthKit 연동, 알림, 위젯 등 부가 기능 구현
+
+### 작업 목록
+
+#### HealthKitInfra
+- [ ] HealthKit 권한 요청
+- [ ] 걸음수 읽기
+- [ ] 활동 칼로리 읽기
+- [ ] 체중 데이터 동기화
+
+#### Notification Feature
+- [ ] 리마인더 알림 설정
+- [ ] 로컬 알림 스케줄링
+- [ ] 식사/운동 기록 알림
+
+#### Widget
+- [ ] 일일 칼로리 요약 위젯
+- [ ] 목표 달성률 위젯
+
+#### Settings 완성
+- [ ] 데이터 내보내기 (CSV/JSON)
+- [ ] 데이터 삭제
+- [ ] 알림 설정
+- [ ] 테마 설정
+
+#### AI 고도화
+- [ ] 개인화된 추천 기능
+- [ ] 식단 패턴 분석
+- [ ] 목표 달성 예측
+
+---
+
+## 구현 상태
+
+### 모듈별 진행률
+
+| 모듈 | 상태 | 진행률 |
+|-----|------|-------|
+| **Base** | 완료 | 100% |
+| **Profile** | 완료 | 100% |
+| **Onboarding** | 완료 | 100% |
+| **Dashboard** | 완료 | 100% |
+| **Meal** | 완료 | 100% |
+| **Exercise** | 완료 | 100% |
+| **Weight** | 완료 | 100% |
+| **StorageInfra** | 완료 | 100% |
+| **AIServiceInfra** | 완료 | 100% |
+| **NetworkInfra** | 기본 완료 | 80% |
+| **HealthKitInfra** | 미시작 | 0% |
+| **Notification** | 미시작 | 0% |
+| **Widget** | 미시작 | 0% |
+
+### 전체 진행률
+```
+Phase 1: ████████████████████ 100%
+Phase 2: ████████████████████ 100%
+Phase 3: ████████████████████ 100%
+Phase 4: ████                  20%
+---------------------------------
+Total:   ████████████████      80%
+```
+
+---
+
+## 우선순위 정의
+
+| 우선순위 | 설명 | 포함 기능 |
+|---------|------|----------|
+| **P0** | 필수 기능 | Dashboard, Meal, AI서비스 |
+| **P1** | 핵심 기능 | Exercise, Weight, Profile |
+| **P2** | 부가 기능 | HealthKit, Notification, Widget |
+| **P3** | 고도화 | AI 추천, 분석 |
+
+---
+
+## 기술 부채
+
+### 현재 이슈
+1. ~~DIContainer가 Presentation 레이어에 위치~~ → **해결됨** (Feature 루트로 이동)
+2. ~~Coordinator가 DIContainer 직접 의존~~ → **해결됨** (Delegate 패턴 적용)
+3. Splash 화면 미구현 (현재 스킵)
+4. Home Feature 미사용 (Dashboard로 대체)
+
+### 리팩토링 계획
+- [ ] 미사용 모듈 정리 (Home, Splash)
+- [ ] 테스트 코드 작성
+- [ ] 에러 처리 고도화
+- [ ] 접근성(Accessibility) 개선
+
+---
+
+## 검증 체크리스트
+
+### 빌드 검증
+```bash
+# Tuist 프로젝트 생성 및 빌드
+tuist generate && xcodebuild build
+
+# 특정 Feature 모듈만 빌드
+xcodebuild build -scheme Meal -destination 'platform=iOS Simulator,name=iPhone 16'
+```
+
+### 기능 검증
+- [ ] 온보딩 플로우 완료
+- [ ] 프로필 설정 저장/조회
+- [ ] 식사 기록 (텍스트 입력)
+- [ ] 식사 기록 (사진 입력)
+- [ ] 운동 기록
+- [ ] 체중 기록
+- [ ] 대시보드 요약 표시
+- [ ] 차트 시각화
+
+### AI 검증
+- [ ] 텍스트 → 영양 추정 정확도
+- [ ] 이미지 → 음식 인식 정확도
+- [ ] API 에러 처리
+- [ ] 네트워크 오프라인 처리
+
+---
+
+## 참고
+
+### 관련 문서
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - 아키텍처 설계
+- [MODULES.md](./MODULES.md) - 모듈 상세 정의
+- [API.md](./API.md) - API 명세
+
+### 외부 참고
+- [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
+- [Swift Charts Documentation](https://developer.apple.com/documentation/charts)
+- [SwiftData Documentation](https://developer.apple.com/documentation/swiftdata)
+- [OpenAI API Documentation](https://platform.openai.com/docs)

@@ -27,6 +27,16 @@ public enum ProjectDomain: String {
     case Onboarding
     case Home
     case Settings
+
+    // Healthcare Features
+    case Dashboard
+    case Meal
+    case Weight
+    case Exercise
+    case AI
+    case Profile
+    case Notification
+    case HealthKitFeature
 }
 
 // MARK: - Project
@@ -53,6 +63,26 @@ public extension TargetDependency.Project.Infrastructure {
     static let Network: TargetDependency = .project(
         layer: .Infrastructure,
         name: "NetworkInfra"
+    )
+
+    static let Storage: TargetDependency = .project(
+        layer: .Infrastructure,
+        name: "StorageInfra"
+    )
+
+    static let AIService: TargetDependency = .project(
+        layer: .Infrastructure,
+        name: "AIServiceInfra"
+    )
+
+    static let HealthKit: TargetDependency = .project(
+        layer: .Infrastructure,
+        name: "HealthKitInfra"
+    )
+
+    static let ImageProcessing: TargetDependency = .project(
+        layer: .Infrastructure,
+        name: "ImageProcessingInfra"
     )
 }
 
@@ -82,6 +112,47 @@ public extension TargetDependency.Project.Feature {
         domain: .Settings,
         name: "Settings"
     )
+
+    // Healthcare Features
+    static let Dashboard: TargetDependency = .project(
+        domain: .Dashboard,
+        name: "Dashboard"
+    )
+
+    static let Meal: TargetDependency = .project(
+        domain: .Meal,
+        name: "Meal"
+    )
+
+    static let Weight: TargetDependency = .project(
+        domain: .Weight,
+        name: "Weight"
+    )
+
+    static let Exercise: TargetDependency = .project(
+        domain: .Exercise,
+        name: "Exercise"
+    )
+
+    static let AI: TargetDependency = .project(
+        domain: .AI,
+        name: "AI"
+    )
+
+    static let Profile: TargetDependency = .project(
+        domain: .Profile,
+        name: "Profile"
+    )
+
+    static let Notification: TargetDependency = .project(
+        domain: .Notification,
+        name: "Notification"
+    )
+
+    static let HealthKitFeature: TargetDependency = .project(
+        domain: .HealthKitFeature,
+        name: "HealthKitFeature"
+    )
 }
 
 // MARK: - Data
@@ -109,6 +180,47 @@ public extension TargetDependency.Project.Feature.Data {
     static let SettingsData: TargetDependency = .project(
         domain: .Settings,
         name: "SettingsData"
+    )
+
+    // Healthcare Features Data
+    static let DashboardData: TargetDependency = .project(
+        domain: .Dashboard,
+        name: "DashboardData"
+    )
+
+    static let MealData: TargetDependency = .project(
+        domain: .Meal,
+        name: "MealData"
+    )
+
+    static let WeightData: TargetDependency = .project(
+        domain: .Weight,
+        name: "WeightData"
+    )
+
+    static let ExerciseData: TargetDependency = .project(
+        domain: .Exercise,
+        name: "ExerciseData"
+    )
+
+    static let AIData: TargetDependency = .project(
+        domain: .AI,
+        name: "AIData"
+    )
+
+    static let ProfileData: TargetDependency = .project(
+        domain: .Profile,
+        name: "ProfileData"
+    )
+
+    static let NotificationData: TargetDependency = .project(
+        domain: .Notification,
+        name: "NotificationData"
+    )
+
+    static let HealthKitFeatureData: TargetDependency = .project(
+        domain: .HealthKitFeature,
+        name: "HealthKitFeatureData"
     )
 }
 
@@ -138,6 +250,47 @@ public extension TargetDependency.Project.Feature.Domain {
         domain: .Settings,
         name: "SettingsDomain"
     )
+
+    // Healthcare Features Domain
+    static let DashboardDomain: TargetDependency = .project(
+        domain: .Dashboard,
+        name: "DashboardDomain"
+    )
+
+    static let MealDomain: TargetDependency = .project(
+        domain: .Meal,
+        name: "MealDomain"
+    )
+
+    static let WeightDomain: TargetDependency = .project(
+        domain: .Weight,
+        name: "WeightDomain"
+    )
+
+    static let ExerciseDomain: TargetDependency = .project(
+        domain: .Exercise,
+        name: "ExerciseDomain"
+    )
+
+    static let AIDomain: TargetDependency = .project(
+        domain: .AI,
+        name: "AIDomain"
+    )
+
+    static let ProfileDomain: TargetDependency = .project(
+        domain: .Profile,
+        name: "ProfileDomain"
+    )
+
+    static let NotificationDomain: TargetDependency = .project(
+        domain: .Notification,
+        name: "NotificationDomain"
+    )
+
+    static let HealthKitFeatureDomain: TargetDependency = .project(
+        domain: .HealthKitFeature,
+        name: "HealthKitFeatureDomain"
+    )
 }
 
 // MARK: - Presentation
@@ -165,6 +318,47 @@ public extension TargetDependency.Project.Feature.Presentation {
     static let SettingsPresentation: TargetDependency = .project(
         domain: .Settings,
         name: "SettingsPresentation"
+    )
+
+    // Healthcare Features Presentation
+    static let DashboardPresentation: TargetDependency = .project(
+        domain: .Dashboard,
+        name: "DashboardPresentation"
+    )
+
+    static let MealPresentation: TargetDependency = .project(
+        domain: .Meal,
+        name: "MealPresentation"
+    )
+
+    static let WeightPresentation: TargetDependency = .project(
+        domain: .Weight,
+        name: "WeightPresentation"
+    )
+
+    static let ExercisePresentation: TargetDependency = .project(
+        domain: .Exercise,
+        name: "ExercisePresentation"
+    )
+
+    static let AIPresentation: TargetDependency = .project(
+        domain: .AI,
+        name: "AIPresentation"
+    )
+
+    static let ProfilePresentation: TargetDependency = .project(
+        domain: .Profile,
+        name: "ProfilePresentation"
+    )
+
+    static let NotificationPresentation: TargetDependency = .project(
+        domain: .Notification,
+        name: "NotificationPresentation"
+    )
+
+    static let HealthKitFeaturePresentation: TargetDependency = .project(
+        domain: .HealthKitFeature,
+        name: "HealthKitFeaturePresentation"
     )
 }
 

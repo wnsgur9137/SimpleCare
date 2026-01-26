@@ -16,6 +16,12 @@ let project: Project = .project(
         .Project.Feature.Splash,
         .Project.Feature.Onboarding,
         .Project.Feature.Home,
-        .Project.Feature.Settings
+        .Project.Feature.Settings,
+        // Healthcare Features
+        .Project.Feature.Dashboard,
+        .Project.Feature.Meal,
+        .Project.Feature.Weight,
+        .Project.Feature.Exercise,
+        .Project.Feature.Profile,
     ]
 )

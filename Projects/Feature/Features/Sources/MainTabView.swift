@@ -17,11 +17,40 @@ public struct MainTabView: View {
 
     public var body: some View {
         TabView(selection: $coordinator.selectedTab) {
-            EmptyView()
+            // Dashboard
+            coordinator.makeDashboard()
                 .tabItem {
-                    Label("Home", systemImage: "house.fill")
+                    Label(AppTab.dashboard.title, systemImage: AppTab.dashboard.icon)
                 }
-                .tag(AppTab.home)
+                .tag(AppTab.dashboard)
+
+            // Meal
+            coordinator.makeMealList()
+                .tabItem {
+                    Label(AppTab.meal.title, systemImage: AppTab.meal.icon)
+                }
+                .tag(AppTab.meal)
+
+            // Exercise
+            coordinator.makeExerciseList()
+                .tabItem {
+                    Label(AppTab.exercise.title, systemImage: AppTab.exercise.icon)
+                }
+                .tag(AppTab.exercise)
+
+            // Progress (Weight)
+            coordinator.makeProgress()
+                .tabItem {
+                    Label(AppTab.progress.title, systemImage: AppTab.progress.icon)
+                }
+                .tag(AppTab.progress)
+
+            // Settings
+            coordinator.makeSettings()
+                .tabItem {
+                    Label(AppTab.settings.title, systemImage: AppTab.settings.icon)
+                }
+                .tag(AppTab.settings)
         }
     }
 }
