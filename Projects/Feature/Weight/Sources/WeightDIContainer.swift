@@ -11,7 +11,7 @@ import WeightDomain
 import WeightData
 import WeightPresentation
 
-public final class WeightDIContainer: DIContainer, @MainActor WeightCoordinatorDependency {
+public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
     public struct Dependencies {
         public let userProfileId: UUID
         public let currentWeight: Double
@@ -30,9 +30,27 @@ public final class WeightDIContainer: DIContainer, @MainActor WeightCoordinatorD
         self.dependencies = dependencies
     }
 
+    // MARK: - WeightCoordinatorDependency
+
+    public var userProfileId: UUID {
+        dependencies.userProfileId
+    }
+
+    public var currentWeight: Double {
+        dependencies.currentWeight
+    }
+
+    public var targetWeight: Double {
+        dependencies.targetWeight
+    }
+
+    // MARK: - Repository
+
     private func makeWeightRepository() -> WeightRepositoryProtocol {
         WeightRepository()
     }
+
+    // MARK: - Use Cases
 
     private func makeRecordWeightUseCase() -> RecordWeightUseCaseProtocol {
         RecordWeightUseCase(repository: makeWeightRepository())
@@ -42,14 +60,23 @@ public final class WeightDIContainer: DIContainer, @MainActor WeightCoordinatorD
         GetWeightTrendUseCase(repository: makeWeightRepository())
     }
 
-    @MainActor
-    public func makeWeightViewModel() -> WeightViewModel {
-        WeightViewModel(
-            recordWeightUseCase: makeRecordWeightUseCase(),
-            getWeightTrendUseCase: makeGetWeightTrendUseCase(),
-            userProfileId: dependencies.userProfileId,
-            currentWeight: dependencies.currentWeight,
-            targetWeight: dependencies.targetWeight
+    // MARK: - TCA Dependencies
+
+    public var weightClient: WeightClient {
+        let recordUseCase = makeRecordWeightUseCase()
+        let trendUseCase = makeGetWeightTrendUseCase()
+
+        return WeightClient(
+            recordWeight: { record in
+                try await recordUseCase.execute(weight: record)
+            },
+            getWeightTrend: { userProfileId, targetWeight, limit in
+                try await trendUseCase.execute(
+                    userProfileId: userProfileId,
+                    targetWeight: targetWeight,
+                    limit: limit
+                )
+            }
         )
     }
 }

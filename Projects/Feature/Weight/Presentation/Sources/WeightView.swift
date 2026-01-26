@@ -7,15 +7,16 @@
 
 import SwiftUI
 import Charts
+import ComposableArchitecture
 import WeightDomain
 
 /// 체중 관리 화면
 public struct WeightView: View {
-    @StateObject private var viewModel: WeightViewModel
+    @Bindable var store: StoreOf<WeightFeature>
     @Environment(\.dismiss) private var dismiss
 
-    public init(viewModel: WeightViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    public init(store: StoreOf<WeightFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -26,7 +27,7 @@ public struct WeightView: View {
                     weightInputSection
 
                     // 추세 차트
-                    if let trend = viewModel.weightTrend, !trend.records.isEmpty {
+                    if let trend = store.weightTrend, !trend.records.isEmpty {
                         trendChartSection(trend: trend)
                         statisticsSection(trend: trend)
                     }
@@ -38,13 +39,13 @@ public struct WeightView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") {
-                        Task { await viewModel.saveWeight() }
+                        store.send(.saveWeight)
                     }
-                    .disabled(viewModel.isLoading)
+                    .disabled(store.isLoading)
                 }
             }
             .task {
-                await viewModel.loadTrend()
+                store.send(.onAppear)
             }
         }
     }
@@ -55,16 +56,16 @@ public struct WeightView: View {
                 .font(.headline)
 
             HStack {
-                Text(String(format: "%.1f", viewModel.newWeightKg))
+                Text(String(format: "%.1f", store.newWeightKg))
                     .font(.system(size: 48, weight: .bold))
                 Text("kg")
                     .font(.title2)
                     .foregroundStyle(.secondary)
             }
 
-            Slider(value: $viewModel.newWeightKg, in: 30...200, step: 0.1)
+            Slider(value: $store.newWeightKg, in: 30...200, step: 0.1)
 
-            TextField("메모 (선택)", text: $viewModel.notes)
+            TextField("메모 (선택)", text: $store.notes)
                 .textFieldStyle(.roundedBorder)
         }
         .padding()
@@ -169,4 +170,18 @@ struct StatBox: View {
         }
         .frame(maxWidth: .infinity)
     }
+}
+
+#Preview {
+    WeightView(
+        store: Store(
+            initialState: WeightFeature.State(
+                userProfileId: UUID(),
+                currentWeight: 70,
+                targetWeight: 65
+            )
+        ) {
+            WeightFeature()
+        }
+    )
 }
