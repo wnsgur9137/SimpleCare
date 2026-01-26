@@ -28,7 +28,8 @@
 | 항목 | 선택 | 비고 |
 |-----|------|------|
 | **플랫폼** | iOS 18.0+ | SwiftUI, SwiftData 활용 |
-| **아키텍처** | Clean Architecture + Coordinator | Tuist 모듈화 |
+| **아키텍처** | Clean Architecture + TCA | Tuist 모듈화 |
+| **상태 관리** | The Composable Architecture (TCA) | 단방향 데이터 흐름, 테스트 용이 |
 | **AI 서비스** | OpenAI GPT-4o | 영양 추정, 음식 인식 |
 | **차트** | Swift Charts | Apple 네이티브 |
 | **데이터 저장** | SwiftData | 로컬 저장 |
