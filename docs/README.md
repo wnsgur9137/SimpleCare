@@ -39,7 +39,8 @@ open SimpleCare.xcworkspace
 | 분류 | 기술 |
 |-----|------|
 | UI | SwiftUI |
-| 아키텍처 | Clean Architecture + Coordinator |
+| 아키텍처 | Clean Architecture + TCA |
+| 상태 관리 | The Composable Architecture (TCA) |
 | 데이터 저장 | SwiftData |
 | 차트 | Swift Charts |
 | AI | OpenAI GPT-4o |

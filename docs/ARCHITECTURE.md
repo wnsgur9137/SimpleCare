@@ -34,6 +34,7 @@ SimpleCare는 식단, 운동, 체중 관리를 위한 AI 기반 헬스케어 iOS
 |-----|------|------|
 | **빌드 시스템** | Tuist | 모듈화된 Xcode 프로젝트 생성 |
 | **UI 프레임워크** | SwiftUI | 선언형 UI |
+| **상태 관리** | TCA (The Composable Architecture) | 단방향 데이터 흐름, Reducer 기반 |
 | **데이터 저장** | SwiftData | Apple 네이티브 ORM |
 | **차트** | Swift Charts | 네이티브 차트 라이브러리 |
 | **AI 서비스** | OpenAI API (GPT-4o) | 영양소 추정/이미지 분석 |
@@ -99,7 +100,7 @@ SimpleCare/
 
 ### Feature 모듈 구조
 
-각 Feature 모듈은 Clean Architecture를 따르며, 4개의 레이어로 구성됩니다.
+각 Feature 모듈은 Clean Architecture + TCA를 따르며, 4개의 레이어로 구성됩니다.
 
 ```
 Feature/{FeatureName}/
@@ -116,7 +117,7 @@ Feature/{FeatureName}/
 └── Presentation/
     └── Sources/
         ├── Coordinator.swift     # 화면 네비게이션
-        ├── ViewModel.swift       # 프레젠테이션 로직
+        ├── {FeatureName}Feature.swift  # TCA Reducer (State, Action, Effect)
         └── View.swift            # SwiftUI 뷰
 ```
 
@@ -134,7 +135,7 @@ Feature/{FeatureName}/
 
 ---
 
-## Clean Architecture
+## Clean Architecture + TCA
 
 ### 레이어 책임
 
@@ -142,7 +143,8 @@ Feature/{FeatureName}/
 ┌─────────────────────────────────────────────────────────┐
 │                    Presentation                         │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │    View     │→ │  ViewModel  │→ │ Coordinator │     │
+│  │    View     │→ │   Reducer   │→ │ Coordinator │     │
+│  │  (SwiftUI)  │  │ (TCA Store) │  │             │     │
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 ├─────────────────────────────────────────────────────────┤
 │                      Domain                             │
@@ -200,27 +202,66 @@ public final class MealRepository: MealRepositoryProtocol {
 }
 ```
 
-#### Presentation Layer
-- **View**: SwiftUI 뷰 (UI만 담당)
-- **ViewModel**: @Published 상태 관리, UseCase 호출
-- **Coordinator**: 화면 네비게이션
+#### Presentation Layer (TCA 기반)
+- **View**: SwiftUI 뷰 (TCA Store 바인딩)
+- **Reducer**: State, Action, Effect 정의
+- **Coordinator**: 화면 네비게이션 및 Store 생성
 
 ```swift
-@MainActor
-public final class MealRecordViewModel: ObservableObject {
-    @Published public private(set) var state: ViewState = .idle
+// TCA Reducer 예시
+@Reducer
+public struct MealFeature {
+    @ObservableState
+    public struct State: Equatable {
+        public var viewState: ViewState = .idle
+        public var mealType: MealType = .lunch
+        public var estimatedFoods: [EstimatedFoodItem] = []
+    }
 
-    private let recordMealUseCase: RecordMealUseCaseProtocol
+    public enum Action: BindableAction, Equatable {
+        case binding(BindingAction<State>)
+        case saveMeal
+        case saveMealResponse(Result<Void, Error>)
+        case delegate(Delegate)
 
-    public func saveMeal() async {
-        state = .loading
-        do {
-            try await recordMealUseCase.execute(meal: meal)
-            state = .success
-        } catch {
-            state = .error(error.localizedDescription)
+        public enum Delegate: Equatable {
+            case saveCompleted
         }
     }
+
+    @Dependency(\.mealClient) var mealClient
+
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .saveMeal:
+                state.viewState = .loading
+                let meal = createMeal(from: state)
+                return .run { send in
+                    do {
+                        try await mealClient.recordMeal(meal)
+                        await send(.saveMealResponse(.success(())))
+                    } catch {
+                        await send(.saveMealResponse(.failure(error)))
+                    }
+                }
+            case .saveMealResponse(.success):
+                state.viewState = .success
+                return .send(.delegate(.saveCompleted))
+            // ...
+            }
+        }
+    }
+}
+
+// TCA Dependency 예시
+public struct MealClient {
+    public var recordMeal: @Sendable (MealRecord) async throws -> Void
+}
+
+extension MealClient: DependencyKey {
+    public static var liveValue: MealClient { /* ... */ }
 }
 ```
 
@@ -287,9 +328,34 @@ Features ───────────────────────�
 
 ## 디자인 패턴
 
-### Coordinator 패턴
+### TCA (The Composable Architecture) 패턴
 
-화면 전환 로직을 View에서 분리하여 관리합니다.
+단방향 데이터 흐름과 명시적인 상태 관리를 제공합니다.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      View                               │
+│                        │                                │
+│                   send(Action)                          │
+│                        ▼                                │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │                   Reducer                        │   │
+│  │  ┌───────┐    ┌────────┐    ┌────────────┐     │   │
+│  │  │ State │ ←  │ Action │ →  │   Effect   │     │   │
+│  │  └───────┘    └────────┘    └────────────┘     │   │
+│  │       │                           │             │   │
+│  │       └───────────────────────────┘             │   │
+│  └─────────────────────────────────────────────────┘   │
+│                        │                                │
+│                  State 변경                              │
+│                        ▼                                │
+│                   View 업데이트                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Coordinator 패턴 (TCA Store 생성)
+
+화면 전환 로직과 TCA Store 생성을 담당합니다.
 
 ```swift
 public protocol Coordinator: AnyObject {
@@ -297,39 +363,65 @@ public protocol Coordinator: AnyObject {
     @MainActor @ViewBuilder func start() -> Content
 }
 
-public protocol CoordinatorDependency {
-    @MainActor func makeViewModel() -> SomeViewModel
+public protocol MealCoordinatorDependency {
+    var userProfileId: UUID { get }
+    var mealClient: MealClient { get }
 }
 
 public final class MealCoordinator: ObservableObject, Coordinator {
     private let dependencies: MealCoordinatorDependency
 
-    public init(dependencies: MealCoordinatorDependency) {
-        self.dependencies = dependencies
-    }
-
     @MainActor @ViewBuilder
     public func start() -> some View {
-        MealRecordView(viewModel: dependencies.makeMealRecordViewModel())
+        MealContainerView(
+            userProfileId: dependencies.userProfileId,
+            mealClient: dependencies.mealClient
+        )
+    }
+}
+
+// Container View에서 TCA Store 생성
+private struct MealContainerView: View {
+    @State private var store: StoreOf<MealFeature>
+
+    init(userProfileId: UUID, mealClient: MealClient) {
+        self._store = State(
+            initialValue: Store(
+                initialState: MealFeature.State(userProfileId: userProfileId)
+            ) {
+                MealFeature()
+            } withDependencies: {
+                $0.mealClient = mealClient
+            }
+        )
+    }
+
+    var body: some View {
+        MealRecordView(store: store)
     }
 }
 ```
 
-### DIContainer 패턴
+### DIContainer 패턴 (TCA Client 제공)
 
-의존성 조립 및 주입을 담당합니다.
+UseCase를 TCA Client로 래핑하여 의존성 주입을 담당합니다.
 
 ```swift
 public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
-    private let storageContainer: StorageContainer
-    private let aiService: AIServiceProtocol
+    public var userProfileId: UUID { dependencies.userProfileId }
 
-    @MainActor
-    public func makeMealRecordViewModel() -> MealRecordViewModel {
-        MealRecordViewModel(
-            estimateNutritionUseCase: makeEstimateNutritionUseCase(),
-            analyzeMealImageUseCase: makeAnalyzeMealImageUseCase(),
-            recordMealUseCase: makeRecordMealUseCase()
+    // TCA Client 생성
+    public var mealClient: MealClient {
+        let estimateUseCase = makeEstimateNutritionUseCase()
+        let recordUseCase = makeRecordMealUseCase()
+
+        return MealClient(
+            estimateNutrition: { text in
+                try await estimateUseCase.execute(text: text)
+            },
+            recordMeal: { meal in
+                try await recordUseCase.execute(meal: meal)
+            }
         )
     }
 
@@ -370,9 +462,29 @@ public final class MealRepository: MealRepositoryProtocol {
 ## 테스트 전략
 
 ### 단위 테스트
-- UseCase 테스트: Mock Repository 주입
-- ViewModel 테스트: Mock UseCase 주입
-- Repository 테스트: In-memory Storage 사용
+- **Reducer 테스트**: TCA TestStore를 활용한 상태/액션 검증
+- **UseCase 테스트**: Mock Repository 주입
+- **Repository 테스트**: In-memory Storage 사용
+
+```swift
+// TCA Reducer 테스트 예시
+@Test
+func testSaveMeal() async {
+    let store = TestStore(initialState: MealFeature.State(userProfileId: UUID())) {
+        MealFeature()
+    } withDependencies: {
+        $0.mealClient.recordMeal = { _ in }
+    }
+
+    await store.send(.saveMeal) {
+        $0.viewState = .loading
+    }
+    await store.receive(.saveMealResponse(.success(()))) {
+        $0.viewState = .success
+    }
+    await store.receive(.delegate(.saveCompleted))
+}
+```
 
 ### 통합 테스트
 - Feature 모듈 빌드 검증
@@ -386,6 +498,8 @@ public final class MealRepository: MealRepositoryProtocol {
 
 ## 참고 자료
 
+- [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)
+- [TCA Documentation](https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/)
 - [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Tuist Documentation](https://docs.tuist.io)
 - [SwiftData Documentation](https://developer.apple.com/documentation/swiftdata)
