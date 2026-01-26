@@ -24,10 +24,10 @@
       }
     },
     "shrimp-task-manager": {
-      "command": "npx",
-      "args": ["-y", "mcp-shrimp-task-manager"],
+      "command": "node",
+      "args": ["/mcp-shrimp-task-manager/dist/index.js"],
       "env": {
-        "DATA_DIR": "/Users/junhyeok/shrimp_data",
+        "DATA_DIR": "/shrimp-task-manager/shrimp_data",
         "TEMPLATES_USE": "ko",
         "ENABLE_GUI": "false"
       }
