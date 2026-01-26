@@ -12,7 +12,7 @@ import MealData
 import MealPresentation
 
 /// Meal DI Container
-public final class MealDIContainer: DIContainer, @MainActor MealCoordinatorDependency {
+public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
     public struct Dependencies {
         public let userProfileId: UUID
 
@@ -25,6 +25,12 @@ public final class MealDIContainer: DIContainer, @MainActor MealCoordinatorDepen
 
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
+    }
+
+    // MARK: - MealCoordinatorDependency
+
+    public var userProfileId: UUID {
+        dependencies.userProfileId
     }
 
     // MARK: - Repository
@@ -51,15 +57,23 @@ public final class MealDIContainer: DIContainer, @MainActor MealCoordinatorDepen
         RecordMealUseCase(repository: makeMealRepository())
     }
 
-    // MARK: - ViewModels
+    // MARK: - TCA Dependencies
 
-    @MainActor
-    public func makeMealRecordViewModel() -> MealRecordViewModel {
-        MealRecordViewModel(
-            estimateNutritionUseCase: makeEstimateNutritionUseCase(),
-            analyzeMealImageUseCase: makeAnalyzeMealImageUseCase(),
-            recordMealUseCase: makeRecordMealUseCase(),
-            userProfileId: dependencies.userProfileId
+    public var mealClient: MealClient {
+        let estimateUseCase = makeEstimateNutritionUseCase()
+        let analyzeUseCase = makeAnalyzeMealImageUseCase()
+        let recordUseCase = makeRecordMealUseCase()
+
+        return MealClient(
+            estimateNutrition: { text in
+                try await estimateUseCase.execute(text: text)
+            },
+            analyzeMealImage: { imageData in
+                try await analyzeUseCase.execute(imageData: imageData)
+            },
+            recordMeal: { meal in
+                try await recordUseCase.execute(meal: meal)
+            }
         )
     }
 }

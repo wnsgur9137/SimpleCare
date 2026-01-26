@@ -7,16 +7,17 @@
 
 import SwiftUI
 import PhotosUI
+import ComposableArchitecture
 import MealDomain
 
 /// 식사 기록 화면
 public struct MealRecordView: View {
-    @StateObject private var viewModel: MealRecordViewModel
+    @Bindable var store: StoreOf<MealFeature>
     @State private var selectedItem: PhotosPickerItem?
     @Environment(\.dismiss) private var dismiss
 
-    public init(viewModel: MealRecordViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    public init(store: StoreOf<MealFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -30,7 +31,7 @@ public struct MealRecordView: View {
                     inputSection
 
                     // 추정 결과
-                    if !viewModel.estimatedFoods.isEmpty {
+                    if !store.estimatedFoods.isEmpty {
                         estimatedFoodsSection
                     }
 
@@ -47,24 +48,24 @@ public struct MealRecordView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("저장") {
-                        Task { await viewModel.saveMeal() }
+                        store.send(.saveMeal)
                     }
-                    .disabled(!viewModel.canSave)
+                    .disabled(!store.canSave)
                 }
             }
             .overlay {
-                if viewModel.state == .loading || viewModel.state == .estimating {
+                if store.viewState == .loading || store.viewState == .estimating {
                     loadingOverlay
                 }
             }
-            .alert("오류", isPresented: .constant(viewModel.state.isError)) {
-                Button("확인") { viewModel.dismissError() }
+            .alert("오류", isPresented: .constant(store.viewState.isError)) {
+                Button("확인") { store.send(.dismissError) }
             } message: {
-                if case .error(let message) = viewModel.state {
+                if case .error(let message) = store.viewState {
                     Text(message)
                 }
             }
-            .onChange(of: viewModel.state) { _, newState in
+            .onChange(of: store.viewState) { _, newState in
                 if newState == .success {
                     dismiss()
                 }
@@ -79,7 +80,7 @@ public struct MealRecordView: View {
             Text("식사 유형")
                 .font(.headline)
 
-            Picker("식사 유형", selection: $viewModel.mealType) {
+            Picker("식사 유형", selection: $store.mealType) {
                 ForEach(MealType.allCases, id: \.self) { type in
                     Label(type.displayName, systemImage: type.icon)
                         .tag(type)
@@ -101,17 +102,17 @@ public struct MealRecordView: View {
                     .foregroundStyle(.secondary)
 
                 HStack {
-                    TextField("예: 김치찌개 1인분, 공기밥", text: $viewModel.foodDescription, axis: .vertical)
+                    TextField("예: 김치찌개 1인분, 공기밥", text: $store.foodDescription, axis: .vertical)
                         .lineLimit(2...4)
                         .textFieldStyle(.roundedBorder)
 
                     Button {
-                        Task { await viewModel.estimateFromText() }
+                        store.send(.estimateFromText)
                     } label: {
                         Image(systemName: "sparkles")
                             .font(.title2)
                     }
-                    .disabled(viewModel.foodDescription.isEmpty)
+                    .disabled(store.foodDescription.isEmpty)
                 }
             }
 
@@ -131,13 +132,13 @@ public struct MealRecordView: View {
                     .onChange(of: selectedItem) { _, newItem in
                         Task {
                             if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                viewModel.selectedImageData = data
-                                await viewModel.estimateFromImage()
+                                store.selectedImageData = data
+                                store.send(.estimateFromImage)
                             }
                         }
                     }
 
-                    if viewModel.selectedImageData != nil {
+                    if store.selectedImageData != nil {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                     }
@@ -162,16 +163,16 @@ public struct MealRecordView: View {
 
             // 총합
             HStack(spacing: 16) {
-                NutritionBadge(label: "칼로리", value: "\(viewModel.totalCalories)", unit: "kcal", color: .blue)
-                NutritionBadge(label: "단백질", value: String(format: "%.1f", viewModel.totalProtein), unit: "g", color: .red)
-                NutritionBadge(label: "탄수화물", value: String(format: "%.1f", viewModel.totalCarbs), unit: "g", color: .orange)
-                NutritionBadge(label: "지방", value: String(format: "%.1f", viewModel.totalFat), unit: "g", color: .yellow)
+                NutritionBadge(label: "칼로리", value: "\(store.totalCalories)", unit: "kcal", color: .blue)
+                NutritionBadge(label: "단백질", value: String(format: "%.1f", store.totalProtein), unit: "g", color: .red)
+                NutritionBadge(label: "탄수화물", value: String(format: "%.1f", store.totalCarbs), unit: "g", color: .orange)
+                NutritionBadge(label: "지방", value: String(format: "%.1f", store.totalFat), unit: "g", color: .yellow)
             }
 
             // 개별 음식
-            ForEach(Array(viewModel.estimatedFoods.enumerated()), id: \.element.name) { index, food in
+            ForEach(Array(store.estimatedFoods.enumerated()), id: \.element.name) { index, food in
                 EstimatedFoodRow(food: food) {
-                    viewModel.removeFood(at: index)
+                    store.send(.removeFood(index))
                 }
             }
 
@@ -189,7 +190,7 @@ public struct MealRecordView: View {
             Text("메모 (선택)")
                 .font(.headline)
 
-            TextField("메모를 입력하세요", text: $viewModel.notes, axis: .vertical)
+            TextField("메모를 입력하세요", text: $store.notes, axis: .vertical)
                 .lineLimit(2...4)
                 .textFieldStyle(.roundedBorder)
         }
@@ -203,7 +204,7 @@ public struct MealRecordView: View {
             VStack(spacing: 16) {
                 ProgressView()
                     .scaleEffect(1.5)
-                Text(viewModel.state == .estimating ? "AI가 분석 중..." : "저장 중...")
+                Text(store.viewState == .estimating ? "AI가 분석 중..." : "저장 중...")
                     .foregroundStyle(.white)
             }
             .padding(32)
@@ -270,11 +271,12 @@ struct EstimatedFoodRow: View {
     }
 }
 
-// MARK: - State Extension
-
-extension MealRecordViewState {
-    var isError: Bool {
-        if case .error = self { return true }
-        return false
-    }
+#Preview {
+    MealRecordView(
+        store: Store(
+            initialState: MealFeature.State(userProfileId: UUID())
+        ) {
+            MealFeature()
+        }
+    )
 }
