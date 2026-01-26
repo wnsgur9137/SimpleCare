@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import BasePresentation
+import ProfileDomain
 
 public protocol ProfileCoordinatorDependency {
-    func makeProfileViewModel() -> ProfileViewModel
+    var profileClient: ProfileClient { get }
 }
 
 /// 프로필 Coordinator
 public final class ProfileCoordinator: ObservableObject, Coordinator {
-    
     private let dependencies: ProfileCoordinatorDependency
 
     public init(dependencies: ProfileCoordinatorDependency) {
@@ -23,11 +24,29 @@ public final class ProfileCoordinator: ObservableObject, Coordinator {
 
     @ViewBuilder
     public func start() -> some View {
-        makeProfileView()
+        ProfileContainerView(profileClient: dependencies.profileClient)
+    }
+}
+
+// MARK: - Container View
+
+private struct ProfileContainerView: View {
+    let profileClient: ProfileClient
+
+    @State private var store: StoreOf<ProfileFeature>
+
+    init(profileClient: ProfileClient) {
+        self.profileClient = profileClient
+        self._store = State(
+            initialValue: Store(initialState: ProfileFeature.State()) {
+                ProfileFeature()
+            } withDependencies: {
+                $0.profileClient = profileClient
+            }
+        )
     }
 
-    @ViewBuilder
-    private func makeProfileView() -> some View {
-        ProfileView(viewModel: dependencies.makeProfileViewModel())
+    var body: some View {
+        ProfileView(store: store)
     }
 }
