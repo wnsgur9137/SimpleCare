@@ -8,6 +8,7 @@ graph: common-graph splash-graph onboarding-graph home-graph settings-graph
 
 generate:
 	TUIST_ROOT_DIR=${PWD} tuist generate
+	graph
 
 # 전체 타겟 그래프
 common-graph:
