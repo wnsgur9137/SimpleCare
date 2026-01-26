@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import BasePresentation
 
 public protocol SplashCoordinatorDependency {
@@ -23,8 +24,41 @@ public final class SplashCoordinator: ObservableObject, @MainActor Coordinator {
 
     @MainActor @ViewBuilder
     public func start() -> some View {
-        SplashView(minimumDuration: dependencies.minimumDuration) { [weak self] in
-            self?.onComplete?()
-        }
+        SplashContainerView(
+            minimumDuration: dependencies.minimumDuration,
+            onComplete: { [weak self] in
+                self?.onComplete?()
+            }
+        )
+    }
+}
+
+// MARK: - Container View for handling completion
+
+private struct SplashContainerView: View {
+    let minimumDuration: TimeInterval
+    let onComplete: () -> Void
+
+    @State private var store: StoreOf<SplashFeature>
+
+    init(minimumDuration: TimeInterval, onComplete: @escaping () -> Void) {
+        self.minimumDuration = minimumDuration
+        self.onComplete = onComplete
+        self._store = State(
+            initialValue: Store(
+                initialState: SplashFeature.State(minimumDuration: minimumDuration)
+            ) {
+                SplashFeature()
+            }
+        )
+    }
+
+    var body: some View {
+        SplashView(store: store)
+            .onChange(of: store.isCompleted) { _, isCompleted in
+                if isCompleted {
+                    onComplete()
+                }
+            }
     }
 }

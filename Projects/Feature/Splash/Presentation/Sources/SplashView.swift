@@ -6,19 +6,13 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 public struct SplashView: View {
-    private let minimumDuration: TimeInterval
-    private let onComplete: () -> Void
+    @Bindable var store: StoreOf<SplashFeature>
 
-    @State private var isAnimating = false
-
-    public init(
-        minimumDuration: TimeInterval = 1.5,
-        onComplete: @escaping () -> Void
-    ) {
-        self.minimumDuration = minimumDuration
-        self.onComplete = onComplete
+    public init(store: StoreOf<SplashFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -41,37 +35,34 @@ public struct SplashView: View {
                     Image(systemName: "heart.text.clipboard")
                         .font(.system(size: 60))
                         .foregroundStyle(.white)
-                        .scaleEffect(isAnimating ? 1.0 : 0.8)
-                        .opacity(isAnimating ? 1.0 : 0.5)
+                        .scaleEffect(store.isAnimating ? 1.0 : 0.8)
+                        .opacity(store.isAnimating ? 1.0 : 0.5)
                 }
 
                 // App name
                 Text("SimpleCare")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                    .opacity(isAnimating ? 1.0 : 0.0)
+                    .opacity(store.isAnimating ? 1.0 : 0.0)
 
                 // Tagline
                 Text("건강한 하루를 기록하세요")
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
-                    .opacity(isAnimating ? 1.0 : 0.0)
+                    .opacity(store.isAnimating ? 1.0 : 0.0)
             }
         }
+        .animation(.easeOut(duration: 0.6), value: store.isAnimating)
         .onAppear {
-            withAnimation(.easeOut(duration: 0.6)) {
-                isAnimating = true
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + minimumDuration) {
-                onComplete()
-            }
+            store.send(.onAppear)
         }
     }
 }
 
 #Preview {
-    SplashView {
-        print("Splash completed")
-    }
+    SplashView(
+        store: Store(initialState: SplashFeature.State()) {
+            SplashFeature()
+        }
+    )
 }
