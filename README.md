@@ -173,6 +173,7 @@ MET 기반 운동 기록 및 칼로리 계산
 | [MODULES.md](./docs/MODULES.md) | 모듈 상세 정의 |
 | [API.md](./docs/API.md) | AI API 연동 명세 |
 | [PRD.md](./docs/PRD.md) | 제품 요구사항 문서 |
+| [WORKPLAN.md](./docs/WORKPLAN.md) | 작업 계획서 |
 | [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
 
 ---

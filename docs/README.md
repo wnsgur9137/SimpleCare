@@ -12,6 +12,8 @@ AI 기반 헬스케어 iOS 앱 기술 문서
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 프로젝트 아키텍처 설계 |
 | [MODULES.md](./MODULES.md) | 모듈 상세 정의 |
 | [API.md](./API.md) | AI API 연동 명세 |
+| [PRD.md](./PRD.md) | 제품 요구사항 문서 |
+| [WORKPLAN.md](./WORKPLAN.md) | 작업 계획서 |
 | [ROADMAP.md](./ROADMAP.md) | 개발 로드맵 및 진행 상황 |
 
 ---
