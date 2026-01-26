@@ -1,19 +1,19 @@
 //
-//  DashboardView.swift
-//  DashboardPresentation
+//  HomeView.swift
+//  HomePresentation
 //
 //  Created by SimpleCare on 1/26/26.
 //
 
 import SwiftUI
 import ComposableArchitecture
-import DashboardDomain
+import HomeDomain
 
-/// 대시보드 메인 화면
-public struct DashboardView: View {
-    @Bindable var store: StoreOf<DashboardFeature>
+/// 홈 메인 화면
+public struct HomeView: View {
+    @Bindable var store: StoreOf<HomeFeature>
 
-    public init(store: StoreOf<DashboardFeature>) {
+    public init(store: StoreOf<HomeFeature>) {
         self.store = store
     }
 
@@ -32,24 +32,24 @@ public struct DashboardView: View {
                         calorieSummarySection(summary: summary)
 
                         // 영양소 프로그레스
-                        NutritionProgressSection(summary: summary)
+                        HomeNutritionSection(summary: summary)
 
                         // 빠른 기록 버튼
-                        QuickActionButtons(
+                        HomeQuickActionButtons(
                             onMealTap: { store.send(.mealButtonTapped) },
                             onExerciseTap: { store.send(.exerciseButtonTapped) },
                             onWeightTap: { store.send(.weightButtonTapped) }
                         )
 
                         // 오늘의 기록 목록
-                        TodayRecordsSection(
+                        HomeTodayRecordsSection(
                             meals: summary.meals,
                             exercises: summary.exercises,
                             onAddTap: { store.send(.addRecordButtonTapped) }
                         )
 
                         // 주간 트렌드
-                        WeeklyTrendView(
+                        HomeWeeklyTrendView(
                             weeklyStatus: store.weeklyStatus,
                             selectedDayIndex: store.selectedDayIndex,
                             onDayTap: { store.send(.selectWeekDay($0)) }
@@ -142,7 +142,7 @@ public struct DashboardView: View {
         }
     }
 
-    private func calorieSummarySection(summary: DailySummary) -> some View {
+    private func calorieSummarySection(summary: HomeDailySummary) -> some View {
         VStack(spacing: 16) {
             HStack(alignment: .top) {
                 Spacer()
@@ -181,7 +181,7 @@ public struct DashboardView: View {
 
                 // 스트릭 배지
                 if summary.streakDays > 0 {
-                    StreakBadge(days: summary.streakDays)
+                    HomeStreakBadge(days: summary.streakDays)
                 }
 
                 Spacer()
@@ -238,7 +238,7 @@ public struct DashboardView: View {
         return formatter.string(from: store.selectedDate)
     }
 
-    private func calorieColor(for status: CalorieStatus) -> Color {
+    private func calorieColor(for status: HomeCalorieStatus) -> Color {
         switch status {
         case .under: return .orange
         case .onTrack: return .green
@@ -248,16 +248,16 @@ public struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView(
+    HomeView(
         store: Store(
-            initialState: DashboardFeature.State(
+            initialState: HomeFeature.State(
                 userProfileId: UUID(),
                 goalCalories: 2000
             )
         ) {
-            DashboardFeature()
+            HomeFeature()
         } withDependencies: {
-            $0[DashboardClient.self] = .testValue
+            $0.homeClient = .testValue
         }
     )
 }

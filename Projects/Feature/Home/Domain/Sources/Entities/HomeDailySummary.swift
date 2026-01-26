@@ -1,29 +1,24 @@
 //
-//  DailySummary.swift
-//  DashboardDomain
+//  HomeDailySummary.swift
+//  HomeDomain
 //
 //  Created by SimpleCare on 1/26/26.
 //
 
 import Foundation
 
-/// 하루 요약 정보
-public struct DailySummary: Equatable, Sendable {
+/// 홈 화면용 하루 요약 정보
+public struct HomeDailySummary: Equatable, Sendable {
     public let date: Date
     public let totalCalories: Int
     public let goalCalories: Int
     public let totalProtein: Double
     public let totalCarbs: Double
     public let totalFat: Double
-    public let mealCount: Int
     public let exerciseCalories: Int
-
-    // 신규 필드
-    public let meals: [MealSummary]
-    public let exercises: [ExerciseSummary]
+    public let meals: [HomeMealSummary]
+    public let exercises: [HomeExerciseSummary]
     public let streakDays: Int
-
-    // 영양소 목표
     public let proteinGoal: Double
     public let carbsGoal: Double
     public let fatGoal: Double
@@ -35,10 +30,9 @@ public struct DailySummary: Equatable, Sendable {
         totalProtein: Double,
         totalCarbs: Double,
         totalFat: Double,
-        mealCount: Int,
         exerciseCalories: Int = 0,
-        meals: [MealSummary] = [],
-        exercises: [ExerciseSummary] = [],
+        meals: [HomeMealSummary] = [],
+        exercises: [HomeExerciseSummary] = [],
         streakDays: Int = 0,
         proteinGoal: Double = 100,
         carbsGoal: Double = 250,
@@ -50,7 +44,6 @@ public struct DailySummary: Equatable, Sendable {
         self.totalProtein = totalProtein
         self.totalCarbs = totalCarbs
         self.totalFat = totalFat
-        self.mealCount = mealCount
         self.exerciseCalories = exerciseCalories
         self.meals = meals
         self.exercises = exercises
@@ -58,6 +51,29 @@ public struct DailySummary: Equatable, Sendable {
         self.proteinGoal = proteinGoal
         self.carbsGoal = carbsGoal
         self.fatGoal = fatGoal
+    }
+
+    /// 남은 칼로리
+    public var remainingCalories: Int {
+        goalCalories - totalCalories + exerciseCalories
+    }
+
+    /// 칼로리 달성률 (0.0 ~ 1.0+)
+    public var calorieProgress: Double {
+        guard goalCalories > 0 else { return 0 }
+        return Double(totalCalories) / Double(goalCalories)
+    }
+
+    /// 칼로리 상태
+    public var calorieStatus: HomeCalorieStatus {
+        let progress = calorieProgress
+        if progress < 0.8 {
+            return .under
+        } else if progress <= 1.1 {
+            return .onTrack
+        } else {
+            return .over
+        }
     }
 
     /// 기록이 있는지 여부
@@ -83,32 +99,21 @@ public struct DailySummary: Equatable, Sendable {
         return min(totalFat / fatGoal, 1.0)
     }
 
-    /// 남은 칼로리
-    public var remainingCalories: Int {
-        goalCalories - totalCalories + exerciseCalories
-    }
-
-    /// 칼로리 달성률 (0.0 ~ 1.0+)
-    public var calorieProgress: Double {
-        guard goalCalories > 0 else { return 0 }
-        return Double(totalCalories) / Double(goalCalories)
-    }
-
-    /// 칼로리 상태
-    public var calorieStatus: CalorieStatus {
-        let progress = calorieProgress
-        if progress < 0.8 {
-            return .under
-        } else if progress <= 1.1 {
-            return .onTrack
-        } else {
-            return .over
-        }
+    /// 빈 요약
+    public static func empty(goalCalories: Int) -> HomeDailySummary {
+        HomeDailySummary(
+            date: Date(),
+            totalCalories: 0,
+            goalCalories: goalCalories,
+            totalProtein: 0,
+            totalCarbs: 0,
+            totalFat: 0
+        )
     }
 }
 
 /// 칼로리 상태
-public enum CalorieStatus: Equatable, Sendable {
+public enum HomeCalorieStatus: Equatable, Sendable {
     case under
     case onTrack
     case over
@@ -120,18 +125,10 @@ public enum CalorieStatus: Equatable, Sendable {
         case .over: return "초과"
         }
     }
-
-    public var color: String {
-        switch self {
-        case .under: return "orange"
-        case .onTrack: return "green"
-        case .over: return "red"
-        }
-    }
 }
 
 /// AI 인사이트
-public struct DailyInsight: Equatable, Sendable {
+public struct HomeInsight: Equatable, Sendable {
     public let comment: String
     public let emoji: String
 
@@ -140,9 +137,9 @@ public struct DailyInsight: Equatable, Sendable {
         self.emoji = emoji
     }
 
-    public static var defaultInsight: DailyInsight {
-        DailyInsight(
-            comment: "오늘도 건강한 식단을 위해 노력해주세요!",
+    public static var defaultInsight: HomeInsight {
+        HomeInsight(
+            comment: "오늘도 건강한 하루를 시작해보세요!",
             emoji: "💪"
         )
     }

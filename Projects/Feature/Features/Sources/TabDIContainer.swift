@@ -51,6 +51,21 @@ public final class TabDIContainer: DIContainer {
         ProfileDIContainer()
     }
 
+    // MARK: - Home
+
+    @MainActor
+    public func makeHomeDIContainer() -> HomeDIContainer {
+        let userProfileId = cachedUserProfile?.id ?? UUID()
+        let goalCalories = cachedUserProfile?.recommendedDailyCalories ?? 2000
+
+        return HomeDIContainer(
+            dependencies: HomeDIContainer.Dependencies(
+                userProfileId: userProfileId,
+                goalCalories: goalCalories
+            )
+        )
+    }
+
     // MARK: - Dashboard
 
     @MainActor
