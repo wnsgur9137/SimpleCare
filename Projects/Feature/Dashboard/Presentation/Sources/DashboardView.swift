@@ -7,14 +7,15 @@
 
 import SwiftUI
 import Charts
+import ComposableArchitecture
 import DashboardDomain
 
 /// 대시보드 메인 화면
 public struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel
+    @Bindable var store: StoreOf<DashboardFeature>
 
-    public init(viewModel: DashboardViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    public init(store: StoreOf<DashboardFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -28,7 +29,7 @@ public struct DashboardView: View {
                     insightSection
 
                     // 칼로리 요약
-                    if let summary = viewModel.dailySummary {
+                    if let summary = store.dailySummary {
                         calorieSummarySection(summary: summary)
 
                         // 영양소 차트
@@ -42,13 +43,13 @@ public struct DashboardView: View {
             }
             .navigationTitle("대시보드")
             .refreshable {
-                await viewModel.refreshData()
+                await store.send(.refreshData).finish()
             }
             .task {
-                await viewModel.loadDashboard()
+                store.send(.onAppear)
             }
             .overlay {
-                if viewModel.state == .loading && viewModel.dailySummary == nil {
+                if store.viewState == .loading && store.dailySummary == nil {
                     ProgressView()
                 }
             }
@@ -60,7 +61,7 @@ public struct DashboardView: View {
     private var dateNavigationSection: some View {
         HStack {
             Button {
-                viewModel.goToPreviousDay()
+                store.send(.goToPreviousDay)
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.title2)
@@ -69,11 +70,11 @@ public struct DashboardView: View {
             Spacer()
 
             VStack {
-                Text(viewModel.isToday ? "오늘" : formattedDate)
+                Text(store.isToday ? "오늘" : formattedDate)
                     .font(.title2)
                     .fontWeight(.bold)
 
-                if !viewModel.isToday {
+                if !store.isToday {
                     Text(formattedWeekday)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -83,22 +84,22 @@ public struct DashboardView: View {
             Spacer()
 
             Button {
-                viewModel.goToNextDay()
+                store.send(.goToNextDay)
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.title2)
             }
-            .disabled(!viewModel.canGoToNextDay)
+            .disabled(!store.canGoToNextDay)
         }
         .padding(.horizontal)
     }
 
     private var insightSection: some View {
         HStack(spacing: 12) {
-            Text(viewModel.insight.emoji)
+            Text(store.insight.emoji)
                 .font(.largeTitle)
 
-            Text(viewModel.insight.comment)
+            Text(store.insight.comment)
                 .font(.body)
                 .foregroundStyle(.secondary)
 
@@ -239,14 +240,14 @@ public struct DashboardView: View {
     private var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "M월 d일"
-        return formatter.string(from: viewModel.selectedDate)
+        return formatter.string(from: store.selectedDate)
     }
 
     private var formattedWeekday: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
         formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.string(from: viewModel.selectedDate)
+        return formatter.string(from: store.selectedDate)
     }
 
     private func calorieColor(for status: CalorieStatus) -> Color {
@@ -278,4 +279,17 @@ struct NutritionLegend: View {
                 .fontWeight(.medium)
         }
     }
+}
+
+#Preview {
+    DashboardView(
+        store: Store(
+            initialState: DashboardFeature.State(
+                userProfileId: UUID(),
+                goalCalories: 2000
+            )
+        ) {
+            DashboardFeature()
+        }
+    )
 }
