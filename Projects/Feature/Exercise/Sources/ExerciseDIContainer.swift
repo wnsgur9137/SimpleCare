@@ -11,7 +11,7 @@ import ExerciseDomain
 import ExerciseData
 import ExercisePresentation
 
-public final class ExerciseDIContainer: DIContainer, @MainActor ExerciseCoordinatorDependency {
+public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependency {
     public struct Dependencies {
         public let userProfileId: UUID
         public let userWeightKg: Double
@@ -28,25 +28,37 @@ public final class ExerciseDIContainer: DIContainer, @MainActor ExerciseCoordina
         self.dependencies = dependencies
     }
 
+    // MARK: - ExerciseCoordinatorDependency
+
+    public var userProfileId: UUID {
+        dependencies.userProfileId
+    }
+
+    public var userWeightKg: Double {
+        dependencies.userWeightKg
+    }
+
+    // MARK: - Repository
+
     private func makeExerciseRepository() -> ExerciseRepositoryProtocol {
         ExerciseRepository()
     }
+
+    // MARK: - Use Cases
 
     private func makeRecordExerciseUseCase() -> RecordExerciseUseCaseProtocol {
         RecordExerciseUseCase(repository: makeExerciseRepository())
     }
 
-    private func makeEstimateCaloriesUseCase() -> EstimateCalorieBurnUseCaseProtocol {
-        EstimateCalorieBurnUseCase()
-    }
+    // MARK: - TCA Dependencies
 
-    @MainActor
-    public func makeExerciseRecordViewModel() -> ExerciseRecordViewModel {
-        ExerciseRecordViewModel(
-            recordExerciseUseCase: makeRecordExerciseUseCase(),
-            estimateCaloriesUseCase: makeEstimateCaloriesUseCase(),
-            userProfileId: dependencies.userProfileId,
-            userWeightKg: dependencies.userWeightKg
+    public var exerciseClient: ExerciseClient {
+        let recordUseCase = makeRecordExerciseUseCase()
+
+        return ExerciseClient(
+            recordExercise: { record in
+                try await recordUseCase.execute(exercise: record)
+            }
         )
     }
 }
