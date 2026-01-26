@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-import Splash
-import Onboarding
 import Home
 import Settings
 import Dashboard
@@ -22,28 +20,14 @@ import BasePresentation
 public final class TabCoordinator: ObservableObject, Coordinator {
     private let diContainer: TabDIContainer
 
-    private enum UserDefaultsKeys {
-        static let isOnboardingCompleted = "com.simplecare.isOnboardingCompleted"
-    }
-
-    // MARK: - Child Coordinators (강한 참조 유지)
-
-    private var splashCoordinator: SplashCoordinator?
-    private var onboardingCoordinator: OnboardingCoordinator?
-
     // MARK: - Published Properties
 
     @Published public var selectedTab: AppTab = .dashboard
-    @Published public var isSplashCompleted: Bool = false
-    @Published public var isOnboardingCompleted: Bool = false
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
 
     public init(diContainer: TabDIContainer) {
         self.diContainer = diContainer
-        self.isOnboardingCompleted = UserDefaults.standard.bool(
-            forKey: UserDefaultsKeys.isOnboardingCompleted
-        )
     }
 
     // MARK: - Bindings
@@ -63,31 +47,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     }
 
     public func start() -> some View {
-        return TabCoordinatorView(coordinator: self)
-    }
-
-    // MARK: - Splash
-
-    @MainActor
-    func makeSplash() -> some View {
-        let container = diContainer.makeSplashDIContainer()
-        let coordinator = SplashCoordinator(dependencies: container) { [weak self] in
-            self?.completeSplash()
-        }
-        self.splashCoordinator = coordinator
-        return coordinator.start()
-    }
-
-    // MARK: - Onboarding
-
-    @MainActor
-    func makeOnboarding() -> some View {
-        let container = diContainer.makeOnboardingDIContainer()
-        let coordinator = OnboardingCoordinator(dependencies: container) { [weak self] in
-            self?.completeOnboarding()
-        }
-        self.onboardingCoordinator = coordinator
-        return coordinator.start()
+        return MainTabView(coordinator: self)
     }
 
     // MARK: - Dashboard
@@ -194,24 +154,6 @@ public final class TabCoordinator: ObservableObject, Coordinator {
                 }
             }
             .navigationTitle("설정")
-        }
-    }
-
-    // MARK: - Private
-
-    private func completeSplash() {
-        withAnimation {
-            isSplashCompleted = true
-            splashCoordinator = nil
-        }
-    }
-
-    private func completeOnboarding() {
-        UserDefaults.standard.set(true, forKey: UserDefaultsKeys.isOnboardingCompleted)
-        withAnimation {
-            isOnboardingCompleted = true
-            selectedTab = .dashboard
-            onboardingCoordinator = nil
         }
     }
 }

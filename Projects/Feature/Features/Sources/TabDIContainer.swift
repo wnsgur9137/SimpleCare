@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Splash
-import Onboarding
 import Home
 import Settings
 import Dashboard
@@ -45,18 +43,6 @@ public final class TabDIContainer: DIContainer {
         let storage = UserProfileStorage()
         cachedUserProfile = try? await storage.fetchProfile()
         return cachedUserProfile
-    }
-
-    // MARK: - Splash
-
-    public func makeSplashDIContainer() -> SplashDIContainer {
-        SplashDIContainer(minimumDuration: 1.5)
-    }
-
-    // MARK: - Onboarding
-
-    public func makeOnboardingDIContainer() -> OnboardingDIContainer {
-        OnboardingDIContainer()
     }
 
     // MARK: - Profile

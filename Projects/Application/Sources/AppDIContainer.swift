@@ -9,6 +9,8 @@
 import Foundation
 
 import Features
+import Splash
+import Onboarding
 import BasePresentation
 
 final class AppDIContainer: DIContainer {
@@ -18,6 +20,18 @@ final class AppDIContainer: DIContainer {
 
     init(dependencies: Dependencies = Dependencies()) { // TODO: - AppConfiguration 생성
         self.dependencies = dependencies
+    }
+
+    // MARK: - Splash DIContainer
+
+    func makeSplashDIContainer() -> SplashDIContainer {
+        SplashDIContainer(minimumDuration: 1.5)
+    }
+
+    // MARK: - Onboarding DIContainer
+
+    func makeOnboardingDIContainer() -> OnboardingDIContainer {
+        OnboardingDIContainer()
     }
 
     // MARK: - Tab DIContainer
