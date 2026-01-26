@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 import BasePresentation
+import ProfileDomain
 
 public protocol OnboardingCoordinatorDependency {
-    @MainActor func makeOnboardingViewModel() -> OnboardingViewModel
+    var saveUserProfile: @Sendable (UserProfile) async throws -> Void { get }
 }
 
 /// 온보딩 Coordinator
@@ -24,15 +26,44 @@ public final class OnboardingCoordinator: ObservableObject, Coordinator {
 
     @MainActor @ViewBuilder
     public func start() -> some View {
-        makeOnboardingView()
+        OnboardingContainerView(
+            saveUserProfile: dependencies.saveUserProfile,
+            onComplete: { [weak self] in
+                self?.onComplete?()
+            }
+        )
+    }
+}
+
+// MARK: - Container View
+
+private struct OnboardingContainerView: View {
+    let saveUserProfile: @Sendable (UserProfile) async throws -> Void
+    let onComplete: () -> Void
+
+    @State private var store: StoreOf<OnboardingFeature>
+
+    init(
+        saveUserProfile: @escaping @Sendable (UserProfile) async throws -> Void,
+        onComplete: @escaping () -> Void
+    ) {
+        self.saveUserProfile = saveUserProfile
+        self.onComplete = onComplete
+        self._store = State(
+            initialValue: Store(initialState: OnboardingFeature.State()) {
+                OnboardingFeature()
+            } withDependencies: {
+                $0.saveUserProfile = saveUserProfile
+            }
+        )
     }
 
-    @MainActor @ViewBuilder
-    private func makeOnboardingView() -> some View {
-        let viewModel = dependencies.makeOnboardingViewModel()
-        viewModel.onComplete = { [weak self] in
-            self?.onComplete?()
-        }
-        return OnboardingView(viewModel: viewModel)
+    var body: some View {
+        OnboardingView(store: store)
+            .onChange(of: store.isCompleted) { _, isCompleted in
+                if isCompleted {
+                    onComplete()
+                }
+            }
     }
 }
