@@ -49,7 +49,8 @@ public let defaultInfoPlist: [String: Plist.Value] = [
 // MARK: - Default Settings
 public let defaultSettings: Settings = .settings(
     base: [
-        "DEVELOPMENT_TEAM": "VW2UR5Y845"
+        "DEVELOPMENT_TEAM": "VW2UR5Y845",
+        "SWIFT_INSTALL_OBJC_HEADER": "NO"
     ],
     configurations: [
         .debug(name: .DEV),
