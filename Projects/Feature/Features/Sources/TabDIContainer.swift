@@ -47,6 +47,12 @@ public final class TabDIContainer: DIContainer {
         return cachedUserProfile
     }
 
+    // MARK: - Splash
+
+    public func makeSplashDIContainer() -> SplashDIContainer {
+        SplashDIContainer(minimumDuration: 1.5)
+    }
+
     // MARK: - Onboarding
 
     public func makeOnboardingDIContainer() -> OnboardingDIContainer {

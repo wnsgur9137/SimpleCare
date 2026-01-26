@@ -26,8 +26,15 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         static let isOnboardingCompleted = "com.simplecare.isOnboardingCompleted"
     }
 
+    // MARK: - Child Coordinators (강한 참조 유지)
+
+    private var splashCoordinator: SplashCoordinator?
+    private var onboardingCoordinator: OnboardingCoordinator?
+
+    // MARK: - Published Properties
+
     @Published public var selectedTab: AppTab = .dashboard
-    @Published public var isSplashCompleted: Bool = true // Skip splash for now
+    @Published public var isSplashCompleted: Bool = false
     @Published public var isOnboardingCompleted: Bool = false
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
@@ -55,43 +62,47 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         )
     }
 
-    @ViewBuilder
     public func start() -> some View {
-        TabCoordinatorView(coordinator: self)
+        return TabCoordinatorView(coordinator: self)
     }
 
     // MARK: - Splash
 
-    @ViewBuilder
+    @MainActor
     func makeSplash() -> some View {
-        // TODO: Implement splash screen
-        EmptyView()
+        let container = diContainer.makeSplashDIContainer()
+        let coordinator = SplashCoordinator(dependencies: container) { [weak self] in
+            self?.completeSplash()
+        }
+        self.splashCoordinator = coordinator
+        return coordinator.start()
     }
 
     // MARK: - Onboarding
 
-    @MainActor @ViewBuilder
+    @MainActor
     func makeOnboarding() -> some View {
         let container = diContainer.makeOnboardingDIContainer()
         let coordinator = OnboardingCoordinator(dependencies: container) { [weak self] in
             self?.completeOnboarding()
         }
-        coordinator.start()
+        self.onboardingCoordinator = coordinator
+        return coordinator.start()
     }
 
     // MARK: - Dashboard
 
-    @MainActor @ViewBuilder
+    @MainActor
     public func makeDashboard() -> some View {
         let container = diContainer.makeDashboardDIContainer()
-        DashboardCoordinator(dependencies: container).start()
+        return DashboardCoordinator(dependencies: container).start()
     }
 
     // MARK: - Meal
 
-    @MainActor @ViewBuilder
+    @MainActor
     public func makeMealList() -> some View {
-        NavigationStack {
+        return NavigationStack {
             VStack {
                 // TODO: Implement meal list view
                 Text("식사 기록")
@@ -118,9 +129,9 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     // MARK: - Exercise
 
-    @MainActor @ViewBuilder
+    @MainActor
     public func makeExerciseList() -> some View {
-        NavigationStack {
+        return NavigationStack {
             VStack {
                 // TODO: Implement exercise list view
                 Text("운동 기록")
@@ -147,17 +158,16 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     // MARK: - Progress (Weight)
 
-    @MainActor @ViewBuilder
+    @MainActor
     public func makeProgress() -> some View {
         let container = diContainer.makeWeightDIContainer()
-        WeightCoordinator(dependencies: container).start()
+        return WeightCoordinator(dependencies: container).start()
     }
 
     // MARK: - Settings
 
-    @ViewBuilder
     public func makeSettings() -> some View {
-        NavigationStack {
+        return NavigationStack {
             List {
                 Section("계정") {
                     NavigationLink {
@@ -192,12 +202,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     private func completeSplash() {
         withAnimation {
             isSplashCompleted = true
-            // Check if onboarding is needed
-            if !isOnboardingCompleted {
-                // Show onboarding
-            } else {
-                selectedTab = .dashboard
-            }
+            splashCoordinator = nil
         }
     }
 
@@ -206,6 +211,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         withAnimation {
             isOnboardingCompleted = true
             selectedTab = .dashboard
+            onboardingCoordinator = nil
         }
     }
 }
