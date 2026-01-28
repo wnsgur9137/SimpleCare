@@ -10,7 +10,6 @@ import SwiftUI
 
 import Home
 import Settings
-import Dashboard
 import Meal
 import Weight
 import Exercise
@@ -66,14 +65,6 @@ public final class TabCoordinator: ObservableObject, Coordinator {
             self?.selectedTab = .progress
         }
         return coordinator.start()
-    }
-
-    // MARK: - Dashboard
-
-    @MainActor
-    public func makeDashboard() -> some View {
-        let container = diContainer.makeDashboardDIContainer()
-        return DashboardCoordinator(dependencies: container).start()
     }
 
     // MARK: - Meal
