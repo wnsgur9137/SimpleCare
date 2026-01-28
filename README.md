@@ -4,6 +4,21 @@ AI 기반 개인 건강 관리 iOS 앱
 
 ---
 
+## 목차
+
+1. [제품 비전](#제품-비전)
+2. [기술 스택](#기술-스택)
+3. [주요 기능](#주요-기능)
+4. [빠른 시작](#빠른-시작)
+5. [AI 개발 도구](#ai-개발-도구)
+6. [모듈 구조](#모듈-구조)
+7. [아키텍처](#아키텍처)
+8. [문서](#문서)
+9. [면책 조항](#면책-조항)
+10. [라이선스](#라이선스)
+
+---
+
 ## 제품 비전
 
 사용자가 식단, 운동, 체중을 간편하게 기록하고 AI의 도움으로 건강한 생활 습관을 형성할 수 있도록 돕는 iOS 앱
@@ -47,6 +62,37 @@ tuist install && tuist generate
 # 3. Xcode에서 열기
 open SimpleCare.xcworkspace
 ```
+
+---
+
+## AI 개발 도구
+
+본 프로젝트는 AI 도구를 적극 활용하여 개발 생산성과 코드 품질을 향상시키고 있습니다.
+
+### PR 리뷰 자동화
+
+| 도구 | 용도 |
+|------|------|
+| **Claude Code** | 코드 작성, 리팩토링, PR 생성, GitHub MCP 연동 |
+| **Gemini Code Assist** | PR 생성 시 자동 코드 리뷰 수행 |
+
+### AI 교차검증
+
+단일 AI에 의존하지 않고, 여러 AI 모델을 활용하여 교차검증을 진행합니다.
+
+- **ChatGPT** (OpenAI)
+- **Claude** (Anthropic)
+- **Gemini** (Google)
+
+### MCP 서버 연동
+
+Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동됩니다.
+
+- **GitHub MCP**: Docker 기반으로 실행되며, PR/Issue 관리 기능 제공
+- **Sosumi**: Apple Developer Documentation 검색
+- **Shrimp Task Manager**: 태스크 관리 (GUI 지원)
+
+> 자세한 내용은 [AI_TOOLS.md](./docs/AI_TOOLS.md)를 참고하세요.
 
 ---
 
@@ -176,6 +222,7 @@ MET 기반 운동 기록 및 칼로리 계산
 | [WORKPLAN.md](./docs/WORKPLAN.md) | 작업 계획서 |
 | [HOME_SCREEN_PLAN.md](./docs/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
 | [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
+| [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
 
 ---
 
