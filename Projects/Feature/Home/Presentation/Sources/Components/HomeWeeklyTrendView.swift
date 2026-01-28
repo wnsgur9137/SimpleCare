@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HomeDomain
+import BasePresentation
 
 /// 주간 트렌드 뷰
 struct HomeWeeklyTrendView: View {
@@ -28,7 +29,7 @@ struct HomeWeeklyTrendView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -68,9 +69,9 @@ struct HomeWeeklyTrendView: View {
             return .gray.opacity(0.3)
         }
         switch status {
-        case .under: return .orange
-        case .onTrack: return .green
-        case .over: return .red
+        case .under: return .scWarning
+        case .onTrack: return .scSuccess
+        case .over: return .scError
         }
     }
 

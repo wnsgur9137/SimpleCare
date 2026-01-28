@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 import ComposableArchitecture
 import WeightDomain
+import BasePresentation
 
 /// 체중 관리 화면
 public struct WeightView: View {
@@ -69,7 +70,7 @@ public struct WeightView: View {
                 .textFieldStyle(.roundedBorder)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -83,13 +84,13 @@ public struct WeightView: View {
                     x: .value("날짜", record.date),
                     y: .value("체중", record.weightKg)
                 )
-                .foregroundStyle(.blue)
+                .foregroundStyle(.scPrimary)
 
                 PointMark(
                     x: .value("날짜", record.date),
                     y: .value("체중", record.weightKg)
                 )
-                .foregroundStyle(.blue)
+                .foregroundStyle(.scPrimary)
             }
             .frame(height: 200)
             .chartYAxis {
@@ -99,7 +100,7 @@ public struct WeightView: View {
             // 목표선
             HStack {
                 Circle()
-                    .fill(.green)
+                    .fill(.scSuccess)
                     .frame(width: 8, height: 8)
                 Text("목표: \(String(format: "%.1f", trend.targetWeight)) kg")
                     .font(.caption)
@@ -107,7 +108,7 @@ public struct WeightView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -121,7 +122,7 @@ public struct WeightView: View {
                     title: "목표까지",
                     value: String(format: "%.1f", abs(trend.remainingToGoal)),
                     unit: "kg",
-                    color: trend.remainingToGoal > 0 ? .orange : .green
+                    color: trend.remainingToGoal > 0 ? .scWarning : .scSuccess
                 )
 
                 if let weekly = trend.weeklyChange {
@@ -129,7 +130,7 @@ public struct WeightView: View {
                         title: "주간 변화",
                         value: String(format: "%+.1f", weekly),
                         unit: "kg",
-                        color: weekly < 0 ? .green : .orange
+                        color: weekly < 0 ? .scSuccess : .scWarning
                     )
                 }
 
@@ -138,13 +139,13 @@ public struct WeightView: View {
                         title: "월간 변화",
                         value: String(format: "%+.1f", monthly),
                         unit: "kg",
-                        color: monthly < 0 ? .green : .orange
+                        color: monthly < 0 ? .scSuccess : .scWarning
                     )
                 }
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

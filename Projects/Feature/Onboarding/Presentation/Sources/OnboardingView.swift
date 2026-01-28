@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import OnboardingDomain
 import ProfileDomain
+import BasePresentation
 
 /// 온보딩 메인 뷰
 public struct OnboardingView: View {
@@ -22,7 +23,7 @@ public struct OnboardingView: View {
         VStack(spacing: 0) {
             // Progress bar
             ProgressView(value: store.currentStep.progress)
-                .tint(.blue)
+                .tint(.scPrimary)
                 .padding(.horizontal)
 
             // Step content
@@ -96,7 +97,7 @@ struct WelcomeStepView: View {
 
             Image(systemName: "heart.circle.fill")
                 .font(.system(size: 100))
-                .foregroundStyle(.blue)
+                .foregroundStyle(.scPrimary)
 
             VStack(spacing: 8) {
                 Text("SimpleCare")
@@ -117,7 +118,7 @@ struct WelcomeStepView: View {
                 FeatureRow(icon: "figure.run", text: "운동 칼로리 추적")
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.scSurface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
 
             Spacer()
@@ -138,7 +139,7 @@ struct FeatureRow: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(.blue)
+                .foregroundStyle(.scPrimary)
                 .frame(width: 40)
 
             Text(text)
@@ -216,7 +217,7 @@ struct BodyInfoStepView: View {
                         Text(String(format: "%.1f cm", store.heightCm))
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(.scPrimary)
                     }
                     Slider(value: $store.heightCm, in: 100...250, step: 0.5)
                 }
@@ -229,7 +230,7 @@ struct BodyInfoStepView: View {
                         Text(String(format: "%.1f kg", store.currentWeightKg))
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(.scPrimary)
                     }
                     Slider(value: $store.currentWeightKg, in: 30...200, step: 0.1)
                 }
@@ -242,7 +243,7 @@ struct BodyInfoStepView: View {
                         Text(String(format: "%.1f kg", store.targetWeightKg))
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(.scSuccess)
                     }
                     Slider(value: $store.targetWeightKg, in: 30...200, step: 0.1)
                 }
@@ -293,9 +294,9 @@ struct GoalOptionCard: View {
             HStack(spacing: 16) {
                 Image(systemName: goal.icon)
                     .font(.title)
-                    .foregroundStyle(isSelected ? .white : .blue)
+                    .foregroundStyle(isSelected ? .white : .scPrimary)
                     .frame(width: 50, height: 50)
-                    .background(isSelected ? Color.blue : Color.blue.opacity(0.1))
+                    .background(isSelected ? Color.scPrimary : Color.scPrimary.opacity(0.1))
                     .clipShape(Circle())
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -316,7 +317,7 @@ struct GoalOptionCard: View {
                 }
             }
             .padding()
-            .background(isSelected ? Color.blue : Color(.systemGray6))
+            .background(isSelected ? Color.scPrimary : Color.scSurface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
@@ -372,18 +373,18 @@ struct ActivityLevelRow: View {
                     Text(level.displayName)
                         .font(.body)
                         .fontWeight(isSelected ? .semibold : .regular)
-                        .foregroundStyle(isSelected ? .blue : .primary)
+                        .foregroundStyle(isSelected ? .scPrimary : .primary)
                 }
 
                 Spacer()
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.scPrimary)
                 }
             }
             .padding()
-            .background(isSelected ? Color.blue.opacity(0.1) : Color(.systemGray6))
+            .background(isSelected ? Color.scPrimary.opacity(0.1) : Color.scSurface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
@@ -412,7 +413,7 @@ struct SummaryStepView: View {
                     SummaryRow(label: "활동 수준", value: store.activityLevel.displayName)
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.scSurface)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 VStack(spacing: 8) {
@@ -420,14 +421,14 @@ struct SummaryStepView: View {
                         .font(.headline)
                     Text("\(store.calculatedCalories) kcal")
                         .font(.system(size: 48, weight: .bold))
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.scPrimary)
                     Text("기초대사량 \(Int(store.calculatedBMR)) kcal")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.blue.opacity(0.1))
+                .background(Color.scPrimary.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 Text("이 정보는 Mifflin-St Jeor 공식을 기반으로 한 추정치입니다. 정확한 건강 조언은 전문가와 상담하세요.")

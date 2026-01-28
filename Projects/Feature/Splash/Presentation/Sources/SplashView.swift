@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import BasePresentation
 
 public struct SplashView: View {
     @Bindable var store: StoreOf<SplashFeature>
@@ -19,7 +20,7 @@ public struct SplashView: View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [Color.blue.opacity(0.6), Color.green.opacity(0.4)],
+                colors: [Color.scPrimary.opacity(0.6), Color.scAccent.opacity(0.4)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )

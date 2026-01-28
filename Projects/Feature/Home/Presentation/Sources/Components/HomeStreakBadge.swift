@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BasePresentation
 
 /// 연속 기록 배지
 struct HomeStreakBadge: View {
@@ -20,10 +21,10 @@ struct HomeStreakBadge: View {
                     .font(.caption)
                     .fontWeight(.semibold)
             }
-            .foregroundStyle(.orange)
+            .foregroundStyle(.scWarning)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color.orange.opacity(0.15))
+            .background(Color.scWarning.opacity(0.15))
             .clipShape(Capsule())
             .accessibilityLabel("\(days)일 연속 기록 중")
         }

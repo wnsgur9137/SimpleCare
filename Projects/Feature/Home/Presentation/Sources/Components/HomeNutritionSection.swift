@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HomeDomain
+import BasePresentation
 
 /// 영양소 프로그레스 섹션
 struct HomeNutritionSection: View {
@@ -22,26 +23,26 @@ struct HomeNutritionSection: View {
                     label: "단백질",
                     current: summary.totalProtein,
                     goal: summary.proteinGoal,
-                    color: .red
+                    color: .scProtein
                 )
 
                 HomeNutritionProgressRow(
                     label: "탄수화물",
                     current: summary.totalCarbs,
                     goal: summary.carbsGoal,
-                    color: .orange
+                    color: .scCarbs
                 )
 
                 HomeNutritionProgressRow(
                     label: "지방",
                     current: summary.totalFat,
                     goal: summary.fatGoal,
-                    color: .yellow
+                    color: .scFat
                 )
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
@@ -73,7 +74,7 @@ struct HomeNutritionProgressRow: View {
 
                 Text("\(Int(current))g / \(Int(goal))g")
                     .font(.caption)
-                    .foregroundStyle(isOverGoal ? .red : .secondary)
+                    .foregroundStyle(isOverGoal ? .scError : .secondary)
             }
 
             GeometryReader { geometry in
@@ -83,7 +84,7 @@ struct HomeNutritionProgressRow: View {
                         .frame(height: 8)
 
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(isOverGoal ? .red : color)
+                        .fill(isOverGoal ? Color.scError : color)
                         .frame(width: geometry.size.width * progress, height: 8)
                         .animation(.easeOut(duration: 0.3), value: progress)
                 }

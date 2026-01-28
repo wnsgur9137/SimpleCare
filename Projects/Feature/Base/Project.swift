@@ -23,5 +23,6 @@ let project: Project = .feature(
         .Project.LibraryManager.LayoutLibraries,
         .Project.LibraryManager.UILibraries,
     ],
+    hasPresentationResources: true,
     hasAggregator: false
 )
