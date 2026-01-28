@@ -113,7 +113,7 @@ platform :ios do
     )
   end
 
-  desc "Build for development (creates IPA)"
+  desc "Build for ad-hoc distribution (creates IPA with PROD config)"
   lane :build do
     build_app(
       workspace: "SimpleCare.xcworkspace",
@@ -151,7 +151,7 @@ platform :ios do
     run_tests(
       workspace: "SimpleCare.xcworkspace",
       scheme: "SimpleCare-Dev",
-      device: "iPhone 16 Pro",
+      device: "iPhone 15 Pro",
       clean: true
     )
   end
@@ -160,23 +160,24 @@ platform :ios do
 
   def get_version_from_tuist
     content = File.read("../#{TUIST_CONSTANTS_PATH}")
-    match = content.match(/appVersion:\s*Plist\.Value\s*=\s*"([^"]+)"/)
-    match ? match[1] : "0.0.1"
+    match = content.match(/public static let appVersion: Plist\.Value = "([^"]+)"/)
+    UI.user_error!("Could not find appVersion in #{TUIST_CONSTANTS_PATH}") unless match
+    match[1]
   end
 
   def get_build_from_tuist
     content = File.read("../#{TUIST_CONSTANTS_PATH}")
-    match = content.match(/bundleVersion:\s*Plist\.Value\s*=\s*"([^"]+)"/)
-    match ? match[1] : "1"
+    match = content.match(/public static let bundleVersion: Plist\.Value = "([^"]+)"/)
+    UI.user_error!("Could not find bundleVersion in #{TUIST_CONSTANTS_PATH}") unless match
+    match[1]
   end
 
   def set_version_in_tuist(version)
     path = "../#{TUIST_CONSTANTS_PATH}"
     content = File.read(path)
     new_content = content.gsub(
-      /appVersion:\s*Plist\.Value\s*=\s*"[^"]+"/,
-      "appVersion: Plist.Value = \"#{version}\""
-    )
+      /(public static let appVersion: Plist\.Value = ")([^"]+)(")/
+    ) { "#{$1}#{version}#{$3}" }
     File.write(path, new_content)
     UI.message("Updated appVersion to #{version}")
   end
@@ -185,9 +186,8 @@ platform :ios do
     path = "../#{TUIST_CONSTANTS_PATH}"
     content = File.read(path)
     new_content = content.gsub(
-      /bundleVersion:\s*Plist\.Value\s*=\s*"[^"]+"/,
-      "bundleVersion: Plist.Value = \"#{build}\""
-    )
+      /(public static let bundleVersion: Plist\.Value = ")([^"]+)(")/
+    ) { "#{$1}#{build}#{$3}" }
     File.write(path, new_content)
     UI.message("Updated bundleVersion to #{build}")
   end
