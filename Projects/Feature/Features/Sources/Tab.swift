@@ -9,7 +9,7 @@
 import Foundation
 
 public enum AppTab: Hashable, CaseIterable {
-    case dashboard      // 대시보드 (메인)
+    case home           // 홈 (메인)
     case meal           // 식단 기록
     case exercise       // 운동 기록
     case progress       // 진행 현황 (체중/목표)
@@ -17,7 +17,7 @@ public enum AppTab: Hashable, CaseIterable {
 
     public var title: String {
         switch self {
-        case .dashboard: return "대시보드"
+        case .home: return "홈"
         case .meal: return "식단"
         case .exercise: return "운동"
         case .progress: return "진행"
@@ -27,7 +27,7 @@ public enum AppTab: Hashable, CaseIterable {
 
     public var icon: String {
         switch self {
-        case .dashboard: return "house.fill"
+        case .home: return "house.fill"
         case .meal: return "fork.knife"
         case .exercise: return "figure.run"
         case .progress: return "chart.line.uptrend.xyaxis"

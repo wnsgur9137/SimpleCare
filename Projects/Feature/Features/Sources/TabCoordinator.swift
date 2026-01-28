@@ -10,7 +10,6 @@ import SwiftUI
 
 import Home
 import Settings
-import Dashboard
 import Meal
 import Weight
 import Exercise
@@ -22,7 +21,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     // MARK: - Published Properties
 
-    @Published public var selectedTab: AppTab = .dashboard
+    @Published public var selectedTab: AppTab = .home
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
 
@@ -50,12 +49,22 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return MainTabView(coordinator: self)
     }
 
-    // MARK: - Dashboard
+    // MARK: - Home
 
     @MainActor
-    public func makeDashboard() -> some View {
-        let container = diContainer.makeDashboardDIContainer()
-        return DashboardCoordinator(dependencies: container).start()
+    public func makeHome() -> some View {
+        let container = diContainer.makeHomeDIContainer()
+        let coordinator = HomeCoordinator(dependencies: container)
+        coordinator.onNavigateToMeal = { [weak self] in
+            self?.selectedTab = .meal
+        }
+        coordinator.onNavigateToExercise = { [weak self] in
+            self?.selectedTab = .exercise
+        }
+        coordinator.onNavigateToWeight = { [weak self] in
+            self?.selectedTab = .progress
+        }
+        return coordinator.start()
     }
 
     // MARK: - Meal

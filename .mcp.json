@@ -29,7 +29,8 @@
       "env": {
         "DATA_DIR": "/Users/junhyeok/shrimp_data",
         "TEMPLATES_USE": "ko",
-        "ENABLE_GUI": "false"
+        "ENABLE_GUI": "true",
+        "WEB_PORT": "3000"
       }
     }
   }

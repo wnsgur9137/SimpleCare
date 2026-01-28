@@ -17,12 +17,12 @@ public struct MainTabView: View {
 
     public var body: some View {
         TabView(selection: $coordinator.selectedTab) {
-            // Dashboard
-            coordinator.makeDashboard()
+            // Home
+            coordinator.makeHome()
                 .tabItem {
-                    Label(AppTab.dashboard.title, systemImage: AppTab.dashboard.icon)
+                    Label(AppTab.home.title, systemImage: AppTab.home.icon)
                 }
-                .tag(AppTab.dashboard)
+                .tag(AppTab.home)
 
             // Meal
             coordinator.makeMealList()
