@@ -1,0 +1,5 @@
+app_identifier("com.junhyeok.SimpleCare-Dev")
+apple_id(ENV["APPLE_ID"])
+
+itc_team_id("125231504") # App Store Connect Team ID
+team_id("VW2UR5Y845") # Developer Portal Team ID

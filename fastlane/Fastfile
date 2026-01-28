@@ -1,0 +1,65 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    build_app(
+      scheme: "SimpleCare",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.junhyeok.SimpleCare" => "match AppStore com.junhyeok.SimpleCare"
+        }
+      }
+    )
+    upload_to_testflight
+  end
+
+  desc "Build for release (creates IPA)"
+  lane :build do
+    build_app(
+      scheme: "SimpleCare",
+      export_method: "development",
+      export_options: {
+        provisioningProfiles: {
+          "com.junhyeok.SimpleCare" => "iOS Team Provisioning Profile: *"
+        }
+      }
+    )
+  end
+
+  desc "Build test (compile only, no archive/export)"
+  lane :build_test do
+    xcodebuild(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare-Dev",
+      configuration: "DEV",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "build"
+    )
+  end
+
+  desc "Run unit tests"
+  lane :test do
+    run_tests(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare-Dev",
+      device: "iPhone 16 Pro"
+    )
+  end
+end
