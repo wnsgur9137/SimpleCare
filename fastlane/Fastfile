@@ -1,0 +1,195 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+# Constants
+TUIST_CONSTANTS_PATH = "Tuist/ProjectDescriptionHelpers/Project+Templates.swift"
+
+platform :ios do
+
+  # ==================== Version Management ====================
+
+  desc "Get current version"
+  lane :current_version do
+    version = get_version_from_tuist
+    build = get_build_from_tuist
+    UI.success("Current version: #{version} (#{build})")
+    { version: version, build: build }
+  end
+
+  desc "Bump version. Options: version (e.g., '1.0.0'), build (e.g., '10')"
+  lane :bump do |options|
+    new_version = options[:version]
+    new_build = options[:build]
+
+    current_version = get_version_from_tuist
+    current_build = get_build_from_tuist.to_i
+
+    # Determine new values
+    if new_version
+      set_version_in_tuist(new_version)
+      current_version = new_version
+    end
+
+    if new_build
+      set_build_in_tuist(new_build)
+      current_build = new_build.to_i
+    elsif new_version.nil?
+      # Auto-increment build number if no version or build specified
+      current_build += 1
+      set_build_in_tuist(current_build.to_s)
+    end
+
+    version_string = "#{current_version} (#{current_build})"
+    UI.success("New version: #{version_string}")
+
+    # Regenerate Xcode project with tuist
+    UI.message("Regenerating Xcode project...")
+    sh("cd .. && tuist generate --no-open")
+
+    # Commit changes
+    git_commit(
+      path: [TUIST_CONSTANTS_PATH],
+      message: "🔖 Bump version to #{version_string}",
+      allow_nothing_to_commit: false
+    )
+
+    UI.success("Version bumped and committed: #{version_string}")
+    { version: current_version, build: current_build }
+  end
+
+  desc "Bump major version (X.0.0)"
+  lane :bump_major do
+    current = get_version_from_tuist
+    parts = current.split('.').map(&:to_i)
+    new_version = "#{parts[0] + 1}.0.0"
+    bump(version: new_version, build: "1")
+  end
+
+  desc "Bump minor version (0.X.0)"
+  lane :bump_minor do
+    current = get_version_from_tuist
+    parts = current.split('.').map(&:to_i)
+    new_version = "#{parts[0]}.#{parts[1] + 1}.0"
+    bump(version: new_version, build: "1")
+  end
+
+  desc "Bump patch version (0.0.X)"
+  lane :bump_patch do
+    current = get_version_from_tuist
+    parts = current.split('.').map(&:to_i)
+    new_version = "#{parts[0]}.#{parts[1]}.#{parts[2] + 1}"
+    bump(version: new_version, build: "1")
+  end
+
+  desc "Bump build number only"
+  lane :bump_build do
+    bump
+  end
+
+  # ==================== Build Lanes ====================
+
+  desc "Build test (compile only, no archive/export)"
+  lane :build_test do
+    xcodebuild(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare-Dev",
+      configuration: "DEV",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "build"
+    )
+  end
+
+  desc "Build for ad-hoc distribution (creates IPA with PROD config)"
+  lane :build do
+    build_app(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare",
+      configuration: "PROD",
+      export_method: "development",
+      export_options: {
+        provisioningProfiles: {
+          "com.junhyeok.SimpleCare" => "iOS Team Provisioning Profile: *"
+        }
+      }
+    )
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    build_app(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare",
+      configuration: "PROD",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.junhyeok.SimpleCare" => "match AppStore com.junhyeok.SimpleCare"
+        }
+      }
+    )
+    upload_to_testflight
+  end
+
+  # ==================== Test Lanes ====================
+
+  desc "Run unit tests"
+  lane :test do
+    run_tests(
+      workspace: "SimpleCare.xcworkspace",
+      scheme: "SimpleCare-Dev",
+      device: "iPhone 15 Pro",
+      clean: true
+    )
+  end
+
+  # ==================== Helper Methods ====================
+
+  def get_version_from_tuist
+    content = File.read("../#{TUIST_CONSTANTS_PATH}")
+    match = content.match(/public static let appVersion: Plist\.Value = "([^"]+)"/)
+    UI.user_error!("Could not find appVersion in #{TUIST_CONSTANTS_PATH}") unless match
+    match[1]
+  end
+
+  def get_build_from_tuist
+    content = File.read("../#{TUIST_CONSTANTS_PATH}")
+    match = content.match(/public static let bundleVersion: Plist\.Value = "([^"]+)"/)
+    UI.user_error!("Could not find bundleVersion in #{TUIST_CONSTANTS_PATH}") unless match
+    match[1]
+  end
+
+  def set_version_in_tuist(version)
+    path = "../#{TUIST_CONSTANTS_PATH}"
+    content = File.read(path)
+    new_content = content.gsub(
+      /(public static let appVersion: Plist\.Value = ")([^"]+)(")/
+    ) { "#{$1}#{version}#{$3}" }
+    File.write(path, new_content)
+    UI.message("Updated appVersion to #{version}")
+  end
+
+  def set_build_in_tuist(build)
+    path = "../#{TUIST_CONSTANTS_PATH}"
+    content = File.read(path)
+    new_content = content.gsub(
+      /(public static let bundleVersion: Plist\.Value = ")([^"]+)(")/
+    ) { "#{$1}#{build}#{$3}" }
+    File.write(path, new_content)
+    UI.message("Updated bundleVersion to #{build}")
+  end
+
+end

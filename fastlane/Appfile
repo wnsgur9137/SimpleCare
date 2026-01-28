@@ -1,0 +1,15 @@
+# Default app identifier (for development)
+app_identifier("com.junhyeok.SimpleCare-Dev")
+apple_id(ENV["APPLE_ID"])
+
+itc_team_id("125231504") # App Store Connect Team ID
+team_id("VW2UR5Y845") # Developer Portal Team ID
+
+# Production app identifier for specific lanes
+for_lane :build do
+  app_identifier("com.junhyeok.SimpleCare")
+end
+
+for_lane :beta do
+  app_identifier("com.junhyeok.SimpleCare")
+end
