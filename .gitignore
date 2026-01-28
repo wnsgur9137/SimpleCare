@@ -73,3 +73,11 @@ Tuist/.build
 **.env
 **/.env
 /**/.env
+
+### Fastlane ###
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+*.ipa
+*.dSYM.zip
