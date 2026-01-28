@@ -27,16 +27,14 @@ AI 기반 개인 건강 관리 iOS 앱
 
 ## 기술 스택
 
-| 분류 | 기술 | 비고 |
-|-----|------|------|
-| **플랫폼** | iOS 18.0+ | SwiftUI, SwiftData |
-| **UI** | SwiftUI | 선언형 UI |
-| **아키텍처** | Clean Architecture + TCA | Tuist 모듈화 |
-| **상태 관리** | The Composable Architecture (TCA) | 단방향 데이터 흐름, Reducer 기반 |
-| **데이터 저장** | SwiftData | Apple 네이티브 ORM |
-| **차트** | Swift Charts | 네이티브 차트 라이브러리 |
-| **AI** | OpenAI GPT-4o | 영양소 추정, 이미지 분석 |
-| **빌드** | Tuist | 모듈화된 프로젝트 관리 |
+| 분류 | 기술 |
+|-----|------|
+| **Platform** | iOS 18.0+, SwiftUI, SwiftData |
+| **Architecture** | Clean Architecture + TCA |
+| **Network** | Moya, Alamofire |
+| **UI Components** | Kingfisher, Lottie, IQKeyboardManager |
+| **AI** | OpenAI GPT-4o |
+| **Build & CI/CD** | Tuist, Fastlane |
 
 ---
 
@@ -223,6 +221,7 @@ MET 기반 운동 기록 및 칼로리 계산
 | [HOME_SCREEN_PLAN.md](./docs/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
 | [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
 | [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
+| [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
 
 ---
 
