@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import HomeDomain
+import BasePresentation
 
 /// 홈 메인 화면
 public struct HomeView: View {
@@ -133,12 +134,12 @@ public struct HomeView: View {
 
     private var insightBackgroundColor: Color {
         guard let summary = store.dailySummary else {
-            return Color.blue.opacity(0.1)
+            return Color.scPrimary.opacity(0.1)
         }
         switch summary.calorieStatus {
-        case .under: return Color.orange.opacity(0.1)
-        case .onTrack: return Color.green.opacity(0.1)
-        case .over: return Color.red.opacity(0.1)
+        case .under: return Color.scWarning.opacity(0.1)
+        case .onTrack: return Color.scSuccess.opacity(0.1)
+        case .over: return Color.scError.opacity(0.1)
         }
     }
 
@@ -196,7 +197,7 @@ public struct HomeView: View {
                     Text("\(summary.remainingCalories)")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundStyle(summary.remainingCalories >= 0 ? .green : .red)
+                        .foregroundStyle(summary.remainingCalories >= 0 ? .scSuccess : .scError)
                     Text("kcal")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -210,7 +211,7 @@ public struct HomeView: View {
                         Text("+\(summary.exerciseCalories)")
                             .font(.title2)
                             .fontWeight(.bold)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(.scExercise)
                         Text("kcal")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -219,7 +220,7 @@ public struct HomeView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -240,9 +241,9 @@ public struct HomeView: View {
 
     private func calorieColor(for status: HomeCalorieStatus) -> Color {
         switch status {
-        case .under: return .orange
-        case .onTrack: return .green
-        case .over: return .red
+        case .under: return .scWarning
+        case .onTrack: return .scSuccess
+        case .over: return .scError
         }
     }
 }

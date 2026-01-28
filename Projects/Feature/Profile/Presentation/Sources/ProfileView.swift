@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import ProfileDomain
+import BasePresentation
 
 /// 프로필 화면
 public struct ProfileView: View {
@@ -96,7 +97,7 @@ public struct ProfileView: View {
                         Text("일일 목표 칼로리")
                         Spacer()
                         Text("\(store.recommendedCalories) kcal")
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(.scPrimary)
                             .fontWeight(.semibold)
                     }
                 }

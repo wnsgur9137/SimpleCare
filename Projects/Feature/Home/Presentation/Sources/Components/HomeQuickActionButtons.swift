@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BasePresentation
 
 /// 빠른 기록 버튼 그룹
 struct HomeQuickActionButtons: View {
@@ -18,21 +19,21 @@ struct HomeQuickActionButtons: View {
             HomeQuickActionButton(
                 icon: "fork.knife",
                 label: "식사",
-                color: .green,
+                color: .scCalories,
                 action: onMealTap
             )
 
             HomeQuickActionButton(
                 icon: "figure.run",
                 label: "운동",
-                color: .orange,
+                color: .scExercise,
                 action: onExerciseTap
             )
 
             HomeQuickActionButton(
                 icon: "scalemass",
                 label: "체중",
-                color: .blue,
+                color: .scPrimary,
                 action: onWeightTap
             )
         }

@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import ExerciseDomain
+import BasePresentation
 
 public struct ExerciseRecordView: View {
     @Bindable var store: StoreOf<ExerciseFeature>
@@ -56,7 +57,7 @@ public struct ExerciseRecordView: View {
                                 store.durationMinutes = minutes
                             }
                             .buttonStyle(.bordered)
-                            .tint(store.durationMinutes == minutes ? .blue : .gray)
+                            .tint(store.durationMinutes == minutes ? .scPrimary : .gray)
                         }
                     }
                 }
@@ -65,7 +66,7 @@ public struct ExerciseRecordView: View {
                 Section("예상 소모 칼로리") {
                     HStack {
                         Image(systemName: "flame.fill")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(.scExercise)
                         Text("\(store.estimatedCalories)")
                             .font(.title)
                             .fontWeight(.bold)

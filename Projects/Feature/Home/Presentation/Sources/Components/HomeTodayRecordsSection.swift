@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HomeDomain
+import BasePresentation
 
 /// 오늘의 기록 섹션
 struct HomeTodayRecordsSection: View {
@@ -30,7 +31,7 @@ struct HomeTodayRecordsSection: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -65,7 +66,7 @@ struct HomeMealRecordRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: meal.mealType.icon)
-                .foregroundStyle(.orange)
+                .foregroundStyle(.scCalories)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -99,7 +100,7 @@ struct HomeExerciseRecordRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "figure.run")
-                .foregroundStyle(.green)
+                .foregroundStyle(.scExercise)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -117,7 +118,7 @@ struct HomeExerciseRecordRow: View {
             Text("-\(exercise.caloriesBurned) kcal")
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundStyle(.green)
+                .foregroundStyle(.scExercise)
         }
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
@@ -146,7 +147,7 @@ struct HomeEmptyRecordView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .background(Color.green)
+                    .background(Color.scPrimary)
                     .clipShape(Capsule())
             }
         }

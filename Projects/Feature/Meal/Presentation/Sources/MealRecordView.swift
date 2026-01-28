@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 import ComposableArchitecture
 import MealDomain
+import BasePresentation
 
 /// 식사 기록 화면
 public struct MealRecordView: View {
@@ -140,13 +141,13 @@ public struct MealRecordView: View {
 
                     if store.selectedImageData != nil {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(.scSuccess)
                     }
                 }
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
@@ -163,10 +164,10 @@ public struct MealRecordView: View {
 
             // 총합
             HStack(spacing: 16) {
-                NutritionBadge(label: "칼로리", value: "\(store.totalCalories)", unit: "kcal", color: .blue)
-                NutritionBadge(label: "단백질", value: String(format: "%.1f", store.totalProtein), unit: "g", color: .red)
-                NutritionBadge(label: "탄수화물", value: String(format: "%.1f", store.totalCarbs), unit: "g", color: .orange)
-                NutritionBadge(label: "지방", value: String(format: "%.1f", store.totalFat), unit: "g", color: .yellow)
+                NutritionBadge(label: "칼로리", value: "\(store.totalCalories)", unit: "kcal", color: .scCalories)
+                NutritionBadge(label: "단백질", value: String(format: "%.1f", store.totalProtein), unit: "g", color: .scProtein)
+                NutritionBadge(label: "탄수화물", value: String(format: "%.1f", store.totalCarbs), unit: "g", color: .scCarbs)
+                NutritionBadge(label: "지방", value: String(format: "%.1f", store.totalFat), unit: "g", color: .scFat)
             }
 
             // 개별 음식
@@ -181,7 +182,7 @@ public struct MealRecordView: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.scSurface)
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
@@ -258,7 +259,7 @@ struct EstimatedFoodRow: View {
 
             if food.confidence < 0.7 {
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.scWarning)
                     .font(.caption)
             }
 
