@@ -222,6 +222,31 @@ MET 기반 운동 기록 및 칼로리 계산
 | [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
 | [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
 | [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
+| [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
+
+---
+
+## Claude Code 설정
+
+이 프로젝트는 Claude Code를 활용한 AI 기반 개발 워크플로우를 지원합니다.
+
+### 프로젝트 컨텍스트
+
+`CLAUDE.md` 파일이 프로젝트 루트에 위치하며, Claude Code가 대화 시작 시 자동으로 읽어들여 프로젝트 구조, 컨벤션, 명령어 등을 파악합니다.
+
+### 커스텀 슬래시 명령
+
+`.claude/commands/` 디렉토리에 등록된 명령어:
+
+| 명령어 | 기능 |
+|--------|------|
+| `/build` | Tuist 프로젝트 생성 + 빌드 검증 |
+| `/version [type]` | 앱 버전 관리 (major/minor/patch/build/current) |
+| `/new-feature [이름]` | Clean Architecture 기반 새 Feature 모듈 스캐폴딩 |
+| `/review` | main 대비 변경사항 코드 리뷰 |
+| `/test` | 유닛 테스트 실행 + 결과 분석 |
+
+> 자세한 내용은 [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md)를 참고하세요.
 
 ---
 
