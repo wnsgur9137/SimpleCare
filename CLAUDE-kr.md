@@ -135,6 +135,18 @@ fastlane ios bump_build              # 빌드 번호 증가
 - `docs/*`: 문서 브랜치
 - PR 기반 워크플로우 (Gemini Code Assist 자동 리뷰)
 
+### Pull Request
+
+PR 생성 시 **GitHub MCP**를 사용합니다 (`gh` CLI가 아님). `.github/PULL_REQUEST_TEMPLATE.md`에 정의된 템플릿을 따릅니다.
+- **📌 개요**: 관련 링크와 함께 간략한 요약 (스레드, 기획서, 피그마, QA 티켓)
+- **📋 변경사항**: 리뷰어를 위한 변경 목록, 해당하는 경우 작업 전/후 스크린샷 포함
+- **🙏 참고사항**: 리뷰어를 위한 참고 내용 및 선택적 리뷰 희망 기한
+
+### GitHub MCP
+
+모든 GitHub 작업(PR 생성, 이슈 관리 등)은 `gh` CLI 대신 **GitHub MCP**를 사용합니다.
+GitHub MCP는 `.mcp.json`을 통해 설정되며 Docker 컨테이너로 실행됩니다.
+
 ## 주요 패턴
 
 ### TCA Reducer

@@ -135,6 +135,18 @@ fastlane ios bump_build              # Increment build number
 - `docs/*`: Documentation branches
 - PR-based workflow (Gemini Code Assist auto-review)
 
+### Pull Request
+
+When creating a PR, use **GitHub MCP** (not `gh` CLI). Follow the template defined in `.github/PULL_REQUEST_TEMPLATE.md`.
+- **📌 개요**: Brief summary with relevant links (thread, design doc, Figma, QA ticket)
+- **📋 변경사항**: List of changes for reviewers, with before/after screenshots if applicable
+- **🙏 참고사항**: Notes for reviewers and optional review deadline
+
+### GitHub MCP
+
+Use GitHub MCP for all GitHub operations (PR creation, issue management, etc.) instead of the `gh` CLI.
+GitHub MCP is configured via `.mcp.json` and runs as a Docker container.
+
 ## Key Patterns
 
 ### TCA Reducer
