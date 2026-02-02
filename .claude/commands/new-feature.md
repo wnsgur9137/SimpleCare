@@ -16,8 +16,10 @@ Projects/Feature/[모듈이름]/
 │           └── [모듈이름]UseCase.swift           # RepositoryProtocol도 이 파일에 정의
 ├── Data/
 │   └── Sources/
-│       └── Repositories/
-│           └── [모듈이름]Repository.swift
+│       ├── Repositories/
+│       │   └── [모듈이름]Repository.swift
+│       └── Services/
+│           └── [모듈이름]Service.swift
 ├── Presentation/
 │   └── Sources/
 │       ├── [모듈이름]View.swift
