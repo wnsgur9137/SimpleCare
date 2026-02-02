@@ -74,6 +74,9 @@ Tuist/.build
 **/.env
 /**/.env
 
+### oh-my-claudecode ###
+.omc/
+
 ### Fastlane ###
 fastlane/report.xml
 fastlane/Preview.html
