@@ -13,4 +13,4 @@ $ARGUMENTS 값에 따라 실행:
 실행 후:
 1. 변경된 버전 정보를 출력
 2. `Tuist/ProjectDescriptionHelpers/Project+Templates.swift` 파일에서 버전이 올바르게 반영되었는지 확인
-3. Git 커밋이 필요한지 사용자에게 확인
+3. fastlane 스크립트에 의해 버전 변경 커밋이 생성되었는지 확인

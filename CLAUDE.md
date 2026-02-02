@@ -54,20 +54,14 @@ Projects/
 Feature/[Name]/
 ├── Domain/
 │   └── Sources/
-│       ├── Entity/          # Business models
-│       ├── UseCase/         # Business logic
-│       └── Repository/      # Repository protocols
+│       ├── Entities/        # Business models
+│       └── UseCases/        # Business logic + Repository protocols
 ├── Data/
 │   └── Sources/
-│       ├── Repository/      # Repository implementations
-│       ├── Model/           # DTO models
-│       └── DataSource/      # Data sources
+│       ├── Repositories/    # Repository implementations
+│       └── Services/        # External service adapters
 └── Presentation/
-    └── Sources/
-        ├── View/            # SwiftUI views
-        ├── Reducer/         # TCA Reducers
-        ├── Coordinator/     # Navigation
-        └── DIContainer/     # Dependency injection containers
+    └── Sources/             # Views, Reducers(Feature), Coordinators
 ```
 
 ## Build Commands

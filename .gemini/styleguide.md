@@ -36,7 +36,7 @@ Presentation → Domain ← Data
 // ✅ 올바른 예시
 struct UserRepository { }
 struct CareItemModel { }
-protocol UserRepositoryType { }
+protocol UserRepositoryProtocol { }
 
 // ❌ 잘못된 예시
 struct userRepository { }
@@ -128,8 +128,8 @@ Feature/
 ├── Home/
 │   ├── Project.swift        # Tuist 프로젝트 정의 (Data, Domain, Presentation 타겟 포함)
 │   ├── Data/Sources/        # Repository 구현, DTO
-│   ├── Domain/Sources/      # UseCase, Entity, Repository 인터페이스
-│   ├── Presentation/Sources/# View, Reducer
+│   ├── Domain/Sources/      # Entities, UseCases (+ Repository 프로토콜)
+│   ├── Presentation/Sources/# View, Feature(Reducer), Coordinator
 │   └── Sources/             # Aggregator
 ```
 
@@ -139,9 +139,9 @@ Feature/
 
 ```swift
 // ✅ 올바른 예시
-UserRepository.swift          // protocol UserRepository
-DefaultUserRepository.swift   // struct DefaultUserRepository
-UserUseCase.swift             // protocol UserUseCase
+UserRepositoryProtocol.swift  // protocol UserRepositoryProtocol
+UserRepository.swift          // struct UserRepository (구현)
+UserUseCase.swift             // protocol + struct UserUseCase
 HomeReducer.swift             // @Reducer struct HomeReducer
 HomeView.swift                // struct HomeView: View
 ```

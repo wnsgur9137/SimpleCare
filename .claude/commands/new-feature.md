@@ -10,28 +10,21 @@ $ARGUMENTS 에서 모듈 이름을 추출하세요.
 Projects/Feature/[모듈이름]/
 ├── Domain/
 │   └── Sources/
-│       ├── Entity/
+│       ├── Entities/
 │       │   └── [모듈이름]Entity.swift
-│       ├── UseCase/
-│       │   └── [모듈이름]UseCase.swift
-│       └── Repository/
-│           └── [모듈이름]RepositoryProtocol.swift
+│       └── UseCases/
+│           └── [모듈이름]UseCase.swift           # RepositoryProtocol도 이 파일에 정의
 ├── Data/
 │   └── Sources/
-│       ├── Repository/
-│       │   └── [모듈이름]Repository.swift
-│       └── Model/
-│           └── [모듈이름]DTO.swift
+│       └── Repositories/
+│           └── [모듈이름]Repository.swift
 ├── Presentation/
 │   └── Sources/
-│       ├── View/
-│       │   └── [모듈이름]View.swift
-│       ├── Reducer/
-│       │   └── [모듈이름]Reducer.swift
-│       ├── Coordinator/
-│       │   └── [모듈이름]Coordinator.swift
-│       └── DIContainer/
-│           └── [모듈이름]DIContainer.swift
+│       ├── [모듈이름]View.swift
+│       ├── [모듈이름]Feature.swift               # TCA Reducer
+│       └── [모듈이름]Coordinator.swift
+├── Sources/
+│   └── [모듈이름]DIContainer.swift
 └── Project.swift
 ```
 

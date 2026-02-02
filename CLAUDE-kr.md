@@ -54,20 +54,14 @@ Projects/
 Feature/[Name]/
 ├── Domain/
 │   └── Sources/
-│       ├── Entity/          # 비즈니스 모델
-│       ├── UseCase/         # 비즈니스 로직
-│       └── Repository/      # Repository 프로토콜
+│       ├── Entities/        # 비즈니스 모델
+│       └── UseCases/        # 비즈니스 로직 + Repository 프로토콜
 ├── Data/
 │   └── Sources/
-│       ├── Repository/      # Repository 구현
-│       ├── Model/           # DTO 모델
-│       └── DataSource/      # 데이터 소스
+│       ├── Repositories/    # Repository 구현
+│       └── Services/        # 외부 서비스 어댑터
 └── Presentation/
-    └── Sources/
-        ├── View/            # SwiftUI 뷰
-        ├── Reducer/         # TCA Reducer
-        ├── Coordinator/     # 화면 전환
-        └── DIContainer/     # 의존성 주입 컨테이너
+    └── Sources/             # View, Reducer(Feature), Coordinator
 ```
 
 ## 빌드 명령어
