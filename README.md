@@ -223,6 +223,7 @@ MET 기반 운동 기록 및 칼로리 계산
 | [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
 | [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
 | [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
+| [OMC_GUIDE.md](./docs/OMC_GUIDE.md) | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
 
 ---
 
