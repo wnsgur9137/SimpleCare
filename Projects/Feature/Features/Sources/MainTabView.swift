@@ -52,5 +52,6 @@ public struct MainTabView: View {
                 }
                 .tag(AppTab.settings)
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
     }
 }

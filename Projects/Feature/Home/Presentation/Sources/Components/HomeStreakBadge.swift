@@ -24,8 +24,7 @@ struct HomeStreakBadge: View {
             .foregroundStyle(.scWarning)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color.scWarning.opacity(0.15))
-            .clipShape(Capsule())
+            .glassEffect(.regular.tint(.scWarning), in: .capsule)
             .accessibilityLabel("\(days)일 연속 기록 중")
         }
     }

@@ -128,18 +128,17 @@ public struct HomeView: View {
             Spacer()
         }
         .padding()
-        .background(insightBackgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .glassEffect(.regular.tint(insightTintColor), in: .rect(cornerRadius: 12))
     }
 
-    private var insightBackgroundColor: Color {
+    private var insightTintColor: Color {
         guard let summary = store.dailySummary else {
-            return Color.scPrimary.opacity(0.1)
+            return .scPrimary
         }
         switch summary.calorieStatus {
-        case .under: return Color.scWarning.opacity(0.1)
-        case .onTrack: return Color.scSuccess.opacity(0.1)
-        case .over: return Color.scError.opacity(0.1)
+        case .under: return .scWarning
+        case .onTrack: return .scSuccess
+        case .over: return .scError
         }
     }
 
@@ -220,8 +219,7 @@ public struct HomeView: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     // MARK: - Helpers

@@ -118,8 +118,7 @@ struct WelcomeStepView: View {
                 FeatureRow(icon: "figure.run", text: "운동 칼로리 추적")
             }
             .padding()
-            .background(Color.scSurface)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .glassEffect(.regular, in: .rect(cornerRadius: 16))
 
             Spacer()
 
@@ -317,8 +316,7 @@ struct GoalOptionCard: View {
                 }
             }
             .padding()
-            .background(isSelected ? Color.scPrimary : Color.scSurface)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .glassEffect(isSelected ? .regular.tint(.scPrimary) : .regular, in: .rect(cornerRadius: 16))
         }
         .buttonStyle(.plain)
     }
@@ -384,8 +382,7 @@ struct ActivityLevelRow: View {
                 }
             }
             .padding()
-            .background(isSelected ? Color.scPrimary.opacity(0.1) : Color.scSurface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .glassEffect(isSelected ? .regular.tint(.scPrimary) : .regular, in: .rect(cornerRadius: 12))
         }
         .buttonStyle(.plain)
     }
@@ -413,8 +410,7 @@ struct SummaryStepView: View {
                     SummaryRow(label: "활동 수준", value: store.activityLevel.displayName)
                 }
                 .padding()
-                .background(Color.scSurface)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .glassEffect(.regular, in: .rect(cornerRadius: 16))
 
                 VStack(spacing: 8) {
                     Text("일일 목표 칼로리")
@@ -428,8 +424,7 @@ struct SummaryStepView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.scPrimary.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .glassEffect(.regular.tint(.scPrimary), in: .rect(cornerRadius: 16))
 
                 Text("이 정보는 Mifflin-St Jeor 공식을 기반으로 한 추정치입니다. 정확한 건강 조언은 전문가와 상담하세요.")
                     .font(.caption)

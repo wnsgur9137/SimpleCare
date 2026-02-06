@@ -14,7 +14,7 @@ public enum TuistConstants {
     public static let appVersion: Plist.Value = "0.0.1"
     public static let bundleVersion: Plist.Value = "1"
     public static let organizationName: String = "com.junhyeok.\(TuistConstants.projectName)"
-    public static let deploymentTarget: DeploymentTargets = .iOS("18.0")
+    public static let deploymentTarget: DeploymentTargets = .iOS("26.0")
     public static let defaultKnownRegions: [String] = ["en", "ko"]
     public static let developmentRegion: String = "ko"
 }

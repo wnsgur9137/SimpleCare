@@ -30,8 +30,9 @@ public struct SplashView: View {
                 // Logo
                 ZStack {
                     Circle()
-                        .fill(.white.opacity(0.2))
+                        .fill(.clear)
                         .frame(width: 140, height: 140)
+                        .glassEffect(.regular, in: .circle)
 
                     Image(systemName: "heart.text.clipboard")
                         .font(.system(size: 60))

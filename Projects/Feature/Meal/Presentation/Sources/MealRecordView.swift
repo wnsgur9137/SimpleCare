@@ -147,8 +147,7 @@ public struct MealRecordView: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
 
     private var estimatedFoodsSection: some View {
@@ -182,8 +181,7 @@ public struct MealRecordView: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
 
     private var notesSection: some View {
@@ -209,8 +207,7 @@ public struct MealRecordView: View {
                     .foregroundStyle(.white)
             }
             .padding(32)
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .glassEffect(.regular, in: .rect(cornerRadius: 16))
         }
     }
 }
