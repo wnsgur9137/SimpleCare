@@ -25,6 +25,7 @@ struct AppCoordinatorView: View {
         }
         .animation(.easeInOut, value: coordinator.isSplashCompleted)
         .animation(.easeInOut, value: coordinator.isOnboardingCompleted)
+        .dismissKeyboardOnTap()
         #if DEBUG
         .debugOverlay()
         #endif
