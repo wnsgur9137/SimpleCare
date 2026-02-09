@@ -70,8 +70,7 @@ public struct WeightView: View {
                 .textFieldStyle(.roundedBorder)
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     private func trendChartSection(trend: WeightTrend) -> some View {
@@ -108,8 +107,7 @@ public struct WeightView: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     private func statisticsSection(trend: WeightTrend) -> some View {
@@ -145,8 +143,7 @@ public struct WeightView: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 }
 

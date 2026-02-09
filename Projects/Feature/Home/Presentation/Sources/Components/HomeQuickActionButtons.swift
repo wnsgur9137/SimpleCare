@@ -61,8 +61,7 @@ struct HomeQuickActionButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(color.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .glassEffect(.regular.tint(color).interactive(), in: .rect(cornerRadius: 12))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(label) 기록하기")

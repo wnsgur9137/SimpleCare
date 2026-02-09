@@ -31,8 +31,7 @@ struct HomeTodayRecordsSection: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     @ViewBuilder
@@ -147,8 +146,7 @@ struct HomeEmptyRecordView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .background(Color.scPrimary)
-                    .clipShape(Capsule())
+                    .glassEffect(.regular.tint(.scPrimary).interactive(), in: .capsule)
             }
         }
         .frame(maxWidth: .infinity)

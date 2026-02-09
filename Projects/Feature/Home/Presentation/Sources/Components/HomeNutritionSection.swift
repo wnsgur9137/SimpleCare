@@ -42,8 +42,7 @@ struct HomeNutritionSection: View {
             }
         }
         .padding()
-        .background(Color.scSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 }
 
