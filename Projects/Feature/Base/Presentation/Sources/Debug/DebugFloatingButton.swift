@@ -1,6 +1,6 @@
 //
 //  DebugFloatingButton.swift
-//  BaseData
+//  BasePresentation
 //
 //  Created by JunHyeok Lee on 2/9/26.
 //  Copyright © 2026 com.junhyeok.SimpleCare. All rights reserved.
