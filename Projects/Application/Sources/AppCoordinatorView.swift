@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+import BasePresentation
+
 struct AppCoordinatorView: View {
     @ObservedObject var coordinator: AppCoordinator
 
@@ -23,5 +25,8 @@ struct AppCoordinatorView: View {
         }
         .animation(.easeInOut, value: coordinator.isSplashCompleted)
         .animation(.easeInOut, value: coordinator.isOnboardingCompleted)
+        #if DEBUG
+        .debugOverlay()
+        #endif
     }
 }
