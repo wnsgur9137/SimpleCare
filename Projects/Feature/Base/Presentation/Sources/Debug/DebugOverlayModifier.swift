@@ -134,7 +134,7 @@ struct DebugOverlayModifier: ViewModifier {
                     MultiTouchTrackingView { locations in
                         updatePointers(locations: locations)
                     }
-                    .allowsHitTesting(true)
+                    .allowsHitTesting(false)
                 }
 
                 // 터치 포인터 표시

@@ -7,21 +7,54 @@
 
 import SwiftUI
 import UIKit
+import Combine
 
-/// ViewModifier that dismisses keyboard when tapping outside of text fields
-/// Uses simultaneousGesture to avoid conflicts with other tap gestures
-public struct DismissKeyboardModifier: ViewModifier {
+// MARK: - Keyboard Observer
+
+/// Observable object that tracks keyboard visibility
+public final class KeyboardObserver: ObservableObject {
+    @Published public var isKeyboardVisible: Bool = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    public init() {
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isKeyboardVisible = true
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isKeyboardVisible = false
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Dismiss Keyboard Overlay Modifier
+
+/// ViewModifier that shows a transparent overlay when keyboard is visible
+/// Tapping the overlay dismisses the keyboard
+public struct DismissKeyboardOverlayModifier: ViewModifier {
+    @StateObject private var keyboardObserver = KeyboardObserver()
+
     public init() {}
 
     public func body(content: Content) -> some View {
         content
-            .contentShape(Rectangle())
-            .simultaneousGesture(
-                TapGesture()
-                    .onEnded { _ in
-                        dismissKeyboard()
-                    }
-            )
+            .overlay {
+                if keyboardObserver.isKeyboardVisible {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            dismissKeyboard()
+                        }
+                        .ignoresSafeArea(.keyboard)
+                }
+            }
     }
 
     private func dismissKeyboard() {
@@ -34,11 +67,13 @@ public struct DismissKeyboardModifier: ViewModifier {
     }
 }
 
+// MARK: - View Extension
+
 public extension View {
-    /// Dismiss keyboard when tapping anywhere on this view
-    /// Uses simultaneousGesture to work alongside other tap gestures
+    /// Shows a transparent overlay when keyboard is visible
+    /// Tapping the overlay dismisses the keyboard
     func dismissKeyboardOnTap() -> some View {
-        modifier(DismissKeyboardModifier())
+        modifier(DismissKeyboardOverlayModifier())
     }
 
     /// Hide keyboard programmatically
