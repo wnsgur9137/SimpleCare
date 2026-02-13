@@ -146,7 +146,7 @@ struct HomeEmptyRecordView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .glassEffect(.regular.tint(.scPrimary).interactive(), in: .capsule)
+                    .glassCapsule(tint: .scPrimary)
             }
         }
         .frame(maxWidth: .infinity)

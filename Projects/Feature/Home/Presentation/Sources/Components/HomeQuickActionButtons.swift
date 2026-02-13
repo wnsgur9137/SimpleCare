@@ -52,6 +52,7 @@ struct HomeQuickActionButton: View {
             VStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.title2)
+                    .fontWeight(.semibold)
                     .foregroundStyle(color)
 
                 Text(label)
@@ -61,7 +62,7 @@ struct HomeQuickActionButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .glassEffect(.regular.tint(color).interactive(), in: .rect(cornerRadius: 12))
+            .glassButton(cornerRadius: 12)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(label) 기록하기")

@@ -160,7 +160,7 @@ struct BasicInfoStepView: View {
                     subtitle: "이름과 나이, 성별을 알려주세요"
                 )
 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
                     Text("이름")
                         .font(.headline)
                     TextField("이름을 입력하세요", text: $store.name)
@@ -168,18 +168,32 @@ struct BasicInfoStepView: View {
                         .font(.title3)
                 }
 
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("나이: \(store.age)세")
+                VStack(spacing: 8) {
+                    Text("나이")
                         .font(.headline)
-                    Stepper("", value: $store.age, in: 10...120)
-                        .labelsHidden()
-                    Slider(value: Binding(
-                        get: { Double(store.age) },
-                        set: { store.age = Int($0) }
-                    ), in: 10...120, step: 1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 0) {
+                        Picker("나이", selection: $store.age) {
+                            ForEach(10...100, id: \.self) { age in
+                                Text("\(age)").tag(age)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 100)
+                        .clipped()
+
+                        Text("세")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity)
+                    .glassEffect(.regular, in: .rect(cornerRadius: 16))
                 }
 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
                     Text("성별")
                         .font(.headline)
                     Picker("성별", selection: $store.biologicalSex) {
@@ -200,51 +214,177 @@ struct BasicInfoStepView: View {
 struct BodyInfoStepView: View {
     @Bindable var store: StoreOf<OnboardingFeature>
 
+    // 키: 정수부와 소수부 분리
+    private var heightWhole: Binding<Int> {
+        Binding(
+            get: { Int(store.heightCm) },
+            set: { store.heightCm = Double($0) + (store.heightCm - Double(Int(store.heightCm))) }
+        )
+    }
+
+    private var heightDecimal: Binding<Int> {
+        Binding(
+            get: { Int((store.heightCm - Double(Int(store.heightCm))) * 10) },
+            set: { store.heightCm = Double(Int(store.heightCm)) + Double($0) / 10.0 }
+        )
+    }
+
+    // 현재 체중: 정수부와 소수부 분리
+    private var currentWeightWhole: Binding<Int> {
+        Binding(
+            get: { Int(store.currentWeightKg) },
+            set: { store.currentWeightKg = Double($0) + (store.currentWeightKg - Double(Int(store.currentWeightKg))) }
+        )
+    }
+
+    private var currentWeightDecimal: Binding<Int> {
+        Binding(
+            get: { Int((store.currentWeightKg - Double(Int(store.currentWeightKg))) * 10) },
+            set: { store.currentWeightKg = Double(Int(store.currentWeightKg)) + Double($0) / 10.0 }
+        )
+    }
+
+    // 목표 체중: 정수부와 소수부 분리
+    private var targetWeightWhole: Binding<Int> {
+        Binding(
+            get: { Int(store.targetWeightKg) },
+            set: { store.targetWeightKg = Double($0) + (store.targetWeightKg - Double(Int(store.targetWeightKg))) }
+        )
+    }
+
+    private var targetWeightDecimal: Binding<Int> {
+        Binding(
+            get: { Int((store.targetWeightKg - Double(Int(store.targetWeightKg))) * 10) },
+            set: { store.targetWeightKg = Double(Int(store.targetWeightKg)) + Double($0) / 10.0 }
+        )
+    }
+
     var body: some View {
         ScrollView {
-            VStack(spacing: 32) {
+            VStack(spacing: 24) {
                 StepHeader(
                     title: "신체 정보",
                     subtitle: "키와 체중을 입력해주세요"
                 )
 
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("키")
-                            .font(.headline)
-                        Spacer()
-                        Text(String(format: "%.1f cm", store.heightCm))
+                // 키 입력
+                VStack(spacing: 8) {
+                    Text("키")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 0) {
+                        Picker("키 정수", selection: heightWhole) {
+                            ForEach(100...220, id: \.self) { cm in
+                                Text("\(cm)").tag(cm)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80)
+                        .clipped()
+
+                        Text(".")
                             .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.scPrimary)
+                            .fontWeight(.medium)
+
+                        Picker("키 소수", selection: heightDecimal) {
+                            ForEach(0...9, id: \.self) { decimal in
+                                Text("\(decimal)").tag(decimal)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 60)
+                        .clipped()
+
+                        Text("cm")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 4)
                     }
-                    Slider(value: $store.heightCm, in: 100...250, step: 0.5)
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity)
+                    .glassEffect(.regular, in: .rect(cornerRadius: 16))
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("현재 체중")
-                            .font(.headline)
-                        Spacer()
-                        Text(String(format: "%.1f kg", store.currentWeightKg))
+                // 현재 체중 입력
+                VStack(spacing: 8) {
+                    Text("현재 체중")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 0) {
+                        Picker("체중 정수", selection: currentWeightWhole) {
+                            ForEach(30...150, id: \.self) { kg in
+                                Text("\(kg)").tag(kg)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80)
+                        .clipped()
+
+                        Text(".")
                             .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.scPrimary)
+                            .fontWeight(.medium)
+
+                        Picker("체중 소수", selection: currentWeightDecimal) {
+                            ForEach(0...9, id: \.self) { decimal in
+                                Text("\(decimal)").tag(decimal)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 60)
+                        .clipped()
+
+                        Text("kg")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 4)
                     }
-                    Slider(value: $store.currentWeightKg, in: 30...200, step: 0.1)
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity)
+                    .glassEffect(.regular.tint(.scPrimary), in: .rect(cornerRadius: 16))
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("목표 체중")
-                            .font(.headline)
-                        Spacer()
-                        Text(String(format: "%.1f kg", store.targetWeightKg))
+                // 목표 체중 입력
+                VStack(spacing: 8) {
+                    Text("목표 체중")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 0) {
+                        Picker("목표 체중 정수", selection: targetWeightWhole) {
+                            ForEach(30...150, id: \.self) { kg in
+                                Text("\(kg)").tag(kg)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80)
+                        .clipped()
+
+                        Text(".")
                             .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.scSuccess)
+                            .fontWeight(.medium)
+
+                        Picker("목표 체중 소수", selection: targetWeightDecimal) {
+                            ForEach(0...9, id: \.self) { decimal in
+                                Text("\(decimal)").tag(decimal)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 60)
+                        .clipped()
+
+                        Text("kg")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 4)
                     }
-                    Slider(value: $store.targetWeightKg, in: 30...200, step: 0.1)
+                    .frame(height: 120)
+                    .frame(maxWidth: .infinity)
+                    .glassEffect(.regular.tint(.scSuccess), in: .rect(cornerRadius: 16))
                 }
 
                 Spacer()
@@ -316,7 +456,7 @@ struct GoalOptionCard: View {
                 }
             }
             .padding()
-            .glassEffect(isSelected ? .regular.tint(.scPrimary) : .regular, in: .rect(cornerRadius: 16))
+            .glassCard(tint: isSelected ? .scPrimary : .clear, cornerRadius: 16)
         }
         .buttonStyle(.plain)
     }
@@ -382,7 +522,7 @@ struct ActivityLevelRow: View {
                 }
             }
             .padding()
-            .glassEffect(isSelected ? .regular.tint(.scPrimary) : .regular, in: .rect(cornerRadius: 12))
+            .glassCard(tint: isSelected ? .scPrimary : .clear, cornerRadius: 12)
         }
         .buttonStyle(.plain)
     }
