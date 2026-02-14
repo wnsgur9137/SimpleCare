@@ -118,7 +118,7 @@ struct WelcomeStepView: View {
                 FeatureRow(icon: "figure.run", text: "운동 칼로리 추적")
             }
             .padding()
-            .glassEffect(.regular, in: .rect(cornerRadius: 16))
+            .glassCard(cornerRadius: 16)
 
             Spacer()
 
@@ -190,7 +190,7 @@ struct BasicInfoStepView: View {
                     }
                     .frame(height: 120)
                     .frame(maxWidth: .infinity)
-                    .glassEffect(.regular, in: .rect(cornerRadius: 16))
+                    .glassCard(cornerRadius: 16)
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
@@ -215,47 +215,28 @@ struct BodyInfoStepView: View {
     @Bindable var store: StoreOf<OnboardingFeature>
 
     // 키: 정수부와 소수부 분리
-    private var heightWhole: Binding<Int> {
-        Binding(
-            get: { Int(store.heightCm) },
-            set: { store.heightCm = Double($0) + (store.heightCm - Double(Int(store.heightCm))) }
-        )
-    }
-
-    private var heightDecimal: Binding<Int> {
-        Binding(
-            get: { Int((store.heightCm - Double(Int(store.heightCm))) * 10) },
-            set: { store.heightCm = Double(Int(store.heightCm)) + Double($0) / 10.0 }
-        )
-    }
+    private var heightWhole: Binding<Int> { wholePartBinding(for: $store.heightCm) }
+    private var heightDecimal: Binding<Int> { decimalPartBinding(for: $store.heightCm) }
 
     // 현재 체중: 정수부와 소수부 분리
-    private var currentWeightWhole: Binding<Int> {
-        Binding(
-            get: { Int(store.currentWeightKg) },
-            set: { store.currentWeightKg = Double($0) + (store.currentWeightKg - Double(Int(store.currentWeightKg))) }
-        )
-    }
-
-    private var currentWeightDecimal: Binding<Int> {
-        Binding(
-            get: { Int((store.currentWeightKg - Double(Int(store.currentWeightKg))) * 10) },
-            set: { store.currentWeightKg = Double(Int(store.currentWeightKg)) + Double($0) / 10.0 }
-        )
-    }
+    private var currentWeightWhole: Binding<Int> { wholePartBinding(for: $store.currentWeightKg) }
+    private var currentWeightDecimal: Binding<Int> { decimalPartBinding(for: $store.currentWeightKg) }
 
     // 목표 체중: 정수부와 소수부 분리
-    private var targetWeightWhole: Binding<Int> {
+    private var targetWeightWhole: Binding<Int> { wholePartBinding(for: $store.targetWeightKg) }
+    private var targetWeightDecimal: Binding<Int> { decimalPartBinding(for: $store.targetWeightKg) }
+
+    private func wholePartBinding(for binding: Binding<Double>) -> Binding<Int> {
         Binding(
-            get: { Int(store.targetWeightKg) },
-            set: { store.targetWeightKg = Double($0) + (store.targetWeightKg - Double(Int(store.targetWeightKg))) }
+            get: { Int(binding.wrappedValue) },
+            set: { binding.wrappedValue = Double($0) + (binding.wrappedValue - Double(Int(binding.wrappedValue))) }
         )
     }
 
-    private var targetWeightDecimal: Binding<Int> {
+    private func decimalPartBinding(for binding: Binding<Double>) -> Binding<Int> {
         Binding(
-            get: { Int((store.targetWeightKg - Double(Int(store.targetWeightKg))) * 10) },
-            set: { store.targetWeightKg = Double(Int(store.targetWeightKg)) + Double($0) / 10.0 }
+            get: { Int((binding.wrappedValue - Double(Int(binding.wrappedValue))) * 10) },
+            set: { binding.wrappedValue = Double(Int(binding.wrappedValue)) + Double($0) / 10.0 }
         )
     }
 
@@ -304,7 +285,7 @@ struct BodyInfoStepView: View {
                     }
                     .frame(height: 120)
                     .frame(maxWidth: .infinity)
-                    .glassEffect(.regular, in: .rect(cornerRadius: 16))
+                    .glassCard(cornerRadius: 16)
                 }
 
                 // 현재 체중 입력
@@ -344,7 +325,7 @@ struct BodyInfoStepView: View {
                     }
                     .frame(height: 120)
                     .frame(maxWidth: .infinity)
-                    .glassEffect(.regular.tint(.scPrimary), in: .rect(cornerRadius: 16))
+                    .glassCard(tint: .scPrimary, cornerRadius: 16)
                 }
 
                 // 목표 체중 입력
@@ -384,7 +365,7 @@ struct BodyInfoStepView: View {
                     }
                     .frame(height: 120)
                     .frame(maxWidth: .infinity)
-                    .glassEffect(.regular.tint(.scSuccess), in: .rect(cornerRadius: 16))
+                    .glassCard(tint: .scSuccess, cornerRadius: 16)
                 }
 
                 Spacer()
@@ -456,7 +437,7 @@ struct GoalOptionCard: View {
                 }
             }
             .padding()
-            .glassCard(tint: isSelected ? .scPrimary : .clear, cornerRadius: 16)
+            .glassCard(tint: isSelected ? .scPrimary : nil, cornerRadius: 16)
         }
         .buttonStyle(.plain)
     }
@@ -522,7 +503,7 @@ struct ActivityLevelRow: View {
                 }
             }
             .padding()
-            .glassCard(tint: isSelected ? .scPrimary : .clear, cornerRadius: 12)
+            .glassCard(tint: isSelected ? .scPrimary : nil, cornerRadius: 12)
         }
         .buttonStyle(.plain)
     }
@@ -550,7 +531,7 @@ struct SummaryStepView: View {
                     SummaryRow(label: "활동 수준", value: store.activityLevel.displayName)
                 }
                 .padding()
-                .glassEffect(.regular, in: .rect(cornerRadius: 16))
+                .glassCard(cornerRadius: 16)
 
                 VStack(spacing: 8) {
                     Text("일일 목표 칼로리")
@@ -564,7 +545,7 @@ struct SummaryStepView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .glassEffect(.regular.tint(.scPrimary), in: .rect(cornerRadius: 16))
+                .glassCard(tint: .scPrimary, cornerRadius: 16)
 
                 Text("이 정보는 Mifflin-St Jeor 공식을 기반으로 한 추정치입니다. 정확한 건강 조언은 전문가와 상담하세요.")
                     .font(.caption)

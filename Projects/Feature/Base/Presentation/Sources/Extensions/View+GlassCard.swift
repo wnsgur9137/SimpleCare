@@ -20,21 +20,13 @@ public struct GlassCard: ViewModifier {
     }
 
     public func body(content: Content) -> some View {
-        if let tint {
-            content
-                .background {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
-                }
-        } else {
-            content
-                .background {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-                }
-        }
+        content
+            .background {
+                let effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.clear)
+                    .glassEffect(effect, in: .rect(cornerRadius: cornerRadius))
+            }
     }
 }
 
@@ -55,21 +47,13 @@ public struct GlassButton: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                if let tint {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(
-                            isInteractive ? .regular.tint(tint).interactive() : .regular.tint(tint),
-                            in: .rect(cornerRadius: cornerRadius)
-                        )
-                } else {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(
-                            isInteractive ? .regular.interactive() : .regular,
-                            in: .rect(cornerRadius: cornerRadius)
-                        )
+                var effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
+                if isInteractive {
+                    effect = effect.interactive()
                 }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.clear)
+                    .glassEffect(effect, in: .rect(cornerRadius: cornerRadius))
             }
     }
 }
@@ -89,21 +73,13 @@ public struct GlassCapsule: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                if let tint {
-                    Capsule()
-                        .fill(.clear)
-                        .glassEffect(
-                            isInteractive ? .regular.tint(tint).interactive() : .regular.tint(tint),
-                            in: .capsule
-                        )
-                } else {
-                    Capsule()
-                        .fill(.clear)
-                        .glassEffect(
-                            isInteractive ? .regular.interactive() : .regular,
-                            in: .capsule
-                        )
+                var effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
+                if isInteractive {
+                    effect = effect.interactive()
                 }
+                Capsule()
+                    .fill(.clear)
+                    .glassEffect(effect, in: .capsule)
             }
     }
 }
@@ -112,12 +88,7 @@ public struct GlassCapsule: ViewModifier {
 
 public extension View {
     /// Apply a Liquid Glass card effect (background style - content always visible)
-    func glassCard(cornerRadius: CGFloat = 16) -> some View {
-        modifier(GlassCard(cornerRadius: cornerRadius))
-    }
-
-    /// Apply a Liquid Glass card effect with a tint color (background style - content always visible)
-    func glassCard(tint: Color, cornerRadius: CGFloat = 16) -> some View {
+    func glassCard(tint: Color? = nil, cornerRadius: CGFloat = 16) -> some View {
         modifier(GlassCard(cornerRadius: cornerRadius, tint: tint))
     }
 
