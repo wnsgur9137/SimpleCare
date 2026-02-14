@@ -13,6 +13,8 @@ let project: Project = .feature(
     name: "Home",
     dataDependencies: [
         .Project.Feature.Data.BaseData,
+        .Project.Infrastructure.Storage,
+        .Project.Infrastructure.AIService,
     ],
     domainDependencies: [
         .Project.Feature.Domain.BaseDomain,

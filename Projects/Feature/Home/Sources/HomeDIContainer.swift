@@ -8,6 +8,7 @@
 import Foundation
 import BasePresentation
 import HomeDomain
+import HomeData
 import HomePresentation
 
 /// Home DI Container
@@ -38,18 +39,38 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
         dependencies.goalCalories
     }
 
+    // MARK: - Repository
+
+    private func makeHomeRepository() -> HomeDailySummaryRepositoryProtocol {
+        HomeRepository()
+    }
+
+    private func makeInsightService() -> HomeInsightServiceProtocol {
+        HomeInsightService()
+    }
+
+    // MARK: - Use Cases
+
+    private func makeGetDailySummaryUseCase() -> GetDailySummaryUseCaseProtocol {
+        GetDailySummaryUseCase(repository: makeHomeRepository())
+    }
+
+    private func makeGenerateInsightUseCase() -> GenerateDailyInsightUseCaseProtocol {
+        GenerateDailyInsightUseCase(insightService: makeInsightService())
+    }
+
     // MARK: - HomeClient
 
     public var homeClient: HomeClient {
-        // TODO: Connect to actual repositories
-        HomeClient(
-            getDailySummary: { [weak self] date, userProfileId, goalCalories in
-                // Placeholder - will be connected to actual data sources
-                HomeDailySummary.empty(goalCalories: goalCalories)
+        let summaryUseCase = makeGetDailySummaryUseCase()
+        let insightUseCase = makeGenerateInsightUseCase()
+
+        return HomeClient(
+            getDailySummary: { date, userProfileId, goalCalories in
+                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
             },
             generateInsight: { summary in
-                // Placeholder - will be connected to AI service
-                .defaultInsight
+                try await insightUseCase.execute(summary: summary)
             }
         )
     }
