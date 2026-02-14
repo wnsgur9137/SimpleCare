@@ -24,9 +24,24 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
     }
 
     public let dependencies: Dependencies
+    public let homeClient: HomeClient
 
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
+
+        let homeRepository = HomeRepository()
+        let insightService = HomeInsightService()
+        let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
+        let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
+
+        self.homeClient = HomeClient(
+            getDailySummary: { date, userProfileId, goalCalories in
+                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
+            },
+            generateInsight: { summary in
+                try await insightUseCase.execute(summary: summary)
+            }
+        )
     }
 
     // MARK: - HomeCoordinatorDependency
@@ -37,41 +52,5 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
 
     public var goalCalories: Int {
         dependencies.goalCalories
-    }
-
-    // MARK: - Repository
-
-    private func makeHomeRepository() -> HomeDailySummaryRepositoryProtocol {
-        HomeRepository()
-    }
-
-    private func makeInsightService() -> HomeInsightServiceProtocol {
-        HomeInsightService()
-    }
-
-    // MARK: - Use Cases
-
-    private func makeGetDailySummaryUseCase() -> GetDailySummaryUseCaseProtocol {
-        GetDailySummaryUseCase(repository: makeHomeRepository())
-    }
-
-    private func makeGenerateInsightUseCase() -> GenerateDailyInsightUseCaseProtocol {
-        GenerateDailyInsightUseCase(insightService: makeInsightService())
-    }
-
-    // MARK: - HomeClient
-
-    public var homeClient: HomeClient {
-        let summaryUseCase = makeGetDailySummaryUseCase()
-        let insightUseCase = makeGenerateInsightUseCase()
-
-        return HomeClient(
-            getDailySummary: { date, userProfileId, goalCalories in
-                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
-            },
-            generateInsight: { summary in
-                try await insightUseCase.execute(summary: summary)
-            }
-        )
     }
 }

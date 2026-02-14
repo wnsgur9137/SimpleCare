@@ -11,6 +11,7 @@ import StorageInfra
 
 /// Home Repository 구현 - StorageInfra에서 식사/운동 데이터를 집계
 public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecked Sendable {
+    private let maxStreakCheckDays = 30
     private let mealStorage: MealRecordRepository
     private let exerciseStorage: ExerciseRecordRepository
 
@@ -56,20 +57,27 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
     /// 연속 기록 일수 계산 (오늘부터 과거로 연속된 날 수)
     private func calculateStreakDays(userProfileId: UUID, from date: Date) async throws -> Int {
         let calendar = Calendar.current
+        guard let startDate = calendar.date(byAdding: .day, value: -(maxStreakCheckDays - 1), to: date) else {
+            return 0
+        }
+
+        async let meals = mealStorage.fetchMeals(from: startDate, to: date, userProfileId: userProfileId)
+        async let exercises = exerciseStorage.fetchExercises(from: startDate, to: date, userProfileId: userProfileId)
+
+        let recordedDays = try await Set(meals.map { calendar.startOfDay(for: $0.date) })
+            .union(Set(exercises.map { calendar.startOfDay(for: $0.date) }))
+
         var streak = 0
-        var currentDate = date
+        var currentDate = calendar.startOfDay(for: date)
 
-        for _ in 0..<30 {
-            let meals = try await mealStorage.fetchMeals(for: currentDate, userProfileId: userProfileId)
-            let exercises = try await exerciseStorage.fetchExercises(for: currentDate, userProfileId: userProfileId)
-
-            if meals.isEmpty && exercises.isEmpty {
+        for _ in 0..<maxStreakCheckDays {
+            if recordedDays.contains(currentDate) {
+                streak += 1
+                guard let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDate) else { break }
+                currentDate = previousDay
+            } else {
                 break
             }
-
-            streak += 1
-            guard let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDate) else { break }
-            currentDate = previousDay
         }
 
         return streak

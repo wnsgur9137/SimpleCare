@@ -22,15 +22,9 @@ public struct GlassCard: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                if let tint {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
-                } else {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.clear)
-                        .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.clear)
+                    .glassEffect(tint.map { .regular.tint($0) } ?? .regular, in: .rect(cornerRadius: cornerRadius))
             }
     }
 }
@@ -52,25 +46,18 @@ public struct GlassButton: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
+                let shape = RoundedRectangle(cornerRadius: cornerRadius).fill(.clear)
                 if let tint {
                     if isInteractive {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: cornerRadius))
+                        shape.glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: cornerRadius))
                     } else {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
+                        shape.glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
                     }
                 } else {
                     if isInteractive {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(.clear)
-                            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: cornerRadius))
+                        shape.glassEffect(.regular.interactive(), in: .rect(cornerRadius: cornerRadius))
                     } else {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(.clear)
-                            .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+                        shape.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
                     }
                 }
             }
@@ -92,25 +79,18 @@ public struct GlassCapsule: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
+                let shape = Capsule().fill(.clear)
                 if let tint {
                     if isInteractive {
-                        Capsule()
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(tint).interactive(), in: .capsule)
+                        shape.glassEffect(.regular.tint(tint).interactive(), in: .capsule)
                     } else {
-                        Capsule()
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(tint), in: .capsule)
+                        shape.glassEffect(.regular.tint(tint), in: .capsule)
                     }
                 } else {
                     if isInteractive {
-                        Capsule()
-                            .fill(.clear)
-                            .glassEffect(.regular.interactive(), in: .capsule)
+                        shape.glassEffect(.regular.interactive(), in: .capsule)
                     } else {
-                        Capsule()
-                            .fill(.clear)
-                            .glassEffect(.regular, in: .capsule)
+                        shape.glassEffect(.regular, in: .capsule)
                     }
                 }
             }
