@@ -23,7 +23,7 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
         self.exerciseStorage = exerciseStorage
     }
 
-    public func getDailySummary(date: Date, userProfileId: UUID, goalCalories: Int) async throws -> HomeDailySummary {
+    public func getDailySummary(date: Date, userProfileId: UUID, goalCalories: Int, macroGoals: MacroGoals) async throws -> HomeDailySummary {
         let meals = try await mealStorage.fetchMeals(for: date, userProfileId: userProfileId)
         let exercises = try await exerciseStorage.fetchExercises(for: date, userProfileId: userProfileId)
 
@@ -48,7 +48,10 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
             exerciseCalories: exerciseCalories,
             meals: mealSummaries,
             exercises: exerciseSummaries,
-            streakDays: streakDays
+            streakDays: streakDays,
+            proteinGoal: macroGoals.proteinGoal,
+            carbsGoal: macroGoals.carbsGoal,
+            fatGoal: macroGoals.fatGoal
         )
     }
 

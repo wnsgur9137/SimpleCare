@@ -100,14 +100,17 @@ public struct HomeDailySummary: Equatable, Sendable {
     }
 
     /// 빈 요약
-    public static func empty(goalCalories: Int) -> HomeDailySummary {
+    public static func empty(goalCalories: Int, macroGoals: MacroGoals = .default) -> HomeDailySummary {
         HomeDailySummary(
             date: Date(),
             totalCalories: 0,
             goalCalories: goalCalories,
             totalProtein: 0,
             totalCarbs: 0,
-            totalFat: 0
+            totalFat: 0,
+            proteinGoal: macroGoals.proteinGoal,
+            carbsGoal: macroGoals.carbsGoal,
+            fatGoal: macroGoals.fatGoal
         )
     }
 }

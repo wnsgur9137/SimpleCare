@@ -16,10 +16,12 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
     public struct Dependencies {
         public let userProfileId: UUID
         public let goalCalories: Int
+        public let macroGoals: MacroGoals
 
-        public init(userProfileId: UUID, goalCalories: Int) {
+        public init(userProfileId: UUID, goalCalories: Int, macroGoals: MacroGoals = .default) {
             self.userProfileId = userProfileId
             self.goalCalories = goalCalories
+            self.macroGoals = macroGoals
         }
     }
 
@@ -35,8 +37,8 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
         let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
 
         self.homeClient = HomeClient(
-            getDailySummary: { date, userProfileId, goalCalories in
-                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
+            getDailySummary: { date, userProfileId, goalCalories, macroGoals in
+                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories, macroGoals: macroGoals)
             },
             generateInsight: { summary in
                 try await insightUseCase.execute(summary: summary)
@@ -52,5 +54,9 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
 
     public var goalCalories: Int {
         dependencies.goalCalories
+    }
+
+    public var macroGoals: MacroGoals {
+        dependencies.macroGoals
     }
 }
