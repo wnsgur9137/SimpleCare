@@ -84,11 +84,14 @@ private struct HomeContainerView: View {
 
     var body: some View {
         HomeView(store: store)
-            .onChange(of: store.state) { oldState, newState in
-                // Handle delegate actions would go here if needed
+            .onChange(of: store.pendingNavigation) { _, newValue in
+                guard let target = newValue else { return }
+                switch target {
+                case .meal: onNavigateToMeal()
+                case .exercise: onNavigateToExercise()
+                case .weight: onNavigateToWeight()
+                }
+                store.send(.navigationHandled)
             }
-            .onReceive(
-                store.publisher.map(\.viewState).removeDuplicates()
-            ) { _ in }
     }
 }

@@ -23,6 +23,13 @@ public struct HomeFeature {
         public var goalCalories: Int
         public var macroGoals: MacroGoals
         public var weeklyStatus: [HomeCalorieStatus?] = Array(repeating: nil, count: 7)
+        public var pendingNavigation: NavigationTarget? = nil
+
+        public enum NavigationTarget: Equatable {
+            case meal
+            case exercise
+            case weight
+        }
 
         public var isToday: Bool {
             Calendar.current.isDateInToday(selectedDate)
@@ -66,12 +73,14 @@ public struct HomeFeature {
         case selectWeekDay(Int)
         case loadHomeResponse(Result<HomeDailySummary, Error>)
         case generateInsightResponse(Result<HomeInsight, Error>)
+        case loadWeeklyStatusResponse(Result<[HomeCalorieStatus?], Error>)
 
         // Quick Actions
         case mealButtonTapped
         case exerciseButtonTapped
         case weightButtonTapped
         case addRecordButtonTapped
+        case navigationHandled
 
         // Delegate
         case delegate(Delegate)
@@ -92,7 +101,8 @@ public struct HomeFeature {
                  (.mealButtonTapped, .mealButtonTapped),
                  (.exerciseButtonTapped, .exerciseButtonTapped),
                  (.weightButtonTapped, .weightButtonTapped),
-                 (.addRecordButtonTapped, .addRecordButtonTapped):
+                 (.addRecordButtonTapped, .addRecordButtonTapped),
+                 (.navigationHandled, .navigationHandled):
                 return true
             case (.selectDate(let l), .selectDate(let r)):
                 return l == r
@@ -105,6 +115,10 @@ public struct HomeFeature {
             case (.generateInsightResponse(.success(let l)), .generateInsightResponse(.success(let r))):
                 return l == r
             case (.generateInsightResponse(.failure), .generateInsightResponse(.failure)):
+                return true
+            case (.loadWeeklyStatusResponse(.success(let l)), .loadWeeklyStatusResponse(.success(let r))):
+                return l == r
+            case (.loadWeeklyStatusResponse(.failure), .loadWeeklyStatusResponse(.failure)):
                 return true
             case (.delegate(let l), .delegate(let r)):
                 return l == r
@@ -180,16 +194,24 @@ public struct HomeFeature {
                 return .none
 
             case .mealButtonTapped:
+                state.pendingNavigation = .meal
                 return .send(.delegate(.navigateToMeal))
 
             case .exerciseButtonTapped:
+                state.pendingNavigation = .exercise
                 return .send(.delegate(.navigateToExercise))
 
             case .weightButtonTapped:
+                state.pendingNavigation = .weight
                 return .send(.delegate(.navigateToWeight))
 
             case .addRecordButtonTapped:
+                state.pendingNavigation = .meal
                 return .send(.delegate(.navigateToMeal))
+
+            case .navigationHandled:
+                state.pendingNavigation = nil
+                return .none
 
             case .delegate:
                 return .none
@@ -197,15 +219,28 @@ public struct HomeFeature {
             case .loadHomeResponse(.success(let summary)):
                 state.dailySummary = summary
                 state.viewState = .loaded
+                let date = state.selectedDate
+                let userProfileId = state.userProfileId
+                let goalCalories = state.goalCalories
 
-                return .run { send in
-                    do {
-                        let insight = try await homeClient.generateInsight(summary)
-                        await send(.generateInsightResponse(.success(insight)))
-                    } catch {
-                        await send(.generateInsightResponse(.failure(error)))
+                return .merge(
+                    .run { send in
+                        do {
+                            let insight = try await homeClient.generateInsight(summary)
+                            await send(.generateInsightResponse(.success(insight)))
+                        } catch {
+                            await send(.generateInsightResponse(.failure(error)))
+                        }
+                    },
+                    .run { send in
+                        do {
+                            let statuses = try await homeClient.getWeeklyStatus(date, userProfileId, goalCalories)
+                            await send(.loadWeeklyStatusResponse(.success(statuses)))
+                        } catch {
+                            await send(.loadWeeklyStatusResponse(.failure(error)))
+                        }
                     }
-                }
+                )
 
             case .loadHomeResponse(.failure(let error)):
                 state.viewState = .error(error.localizedDescription)
@@ -218,6 +253,13 @@ public struct HomeFeature {
             case .generateInsightResponse(.failure):
                 state.insight = .defaultInsight
                 return .none
+
+            case .loadWeeklyStatusResponse(.success(let statuses)):
+                state.weeklyStatus = statuses
+                return .none
+
+            case .loadWeeklyStatusResponse(.failure):
+                return .none
             }
         }
     }
@@ -228,13 +270,16 @@ public struct HomeFeature {
 public struct HomeClient {
     public var getDailySummary: @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary
     public var generateInsight: @Sendable (HomeDailySummary) async throws -> HomeInsight
+    public var getWeeklyStatus: @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
 
     public init(
         getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
-        generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight
+        generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight,
+        getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
     ) {
         self.getDailySummary = getDailySummary
         self.generateInsight = generateInsight
+        self.getWeeklyStatus = getWeeklyStatus
     }
 }
 
@@ -246,6 +291,9 @@ extension HomeClient: DependencyKey {
             },
             generateInsight: { _ in
                 .defaultInsight
+            },
+            getWeeklyStatus: { _, _, _ in
+                Array(repeating: nil, count: 7)
             }
         )
     }
@@ -297,6 +345,9 @@ extension HomeClient: DependencyKey {
             },
             generateInsight: { _ in
                 HomeInsight(comment: "단백질 섭취가 좋아요! 저녁엔 채소를 추가해보세요", emoji: "💪")
+            },
+            getWeeklyStatus: { _, _, _ in
+                [.onTrack, .onTrack, .over, .onTrack, .under, .onTrack, nil]
             }
         )
     }
