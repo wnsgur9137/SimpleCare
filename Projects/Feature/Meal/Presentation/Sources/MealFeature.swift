@@ -232,15 +232,21 @@ public struct MealClient {
     public var estimateNutrition: @Sendable (String) async throws -> NutritionEstimation
     public var analyzeMealImage: @Sendable (Data) async throws -> NutritionEstimation
     public var recordMeal: @Sendable (MealRecord) async throws -> Void
+    public var fetchDailyMeals: @Sendable (Date, UUID) async throws -> [MealRecord]
+    public var fetchMealHistory: @Sendable (Date, Date, UUID) async throws -> [MealRecord]
 
     public init(
         estimateNutrition: @escaping @Sendable (String) async throws -> NutritionEstimation,
         analyzeMealImage: @escaping @Sendable (Data) async throws -> NutritionEstimation,
-        recordMeal: @escaping @Sendable (MealRecord) async throws -> Void
+        recordMeal: @escaping @Sendable (MealRecord) async throws -> Void,
+        fetchDailyMeals: @escaping @Sendable (Date, UUID) async throws -> [MealRecord],
+        fetchMealHistory: @escaping @Sendable (Date, Date, UUID) async throws -> [MealRecord]
     ) {
         self.estimateNutrition = estimateNutrition
         self.analyzeMealImage = analyzeMealImage
         self.recordMeal = recordMeal
+        self.fetchDailyMeals = fetchDailyMeals
+        self.fetchMealHistory = fetchMealHistory
     }
 }
 
@@ -253,7 +259,9 @@ extension MealClient: DependencyKey {
             analyzeMealImage: { _ in
                 NutritionEstimation(foods: [], totalCalories: 0)
             },
-            recordMeal: { _ in }
+            recordMeal: { _ in },
+            fetchDailyMeals: { _, _ in [] },
+            fetchMealHistory: { _, _, _ in [] }
         )
     }
 
@@ -279,7 +287,9 @@ extension MealClient: DependencyKey {
             analyzeMealImage: { _ in
                 NutritionEstimation(foods: [], totalCalories: 0)
             },
-            recordMeal: { _ in }
+            recordMeal: { _ in },
+            fetchDailyMeals: { _, _ in [] },
+            fetchMealHistory: { _, _, _ in [] }
         )
     }
 }
