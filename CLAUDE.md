@@ -136,9 +136,16 @@ When creating a PR, use **GitHub MCP** (not `gh` CLI). Follow the template defin
 - **📋 변경사항**: List of changes for reviewers, with before/after screenshots if applicable
 - **🙏 참고사항**: Notes for reviewers and optional review deadline
 
+### Commit Granularity
+
+Commits must be split per logical unit of work. Do NOT bundle unrelated changes into a single commit.
+- One commit per bug fix, feature addition, or refactoring unit
+- Documentation changes should be a separate commit
+- Example: If fixing 5 independent gaps, create 5 separate commits (not 1 combined commit)
+
 ### GitHub MCP
 
-Use GitHub MCP for all GitHub operations (PR creation, issue management, etc.) instead of the `gh` CLI.
+Use GitHub MCP for **all Git-related operations** (PR creation/update, issue management, branch operations, etc.) instead of the `gh` CLI.
 GitHub MCP is configured via `.mcp.json` and runs as a Docker container.
 
 ## Key Patterns
