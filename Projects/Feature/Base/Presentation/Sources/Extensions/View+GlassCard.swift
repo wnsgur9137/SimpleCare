@@ -22,10 +22,9 @@ public struct GlassCard: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                let effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.clear)
-                    .glassEffect(effect, in: .rect(cornerRadius: cornerRadius))
+                    .glassEffect(tint.map { .regular.tint($0) } ?? .regular, in: .rect(cornerRadius: cornerRadius))
             }
     }
 }
@@ -47,13 +46,20 @@ public struct GlassButton: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                var effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
-                if isInteractive {
-                    effect = effect.interactive()
+                let shape = RoundedRectangle(cornerRadius: cornerRadius).fill(.clear)
+                if let tint {
+                    if isInteractive {
+                        shape.glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: cornerRadius))
+                    } else {
+                        shape.glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
+                    }
+                } else {
+                    if isInteractive {
+                        shape.glassEffect(.regular.interactive(), in: .rect(cornerRadius: cornerRadius))
+                    } else {
+                        shape.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+                    }
                 }
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.clear)
-                    .glassEffect(effect, in: .rect(cornerRadius: cornerRadius))
             }
     }
 }
@@ -73,13 +79,20 @@ public struct GlassCapsule: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .background {
-                var effect: GlassEffectContent = tint.map { .regular.tint($0) } ?? .regular
-                if isInteractive {
-                    effect = effect.interactive()
+                let shape = Capsule().fill(.clear)
+                if let tint {
+                    if isInteractive {
+                        shape.glassEffect(.regular.tint(tint).interactive(), in: .capsule)
+                    } else {
+                        shape.glassEffect(.regular.tint(tint), in: .capsule)
+                    }
+                } else {
+                    if isInteractive {
+                        shape.glassEffect(.regular.interactive(), in: .capsule)
+                    } else {
+                        shape.glassEffect(.regular, in: .capsule)
+                    }
                 }
-                Capsule()
-                    .fill(.clear)
-                    .glassEffect(effect, in: .capsule)
             }
     }
 }

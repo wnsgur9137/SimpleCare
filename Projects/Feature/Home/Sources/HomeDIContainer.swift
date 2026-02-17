@@ -8,6 +8,7 @@
 import Foundation
 import BasePresentation
 import HomeDomain
+import HomeData
 import HomePresentation
 
 /// Home DI Container
@@ -23,9 +24,24 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
     }
 
     public let dependencies: Dependencies
+    public let homeClient: HomeClient
 
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
+
+        let homeRepository = HomeRepository()
+        let insightService = HomeInsightService()
+        let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
+        let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
+
+        self.homeClient = HomeClient(
+            getDailySummary: { date, userProfileId, goalCalories in
+                try await summaryUseCase.execute(date: date, userProfileId: userProfileId, goalCalories: goalCalories)
+            },
+            generateInsight: { summary in
+                try await insightUseCase.execute(summary: summary)
+            }
+        )
     }
 
     // MARK: - HomeCoordinatorDependency
@@ -36,21 +52,5 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
 
     public var goalCalories: Int {
         dependencies.goalCalories
-    }
-
-    // MARK: - HomeClient
-
-    public var homeClient: HomeClient {
-        // TODO: Connect to actual repositories
-        HomeClient(
-            getDailySummary: { [weak self] date, userProfileId, goalCalories in
-                // Placeholder - will be connected to actual data sources
-                HomeDailySummary.empty(goalCalories: goalCalories)
-            },
-            generateInsight: { summary in
-                // Placeholder - will be connected to AI service
-                .defaultInsight
-            }
-        )
     }
 }
