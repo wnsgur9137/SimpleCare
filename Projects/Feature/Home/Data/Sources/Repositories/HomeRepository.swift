@@ -55,6 +55,54 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
         )
     }
 
+    public func getWeeklyStatus(baseDate: Date, userProfileId: UUID, goalCalories: Int) async throws -> [HomeCalorieStatus?] {
+        let calendar = Calendar(identifier: .gregorian)
+        let today = calendar.startOfDay(for: Date())
+
+        // Find Monday of the week containing baseDate
+        let weekday = calendar.component(.weekday, from: baseDate)
+        let daysFromMonday = (weekday + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: baseDate)) else {
+            return Array(repeating: nil, count: 7)
+        }
+
+        var statuses: [HomeCalorieStatus?] = []
+
+        for dayOffset in 0..<7 {
+            guard let dayDate = calendar.date(byAdding: .day, value: dayOffset, to: monday) else {
+                statuses.append(nil)
+                continue
+            }
+
+            // Skip future days
+            if dayDate > today {
+                statuses.append(nil)
+                continue
+            }
+
+            let meals = try await mealStorage.fetchMeals(for: dayDate, userProfileId: userProfileId)
+            let exercises = try await exerciseStorage.fetchExercises(for: dayDate, userProfileId: userProfileId)
+
+            if meals.isEmpty && exercises.isEmpty {
+                statuses.append(nil)
+                continue
+            }
+
+            let totalCalories = meals.reduce(0) { $0 + $1.totalCalories }
+            let progress = goalCalories > 0 ? Double(totalCalories) / Double(goalCalories) : 0
+
+            if progress < 0.8 {
+                statuses.append(.under)
+            } else if progress <= 1.1 {
+                statuses.append(.onTrack)
+            } else {
+                statuses.append(.over)
+            }
+        }
+
+        return statuses
+    }
+
     // MARK: - Private
 
     /// 연속 기록 일수 계산 (오늘부터 과거로 연속된 날 수)

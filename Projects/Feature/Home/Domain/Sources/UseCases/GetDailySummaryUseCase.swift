@@ -25,6 +25,7 @@ public struct MacroGoals: Equatable, Sendable {
 /// 홈 일일 요약 저장소 프로토콜 (Data layer에서 구현)
 public protocol HomeDailySummaryRepositoryProtocol: Sendable {
     func getDailySummary(date: Date, userProfileId: UUID, goalCalories: Int, macroGoals: MacroGoals) async throws -> HomeDailySummary
+    func getWeeklyStatus(baseDate: Date, userProfileId: UUID, goalCalories: Int) async throws -> [HomeCalorieStatus?]
 }
 
 /// 일일 요약 조회 UseCase 프로토콜
