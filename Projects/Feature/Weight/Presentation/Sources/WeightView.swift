@@ -75,35 +75,51 @@ public struct WeightView: View {
 
     private func trendChartSection(trend: WeightTrend) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("체중 변화")
-                .font(.headline)
+            HStack {
+                Text("체중 변화")
+                    .font(.headline)
 
-            Chart(trend.records) { record in
-                LineMark(
-                    x: .value("날짜", record.date),
-                    y: .value("체중", record.weightKg)
-                )
-                .foregroundStyle(.scPrimary)
+                Spacer()
 
-                PointMark(
-                    x: .value("날짜", record.date),
-                    y: .value("체중", record.weightKg)
-                )
-                .foregroundStyle(.scPrimary)
+                Picker("기간", selection: Binding(
+                    get: { store.selectedPeriod },
+                    set: { store.send(.selectPeriod($0)) }
+                )) {
+                    ForEach(WeightFeature.State.TrendPeriod.allCases, id: \.self) { period in
+                        Text(period.displayName).tag(period)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 180)
+            }
+
+            Chart {
+                ForEach(trend.records) { record in
+                    LineMark(
+                        x: .value("날짜", record.date),
+                        y: .value("체중", record.weightKg)
+                    )
+                    .foregroundStyle(.scPrimary)
+
+                    PointMark(
+                        x: .value("날짜", record.date),
+                        y: .value("체중", record.weightKg)
+                    )
+                    .foregroundStyle(.scPrimary)
+                }
+
+                RuleMark(y: .value("목표", trend.targetWeight))
+                    .foregroundStyle(.scSuccess)
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 3]))
+                    .annotation(position: .top, alignment: .trailing) {
+                        Text("목표 \(String(format: "%.1f", trend.targetWeight))kg")
+                            .font(.caption2)
+                            .foregroundStyle(.scSuccess)
+                    }
             }
             .frame(height: 200)
             .chartYAxis {
                 AxisMarks(position: .leading)
-            }
-
-            // 목표선
-            HStack {
-                Circle()
-                    .fill(.scSuccess)
-                    .frame(width: 8, height: 8)
-                Text("목표: \(String(format: "%.1f", trend.targetWeight)) kg")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
         .padding()
