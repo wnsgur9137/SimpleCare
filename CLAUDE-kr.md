@@ -9,6 +9,19 @@
 SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 사용자가 식사, 운동, 체중을 기록하고 AI(GPT-4o)를 활용하여 건강한 생활 습관을 개발할 수 있도록 돕습니다.
 
+## 현재 진행 상황
+
+> 상세 계획: [WORKPLAN.md](./docs/WORKPLAN.md) | [ROADMAP.md](./docs/ROADMAP.md)
+
+| Phase | 상태 | 설명 |
+|-------|------|------|
+| Phase 0: DIContainer-Client 연결 | ✅ 완료 | 모든 Feature DIContainer에 실제 UseCase 연결 |
+| Phase 1: AI 기능 활성화 | 🟡 대기 | Home AI 인사이트 UI, Meal 이미지 선택/분석 |
+| Phase 1.5: 알려진 Gap 수정 | ✅ 완료 | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
+| Phase 2: 홈 화면 개선 및 시각화 | ✅ 완료 | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
+| Phase 3: 확장 기능 | 🔴 대기 | 즐겨찾기, 최근 기록, 커스텀 운동, 리포트 |
+| Phase 4: 연동 및 부가 기능 | 🔴 대기 | HealthKit, 알림, 데이터 내보내기 |
+
 ## 기술 스택
 
 - **플랫폼**: iOS 18.0+ / Swift 6.0 / SwiftUI
