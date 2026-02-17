@@ -50,14 +50,22 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         RecordExerciseUseCase(repository: makeExerciseRepository())
     }
 
+    private func makeGetDailyExercisesUseCase() -> GetDailyExercisesUseCaseProtocol {
+        GetDailyExercisesUseCase(repository: makeExerciseRepository())
+    }
+
     // MARK: - TCA Dependencies
 
     public var exerciseClient: ExerciseClient {
         let recordUseCase = makeRecordExerciseUseCase()
+        let fetchUseCase = makeGetDailyExercisesUseCase()
 
         return ExerciseClient(
             recordExercise: { record in
                 try await recordUseCase.execute(exercise: record)
+            },
+            fetchExercises: { date, userProfileId in
+                try await fetchUseCase.execute(date: date, userProfileId: userProfileId)
             }
         )
     }

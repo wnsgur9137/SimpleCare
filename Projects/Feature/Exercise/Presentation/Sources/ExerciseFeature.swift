@@ -155,19 +155,30 @@ public struct ExerciseFeature {
 
 public struct ExerciseClient {
     public var recordExercise: @Sendable (ExerciseRecord) async throws -> Void
+    public var fetchExercises: @Sendable (Date, UUID) async throws -> [ExerciseRecord]
 
-    public init(recordExercise: @escaping @Sendable (ExerciseRecord) async throws -> Void) {
+    public init(
+        recordExercise: @escaping @Sendable (ExerciseRecord) async throws -> Void,
+        fetchExercises: @escaping @Sendable (Date, UUID) async throws -> [ExerciseRecord]
+    ) {
         self.recordExercise = recordExercise
+        self.fetchExercises = fetchExercises
     }
 }
 
 extension ExerciseClient: DependencyKey {
     public static var liveValue: ExerciseClient {
-        ExerciseClient(recordExercise: { _ in })
+        ExerciseClient(
+            recordExercise: { _ in },
+            fetchExercises: { _, _ in [] }
+        )
     }
 
     public static var testValue: ExerciseClient {
-        ExerciseClient(recordExercise: { _ in })
+        ExerciseClient(
+            recordExercise: { _ in },
+            fetchExercises: { _, _ in [] }
+        )
     }
 }
 
