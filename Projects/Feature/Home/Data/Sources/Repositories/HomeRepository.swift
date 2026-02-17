@@ -55,6 +55,9 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
         )
     }
 
+    private static let underProgressThreshold = 0.8
+    private static let onTrackProgressThreshold = 1.1
+
     public func getWeeklyStatus(baseDate: Date, userProfileId: UUID, goalCalories: Int) async throws -> [HomeCalorieStatus?] {
         let calendar = Calendar(identifier: .gregorian)
         let today = calendar.startOfDay(for: Date())
@@ -62,9 +65,17 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
         // Find Monday of the week containing baseDate
         let weekday = calendar.component(.weekday, from: baseDate)
         let daysFromMonday = (weekday + 5) % 7
-        guard let monday = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: baseDate)) else {
+        guard let monday = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: baseDate)),
+              let sunday = calendar.date(byAdding: .day, value: 6, to: monday) else {
             return Array(repeating: nil, count: 7)
         }
+
+        // Fetch all data for the week at once
+        async let weeklyMeals = mealStorage.fetchMeals(from: monday, to: sunday, userProfileId: userProfileId)
+        async let weeklyExercises = exerciseStorage.fetchExercises(from: monday, to: sunday, userProfileId: userProfileId)
+
+        let mealsByDay = try await Dictionary(grouping: weeklyMeals) { calendar.startOfDay(for: $0.date) }
+        let exercisesByDay = try await Dictionary(grouping: weeklyExercises) { calendar.startOfDay(for: $0.date) }
 
         var statuses: [HomeCalorieStatus?] = []
 
@@ -74,14 +85,13 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
                 continue
             }
 
-            // Skip future days
             if dayDate > today {
                 statuses.append(nil)
                 continue
             }
 
-            let meals = try await mealStorage.fetchMeals(for: dayDate, userProfileId: userProfileId)
-            let exercises = try await exerciseStorage.fetchExercises(for: dayDate, userProfileId: userProfileId)
+            let meals = mealsByDay[dayDate] ?? []
+            let exercises = exercisesByDay[dayDate] ?? []
 
             if meals.isEmpty && exercises.isEmpty {
                 statuses.append(nil)
@@ -91,9 +101,9 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, @unchecke
             let totalCalories = meals.reduce(0) { $0 + $1.totalCalories }
             let progress = goalCalories > 0 ? Double(totalCalories) / Double(goalCalories) : 0
 
-            if progress < 0.8 {
+            if progress < Self.underProgressThreshold {
                 statuses.append(.under)
-            } else if progress <= 1.1 {
+            } else if progress <= Self.onTrackProgressThreshold {
                 statuses.append(.onTrack)
             } else {
                 statuses.append(.over)
