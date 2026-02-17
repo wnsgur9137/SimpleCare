@@ -115,13 +115,6 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
 
     /// 이미지로 음식 분석 및 영양 정보 추정
     public func analyzeImage(_ imageData: Data) async throws -> NutritionEstimationResult {
-        let systemMessage = ChatMessage(role: .system, text: NutritionPrompts.imageAnalysisSystemPrompt)
-
-        let systemResponse = try await client.chatCompletion(
-            messages: [systemMessage],
-            temperature: 0.3
-        )
-
         let response = try await client.chatCompletionWithVision(
             textPrompt: NutritionPrompts.imageAnalysisUserPrompt,
             imageData: imageData,
