@@ -57,12 +57,22 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         RecordMealUseCase(repository: makeMealRepository())
     }
 
+    private func makeGetDailyMealsUseCase() -> GetDailyMealsUseCaseProtocol {
+        GetDailyMealsUseCase(repository: makeMealRepository())
+    }
+
+    private func makeGetMealHistoryUseCase() -> GetMealHistoryUseCaseProtocol {
+        GetMealHistoryUseCase(repository: makeMealRepository())
+    }
+
     // MARK: - TCA Dependencies
 
     public var mealClient: MealClient {
         let estimateUseCase = makeEstimateNutritionUseCase()
         let analyzeUseCase = makeAnalyzeMealImageUseCase()
         let recordUseCase = makeRecordMealUseCase()
+        let dailyMealsUseCase = makeGetDailyMealsUseCase()
+        let historyUseCase = makeGetMealHistoryUseCase()
 
         return MealClient(
             estimateNutrition: { text in
@@ -73,6 +83,12 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
             },
             recordMeal: { meal in
                 try await recordUseCase.execute(meal: meal)
+            },
+            fetchDailyMeals: { date, userProfileId in
+                try await dailyMealsUseCase.execute(date: date, userProfileId: userProfileId)
+            },
+            fetchMealHistory: { startDate, endDate, userProfileId in
+                try await historyUseCase.execute(from: startDate, to: endDate, userProfileId: userProfileId)
             }
         )
     }

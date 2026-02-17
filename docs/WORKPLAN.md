@@ -57,15 +57,15 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 모든 Feature의 DIContainer가 실제 UseCase/Repository/Storage와 연결 완료됨.
 
-### 2.3 알려진 개선 사항 (Gap)
+### 2.3 알려진 개선 사항 (Gap) - ✅ 모두 해결
 
-| # | 이슈 | 심각도 | 설명 |
-|---|------|--------|------|
-| G1 | ExerciseClient 조회 메서드 미노출 | 낮음 | `GetDailyExercisesUseCase` 존재하나 Client에 미연결 |
-| G2 | MealClient 히스토리 메서드 미노출 | 낮음 | `GetDailyMealsUseCase`, `GetMealHistoryUseCase` 존재하나 Client에 미연결 |
-| G3 | 영양소 목표 하드코딩 | 중간 | `HomeDailySummary`의 proteinGoal/carbsGoal/fatGoal이 100/250/70g으로 고정 |
-| G4 | TabDIContainer 프로필 fetch race condition | 중간 | `fetchUserProfile()` 호출 전 DIContainer 생성 시 fallback 값 사용 가능 |
-| G5 | analyzeImage 불필요한 API 호출 | 낮음 | `NutritionEstimationService.analyzeImage()`에서 사용하지 않는 `chatCompletion` 호출 존재 |
+| # | 이슈 | 상태 | 해결 방법 |
+|---|------|------|----------|
+| G1 | ExerciseClient 조회 메서드 미노출 | ✅ | `fetchExercises` 클로저 추가 및 UseCase 연결 |
+| G2 | MealClient 히스토리 메서드 미노출 | ✅ | `fetchDailyMeals`, `fetchMealHistory` 클로저 추가 |
+| G3 | 영양소 목표 하드코딩 | ✅ | `MacroGoals` 구조체로 UserProfile 기반 전달 |
+| G4 | TabDIContainer 프로필 fetch race condition | ✅ | `ensureProfileLoaded()` + `isReady` 게이트 패턴 |
+| G5 | analyzeImage 불필요한 API 호출 | ✅ | 미사용 `chatCompletion` 호출 제거 |
 
 ---
 
@@ -136,15 +136,17 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - Home에서 AI 코멘트 표시
 - Meal에서 사진 촬영/선택 → AI 분석 → 영양소 표시
 
-### Phase 1.5: 알려진 Gap 수정 🟠
+### ~~Phase 1.5: 알려진 Gap 수정~~ ✅ 완료
 
-| 순서 | 작업 | 관련 Gap | 예상 복잡도 |
-|------|------|----------|------------|
-| 1.5.1 | 영양소 목표를 UserProfile에서 계산하여 전달 | G3 | 중간 |
-| 1.5.2 | TabDIContainer 프로필 fetch 보장 | G4 | 낮음 |
-| 1.5.3 | analyzeImage 불필요 API 호출 제거 | G5 | 낮음 |
-| 1.5.4 | ExerciseClient에 조회 메서드 추가 | G1 | 낮음 |
-| 1.5.5 | MealClient에 히스토리 메서드 추가 | G2 | 낮음 |
+> PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26)
+
+| 순서 | 작업 | 관련 Gap | 상태 |
+|------|------|----------|------|
+| 1.5.1 | 영양소 목표를 UserProfile에서 계산하여 전달 | G3 | ✅ 완료 |
+| 1.5.2 | TabDIContainer 프로필 fetch 보장 | G4 | ✅ 완료 |
+| 1.5.3 | analyzeImage 불필요 API 호출 제거 | G5 | ✅ 완료 |
+| 1.5.4 | ExerciseClient에 조회 메서드 추가 | G1 | ✅ 완료 |
+| 1.5.5 | MealClient에 히스토리 메서드 추가 | G2 | ✅ 완료 |
 
 ### Phase 2: 홈 화면 개선 및 데이터 시각화 🟢
 
@@ -233,7 +235,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### v1.1 - PRD §7.2
 - [ ] Phase 1 완료 (AI 기능)
-- [ ] Phase 1.5 완료 (Gap 수정)
+- [x] Phase 1.5 완료 (Gap 수정)
 - [ ] Phase 2 완료 (홈 화면 개선)
 - [ ] 이미지 기반 음식 인식
 

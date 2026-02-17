@@ -21,6 +21,7 @@ public struct HomeFeature {
         public var selectedDate: Date = Date()
         public var userProfileId: UUID
         public var goalCalories: Int
+        public var macroGoals: MacroGoals
         public var weeklyStatus: [HomeCalorieStatus?] = Array(repeating: nil, count: 7)
 
         public var isToday: Bool {
@@ -46,9 +47,10 @@ public struct HomeFeature {
             case error(String)
         }
 
-        public init(userProfileId: UUID, goalCalories: Int) {
+        public init(userProfileId: UUID, goalCalories: Int, macroGoals: MacroGoals = .default) {
             self.userProfileId = userProfileId
             self.goalCalories = goalCalories
+            self.macroGoals = macroGoals
         }
     }
 
@@ -131,10 +133,11 @@ public struct HomeFeature {
                 let date = state.selectedDate
                 let userProfileId = state.userProfileId
                 let goalCalories = state.goalCalories
+                let macroGoals = state.macroGoals
 
                 return .run { send in
                     do {
-                        let summary = try await homeClient.getDailySummary(date, userProfileId, goalCalories)
+                        let summary = try await homeClient.getDailySummary(date, userProfileId, goalCalories, macroGoals)
                         await send(.loadHomeResponse(.success(summary)))
                     } catch {
                         await send(.loadHomeResponse(.failure(error)))
@@ -223,11 +226,11 @@ public struct HomeFeature {
 // MARK: - HomeClient
 
 public struct HomeClient {
-    public var getDailySummary: @Sendable (Date, UUID, Int) async throws -> HomeDailySummary
+    public var getDailySummary: @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary
     public var generateInsight: @Sendable (HomeDailySummary) async throws -> HomeInsight
 
     public init(
-        getDailySummary: @escaping @Sendable (Date, UUID, Int) async throws -> HomeDailySummary,
+        getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
         generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight
     ) {
         self.getDailySummary = getDailySummary
@@ -238,7 +241,7 @@ public struct HomeClient {
 extension HomeClient: DependencyKey {
     public static var liveValue: HomeClient {
         HomeClient(
-            getDailySummary: { _, _, goalCalories in
+            getDailySummary: { _, _, goalCalories, _ in
                 HomeDailySummary.empty(goalCalories: goalCalories)
             },
             generateInsight: { _ in
@@ -249,7 +252,7 @@ extension HomeClient: DependencyKey {
 
     public static var testValue: HomeClient {
         HomeClient(
-            getDailySummary: { _, _, _ in
+            getDailySummary: { _, _, _, _ in
                 HomeDailySummary(
                     date: Date(),
                     totalCalories: 1500,

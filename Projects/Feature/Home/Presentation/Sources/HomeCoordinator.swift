@@ -14,6 +14,7 @@ import HomeDomain
 public protocol HomeCoordinatorDependency {
     var userProfileId: UUID { get }
     var goalCalories: Int { get }
+    var macroGoals: MacroGoals { get }
     var homeClient: HomeClient { get }
 }
 
@@ -37,6 +38,7 @@ public final class HomeCoordinator: ObservableObject, Coordinator {
         HomeContainerView(
             userProfileId: dependencies.userProfileId,
             goalCalories: dependencies.goalCalories,
+            macroGoals: dependencies.macroGoals,
             homeClient: dependencies.homeClient,
             onNavigateToMeal: { [weak self] in self?.onNavigateToMeal?() },
             onNavigateToExercise: { [weak self] in self?.onNavigateToExercise?() },
@@ -56,6 +58,7 @@ private struct HomeContainerView: View {
     init(
         userProfileId: UUID,
         goalCalories: Int,
+        macroGoals: MacroGoals,
         homeClient: HomeClient,
         onNavigateToMeal: @escaping () -> Void,
         onNavigateToExercise: @escaping () -> Void,
@@ -65,7 +68,8 @@ private struct HomeContainerView: View {
             initialValue: Store(
                 initialState: HomeFeature.State(
                     userProfileId: userProfileId,
-                    goalCalories: goalCalories
+                    goalCalories: goalCalories,
+                    macroGoals: macroGoals
                 )
             ) {
                 HomeFeature()

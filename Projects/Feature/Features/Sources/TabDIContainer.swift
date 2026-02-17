@@ -9,6 +9,7 @@
 import Foundation
 
 import Home
+import HomeDomain
 import Settings
 import Meal
 import Weight
@@ -33,15 +34,12 @@ public final class TabDIContainer: DIContainer {
 
     // MARK: - Profile Access
 
+    /// 프로필이 로드되었는지 확인하고, 아직이면 fetch
     @MainActor
-    private func fetchUserProfile() async -> UserProfileModel? {
-        if let cached = cachedUserProfile {
-            return cached
-        }
-
+    public func ensureProfileLoaded() async {
+        guard cachedUserProfile == nil else { return }
         let storage = UserProfileStorage()
         cachedUserProfile = try? await storage.fetchProfile()
-        return cachedUserProfile
     }
 
     // MARK: - Profile
@@ -56,11 +54,23 @@ public final class TabDIContainer: DIContainer {
     public func makeHomeDIContainer() -> HomeDIContainer {
         let userProfileId = cachedUserProfile?.id ?? UUID()
         let goalCalories = cachedUserProfile?.recommendedDailyCalories ?? 2000
+        let macroGoals: MacroGoals
+        if let profile = cachedUserProfile {
+            let effectiveCalories = Double(profile.recommendedDailyCalories)
+            macroGoals = MacroGoals(
+                proteinGoal: Double(profile.dailyProteinGoal ?? Int(profile.currentWeightKg * 1.6)),
+                carbsGoal: Double(profile.dailyCarbsGoal ?? Int(effectiveCalories * 0.5 / 4.0)),
+                fatGoal: Double(profile.dailyFatGoal ?? Int(effectiveCalories * 0.25 / 9.0))
+            )
+        } else {
+            macroGoals = .default
+        }
 
         return HomeDIContainer(
             dependencies: HomeDIContainer.Dependencies(
                 userProfileId: userProfileId,
-                goalCalories: goalCalories
+                goalCalories: goalCalories,
+                macroGoals: macroGoals
             )
         )
     }

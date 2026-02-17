@@ -16,42 +16,51 @@ public struct MainTabView: View {
     }
 
     public var body: some View {
-        TabView(selection: $coordinator.selectedTab) {
-            // Home
-            coordinator.makeHome()
-                .tabItem {
-                    Label(AppTab.home.title, systemImage: AppTab.home.icon)
-                }
-                .tag(AppTab.home)
+        Group {
+            if coordinator.isReady {
+                TabView(selection: $coordinator.selectedTab) {
+                    // Home
+                    coordinator.makeHome()
+                        .tabItem {
+                            Label(AppTab.home.title, systemImage: AppTab.home.icon)
+                        }
+                        .tag(AppTab.home)
 
-            // Meal
-            coordinator.makeMealList()
-                .tabItem {
-                    Label(AppTab.meal.title, systemImage: AppTab.meal.icon)
-                }
-                .tag(AppTab.meal)
+                    // Meal
+                    coordinator.makeMealList()
+                        .tabItem {
+                            Label(AppTab.meal.title, systemImage: AppTab.meal.icon)
+                        }
+                        .tag(AppTab.meal)
 
-            // Exercise
-            coordinator.makeExerciseList()
-                .tabItem {
-                    Label(AppTab.exercise.title, systemImage: AppTab.exercise.icon)
-                }
-                .tag(AppTab.exercise)
+                    // Exercise
+                    coordinator.makeExerciseList()
+                        .tabItem {
+                            Label(AppTab.exercise.title, systemImage: AppTab.exercise.icon)
+                        }
+                        .tag(AppTab.exercise)
 
-            // Progress (Weight)
-            coordinator.makeProgress()
-                .tabItem {
-                    Label(AppTab.progress.title, systemImage: AppTab.progress.icon)
-                }
-                .tag(AppTab.progress)
+                    // Progress (Weight)
+                    coordinator.makeProgress()
+                        .tabItem {
+                            Label(AppTab.progress.title, systemImage: AppTab.progress.icon)
+                        }
+                        .tag(AppTab.progress)
 
-            // Settings
-            coordinator.makeSettings()
-                .tabItem {
-                    Label(AppTab.settings.title, systemImage: AppTab.settings.icon)
+                    // Settings
+                    coordinator.makeSettings()
+                        .tabItem {
+                            Label(AppTab.settings.title, systemImage: AppTab.settings.icon)
+                        }
+                        .tag(AppTab.settings)
                 }
-                .tag(AppTab.settings)
+                .tabBarMinimizeBehavior(.onScrollDown)
+            } else {
+                ProgressView()
+            }
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
+        .task {
+            await coordinator.ensureProfileLoaded()
+        }
     }
 }

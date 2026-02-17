@@ -24,6 +24,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     @Published public var selectedTab: AppTab = .home
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
+    @Published public var isReady: Bool = false
 
     public init(diContainer: TabDIContainer) {
         self.diContainer = diContainer
@@ -47,6 +48,14 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     public func start() -> some View {
         return MainTabView(coordinator: self)
+    }
+
+    // MARK: - Profile Preload
+
+    @MainActor
+    public func ensureProfileLoaded() async {
+        await diContainer.ensureProfileLoaded()
+        isReady = true
     }
 
     // MARK: - Home
