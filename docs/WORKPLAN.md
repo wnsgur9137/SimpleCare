@@ -1,6 +1,7 @@
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
+> 최종 수정일: 2026-02-17
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -25,6 +26,7 @@
 | 데이터 저장 | SwiftData | ✅ |
 | 차트 | Swift Charts | ✅ |
 | 빌드 | Tuist | ✅ |
+| CI/CD | Fastlane | ✅ |
 
 ---
 
@@ -36,102 +38,129 @@
 |---------|-------------|------|-------------|-------------|
 | Splash | ✅ | ✅ | ✅ | ✅ |
 | Onboarding | ✅ | ✅ | ✅ | ✅ |
-| Dashboard | ✅ | ✅ | ⚠️ placeholder | ❌ |
-| Meal | ✅ | ✅ | ⚠️ placeholder | ❌ |
-| Exercise | ✅ | ✅ | ⚠️ placeholder | ❌ |
-| Weight | ✅ | ✅ | ⚠️ placeholder | ❌ |
-| Profile | ✅ | ✅ | ⚠️ placeholder | ❌ |
+| Home | ✅ | ✅ | ✅ | ✅ |
+| Meal | ✅ | ✅ | ✅ | ✅ |
+| Exercise | ✅ | ✅ | ✅ | ✅ |
+| Weight | ✅ | ✅ | ✅ | ✅ |
+| Profile | ✅ | ✅ | ✅ | ✅ |
 
-### 2.2 핵심 문제점
+> **Note**: 기존 Dashboard 모듈은 Home 모듈로 대체되었습니다.
 
-#### 구조적 문제: DIContainer ↔ TCA Client 연결 미완성
+### 2.2 DIContainer ↔ TCA Client 연결 완료
 
 ```
 현재 상태:
 DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구현됨)
                 ↓
-         TCA Client (liveValue = placeholder ❌)
+         TCA Client (실제 구현체 연결 ✅)
 ```
 
-모든 TCA Client의 `liveValue`가 placeholder 상태로, 실제 비즈니스 로직이 연결되지 않음.
+모든 Feature의 DIContainer가 실제 UseCase/Repository/Storage와 연결 완료됨.
+
+### 2.3 알려진 개선 사항 (Gap)
+
+| # | 이슈 | 심각도 | 설명 |
+|---|------|--------|------|
+| G1 | ExerciseClient 조회 메서드 미노출 | 낮음 | `GetDailyExercisesUseCase` 존재하나 Client에 미연결 |
+| G2 | MealClient 히스토리 메서드 미노출 | 낮음 | `GetDailyMealsUseCase`, `GetMealHistoryUseCase` 존재하나 Client에 미연결 |
+| G3 | 영양소 목표 하드코딩 | 중간 | `HomeDailySummary`의 proteinGoal/carbsGoal/fatGoal이 100/250/70g으로 고정 |
+| G4 | TabDIContainer 프로필 fetch race condition | 중간 | `fetchUserProfile()` 호출 전 DIContainer 생성 시 fallback 값 사용 가능 |
+| G5 | analyzeImage 불필요한 API 호출 | 낮음 | `NutritionEstimationService.analyzeImage()`에서 사용하지 않는 `chatCompletion` 호출 존재 |
 
 ---
 
-## 3. 진행 중 기능 (🔄) 상세 분석
+## 3. 완료된 기능 상세
 
-### 3.1 Dashboard AI 인사이트
-
-| 컴포넌트 | 파일 | 상태 |
-|----------|------|------|
-| DashboardFeature | `DashboardFeature.swift` | ✅ generateDailyInsight 의존성 존재 |
-| DailyInsightService | `DailyInsightService.swift` | ✅ GPT-4o-mini 연동 구현됨 |
-| DashboardDIContainer | `DashboardDIContainer.swift` | ❌ AI 서비스 미연결 |
-
-**필요 작업**: DIContainer에서 DailyInsightService를 DashboardClient에 주입
-
-### 3.2 Meal 이미지 분석
+### 3.1 Home AI 인사이트 ✅
 
 | 컴포넌트 | 파일 | 상태 |
 |----------|------|------|
-| MealFeature | `MealFeature.swift` | ✅ analyzeMealImage 액션 존재 |
-| NutritionEstimationService | `NutritionEstimationService.swift` | ✅ analyzeImage() 구현됨 |
-| OpenAIClient | `OpenAIClient.swift` | ✅ chatCompletionWithVision() 구현됨 |
-| MealView | `MealRecordView.swift` | ❌ 이미지 선택 UI 미구현 |
-| MealDIContainer | `MealDIContainer.swift` | ❌ Vision 서비스 미연결 |
+| HomeFeature | `HomeFeature.swift` | ✅ getDailySummary + generateInsight 연결 |
+| HomeInsightService | `HomeInsightService.swift` | ✅ DailyInsightService 연동 |
+| HomeDIContainer | `HomeDIContainer.swift` | ✅ UseCase → Client 완전 연결 |
 
-**필요 작업**:
-1. PhotosPicker UI 추가
-2. DIContainer에서 analyzeImage 연결
-
-### 3.3 Weight 추세 그래프
+### 3.2 Meal 영양 추정 ✅
 
 | 컴포넌트 | 파일 | 상태 |
 |----------|------|------|
-| WeightView | `WeightView.swift` | ✅ Swift Charts 구현됨 |
-| WeightFeature | `WeightFeature.swift` | ✅ getWeightTrend 의존성 존재 |
-| WeightDIContainer | `WeightDIContainer.swift` | ❌ Storage 미연결 |
+| MealFeature | `MealFeature.swift` | ✅ estimateNutrition + analyzeMealImage + recordMeal |
+| AIService | `AIService.swift` | ✅ NutritionEstimationService 연동 |
+| MealDIContainer | `MealDIContainer.swift` | ✅ UseCase 3개 모두 Client 연결 |
 
-**필요 작업**: DIContainer에서 WeightRecordStorage를 WeightClient에 주입
+### 3.3 Weight 추세 그래프 ✅
+
+| 컴포넌트 | 파일 | 상태 |
+|----------|------|------|
+| WeightFeature | `WeightFeature.swift` | ✅ recordWeight + getWeightTrend |
+| WeightDIContainer | `WeightDIContainer.swift` | ✅ UseCase → Client 연결 |
+
+### 3.4 Exercise 기록 ✅
+
+| 컴포넌트 | 파일 | 상태 |
+|----------|------|------|
+| ExerciseFeature | `ExerciseFeature.swift` | ✅ recordExercise (칼로리 계산은 Entity 내부) |
+| ExerciseDIContainer | `ExerciseDIContainer.swift` | ✅ UseCase → Client 연결 |
+
+### 3.5 Profile 관리 ✅
+
+| 컴포넌트 | 파일 | 상태 |
+|----------|------|------|
+| ProfileFeature | `ProfileFeature.swift` | ✅ getProfile + saveProfile + updateProfile |
+| ProfileDIContainer | `ProfileDIContainer.swift` | ✅ UseCase 3개 모두 Client 연결 |
 
 ---
 
 ## 4. 우선순위 기반 작업 계획
 
-### Phase 0: 기반 연결 (Critical) 🔴
+### ~~Phase 0: 기반 연결 (Critical)~~ ✅ 완료
 
 > DIContainer와 TCA Client 연결 - 모든 기능의 기반
 
-| 순서 | 작업 | 파일 | 예상 복잡도 |
-|------|------|------|------------|
-| 0.1 | DashboardDIContainer - Client 연결 | `DashboardDIContainer.swift` | 낮음 |
-| 0.2 | MealDIContainer - Client 연결 | `MealDIContainer.swift` | 낮음 |
-| 0.3 | WeightDIContainer - Client 연결 | `WeightDIContainer.swift` | 낮음 |
-| 0.4 | ExerciseDIContainer - Client 연결 | `ExerciseDIContainer.swift` | 낮음 |
-| 0.5 | ProfileDIContainer - Client 연결 | `ProfileDIContainer.swift` | 낮음 |
-
-**완료 조건**: 각 Feature에서 실제 데이터 CRUD 동작 확인
+| 순서 | 작업 | 상태 |
+|------|------|------|
+| 0.1 | HomeDIContainer - Client 연결 | ✅ 완료 |
+| 0.2 | MealDIContainer - Client 연결 | ✅ 완료 |
+| 0.3 | WeightDIContainer - Client 연결 | ✅ 완료 |
+| 0.4 | ExerciseDIContainer - Client 연결 | ✅ 완료 |
+| 0.5 | ProfileDIContainer - Client 연결 | ✅ 완료 |
 
 ### Phase 1: AI 기능 활성화 🟡
 
 | 순서 | 작업 | 의존성 | 예상 복잡도 |
 |------|------|--------|------------|
-| 1.1 | Dashboard AI 인사이트 표시 UI 개선 | Phase 0.1 | 낮음 |
-| 1.2 | Meal 이미지 선택 UI (PhotosPicker) | Phase 0.2 | 중간 |
+| 1.1 | Home AI 인사이트 표시 UI 개선 | Phase 0 ✅ | 낮음 |
+| 1.2 | Meal 이미지 선택 UI (PhotosPicker) | Phase 0 ✅ | 중간 |
 | 1.3 | Meal 이미지 분석 결과 표시 | 1.2 | 중간 |
 
 **완료 조건**:
-- Dashboard에서 AI 코멘트 표시
+- Home에서 AI 코멘트 표시
 - Meal에서 사진 촬영/선택 → AI 분석 → 영양소 표시
 
-### Phase 2: 데이터 시각화 개선 🟢
+### Phase 1.5: 알려진 Gap 수정 🟠
 
-| 순서 | 작업 | 의존성 | 예상 복잡도 |
-|------|------|--------|------------|
-| 2.1 | Weight 차트 목표선 (RuleMark) 추가 | Phase 0.3 | 낮음 |
-| 2.2 | Weight 기간 선택 (7일/30일/90일) | 2.1 | 낮음 |
-| 2.3 | Dashboard 영양소 프로그레스 바 개선 | Phase 0.1 | 중간 |
+| 순서 | 작업 | 관련 Gap | 예상 복잡도 |
+|------|------|----------|------------|
+| 1.5.1 | 영양소 목표를 UserProfile에서 계산하여 전달 | G3 | 중간 |
+| 1.5.2 | TabDIContainer 프로필 fetch 보장 | G4 | 낮음 |
+| 1.5.3 | analyzeImage 불필요 API 호출 제거 | G5 | 낮음 |
+| 1.5.4 | ExerciseClient에 조회 메서드 추가 | G1 | 낮음 |
+| 1.5.5 | MealClient에 히스토리 메서드 추가 | G2 | 낮음 |
 
-### Phase 3: 확장 기능 (📋 PRD 예정 항목)
+### Phase 2: 홈 화면 개선 및 데이터 시각화 🟢
+
+> 상세 계획: [HOME_SCREEN_PLAN.md](./HOME_SCREEN_PLAN.md)
+
+| 순서 | 작업 | 예상 복잡도 |
+|------|------|------------|
+| 2.1 | 빠른 기록 버튼 (식사/운동/체중) | 낮음 |
+| 2.2 | 오늘의 기록 목록 섹션 | 중간 |
+| 2.3 | 영양소 프로그레스 바 개선 | 중간 |
+| 2.4 | 스트릭 배지 (연속 기록일) | 낮음 |
+| 2.5 | Weight 차트 목표선 (RuleMark) 추가 | 낮음 |
+| 2.6 | Weight 기간 선택 (7일/30일/90일) | 낮음 |
+| 2.7 | 주간 트렌드 섹션 | 중간 |
+
+### Phase 3: 확장 기능 (PRD 예정 항목)
 
 | 순서 | 작업 | PRD 참조 | 예상 복잡도 |
 |------|------|----------|------------|
@@ -181,32 +210,31 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ## 7. 즉시 실행 권장 작업
 
-### 최고 ROI 작업: Phase 0 (DIContainer-Client 연결)
+### 최고 ROI 작업: Phase 1 (AI 기능 활성화) + Phase 1.5 (Gap 수정)
 
 **이유**:
-- 낮은 복잡도 (기존 코드 연결만 필요)
-- 높은 영향도 (모든 Feature 활성화)
-- 빠른 완료 가능
+- Phase 0 완료로 기반이 마련됨
+- AI 기능은 앱의 핵심 차별점
+- Gap 수정은 낮은 복잡도로 안정성 향상
 
-**완료 시 활성화되는 기능**:
-- ✅ Dashboard AI 인사이트 자동 표시
-- ✅ Weight 추세 그래프 데이터 표시
-- ✅ Meal 텍스트 기반 영양 추정 작동
-- ✅ Exercise 칼로리 계산 및 저장
-- ✅ Profile 정보 수정 및 저장
+**Phase 1 완료 시 사용자 경험**:
+- Home에서 개인화된 AI 건강 코멘트 확인
+- 사진 촬영만으로 식사 영양소 자동 분석
+- 정확한 영양소 목표 대비 진행률 표시
 
 ---
 
 ## 8. 마일스톤
 
 ### MVP (v1.0) - PRD §7.1
-- [ ] Phase 0 완료 (DIContainer 연결)
+- [x] Phase 0 완료 (DIContainer 연결)
 - [ ] 기본 데이터 흐름 검증
 - [ ] 핵심 기능 E2E 테스트
 
 ### v1.1 - PRD §7.2
 - [ ] Phase 1 완료 (AI 기능)
-- [ ] Phase 2 완료 (차트 개선)
+- [ ] Phase 1.5 완료 (Gap 수정)
+- [ ] Phase 2 완료 (홈 화면 개선)
 - [ ] 이미지 기반 음식 인식
 
 ### v1.2 - PRD §7.3
@@ -225,7 +253,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### Feature DIContainers
 ```
-Projects/Feature/Dashboard/Sources/DashboardDIContainer.swift
+Projects/Feature/Home/Sources/HomeDIContainer.swift
 Projects/Feature/Meal/Sources/MealDIContainer.swift
 Projects/Feature/Weight/Sources/WeightDIContainer.swift
 Projects/Feature/Exercise/Sources/ExerciseDIContainer.swift
@@ -234,7 +262,7 @@ Projects/Feature/Profile/Sources/ProfileDIContainer.swift
 
 ### TCA Features
 ```
-Projects/Feature/Dashboard/Presentation/Sources/DashboardFeature.swift
+Projects/Feature/Home/Presentation/Sources/HomeFeature.swift
 Projects/Feature/Meal/Presentation/Sources/MealFeature.swift
 Projects/Feature/Weight/Presentation/Sources/WeightFeature.swift
 Projects/Feature/Exercise/Presentation/Sources/ExerciseFeature.swift
@@ -248,7 +276,12 @@ Projects/Infrastructure/AIServiceInfra/Sources/Services/NutritionEstimationServi
 Projects/Infrastructure/StorageInfra/Sources/StorageContainer.swift
 ```
 
+### Tab Coordinator
+```
+Projects/Feature/Features/Sources/TabDIContainer.swift
+```
+
 ---
 
-*문서 버전: 1.0*
-*최종 수정일: 2026-01-26*
+*문서 버전: 2.0*
+*최종 수정일: 2026-02-17*
