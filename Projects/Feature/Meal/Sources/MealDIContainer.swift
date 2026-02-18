@@ -43,6 +43,10 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         AIService()
     }
 
+    private func makeFavoriteFoodRepository() -> FavoriteFoodDomainRepositoryProtocol {
+        FavoriteFoodDataRepository()
+    }
+
     // MARK: - Use Cases
 
     private func makeEstimateNutritionUseCase() -> EstimateMealNutritionUseCaseProtocol {
@@ -65,6 +69,22 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         GetMealHistoryUseCase(repository: makeMealRepository())
     }
 
+    private func makeGetFavoriteFoodsUseCase() -> GetFavoriteFoodsUseCaseProtocol {
+        GetFavoriteFoodsUseCase(repository: makeFavoriteFoodRepository())
+    }
+
+    private func makeSaveFavoriteFoodUseCase() -> SaveFavoriteFoodUseCaseProtocol {
+        SaveFavoriteFoodUseCase(repository: makeFavoriteFoodRepository())
+    }
+
+    private func makeDeleteFavoriteFoodUseCase() -> DeleteFavoriteFoodUseCaseProtocol {
+        DeleteFavoriteFoodUseCase(repository: makeFavoriteFoodRepository())
+    }
+
+    private func makeIncrementFavoriteUsageUseCase() -> IncrementFavoriteUsageUseCaseProtocol {
+        IncrementFavoriteUsageUseCase(repository: makeFavoriteFoodRepository())
+    }
+
     // MARK: - TCA Dependencies
 
     public var mealClient: MealClient {
@@ -73,6 +93,10 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         let recordUseCase = makeRecordMealUseCase()
         let dailyMealsUseCase = makeGetDailyMealsUseCase()
         let historyUseCase = makeGetMealHistoryUseCase()
+        let getFavoritesUseCase = makeGetFavoriteFoodsUseCase()
+        let saveFavoriteUseCase = makeSaveFavoriteFoodUseCase()
+        let deleteFavoriteUseCase = makeDeleteFavoriteFoodUseCase()
+        let incrementUsageUseCase = makeIncrementFavoriteUsageUseCase()
 
         return MealClient(
             estimateNutrition: { text in
@@ -89,6 +113,18 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
             },
             fetchMealHistory: { startDate, endDate, userProfileId in
                 try await historyUseCase.execute(from: startDate, to: endDate, userProfileId: userProfileId)
+            },
+            getFavorites: { userProfileId in
+                try await getFavoritesUseCase.execute(userProfileId: userProfileId)
+            },
+            saveFavorite: { food in
+                try await saveFavoriteUseCase.execute(food)
+            },
+            deleteFavorite: { food in
+                try await deleteFavoriteUseCase.execute(food)
+            },
+            incrementFavoriteUsage: { food in
+                try await incrementUsageUseCase.execute(food)
             }
         )
     }

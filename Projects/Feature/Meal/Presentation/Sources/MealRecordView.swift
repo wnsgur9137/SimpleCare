@@ -31,6 +31,12 @@ public struct MealRecordView: View {
                     // 입력 방식 선택
                     inputSection
 
+                    // 즐겨찾기
+                    favoritesSection
+
+                    // 최근 기록
+                    recentMealsSection
+
                     // 추정 결과
                     if !store.estimatedFoods.isEmpty {
                         estimatedFoodsSection
@@ -171,14 +177,92 @@ public struct MealRecordView: View {
 
             // 개별 음식
             ForEach(Array(store.estimatedFoods.enumerated()), id: \.element.name) { index, food in
-                EstimatedFoodRow(food: food) {
-                    store.send(.removeFood(index))
-                }
+                EstimatedFoodRow(
+                    food: food,
+                    onRemove: { store.send(.removeFood(index)) },
+                    onFavorite: { store.send(.saveFoodAsFavorite(food)) }
+                )
             }
 
             Text("AI 추정치는 참고용이며 실제와 다를 수 있습니다")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private var favoritesSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button {
+                store.send(.toggleFavorites)
+            } label: {
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundStyle(.yellow)
+                    Text("즐겨찾기")
+                        .font(.headline)
+                    Spacer()
+                    Image(systemName: store.showFavorites ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .buttonStyle(.plain)
+
+            if store.showFavorites {
+                if store.favorites.isEmpty {
+                    Text("저장된 즐겨찾기가 없습니다")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                } else {
+                    ForEach(store.favorites) { favorite in
+                        FavoriteFoodRow(
+                            favorite: favorite,
+                            onSelect: { store.send(.selectFavorite(favorite)) },
+                            onDelete: { store.send(.deleteFavorite(favorite)) }
+                        )
+                    }
+                }
+            }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private var recentMealsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button {
+                store.send(.toggleRecentMeals)
+            } label: {
+                HStack {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .foregroundStyle(.scPrimary)
+                    Text("최근 기록")
+                        .font(.headline)
+                    Spacer()
+                    Image(systemName: store.showRecentMeals ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .buttonStyle(.plain)
+
+            if store.showRecentMeals {
+                if store.recentMeals.isEmpty {
+                    Text("최근 7일간 기록이 없습니다")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                } else {
+                    ForEach(store.recentMeals) { meal in
+                        RecentMealRow(meal: meal) {
+                            store.send(.selectRecentMeal(meal))
+                        }
+                    }
+                }
+            }
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 12))
@@ -239,6 +323,7 @@ struct NutritionBadge: View {
 struct EstimatedFoodRow: View {
     let food: EstimatedFoodItem
     let onRemove: () -> Void
+    var onFavorite: (() -> Void)?
 
     var body: some View {
         HStack {
@@ -260,12 +345,105 @@ struct EstimatedFoodRow: View {
                     .font(.caption)
             }
 
+            if let onFavorite {
+                Button(action: onFavorite) {
+                    Image(systemName: "star")
+                        .foregroundStyle(.yellow)
+                }
+            }
+
             Button(action: onRemove) {
                 Image(systemName: "xmark.circle.fill")
                     .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 8)
+    }
+}
+
+struct FavoriteFoodRow: View {
+    let favorite: FavoriteFood
+    let onSelect: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: onSelect) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(favorite.name)
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+
+                    HStack(spacing: 8) {
+                        Text("\(favorite.caloriesPerServing)kcal")
+                            .foregroundStyle(.scCalories)
+                        Text("P \(String(format: "%.0f", favorite.proteinPerServing))g")
+                            .foregroundStyle(.scProtein)
+                        if favorite.usageCount > 0 {
+                            Text("(\(favorite.usageCount)회)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .font(.caption)
+                }
+            }
+            .buttonStyle(.plain)
+
+            Spacer()
+
+            Button(action: onDelete) {
+                Image(systemName: "trash")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 6)
+    }
+}
+
+struct RecentMealRow: View {
+    let meal: MealRecord
+    let onSelect: () -> Void
+
+    private var dateText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return formatter.string(from: meal.date)
+    }
+
+    var body: some View {
+        Button(action: onSelect) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 6) {
+                        Image(systemName: meal.mealType.icon)
+                            .font(.caption)
+                            .foregroundStyle(.scPrimary)
+                        Text(meal.mealType.displayName)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Text(dateText)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Text(meal.foodItems.map(\.name).joined(separator: ", "))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                Text("\(meal.totalCalories)kcal")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.scCalories)
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.vertical, 6)
     }
 }
 
