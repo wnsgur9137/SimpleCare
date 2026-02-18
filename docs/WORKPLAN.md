@@ -1,7 +1,7 @@
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
-> 최종 수정일: 2026-02-18
+> 최종 수정일: 2026-02-19
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -126,15 +126,18 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### Phase 1: AI 기능 활성화 🟡
 
-| 순서 | 작업 | 의존성 | 예상 복잡도 |
-|------|------|--------|------------|
-| 1.1 | Home AI 인사이트 표시 UI 개선 | Phase 0 ✅ | 낮음 |
-| 1.2 | Meal 이미지 선택 UI (PhotosPicker) | Phase 0 ✅ | 중간 |
-| 1.3 | Meal 이미지 분석 결과 표시 | 1.2 | 중간 |
+> PR [#29](https://github.com/wnsgur9137/SimpleCare/pull/29) (텍스트 기반 Mock 모드)
 
-**완료 조건**:
-- Home에서 AI 코멘트 표시
-- Meal에서 사진 촬영/선택 → AI 분석 → 영양소 표시
+| 순서 | 작업 | 의존성 | 상태 |
+|------|------|--------|------|
+| 1.1 | Home AI 인사이트 표시 | Phase 0 ✅ | ✅ Mock 서비스 연결 |
+| 1.2 | Meal 텍스트 기반 영양 추정 | Phase 0 ✅ | ✅ Mock 서비스 연결 |
+| 1.3 | Meal 이미지 선택 UI (PhotosPicker) | 1.2 | 🔴 별도 작업 예정 |
+| 1.4 | Meal 이미지 분석 결과 표시 | 1.3 | 🔴 별도 작업 예정 |
+| 1.5 | 실제 OpenAI API 연동 | 1.1~1.2 | 🔴 Mock → Real 전환 |
+
+**현재 상태**: Mock 모드로 텍스트 기반 기능 활성화 완료
+**남은 작업**: 이미지 분석 UI + 실제 API 전환
 
 ### ~~Phase 1.5: 알려진 Gap 수정~~ ✅ 완료
 
@@ -205,7 +208,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 |----------|------|----------|------|
 | 앱 시작 시간 | 2초 이내 (Splash 제외) | ⚠️ 미측정 | 성능 프로파일링 필요 |
 | AI 응답 시간 | 5초 이내 | ✅ 타임아웃 구현됨 | - |
-| API Key 보안 | Git 제외 | ✅ XCConfig 사용 | - |
+| API Key 보안 | Git 제외 | ✅ XCConfig + gitignore | - |
 | VoiceOver | 모든 UI 접근 가능 | ⚠️ 미검증 | 접근성 레이블 검토 |
 | Dynamic Type | 텍스트 크기 조절 | ⚠️ 미검증 | 폰트 스케일링 검토 |
 | 색상 대비 | WCAG 2.1 AA | ⚠️ 미검증 | 색상 대비 검사 |
@@ -236,7 +239,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [ ] 핵심 기능 E2E 테스트
 
 ### v1.1 - PRD §7.2
-- [ ] Phase 1 완료 (AI 기능)
+- [x] Phase 1 텍스트 기반 AI 기능 (Mock 모드)
+- [ ] Phase 1 이미지 분석 + 실제 API 연동
 - [x] Phase 1.5 완료 (Gap 수정)
 - [x] Phase 2 완료 (홈 화면 개선)
 - [ ] 이미지 기반 음식 인식
@@ -287,5 +291,5 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 
 ---
 
-*문서 버전: 3.0*
-*최종 수정일: 2026-02-18*
+*문서 버전: 3.1*
+*최종 수정일: 2026-02-19*
