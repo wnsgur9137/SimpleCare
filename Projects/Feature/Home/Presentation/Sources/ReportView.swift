@@ -1,0 +1,499 @@
+//
+//  ReportView.swift
+//  HomePresentation
+//
+//  Created by SimpleCare on 2/18/26.
+//
+
+import SwiftUI
+import ComposableArchitecture
+import HomeDomain
+import BasePresentation
+
+/// Weekly/Monthly Report View
+public struct ReportView: View {
+    let store: StoreOf<HomeFeature>
+
+    public init(store: StoreOf<HomeFeature>) {
+        self.store = store
+    }
+
+    public var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Report type picker
+                    reportTypePicker
+
+                    if store.isLoadingReport {
+                        ProgressView()
+                            .padding(.top, 40)
+                    } else {
+                        switch store.reportType {
+                        case .weekly:
+                            if let report = store.weeklyReport {
+                                weeklyReportContent(report)
+                            }
+                        case .monthly:
+                            if let report = store.monthlyReport {
+                                monthlyReportContent(report)
+                            }
+                        }
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("리포트")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("닫기") {
+                        store.send(.dismissReport)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Report Type Picker
+
+    private var reportTypePicker: some View {
+        Picker("리포트 타입", selection: Binding(
+            get: { store.reportType },
+            set: { store.send(.selectReportType($0)) }
+        )) {
+            ForEach(HomeFeature.State.ReportType.allCases, id: \.self) { type in
+                Text(type.rawValue).tag(type)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    // MARK: - Weekly Report
+
+    private func weeklyReportContent(_ report: WeeklyReport) -> some View {
+        VStack(spacing: 16) {
+            // Header
+            weeklyHeaderSection(report)
+
+            // Daily calories bar chart
+            dailyCaloriesChart(report)
+
+            // Exercise summary
+            exerciseSummarySection(
+                minutes: report.totalExerciseMinutes,
+                calories: report.totalExerciseCalories,
+                topExercises: report.topExercises
+            )
+
+            // Weight change
+            if let weightChange = report.weightChange {
+                weightChangeSection(weightChange)
+            }
+
+            // Goal achievement
+            goalAchievementSection(rate: report.goalAchievementRate)
+        }
+    }
+
+    private func weeklyHeaderSection(_ report: WeeklyReport) -> some View {
+        VStack(spacing: 8) {
+            Text(weekDateRange(from: report.weekStartDate))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 24) {
+                ReportStatBox(
+                    title: "평균 칼로리",
+                    value: "\(report.avgDailyCalories)",
+                    unit: "kcal",
+                    color: .scPrimary
+                )
+
+                ReportStatBox(
+                    title: "연속 기록",
+                    value: "\(report.streakDays)",
+                    unit: "일",
+                    color: .scSuccess
+                )
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func dailyCaloriesChart(_ report: WeeklyReport) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("일별 칼로리")
+                .font(.headline)
+
+            let maxCalories = max(report.dailyCalories.max() ?? 1, report.goalCalories)
+            let dayLabels = ["월", "화", "수", "목", "금", "토", "일"]
+
+            HStack(alignment: .bottom, spacing: 8) {
+                ForEach(0..<7, id: \.self) { index in
+                    VStack(spacing: 4) {
+                        Text("\(report.dailyCalories[index])")
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(barColor(calories: report.dailyCalories[index], goal: report.goalCalories))
+                            .frame(height: max(4, CGFloat(report.dailyCalories[index]) / CGFloat(maxCalories) * 120))
+
+                        Text(dayLabels[index])
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .frame(height: 160)
+
+            // Goal line indicator
+            HStack(spacing: 4) {
+                Rectangle()
+                    .fill(Color.scWarning)
+                    .frame(width: 16, height: 2)
+                Text("목표: \(report.goalCalories) kcal")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func exerciseSummarySection(minutes: Int, calories: Int, topExercises: [ExerciseStat]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("운동 요약")
+                .font(.headline)
+
+            HStack(spacing: 24) {
+                ReportStatBox(
+                    title: "총 시간",
+                    value: formatDuration(minutes),
+                    unit: "",
+                    color: .scExercise
+                )
+
+                ReportStatBox(
+                    title: "소모 칼로리",
+                    value: "\(calories)",
+                    unit: "kcal",
+                    color: .scExercise
+                )
+            }
+
+            if !topExercises.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("주요 운동")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(topExercises, id: \.name) { stat in
+                        HStack {
+                            Text(stat.name)
+                                .font(.subheadline)
+                            Spacer()
+                            Text("\(stat.count)회")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func weightChangeSection(_ change: Double) -> some View {
+        HStack {
+            Image(systemName: change < 0 ? "arrow.down.right" : change > 0 ? "arrow.up.right" : "arrow.right")
+                .foregroundStyle(change < 0 ? .scSuccess : change > 0 ? .scWarning : .secondary)
+                .font(.title2)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("체중 변화")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Text(String(format: "%+.1f kg", change))
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(change < 0 ? .scSuccess : change > 0 ? .scWarning : .primary)
+            }
+
+            Spacer()
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func goalAchievementSection(rate: Double) -> some View {
+        VStack(spacing: 8) {
+            Text("목표 달성률")
+                .font(.headline)
+
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 12)
+
+                Circle()
+                    .trim(from: 0, to: min(rate, 1.0))
+                    .stroke(
+                        achievementColor(rate: rate),
+                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+
+                Text("\(Int(rate * 100))%")
+                    .font(.title)
+                    .fontWeight(.bold)
+            }
+            .frame(width: 100, height: 100)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    // MARK: - Monthly Report
+
+    private func monthlyReportContent(_ report: MonthlyReport) -> some View {
+        VStack(spacing: 16) {
+            // Header
+            monthlyHeaderSection(report)
+
+            // Weekly calorie trend
+            weeklyCalorieTrendChart(report)
+
+            // Macro average
+            macroAverageSection(report.macroAverage)
+
+            // Exercise summary
+            VStack(alignment: .leading, spacing: 12) {
+                Text("운동 요약")
+                    .font(.headline)
+
+                ReportStatBox(
+                    title: "총 운동 시간",
+                    value: formatDuration(report.totalExerciseMinutes),
+                    unit: "",
+                    color: .scExercise
+                )
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+
+            // Weight change
+            if let weightChange = report.weightChange {
+                weightChangeSection(weightChange)
+            }
+
+            // Goal achievement
+            goalAchievementSection(rate: report.goalAchievementRate)
+        }
+    }
+
+    private func monthlyHeaderSection(_ report: MonthlyReport) -> some View {
+        VStack(spacing: 8) {
+            Text(monthLabel(from: report.monthDate))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 24) {
+                ReportStatBox(
+                    title: "평균 칼로리",
+                    value: "\(report.avgDailyCalories)",
+                    unit: "kcal",
+                    color: .scPrimary
+                )
+
+                ReportStatBox(
+                    title: "기록 일수",
+                    value: "\(report.recordedDays)",
+                    unit: "일",
+                    color: .scSuccess
+                )
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func weeklyCalorieTrendChart(_ report: MonthlyReport) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("주간 칼로리 추이")
+                .font(.headline)
+
+            if report.weeklyCalorieTrend.isEmpty {
+                Text("데이터 없음")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            } else {
+                let maxVal = max(report.weeklyCalorieTrend.max() ?? 1, report.goalCalories)
+
+                HStack(alignment: .bottom, spacing: 12) {
+                    ForEach(0..<report.weeklyCalorieTrend.count, id: \.self) { index in
+                        VStack(spacing: 4) {
+                            Text("\(report.weeklyCalorieTrend[index])")
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(barColor(calories: report.weeklyCalorieTrend[index], goal: report.goalCalories))
+                                .frame(height: max(8, CGFloat(report.weeklyCalorieTrend[index]) / CGFloat(maxVal) * 100))
+
+                            Text("\(index + 1)주차")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                .frame(height: 140)
+            }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func macroAverageSection(_ macro: MacroAverage) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("영양소 평균")
+                .font(.headline)
+
+            // Horizontal bar proportions
+            GeometryReader { geometry in
+                HStack(spacing: 0) {
+                    if macro.total > 0 {
+                        Rectangle()
+                            .fill(Color.scProtein)
+                            .frame(width: geometry.size.width * macro.proteinRatio)
+
+                        Rectangle()
+                            .fill(Color.scCarbs)
+                            .frame(width: geometry.size.width * macro.carbsRatio)
+
+                        Rectangle()
+                            .fill(Color.scFat)
+                            .frame(width: geometry.size.width * macro.fatRatio)
+                    }
+                }
+                .clipShape(Capsule())
+            }
+            .frame(height: 12)
+
+            HStack(spacing: 16) {
+                MacroLabel(name: "단백질", value: macro.protein, color: .scProtein)
+                MacroLabel(name: "탄수화물", value: macro.carbs, color: .scCarbs)
+                MacroLabel(name: "지방", value: macro.fat, color: .scFat)
+            }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    // MARK: - Helpers
+
+    private func barColor(calories: Int, goal: Int) -> Color {
+        guard goal > 0 else { return .gray }
+        let ratio = Double(calories) / Double(goal)
+        if ratio < 0.8 { return .scWarning }
+        if ratio <= 1.1 { return .scSuccess }
+        return .scError
+    }
+
+    private func achievementColor(rate: Double) -> Color {
+        if rate < 0.8 { return .scWarning }
+        if rate <= 1.1 { return .scSuccess }
+        return .scError
+    }
+
+    private func formatDuration(_ minutes: Int) -> String {
+        if minutes < 60 {
+            return "\(minutes)분"
+        }
+        let hours = minutes / 60
+        let mins = minutes % 60
+        if mins == 0 {
+            return "\(hours)시간"
+        }
+        return "\(hours)시간 \(mins)분"
+    }
+
+    private func weekDateRange(from startDate: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        let start = formatter.string(from: startDate)
+        let endDate = Calendar.current.date(byAdding: .day, value: 6, to: startDate) ?? startDate
+        let end = formatter.string(from: endDate)
+        return "\(start) - \(end)"
+    }
+
+    private func monthLabel(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 M월"
+        return formatter.string(from: date)
+    }
+}
+
+// MARK: - Sub-components
+
+private struct ReportStatBox: View {
+    let title: String
+    let value: String
+    let unit: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text(value)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(color)
+
+                if !unit.isEmpty {
+                    Text(unit)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+}
+
+private struct MacroLabel: View {
+    let name: String
+    let value: Double
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+
+            VStack(alignment: .leading, spacing: 0) {
+                Text(name)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Text(String(format: "%.0fg", value))
+                    .font(.caption)
+                    .fontWeight(.medium)
+            }
+        }
+    }
+}

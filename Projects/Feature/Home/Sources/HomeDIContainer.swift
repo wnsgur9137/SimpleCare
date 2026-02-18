@@ -35,6 +35,8 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
         let insightService = HomeInsightService()
         let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
         let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
+        let weeklyReportUseCase = GetWeeklyReportUseCase(repository: homeRepository)
+        let monthlyReportUseCase = GetMonthlyReportUseCase(repository: homeRepository)
 
         self.homeClient = HomeClient(
             getDailySummary: { date, userProfileId, goalCalories, macroGoals in
@@ -45,6 +47,12 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
             },
             getWeeklyStatus: { baseDate, userProfileId, goalCalories in
                 try await homeRepository.getWeeklyStatus(baseDate: baseDate, userProfileId: userProfileId, goalCalories: goalCalories)
+            },
+            getWeeklyReport: { baseDate, userProfileId, goalCalories in
+                try await weeklyReportUseCase.execute(baseDate: baseDate, userProfileId: userProfileId, goalCalories: goalCalories)
+            },
+            getMonthlyReport: { baseDate, userProfileId, goalCalories in
+                try await monthlyReportUseCase.execute(baseDate: baseDate, userProfileId: userProfileId, goalCalories: goalCalories)
             }
         )
     }
