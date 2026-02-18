@@ -41,7 +41,7 @@ public struct ExerciseFeature {
         }
 
         mutating func updateCalorieEstimate() {
-            let customMET: Double? = selectedCustomExercise != nil ? selectedCustomExercise?.baseMET : nil
+            let customMET = selectedCustomExercise?.baseMET
             estimatedCalories = ExerciseRecord.calculateCalories(
                 exerciseType: exerciseType,
                 intensity: intensity,
@@ -134,6 +134,7 @@ public struct ExerciseFeature {
         BindingReducer()
             .onChange(of: \.exerciseType) { _, _ in
                 Reduce { state, _ in
+                    state.selectedCustomExercise = nil
                     state.updateCalorieEstimate()
                     return .none
                 }
@@ -212,7 +213,8 @@ public struct ExerciseFeature {
                 state.customExercises = exercises
                 return .none
 
-            case .loadCustomExercisesResponse(.failure):
+            case .loadCustomExercisesResponse(.failure(let error)):
+                state.error = error.localizedDescription
                 return .none
 
             case .showAddCustomExercise:
@@ -247,7 +249,8 @@ public struct ExerciseFeature {
             case .saveCustomExerciseResponse(.success):
                 return .send(.loadCustomExercises)
 
-            case .saveCustomExerciseResponse(.failure):
+            case .saveCustomExerciseResponse(.failure(let error)):
+                state.error = error.localizedDescription
                 return .none
 
             case .deleteCustomExercise(let exercise):
@@ -263,7 +266,8 @@ public struct ExerciseFeature {
             case .deleteCustomExerciseResponse(.success):
                 return .send(.loadCustomExercises)
 
-            case .deleteCustomExerciseResponse(.failure):
+            case .deleteCustomExerciseResponse(.failure(let error)):
+                state.error = error.localizedDescription
                 return .none
 
             case .selectCustomExercise(let exercise):

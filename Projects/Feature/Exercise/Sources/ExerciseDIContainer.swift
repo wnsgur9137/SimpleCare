@@ -44,9 +44,7 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         ExerciseRepository()
     }
 
-    private func makeCustomExerciseRepository() -> CustomExerciseDomainRepositoryProtocol {
-        CustomExerciseDataRepository()
-    }
+    private lazy var customExerciseRepository: CustomExerciseDomainRepositoryProtocol = CustomExerciseDataRepository()
 
     // MARK: - Use Cases
 
@@ -59,15 +57,15 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
     }
 
     private func makeGetCustomExercisesUseCase() -> GetCustomExercisesUseCaseProtocol {
-        GetCustomExercisesUseCase(repository: makeCustomExerciseRepository())
+        GetCustomExercisesUseCase(repository: customExerciseRepository)
     }
 
     private func makeSaveCustomExerciseUseCase() -> SaveCustomExerciseUseCaseProtocol {
-        SaveCustomExerciseUseCase(repository: makeCustomExerciseRepository())
+        SaveCustomExerciseUseCase(repository: customExerciseRepository)
     }
 
     private func makeDeleteCustomExerciseUseCase() -> DeleteCustomExerciseUseCaseProtocol {
-        DeleteCustomExerciseUseCase(repository: makeCustomExerciseRepository())
+        DeleteCustomExerciseUseCase(repository: customExerciseRepository)
     }
 
     // MARK: - TCA Dependencies

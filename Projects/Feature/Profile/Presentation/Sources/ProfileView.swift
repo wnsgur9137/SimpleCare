@@ -144,17 +144,7 @@ public struct ProfileView: View {
     }
 
     private var bmiColor: Color {
-        let bmi = store.calculatedBMI
-        switch bmi {
-        case ..<18.5:
-            return .scWarning
-        case 18.5..<25.0:
-            return .scSuccess
-        case 25.0..<30.0:
-            return .scWarning
-        default:
-            return .scError
-        }
+        .bmiColor(for: store.calculatedBMI)
     }
 }
 

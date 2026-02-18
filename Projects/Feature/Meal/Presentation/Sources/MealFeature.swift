@@ -287,6 +287,7 @@ public struct MealFeature {
                 return .none
 
             case .loadFavoritesResponse(.failure):
+                state.favorites = []
                 return .none
 
             case .toggleFavorites:
@@ -318,7 +319,8 @@ public struct MealFeature {
             case .saveFavoriteResponse(.success):
                 return .send(.loadFavorites)
 
-            case .saveFavoriteResponse(.failure):
+            case .saveFavoriteResponse(.failure(let error)):
+                state.viewState = .error(error.localizedDescription)
                 return .none
 
             case .deleteFavorite(let favorite):
@@ -334,7 +336,8 @@ public struct MealFeature {
             case .deleteFavoriteResponse(.success):
                 return .send(.loadFavorites)
 
-            case .deleteFavoriteResponse(.failure):
+            case .deleteFavoriteResponse(.failure(let error)):
+                state.viewState = .error(error.localizedDescription)
                 return .none
 
             // MARK: - Recent Meals

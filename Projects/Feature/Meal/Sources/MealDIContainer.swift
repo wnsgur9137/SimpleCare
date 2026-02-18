@@ -43,9 +43,7 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         AIService()
     }
 
-    private func makeFavoriteFoodRepository() -> FavoriteFoodDomainRepositoryProtocol {
-        FavoriteFoodDataRepository()
-    }
+    private lazy var favoriteFoodRepository: FavoriteFoodDomainRepositoryProtocol = FavoriteFoodDataRepository()
 
     // MARK: - Use Cases
 
@@ -70,19 +68,19 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
     }
 
     private func makeGetFavoriteFoodsUseCase() -> GetFavoriteFoodsUseCaseProtocol {
-        GetFavoriteFoodsUseCase(repository: makeFavoriteFoodRepository())
+        GetFavoriteFoodsUseCase(repository: favoriteFoodRepository)
     }
 
     private func makeSaveFavoriteFoodUseCase() -> SaveFavoriteFoodUseCaseProtocol {
-        SaveFavoriteFoodUseCase(repository: makeFavoriteFoodRepository())
+        SaveFavoriteFoodUseCase(repository: favoriteFoodRepository)
     }
 
     private func makeDeleteFavoriteFoodUseCase() -> DeleteFavoriteFoodUseCaseProtocol {
-        DeleteFavoriteFoodUseCase(repository: makeFavoriteFoodRepository())
+        DeleteFavoriteFoodUseCase(repository: favoriteFoodRepository)
     }
 
     private func makeIncrementFavoriteUsageUseCase() -> IncrementFavoriteUsageUseCaseProtocol {
-        IncrementFavoriteUsageUseCase(repository: makeFavoriteFoodRepository())
+        IncrementFavoriteUsageUseCase(repository: favoriteFoodRepository)
     }
 
     // MARK: - TCA Dependencies

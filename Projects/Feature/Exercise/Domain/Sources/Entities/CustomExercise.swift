@@ -28,7 +28,7 @@ public struct CustomExercise: Identifiable, Equatable, Sendable {
         self.userProfileId = userProfileId
         self.name = name
         self.category = category
-        self.baseMET = baseMET
+        self.baseMET = max(0.5, min(baseMET, 20.0))
         self.iconName = iconName
     }
 }

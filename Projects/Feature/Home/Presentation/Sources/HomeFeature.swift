@@ -298,8 +298,9 @@ public struct HomeFeature {
                 state.isLoadingReport = false
                 return .none
 
-            case .loadWeeklyReportResponse(.failure):
+            case .loadWeeklyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
+                state.viewState = .error(error.localizedDescription)
                 return .none
 
             case .loadMonthlyReportResponse(.success(let report)):
@@ -307,8 +308,9 @@ public struct HomeFeature {
                 state.isLoadingReport = false
                 return .none
 
-            case .loadMonthlyReportResponse(.failure):
+            case .loadMonthlyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
+                state.viewState = .error(error.localizedDescription)
                 return .none
 
             case .delegate:

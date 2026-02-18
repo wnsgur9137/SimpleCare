@@ -401,6 +401,20 @@ public struct ReportView: View {
         .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
 
+    // MARK: - DateFormatters
+
+    private static let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return formatter
+    }()
+
+    private static let monthDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 M월"
+        return formatter
+    }()
+
     // MARK: - Helpers
 
     private func barColor(calories: Int, goal: Int) -> Color {
@@ -430,18 +444,14 @@ public struct ReportView: View {
     }
 
     private func weekDateRange(from startDate: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d"
-        let start = formatter.string(from: startDate)
+        let start = Self.shortDateFormatter.string(from: startDate)
         let endDate = Calendar.current.date(byAdding: .day, value: 6, to: startDate) ?? startDate
-        let end = formatter.string(from: endDate)
+        let end = Self.shortDateFormatter.string(from: endDate)
         return "\(start) - \(end)"
     }
 
     private func monthLabel(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 M월"
-        return formatter.string(from: date)
+        Self.monthDateFormatter.string(from: date)
     }
 }
 

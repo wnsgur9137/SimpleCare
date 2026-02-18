@@ -264,9 +264,10 @@ public final class ExerciseRecordModel {
         exerciseType: ExerciseType,
         intensity: ExerciseIntensity,
         durationMinutes: Int,
-        weightKg: Double
+        weightKg: Double,
+        customMET: Double? = nil
     ) -> Int {
-        let met = exerciseType.adjustedMET(for: intensity)
+        let met = customMET ?? exerciseType.adjustedMET(for: intensity)
         let hours = Double(durationMinutes) / 60.0
         return Int(met * weightKg * hours)
     }
