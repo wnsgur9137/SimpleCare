@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import PhotosUI
 import ComposableArchitecture
 import MealDomain
 import BasePresentation
@@ -14,7 +13,6 @@ import BasePresentation
 /// 식사 기록 화면
 public struct MealRecordView: View {
     @Bindable var store: StoreOf<MealFeature>
-    @State private var selectedItem: PhotosPickerItem?
     @Environment(\.dismiss) private var dismiss
 
     public init(store: StoreOf<MealFeature>) {
@@ -103,53 +101,18 @@ public struct MealRecordView: View {
                 .font(.headline)
 
             // 텍스트 입력
-            VStack(alignment: .leading, spacing: 8) {
-                Text("텍스트로 입력")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            HStack {
+                TextField("예: 김치찌개 1인분, 공기밥", text: $store.foodDescription, axis: .vertical)
+                    .lineLimit(2...4)
+                    .textFieldStyle(.roundedBorder)
 
-                HStack {
-                    TextField("예: 김치찌개 1인분, 공기밥", text: $store.foodDescription, axis: .vertical)
-                        .lineLimit(2...4)
-                        .textFieldStyle(.roundedBorder)
-
-                    Button {
-                        store.send(.estimateFromText)
-                    } label: {
-                        Image(systemName: "sparkles")
-                            .font(.title2)
-                    }
-                    .disabled(store.foodDescription.isEmpty)
+                Button {
+                    store.send(.estimateFromText)
+                } label: {
+                    Image(systemName: "sparkles")
+                        .font(.title2)
                 }
-            }
-
-            Divider()
-
-            // 이미지 입력
-            VStack(alignment: .leading, spacing: 8) {
-                Text("사진으로 입력")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                HStack {
-                    PhotosPicker(selection: $selectedItem, matching: .images) {
-                        Label("사진 선택", systemImage: "photo")
-                    }
-                    .buttonStyle(.bordered)
-                    .onChange(of: selectedItem) { _, newItem in
-                        Task {
-                            if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                store.selectedImageData = data
-                                store.send(.estimateFromImage)
-                            }
-                        }
-                    }
-
-                    if store.selectedImageData != nil {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.scSuccess)
-                    }
-                }
+                .disabled(store.foodDescription.isEmpty)
             }
         }
         .padding()

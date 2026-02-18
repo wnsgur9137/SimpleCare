@@ -32,7 +32,7 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
         self.dependencies = dependencies
 
         let homeRepository = HomeRepository()
-        let insightService = HomeInsightService()
+        let insightService = MockHomeInsightService()
         let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
         let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
         let weeklyReportUseCase = GetWeeklyReportUseCase(repository: homeRepository)
