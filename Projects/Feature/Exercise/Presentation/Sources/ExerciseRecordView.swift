@@ -35,6 +35,68 @@ public struct ExerciseRecordView: View {
                             Text(type.displayName).tag(type)
                         }
                     }
+
+                    if let selected = store.selectedCustomExercise {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundStyle(.yellow)
+                            Text(selected.name)
+                                .fontWeight(.medium)
+                            Spacer()
+                            Button("해제") {
+                                store.send(.clearCustomSelection)
+                            }
+                            .font(.caption)
+                        }
+                    }
+                }
+
+                // 커스텀 운동
+                if !store.customExercises.isEmpty {
+                    Section("내 커스텀 운동") {
+                        ForEach(store.customExercises) { exercise in
+                            HStack {
+                                Button {
+                                    store.send(.selectCustomExercise(exercise))
+                                } label: {
+                                    HStack {
+                                        Image(systemName: exercise.iconName ?? exercise.category.icon)
+                                            .foregroundStyle(.scPrimary)
+                                        VStack(alignment: .leading) {
+                                            Text(exercise.name)
+                                                .foregroundStyle(.primary)
+                                            Text("MET \(String(format: "%.1f", exercise.baseMET)) · \(exercise.category.displayName)")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.plain)
+
+                                Spacer()
+
+                                if store.selectedCustomExercise?.id == exercise.id {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.scPrimary)
+                                }
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    store.send(.deleteCustomExercise(exercise))
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Section {
+                    Button {
+                        store.send(.showAddCustomExercise)
+                    } label: {
+                        Label("커스텀 운동 추가", systemImage: "plus.circle")
+                    }
                 }
 
                 // 강도 선택
@@ -98,6 +160,55 @@ public struct ExerciseRecordView: View {
             }
             .onChange(of: store.state) { _, _ in
                 // Check for delegate actions handled externally
+            }
+            .sheet(isPresented: $store.showAddCustomSheet) {
+                addCustomExerciseSheet
+            }
+        }
+    }
+
+    private var addCustomExerciseSheet: some View {
+        NavigationStack {
+            Form {
+                Section("운동 정보") {
+                    TextField("운동 이름", text: $store.customExerciseName)
+
+                    Picker("카테고리", selection: $store.customExerciseCategory) {
+                        ForEach(ExerciseCategory.allCases, id: \.self) { category in
+                            Label(category.displayName, systemImage: category.icon)
+                                .tag(category)
+                        }
+                    }
+                }
+
+                Section("MET 값") {
+                    HStack {
+                        Text("MET")
+                        Spacer()
+                        Text(String(format: "%.1f", store.customExerciseMET))
+                            .foregroundStyle(.secondary)
+                    }
+                    Slider(value: $store.customExerciseMET, in: 1.0...15.0, step: 0.5)
+
+                    Text("참고: 걷기 3.5, 달리기 8.0, 요가 2.5")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .navigationTitle("커스텀 운동 추가")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("취소") {
+                        store.send(.dismissAddCustomExercise)
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("저장") {
+                        store.send(.saveCustomExercise)
+                    }
+                    .disabled(store.customExerciseName.isEmpty)
+                }
             }
         }
     }

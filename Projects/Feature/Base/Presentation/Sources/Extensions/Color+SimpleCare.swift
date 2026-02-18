@@ -83,6 +83,28 @@ public extension Color {
     /// 운동 표시 색상 - 청록/시안
     /// Light: #00D7FB, Dark: #33E0FF
     static let scExercise = Color("SCExercise", bundle: .module)
+
+    // MARK: - BMI Helpers
+
+    /// BMI 값에 따른 색상 반환
+    static func bmiColor(for bmi: Double) -> Color {
+        switch bmi {
+        case ..<18.5: return .scWarning
+        case 18.5..<25.0: return .scSuccess
+        case 25.0..<30.0: return .scWarning
+        default: return .scError
+        }
+    }
+
+    /// BMI 값에 따른 카테고리 라벨 반환
+    static func bmiCategoryLabel(for bmi: Double) -> String {
+        switch bmi {
+        case ..<18.5: return "저체중"
+        case 18.5..<25.0: return "정상"
+        case 25.0..<30.0: return "과체중"
+        default: return "비만"
+        }
+    }
 }
 
 // MARK: - ShapeStyle Extension

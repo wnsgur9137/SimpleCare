@@ -164,8 +164,26 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
     public var userWeightKg: Double
     public var date: Date
     public var notes: String?
+    public var customExerciseName: String?
+    public var customMET: Double?
     public let createdAt: Date
     public var updatedAt: Date
+
+    /// 표시용 운동 이름 (커스텀이면 커스텀 이름, 아니면 exerciseType.displayName)
+    public var displayName: String {
+        if exerciseType == .other, let name = customExerciseName, !name.isEmpty {
+            return name
+        }
+        return exerciseType.displayName
+    }
+
+    /// 실제 사용할 MET 값 (커스텀이면 customMET, 아니면 exerciseType.baseMET)
+    public var effectiveBaseMET: Double {
+        if exerciseType == .other, let met = customMET {
+            return met
+        }
+        return exerciseType.baseMET
+    }
 
     public init(
         id: UUID = UUID(),
@@ -177,6 +195,8 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         userWeightKg: Double,
         date: Date = Date(),
         notes: String? = nil,
+        customExerciseName: String? = nil,
+        customMET: Double? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -188,6 +208,8 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         self.userWeightKg = userWeightKg
         self.date = date
         self.notes = notes
+        self.customExerciseName = customExerciseName
+        self.customMET = customMET
         self.createdAt = createdAt
         self.updatedAt = updatedAt
 
@@ -198,7 +220,8 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
                 exerciseType: exerciseType,
                 intensity: intensity,
                 durationMinutes: durationMinutes,
-                weightKg: userWeightKg
+                weightKg: userWeightKg,
+                customMET: customMET
             )
         }
     }
@@ -208,9 +231,17 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         exerciseType: ExerciseType,
         intensity: ExerciseIntensity,
         durationMinutes: Int,
-        weightKg: Double
+        weightKg: Double,
+        customMET: Double? = nil
     ) -> Int {
-        let met = exerciseType.adjustedMET(for: intensity)
+        let baseMET = customMET ?? exerciseType.baseMET
+        let intensityMultiplier: Double
+        switch intensity {
+        case .light: intensityMultiplier = 0.75
+        case .moderate: intensityMultiplier = 1.0
+        case .vigorous: intensityMultiplier = 1.3
+        }
+        let met = baseMET * intensityMultiplier
         let hours = Double(durationMinutes) / 60.0
         return Int(met * weightKg * hours)
     }

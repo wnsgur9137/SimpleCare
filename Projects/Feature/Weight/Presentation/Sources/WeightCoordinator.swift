@@ -14,6 +14,7 @@ public protocol WeightCoordinatorDependency {
     var userProfileId: UUID { get }
     var currentWeight: Double { get }
     var targetWeight: Double { get }
+    var heightCm: Double { get }
     var weightClient: WeightClient { get }
 }
 
@@ -30,6 +31,7 @@ public final class WeightCoordinator: ObservableObject, @MainActor Coordinator {
             userProfileId: dependencies.userProfileId,
             currentWeight: dependencies.currentWeight,
             targetWeight: dependencies.targetWeight,
+            heightCm: dependencies.heightCm,
             weightClient: dependencies.weightClient
         )
     }
@@ -41,6 +43,7 @@ private struct WeightContainerView: View {
     let userProfileId: UUID
     let currentWeight: Double
     let targetWeight: Double
+    let heightCm: Double
     let weightClient: WeightClient
 
     @State private var store: StoreOf<WeightFeature>
@@ -49,18 +52,21 @@ private struct WeightContainerView: View {
         userProfileId: UUID,
         currentWeight: Double,
         targetWeight: Double,
+        heightCm: Double,
         weightClient: WeightClient
     ) {
         self.userProfileId = userProfileId
         self.currentWeight = currentWeight
         self.targetWeight = targetWeight
+        self.heightCm = heightCm
         self.weightClient = weightClient
         self._store = State(
             initialValue: Store(
                 initialState: WeightFeature.State(
                     userProfileId: userProfileId,
                     currentWeight: currentWeight,
-                    targetWeight: targetWeight
+                    targetWeight: targetWeight,
+                    heightCm: heightCm
                 )
             ) {
                 WeightFeature()

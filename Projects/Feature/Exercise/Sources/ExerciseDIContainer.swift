@@ -44,6 +44,8 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         ExerciseRepository()
     }
 
+    private lazy var customExerciseRepository: CustomExerciseDomainRepositoryProtocol = CustomExerciseDataRepository()
+
     // MARK: - Use Cases
 
     private func makeRecordExerciseUseCase() -> RecordExerciseUseCaseProtocol {
@@ -54,11 +56,26 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         GetDailyExercisesUseCase(repository: makeExerciseRepository())
     }
 
+    private func makeGetCustomExercisesUseCase() -> GetCustomExercisesUseCaseProtocol {
+        GetCustomExercisesUseCase(repository: customExerciseRepository)
+    }
+
+    private func makeSaveCustomExerciseUseCase() -> SaveCustomExerciseUseCaseProtocol {
+        SaveCustomExerciseUseCase(repository: customExerciseRepository)
+    }
+
+    private func makeDeleteCustomExerciseUseCase() -> DeleteCustomExerciseUseCaseProtocol {
+        DeleteCustomExerciseUseCase(repository: customExerciseRepository)
+    }
+
     // MARK: - TCA Dependencies
 
     public var exerciseClient: ExerciseClient {
         let recordUseCase = makeRecordExerciseUseCase()
         let fetchUseCase = makeGetDailyExercisesUseCase()
+        let getCustomUseCase = makeGetCustomExercisesUseCase()
+        let saveCustomUseCase = makeSaveCustomExerciseUseCase()
+        let deleteCustomUseCase = makeDeleteCustomExerciseUseCase()
 
         return ExerciseClient(
             recordExercise: { record in
@@ -66,6 +83,15 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
             },
             fetchExercises: { date, userProfileId in
                 try await fetchUseCase.execute(date: date, userProfileId: userProfileId)
+            },
+            getCustomExercises: { userProfileId in
+                try await getCustomUseCase.execute(userProfileId: userProfileId)
+            },
+            saveCustomExercise: { exercise in
+                try await saveCustomUseCase.execute(exercise)
+            },
+            deleteCustomExercise: { exercise in
+                try await deleteCustomUseCase.execute(exercise)
             }
         )
     }

@@ -156,10 +156,27 @@ public struct WeightView: View {
                         color: monthly < 0 ? .scSuccess : .scWarning
                     )
                 }
+
+                if store.heightCm > 0 {
+                    StatBox(
+                        title: "BMI",
+                        value: String(format: "%.1f", store.currentBMI),
+                        unit: bmiCategoryLabel,
+                        color: bmiColor
+                    )
+                }
             }
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    }
+
+    private var bmiCategoryLabel: String {
+        .bmiCategoryLabel(for: store.currentBMI)
+    }
+
+    private var bmiColor: Color {
+        .bmiColor(for: store.currentBMI)
     }
 }
 

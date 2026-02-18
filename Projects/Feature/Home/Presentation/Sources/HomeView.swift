@@ -55,6 +55,9 @@ public struct HomeView: View {
                             selectedDayIndex: store.selectedDayIndex,
                             onDayTap: { store.send(.selectWeekDay($0)) }
                         )
+
+                        // 리포트 진입점
+                        reportEntryCard
                     }
                 }
                 .padding()
@@ -70,6 +73,12 @@ public struct HomeView: View {
                 if store.viewState == .loading && store.dailySummary == nil {
                     ProgressView()
                 }
+            }
+            .sheet(isPresented: Binding(
+                get: { store.showReport },
+                set: { if !$0 { store.send(.dismissReport) } }
+            )) {
+                ReportView(store: store)
             }
         }
     }
@@ -220,6 +229,38 @@ public struct HomeView: View {
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    }
+
+    private var reportEntryCard: some View {
+        Button {
+            store.send(.reportButtonTapped)
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "chart.bar.doc.horizontal")
+                    .font(.title2)
+                    .foregroundStyle(.scPrimary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("주간/월간 리포트")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+
+                    Text("칼로리, 운동, 체중 변화를 한눈에")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding()
+            .glassEffect(.regular.tint(.scPrimary.opacity(0.3)), in: .rect(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Helpers

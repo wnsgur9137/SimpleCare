@@ -71,6 +71,8 @@ extension ExerciseRecordModel {
             userWeightKg: userWeightKg,
             date: date,
             notes: notes,
+            customExerciseName: customExerciseName,
+            customMET: customMET,
             createdAt: createdAt,
             updatedAt: updatedAt
         )
@@ -89,6 +91,8 @@ extension ExerciseRecord {
             userWeightKg: userWeightKg,
             date: date,
             notes: notes,
+            customExerciseName: customExerciseName,
+            customMET: customMET,
             createdAt: createdAt,
             updatedAt: updatedAt
         )
@@ -100,6 +104,8 @@ extension ExerciseRecord {
         model.durationMinutes = durationMinutes
         model.caloriesBurned = caloriesBurned
         model.notes = notes
+        model.customExerciseName = customExerciseName
+        model.customMET = customMET
         model.updatedAt = Date()
     }
 }

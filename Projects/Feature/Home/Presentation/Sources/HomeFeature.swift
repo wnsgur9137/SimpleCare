@@ -24,11 +24,21 @@ public struct HomeFeature {
         public var macroGoals: MacroGoals
         public var weeklyStatus: [HomeCalorieStatus?] = Array(repeating: nil, count: 7)
         public var pendingNavigation: NavigationTarget? = nil
+        public var showReport: Bool = false
+        public var reportType: ReportType = .weekly
+        public var weeklyReport: WeeklyReport?
+        public var monthlyReport: MonthlyReport?
+        public var isLoadingReport: Bool = false
 
         public enum NavigationTarget: Equatable {
             case meal
             case exercise
             case weight
+        }
+
+        public enum ReportType: String, Equatable, CaseIterable {
+            case weekly = "주간"
+            case monthly = "월간"
         }
 
         public var isToday: Bool {
@@ -75,6 +85,15 @@ public struct HomeFeature {
         case generateInsightResponse(Result<HomeInsight, Error>)
         case loadWeeklyStatusResponse(Result<[HomeCalorieStatus?], Error>)
 
+        // Report
+        case reportButtonTapped
+        case dismissReport
+        case selectReportType(State.ReportType)
+        case loadWeeklyReport
+        case loadMonthlyReport
+        case loadWeeklyReportResponse(Result<WeeklyReport, Error>)
+        case loadMonthlyReportResponse(Result<MonthlyReport, Error>)
+
         // Quick Actions
         case mealButtonTapped
         case exerciseButtonTapped
@@ -102,11 +121,17 @@ public struct HomeFeature {
                  (.exerciseButtonTapped, .exerciseButtonTapped),
                  (.weightButtonTapped, .weightButtonTapped),
                  (.addRecordButtonTapped, .addRecordButtonTapped),
-                 (.navigationHandled, .navigationHandled):
+                 (.navigationHandled, .navigationHandled),
+                 (.reportButtonTapped, .reportButtonTapped),
+                 (.dismissReport, .dismissReport),
+                 (.loadWeeklyReport, .loadWeeklyReport),
+                 (.loadMonthlyReport, .loadMonthlyReport):
                 return true
             case (.selectDate(let l), .selectDate(let r)):
                 return l == r
             case (.selectWeekDay(let l), .selectWeekDay(let r)):
+                return l == r
+            case (.selectReportType(let l), .selectReportType(let r)):
                 return l == r
             case (.loadHomeResponse(.success(let l)), .loadHomeResponse(.success(let r))):
                 return l == r
@@ -119,6 +144,14 @@ public struct HomeFeature {
             case (.loadWeeklyStatusResponse(.success(let l)), .loadWeeklyStatusResponse(.success(let r))):
                 return l == r
             case (.loadWeeklyStatusResponse(.failure), .loadWeeklyStatusResponse(.failure)):
+                return true
+            case (.loadWeeklyReportResponse(.success(let l)), .loadWeeklyReportResponse(.success(let r))):
+                return l == r
+            case (.loadWeeklyReportResponse(.failure), .loadWeeklyReportResponse(.failure)):
+                return true
+            case (.loadMonthlyReportResponse(.success(let l)), .loadMonthlyReportResponse(.success(let r))):
+                return l == r
+            case (.loadMonthlyReportResponse(.failure), .loadMonthlyReportResponse(.failure)):
                 return true
             case (.delegate(let l), .delegate(let r)):
                 return l == r
@@ -213,6 +246,73 @@ public struct HomeFeature {
                 state.pendingNavigation = nil
                 return .none
 
+            case .reportButtonTapped:
+                state.showReport = true
+                state.isLoadingReport = true
+                return .send(.loadWeeklyReport)
+
+            case .dismissReport:
+                state.showReport = false
+                state.weeklyReport = nil
+                state.monthlyReport = nil
+                return .none
+
+            case .selectReportType(let type):
+                state.reportType = type
+                state.isLoadingReport = true
+                switch type {
+                case .weekly:
+                    return .send(.loadWeeklyReport)
+                case .monthly:
+                    return .send(.loadMonthlyReport)
+                }
+
+            case .loadWeeklyReport:
+                let date = state.selectedDate
+                let userProfileId = state.userProfileId
+                let goalCalories = state.goalCalories
+                return .run { send in
+                    do {
+                        let report = try await homeClient.getWeeklyReport(date, userProfileId, goalCalories)
+                        await send(.loadWeeklyReportResponse(.success(report)))
+                    } catch {
+                        await send(.loadWeeklyReportResponse(.failure(error)))
+                    }
+                }
+
+            case .loadMonthlyReport:
+                let date = state.selectedDate
+                let userProfileId = state.userProfileId
+                let goalCalories = state.goalCalories
+                return .run { send in
+                    do {
+                        let report = try await homeClient.getMonthlyReport(date, userProfileId, goalCalories)
+                        await send(.loadMonthlyReportResponse(.success(report)))
+                    } catch {
+                        await send(.loadMonthlyReportResponse(.failure(error)))
+                    }
+                }
+
+            case .loadWeeklyReportResponse(.success(let report)):
+                state.weeklyReport = report
+                state.isLoadingReport = false
+                return .none
+
+            case .loadWeeklyReportResponse(.failure(let error)):
+                state.isLoadingReport = false
+                state.viewState = .error(error.localizedDescription)
+                return .none
+
+            case .loadMonthlyReportResponse(.success(let report)):
+                state.monthlyReport = report
+                state.isLoadingReport = false
+                return .none
+
+            case .loadMonthlyReportResponse(.failure(let error)):
+                state.isLoadingReport = false
+                state.viewState = .error(error.localizedDescription)
+                return .none
+
             case .delegate:
                 return .none
 
@@ -271,15 +371,21 @@ public struct HomeClient {
     public var getDailySummary: @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary
     public var generateInsight: @Sendable (HomeDailySummary) async throws -> HomeInsight
     public var getWeeklyStatus: @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
+    public var getWeeklyReport: @Sendable (Date, UUID, Int) async throws -> WeeklyReport
+    public var getMonthlyReport: @Sendable (Date, UUID, Int) async throws -> MonthlyReport
 
     public init(
         getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
         generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight,
-        getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
+        getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?],
+        getWeeklyReport: @escaping @Sendable (Date, UUID, Int) async throws -> WeeklyReport,
+        getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport
     ) {
         self.getDailySummary = getDailySummary
         self.generateInsight = generateInsight
         self.getWeeklyStatus = getWeeklyStatus
+        self.getWeeklyReport = getWeeklyReport
+        self.getMonthlyReport = getMonthlyReport
     }
 }
 
@@ -294,6 +400,12 @@ extension HomeClient: DependencyKey {
             },
             getWeeklyStatus: { _, _, _ in
                 Array(repeating: nil, count: 7)
+            },
+            getWeeklyReport: { _, _, goalCalories in
+                WeeklyReport(weekStartDate: Date(), avgDailyCalories: 0, totalExerciseMinutes: 0, totalExerciseCalories: 0, weightChange: nil, streakDays: 0, dailyCalories: Array(repeating: 0, count: 7), goalCalories: goalCalories)
+            },
+            getMonthlyReport: { _, _, goalCalories in
+                MonthlyReport(monthDate: Date(), avgDailyCalories: 0, totalExerciseMinutes: 0, weightChange: nil, weeklyCalorieTrend: [], macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0), goalCalories: goalCalories)
             }
         )
     }
@@ -348,6 +460,34 @@ extension HomeClient: DependencyKey {
             },
             getWeeklyStatus: { _, _, _ in
                 [.onTrack, .onTrack, .over, .onTrack, .under, .onTrack, nil]
+            },
+            getWeeklyReport: { _, _, _ in
+                WeeklyReport(
+                    weekStartDate: Date(),
+                    avgDailyCalories: 1800,
+                    totalExerciseMinutes: 150,
+                    totalExerciseCalories: 600,
+                    weightChange: -0.3,
+                    streakDays: 5,
+                    dailyCalories: [1900, 2100, 1700, 1850, 2000, 1600, 1950],
+                    goalCalories: 2000,
+                    topExercises: [
+                        ExerciseStat(name: "달리기", count: 3),
+                        ExerciseStat(name: "웨이트 트레이닝", count: 2)
+                    ]
+                )
+            },
+            getMonthlyReport: { _, _, _ in
+                MonthlyReport(
+                    monthDate: Date(),
+                    avgDailyCalories: 1850,
+                    totalExerciseMinutes: 600,
+                    weightChange: -1.2,
+                    weeklyCalorieTrend: [1900, 1850, 1800, 1750],
+                    macroAverage: MacroAverage(protein: 80, carbs: 220, fat: 55),
+                    goalCalories: 2000,
+                    recordedDays: 25
+                )
             }
         )
     }
