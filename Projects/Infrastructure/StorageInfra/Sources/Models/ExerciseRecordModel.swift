@@ -205,6 +205,12 @@ public final class ExerciseRecordModel {
     /// 메모
     public var notes: String?
 
+    /// 커스텀 운동 이름 (exerciseType이 .other일 때)
+    public var customExerciseName: String?
+
+    /// 커스텀 MET 값 (exerciseType이 .other일 때)
+    public var customMET: Double?
+
     /// 생성 일시
     public var createdAt: Date
 
@@ -221,6 +227,8 @@ public final class ExerciseRecordModel {
         userWeightKg: Double,
         date: Date = Date(),
         notes: String? = nil,
+        customExerciseName: String? = nil,
+        customMET: Double? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -232,6 +240,8 @@ public final class ExerciseRecordModel {
         self.userWeightKg = userWeightKg
         self.date = date
         self.notes = notes
+        self.customExerciseName = customExerciseName
+        self.customMET = customMET
         self.createdAt = createdAt
         self.updatedAt = updatedAt
 
