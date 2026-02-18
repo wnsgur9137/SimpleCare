@@ -42,6 +42,9 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
             },
             generateInsight: { summary in
                 try await insightUseCase.execute(summary: summary)
+            },
+            getWeeklyStatus: { baseDate, userProfileId, goalCalories in
+                try await homeRepository.getWeeklyStatus(baseDate: baseDate, userProfileId: userProfileId, goalCalories: goalCalories)
             }
         )
     }

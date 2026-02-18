@@ -21,10 +21,25 @@ public struct WeightFeature {
         public var bodyFatPercentage: Double?
         public var notes: String = ""
         public var error: String?
+        public var selectedPeriod: TrendPeriod = .month
 
         public var userProfileId: UUID
         public var currentWeight: Double
         public var targetWeight: Double
+
+        public enum TrendPeriod: Int, CaseIterable, Equatable {
+            case week = 7
+            case month = 30
+            case threeMonths = 90
+
+            public var displayName: String {
+                switch self {
+                case .week: return "7일"
+                case .month: return "30일"
+                case .threeMonths: return "90일"
+                }
+            }
+        }
 
         public init(userProfileId: UUID, currentWeight: Double, targetWeight: Double) {
             self.userProfileId = userProfileId
@@ -43,6 +58,7 @@ public struct WeightFeature {
         case loadTrendResponse(Result<WeightTrend, Error>)
         case saveWeight
         case saveWeightResponse(Result<Void, Error>)
+        case selectPeriod(State.TrendPeriod)
         case delegate(Delegate)
 
         public enum Delegate: Equatable {
@@ -67,6 +83,8 @@ public struct WeightFeature {
                 return true
             case (.saveWeightResponse(.failure), .saveWeightResponse(.failure)):
                 return true
+            case (.selectPeriod(let l), .selectPeriod(let r)):
+                return l == r
             case (.delegate(let l), .delegate(let r)):
                 return l == r
             default:
@@ -98,15 +116,20 @@ public struct WeightFeature {
                 state.isLoading = true
                 let userProfileId = state.userProfileId
                 let targetWeight = state.targetWeight
+                let days = state.selectedPeriod.rawValue
 
                 return .run { send in
                     do {
-                        let trend = try await weightClient.getWeightTrend(userProfileId, targetWeight, 30)
+                        let trend = try await weightClient.getWeightTrend(userProfileId, targetWeight, days)
                         await send(.loadTrendResponse(.success(trend)))
                     } catch {
                         await send(.loadTrendResponse(.failure(error)))
                     }
                 }
+
+            case .selectPeriod(let period):
+                state.selectedPeriod = period
+                return .send(.loadTrend)
 
             case .loadTrendResponse(.success(let trend)):
                 state.isLoading = false
