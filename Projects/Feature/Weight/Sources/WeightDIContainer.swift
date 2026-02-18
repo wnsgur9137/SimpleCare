@@ -16,11 +16,13 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
         public let userProfileId: UUID
         public let currentWeight: Double
         public let targetWeight: Double
+        public let heightCm: Double
 
-        public init(userProfileId: UUID, currentWeight: Double, targetWeight: Double) {
+        public init(userProfileId: UUID, currentWeight: Double, targetWeight: Double, heightCm: Double = 170.0) {
             self.userProfileId = userProfileId
             self.currentWeight = currentWeight
             self.targetWeight = targetWeight
+            self.heightCm = heightCm
         }
     }
 
@@ -42,6 +44,10 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
 
     public var targetWeight: Double {
         dependencies.targetWeight
+    }
+
+    public var heightCm: Double {
+        dependencies.heightCm
     }
 
     // MARK: - Repository

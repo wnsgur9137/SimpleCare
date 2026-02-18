@@ -95,12 +95,14 @@ public final class TabDIContainer: DIContainer {
         let userProfileId = cachedUserProfile?.id ?? UUID()
         let currentWeight = cachedUserProfile?.currentWeightKg ?? 70.0
         let targetWeight = cachedUserProfile?.targetWeightKg ?? 65.0
+        let heightCm = cachedUserProfile?.heightCm ?? 170.0
 
         return WeightDIContainer(
             dependencies: WeightDIContainer.Dependencies(
                 userProfileId: userProfileId,
                 currentWeight: currentWeight,
-                targetWeight: targetWeight
+                targetWeight: targetWeight,
+                heightCm: heightCm
             )
         )
     }

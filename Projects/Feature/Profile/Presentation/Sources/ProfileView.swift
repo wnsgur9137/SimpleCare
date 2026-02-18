@@ -102,6 +102,26 @@ public struct ProfileView: View {
                     }
                 }
 
+                // BMI 섹션
+                Section("BMI (체질량 지수)") {
+                    HStack {
+                        Text("BMI")
+                        Spacer()
+                        Text(String(format: "%.1f", store.calculatedBMI))
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundStyle(bmiColor)
+                    }
+
+                    HStack {
+                        Text("범위")
+                        Spacer()
+                        Text(store.bmiCategory)
+                            .foregroundStyle(bmiColor)
+                            .fontWeight(.medium)
+                    }
+                }
+
                 // 면책 조항
                 Section {
                     Text("이 정보는 추정치이며 실제 값과 다를 수 있습니다. 정확한 건강 조언은 전문가와 상담하세요.")
@@ -120,6 +140,20 @@ public struct ProfileView: View {
             .task {
                 store.send(.onAppear)
             }
+        }
+    }
+
+    private var bmiColor: Color {
+        let bmi = store.calculatedBMI
+        switch bmi {
+        case ..<18.5:
+            return .scWarning
+        case 18.5..<25.0:
+            return .scSuccess
+        case 25.0..<30.0:
+            return .scWarning
+        default:
+            return .scError
         }
     }
 }

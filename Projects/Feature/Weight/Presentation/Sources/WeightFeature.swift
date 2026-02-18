@@ -26,6 +26,7 @@ public struct WeightFeature {
         public var userProfileId: UUID
         public var currentWeight: Double
         public var targetWeight: Double
+        public var heightCm: Double
 
         public enum TrendPeriod: Int, CaseIterable, Equatable {
             case week = 7
@@ -41,10 +42,18 @@ public struct WeightFeature {
             }
         }
 
-        public init(userProfileId: UUID, currentWeight: Double, targetWeight: Double) {
+        /// 현재 체중 기반 BMI
+        public var currentBMI: Double {
+            guard heightCm > 0 else { return 0 }
+            let heightM = heightCm / 100.0
+            return newWeightKg / (heightM * heightM)
+        }
+
+        public init(userProfileId: UUID, currentWeight: Double, targetWeight: Double, heightCm: Double = 170.0) {
             self.userProfileId = userProfileId
             self.currentWeight = currentWeight
             self.targetWeight = targetWeight
+            self.heightCm = heightCm
             self.newWeightKg = currentWeight
         }
     }

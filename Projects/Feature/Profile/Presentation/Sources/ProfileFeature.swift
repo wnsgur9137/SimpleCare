@@ -28,6 +28,8 @@ public struct ProfileFeature {
         public var calculatedBMR: Double = 0
         public var calculatedTDEE: Double = 0
         public var recommendedCalories: Int = 0
+        public var calculatedBMI: Double = 0
+        public var bmiCategory: String = ""
 
         var currentProfile: UserProfile?
 
@@ -47,6 +49,8 @@ public struct ProfileFeature {
             calculatedBMR = profile.bmr
             calculatedTDEE = profile.tdee
             recommendedCalories = profile.recommendedDailyCalories
+            calculatedBMI = profile.bmi
+            bmiCategory = profile.bmiCategory
         }
 
         func createProfile() -> UserProfile {

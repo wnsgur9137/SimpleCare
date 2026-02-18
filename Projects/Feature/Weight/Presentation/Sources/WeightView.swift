@@ -156,10 +156,39 @@ public struct WeightView: View {
                         color: monthly < 0 ? .scSuccess : .scWarning
                     )
                 }
+
+                if store.heightCm > 0 {
+                    StatBox(
+                        title: "BMI",
+                        value: String(format: "%.1f", store.currentBMI),
+                        unit: bmiCategoryLabel,
+                        color: bmiColor
+                    )
+                }
             }
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    }
+
+    private var bmiCategoryLabel: String {
+        let bmi = store.currentBMI
+        switch bmi {
+        case ..<18.5: return "저체중"
+        case 18.5..<25.0: return "정상"
+        case 25.0..<30.0: return "과체중"
+        default: return "비만"
+        }
+    }
+
+    private var bmiColor: Color {
+        let bmi = store.currentBMI
+        switch bmi {
+        case ..<18.5: return .scWarning
+        case 18.5..<25.0: return .scSuccess
+        case 25.0..<30.0: return .scWarning
+        default: return .scError
+        }
     }
 }
 

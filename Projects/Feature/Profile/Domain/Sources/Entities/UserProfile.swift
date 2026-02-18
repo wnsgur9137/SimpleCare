@@ -109,6 +109,28 @@ public struct UserProfile: Equatable, Sendable {
     public var recommendedDailyFat: Int {
         Int(Double(effectiveDailyCalorieGoal) * 0.25 / 9.0)
     }
+
+    /// BMI (체질량 지수) 계산
+    public var bmi: Double {
+        guard heightCm > 0 else { return 0 }
+        let heightM = heightCm / 100.0
+        return currentWeightKg / (heightM * heightM)
+    }
+
+    /// BMI 범위 라벨
+    public var bmiCategory: String {
+        let value = bmi
+        switch value {
+        case ..<18.5:
+            return "저체중"
+        case 18.5..<25.0:
+            return "정상"
+        case 25.0..<30.0:
+            return "과체중"
+        default:
+            return "비만"
+        }
+    }
 }
 
 /// 성별
