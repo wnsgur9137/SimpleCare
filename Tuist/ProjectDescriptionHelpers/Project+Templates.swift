@@ -32,6 +32,7 @@ public let defaultInfoPlist: [String: Plist.Value] = [
     "CFBundleURLTypes": [],
     "UIRequiresFullScreen": false,
     "UIUserInterfaceStyle": "Automatic",
+    "OPENAI_API_KEY": "$(OPENAI_API_KEY)",
     "UILaunchScreen": [:],
     "UISupportedInterfaceOrientations": [
         "UIInterfaceOrientationPortrait",

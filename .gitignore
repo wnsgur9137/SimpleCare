@@ -74,6 +74,10 @@ Tuist/.build
 **/.env
 /**/.env
 
+### XCConfig (API keys) ###
+XCConfig/DEV.xcconfig
+XCConfig/PROD.xcconfig
+
 ### oh-my-claudecode ###
 .omc/
 
