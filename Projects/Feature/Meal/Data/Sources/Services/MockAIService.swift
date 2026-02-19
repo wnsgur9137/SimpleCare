@@ -50,7 +50,9 @@ public final class MockAIService: AIServiceProtocol, @unchecked Sendable {
 
         for (keyword, food) in knownFoods {
             if normalized.contains(keyword) {
-                matched.append(food)
+                if !matched.contains(food) {
+                    matched.append(food)
+                }
             }
         }
 
