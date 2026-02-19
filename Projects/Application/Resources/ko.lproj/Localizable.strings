@@ -1,0 +1,206 @@
+/*
+  Localizable.strings (Korean)
+  SimpleCare
+
+  Korean is the default language.
+*/
+
+// MARK: - Common
+"common.cancel" = "취소";
+"common.confirm" = "확인";
+"common.save" = "저장";
+"common.delete" = "삭제";
+"common.edit" = "편집";
+"common.done" = "완료";
+"common.next" = "다음";
+"common.back" = "뒤로";
+"common.close" = "닫기";
+"common.search" = "검색";
+"common.loading" = "로딩 중...";
+"common.error" = "오류";
+"common.success" = "성공";
+"common.retry" = "재시도";
+"common.today" = "오늘";
+"common.yesterday" = "어제";
+"common.week" = "주";
+"common.month" = "월";
+"common.year" = "년";
+
+// MARK: - Tab Bar
+"tab.home" = "홈";
+"tab.meal" = "식사";
+"tab.exercise" = "운동";
+"tab.weight" = "체중";
+"tab.settings" = "설정";
+
+// MARK: - Home
+"home.title" = "SimpleCare";
+"home.greeting.morning" = "좋은 아침이에요!";
+"home.greeting.afternoon" = "좋은 오후예요!";
+"home.greeting.evening" = "좋은 저녁이에요!";
+"home.quickActions" = "빠른 기록";
+"home.todayRecords" = "오늘의 기록";
+"home.noRecords" = "아직 기록이 없어요";
+"home.calories" = "칼로리";
+"home.remaining" = "남음";
+"home.exceeded" = "초과";
+"home.weeklyTrend" = "주간 트렌드";
+"home.streak" = "연속 기록";
+"home.streak.days" = "%d일";
+"home.aiInsight" = "AI 인사이트";
+
+// MARK: - Meal
+"meal.title" = "식사 기록";
+"meal.add" = "식사 추가";
+"meal.breakfast" = "아침";
+"meal.lunch" = "점심";
+"meal.dinner" = "저녁";
+"meal.snack" = "간식";
+"meal.inputPlaceholder" = "무엇을 드셨나요?";
+"meal.analyze" = "분석하기";
+"meal.analyzing" = "분석 중...";
+"meal.nutrition" = "영양 정보";
+"meal.calories" = "칼로리";
+"meal.protein" = "단백질";
+"meal.carbs" = "탄수화물";
+"meal.fat" = "지방";
+"meal.fiber" = "식이섬유";
+"meal.sodium" = "나트륨";
+"meal.favorites" = "즐겨찾기";
+"meal.recent" = "최근 기록";
+"meal.addToFavorites" = "즐겨찾기 추가";
+"meal.removeFromFavorites" = "즐겨찾기 제거";
+"meal.healthTip" = "건강 팁";
+
+// MARK: - Exercise
+"exercise.title" = "운동 기록";
+"exercise.add" = "운동 추가";
+"exercise.type" = "운동 종류";
+"exercise.duration" = "운동 시간";
+"exercise.minutes" = "분";
+"exercise.caloriesBurned" = "소모 칼로리";
+"exercise.intensity" = "강도";
+"exercise.intensity.low" = "낮음";
+"exercise.intensity.medium" = "보통";
+"exercise.intensity.high" = "높음";
+"exercise.category.cardio" = "유산소";
+"exercise.category.strength" = "근력";
+"exercise.category.flexibility" = "유연성";
+"exercise.category.sports" = "스포츠";
+"exercise.category.other" = "기타";
+"exercise.custom" = "커스텀 운동";
+"exercise.addCustom" = "커스텀 운동 추가";
+
+// MARK: - Weight
+"weight.title" = "체중 기록";
+"weight.add" = "체중 기록";
+"weight.current" = "현재 체중";
+"weight.goal" = "목표 체중";
+"weight.unit.kg" = "kg";
+"weight.unit.lb" = "lb";
+"weight.trend" = "체중 추세";
+"weight.period.week" = "7일";
+"weight.period.month" = "30일";
+"weight.period.quarter" = "90일";
+"weight.bmi" = "BMI";
+"weight.bmi.underweight" = "저체중";
+"weight.bmi.normal" = "정상";
+"weight.bmi.overweight" = "과체중";
+"weight.bmi.obese" = "비만";
+"weight.change" = "변화";
+"weight.noData" = "데이터가 없습니다";
+
+// MARK: - Profile
+"profile.title" = "프로필";
+"profile.name" = "이름";
+"profile.age" = "나이";
+"profile.gender" = "성별";
+"profile.gender.male" = "남성";
+"profile.gender.female" = "여성";
+"profile.gender.other" = "기타";
+"profile.height" = "키";
+"profile.weight" = "체중";
+"profile.activityLevel" = "활동 수준";
+"profile.activityLevel.sedentary" = "비활동적";
+"profile.activityLevel.light" = "가벼운 활동";
+"profile.activityLevel.moderate" = "보통 활동";
+"profile.activityLevel.active" = "활발한 활동";
+"profile.activityLevel.veryActive" = "매우 활발";
+"profile.goal" = "목표";
+"profile.goal.lose" = "체중 감량";
+"profile.goal.maintain" = "체중 유지";
+"profile.goal.gain" = "체중 증가";
+"profile.dailyCalorieGoal" = "일일 칼로리 목표";
+"profile.tdee" = "일일 에너지 소비량";
+"profile.bmr" = "기초 대사량";
+
+// MARK: - Settings
+"settings.title" = "설정";
+"settings.profile" = "프로필 설정";
+"settings.notifications" = "알림";
+"settings.language" = "언어";
+"settings.language.system" = "시스템 설정 따르기";
+"settings.language.korean" = "한국어";
+"settings.language.english" = "English";
+"settings.theme" = "테마";
+"settings.theme.system" = "시스템";
+"settings.theme.light" = "라이트";
+"settings.theme.dark" = "다크";
+"settings.units" = "단위";
+"settings.data" = "데이터";
+"settings.export" = "데이터 내보내기";
+"settings.import" = "데이터 가져오기";
+"settings.deleteAll" = "모든 데이터 삭제";
+"settings.deleteAll.confirm" = "정말로 모든 데이터를 삭제하시겠습니까?";
+"settings.about" = "앱 정보";
+"settings.version" = "버전";
+"settings.privacy" = "개인정보 처리방침";
+"settings.terms" = "이용약관";
+"settings.contact" = "문의하기";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "SimpleCare에 오신 것을 환영합니다";
+"onboarding.subtitle" = "AI 기반 건강 관리를 시작해보세요";
+"onboarding.getStarted" = "시작하기";
+"onboarding.step.profile" = "프로필 설정";
+"onboarding.step.goal" = "목표 설정";
+"onboarding.step.complete" = "설정 완료";
+"onboarding.enterName" = "이름을 입력해주세요";
+"onboarding.selectGender" = "성별을 선택해주세요";
+"onboarding.enterBirthdate" = "생년월일을 입력해주세요";
+"onboarding.enterHeight" = "키를 입력해주세요";
+"onboarding.enterWeight" = "체중을 입력해주세요";
+"onboarding.selectActivityLevel" = "활동 수준을 선택해주세요";
+"onboarding.selectGoal" = "목표를 선택해주세요";
+"onboarding.enterTargetWeight" = "목표 체중을 입력해주세요";
+"onboarding.complete" = "설정이 완료되었습니다!";
+"onboarding.startUsing" = "사용 시작";
+
+// MARK: - Reports
+"report.title" = "리포트";
+"report.weekly" = "주간 리포트";
+"report.monthly" = "월간 리포트";
+"report.summary" = "요약";
+"report.avgCalories" = "평균 섭취 칼로리";
+"report.avgExercise" = "평균 운동 시간";
+"report.weightChange" = "체중 변화";
+"report.goalProgress" = "목표 달성률";
+"report.insights" = "인사이트";
+
+// MARK: - Errors
+"error.network" = "네트워크 오류가 발생했습니다";
+"error.server" = "서버 오류가 발생했습니다";
+"error.unknown" = "알 수 없는 오류가 발생했습니다";
+"error.invalidInput" = "입력값을 확인해주세요";
+"error.saveFailure" = "저장에 실패했습니다";
+"error.loadFailure" = "불러오기에 실패했습니다";
+"error.aiAnalysis" = "AI 분석에 실패했습니다";
+
+// MARK: - Units
+"unit.kcal" = "kcal";
+"unit.g" = "g";
+"unit.mg" = "mg";
+"unit.cm" = "cm";
+"unit.kg" = "kg";
+"unit.min" = "분";
+"unit.hour" = "시간";

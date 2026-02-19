@@ -402,10 +402,27 @@ extension HomeClient: DependencyKey {
                 Array(repeating: nil, count: 7)
             },
             getWeeklyReport: { _, _, goalCalories in
-                WeeklyReport(weekStartDate: Date(), avgDailyCalories: 0, totalExerciseMinutes: 0, totalExerciseCalories: 0, weightChange: nil, streakDays: 0, dailyCalories: Array(repeating: 0, count: 7), goalCalories: goalCalories)
+                WeeklyReport(
+                    weekStartDate: Date(),
+                    avgDailyCalories: 0,
+                    totalExerciseMinutes: 0,
+                    totalExerciseCalories: 0,
+                    weightChange: nil,
+                    streakDays: 0,
+                    dailyCalories: Array(repeating: 0, count: 7),
+                    goalCalories: goalCalories
+                )
             },
             getMonthlyReport: { _, _, goalCalories in
-                MonthlyReport(monthDate: Date(), avgDailyCalories: 0, totalExerciseMinutes: 0, weightChange: nil, weeklyCalorieTrend: [], macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0), goalCalories: goalCalories)
+                MonthlyReport(
+                    monthDate: Date(),
+                    avgDailyCalories: 0,
+                    totalExerciseMinutes: 0,
+                    weightChange: nil,
+                    weeklyCalorieTrend: [],
+                    macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0),
+                    goalCalories: goalCalories
+                )
             }
         )
     }

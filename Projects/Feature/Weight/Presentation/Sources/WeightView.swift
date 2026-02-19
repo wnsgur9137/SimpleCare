@@ -172,7 +172,7 @@ public struct WeightView: View {
     }
 
     private var bmiCategoryLabel: String {
-        .bmiCategoryLabel(for: store.currentBMI)
+        Color.bmiCategoryLabel(for: store.currentBMI)
     }
 
     private var bmiColor: Color {

@@ -126,7 +126,16 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeRepor
         let daysFromMonday = (weekday + 5) % 7
         guard let monday = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: baseDate)),
               let sundayEnd = calendar.date(byAdding: .day, value: 7, to: monday) else {
-            return WeeklyReport(weekStartDate: baseDate, avgDailyCalories: 0, totalExerciseMinutes: 0, totalExerciseCalories: 0, weightChange: nil, streakDays: 0, dailyCalories: Array(repeating: 0, count: 7), goalCalories: goalCalories)
+            return WeeklyReport(
+                weekStartDate: baseDate,
+                avgDailyCalories: 0,
+                totalExerciseMinutes: 0,
+                totalExerciseCalories: 0,
+                weightChange: nil,
+                streakDays: 0,
+                dailyCalories: Array(repeating: 0, count: 7),
+                goalCalories: goalCalories
+            )
         }
 
         // Fetch all data for the week
@@ -198,7 +207,15 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeRepor
         let components = calendar.dateComponents([.year, .month], from: baseDate)
         guard let monthStart = calendar.date(from: components),
               let monthEnd = calendar.date(byAdding: .month, value: 1, to: monthStart) else {
-            return MonthlyReport(monthDate: baseDate, avgDailyCalories: 0, totalExerciseMinutes: 0, weightChange: nil, weeklyCalorieTrend: [], macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0), goalCalories: goalCalories)
+            return MonthlyReport(
+                monthDate: baseDate,
+                avgDailyCalories: 0,
+                totalExerciseMinutes: 0,
+                weightChange: nil,
+                weeklyCalorieTrend: [],
+                macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0),
+                goalCalories: goalCalories
+            )
         }
 
         // Fetch all data for the month

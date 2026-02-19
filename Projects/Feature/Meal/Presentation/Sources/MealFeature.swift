@@ -97,6 +97,7 @@ public struct MealFeature {
             case saveCompleted
         }
 
+        // swiftlint:disable:next cyclomatic_complexity
         public static func == (lhs: Action, rhs: Action) -> Bool {
             switch (lhs, rhs) {
             case (.binding(let l), .binding(let r)):
