@@ -15,6 +15,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 
 | Phase | Status | Description |
 |-------|--------|-------------|
+| Phase L: Localization | 🔴 Highest Priority | Korean (default), English support |
 | Phase 0: DIContainer-Client Wiring | ✅ Done | All Feature DIContainers connected to real UseCases |
 | Phase 1: AI Feature Activation | 🟡 In Progress | Text mock done (PR #29), image deferred to Phase 5 |
 | Phase 1.5: Known Gap Fixes | ✅ Done | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
