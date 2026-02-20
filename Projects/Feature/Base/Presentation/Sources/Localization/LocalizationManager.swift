@@ -22,7 +22,7 @@ public enum AppLanguage: String, CaseIterable, Identifiable {
     public var displayName: String {
         switch self {
         case .system:
-            return String(localized: "settings.language.system")
+            return "settings.language.system".localized
         case .korean:
             return "한국어"
         case .english:
@@ -67,7 +67,6 @@ public final class LocalizationManager: ObservableObject {
 
     // MARK: - Private Properties
 
-    private let userDefaultsKey = "SimpleCare.AppLanguage"
     private var bundle: Bundle = .main
 
     // MARK: - Initialization
@@ -75,7 +74,7 @@ public final class LocalizationManager: ObservableObject {
     private init() {
         // Load saved language preference or use system
         let initialLanguage: AppLanguage
-        if let savedLanguage = UserDefaults.standard.string(forKey: userDefaultsKey),
+        if let savedLanguage = UserDefaults.standard.string(forKey: LocalizationConstants.userDefaultsKey),
            let language = AppLanguage(rawValue: savedLanguage) {
             initialLanguage = language
         } else {
@@ -111,11 +110,11 @@ public final class LocalizationManager: ObservableObject {
     public var effectiveLanguageCode: String {
         switch currentLanguage {
         case .system:
-            return Locale.current.language.languageCode?.identifier ?? "ko"
+            return LocalizationConstants.systemLanguageCode
         case .korean:
-            return "ko"
+            return LocalizationConstants.LanguageCode.korean
         case .english:
-            return "en"
+            return LocalizationConstants.LanguageCode.english
         }
     }
 
@@ -132,7 +131,7 @@ public final class LocalizationManager: ObservableObject {
     // MARK: - Private Methods
 
     private func saveLanguagePreference() {
-        UserDefaults.standard.set(currentLanguage.rawValue, forKey: userDefaultsKey)
+        UserDefaults.standard.set(currentLanguage.rawValue, forKey: LocalizationConstants.userDefaultsKey)
     }
 
     private func updateBundle() {

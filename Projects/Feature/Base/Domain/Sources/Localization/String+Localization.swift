@@ -7,6 +7,47 @@
 
 import Foundation
 
+// MARK: - Localization Constants
+
+/// 다국어 관련 공유 상수
+public enum LocalizationConstants {
+    /// UserDefaults에 저장되는 언어 설정 키
+    public static let userDefaultsKey = "SimpleCare.AppLanguage"
+
+    /// 기본 폴백 언어 코드
+    public static let defaultLanguageCode = "ko"
+
+    /// 지원 언어 코드
+    public enum LanguageCode {
+        public static let system = "system"
+        public static let korean = "ko"
+        public static let english = "en"
+    }
+
+    /// 저장된 언어 설정에 따른 실제 언어 코드 반환
+    public static func resolveLanguageCode(from savedLanguage: String?) -> String {
+        guard let savedLanguage = savedLanguage else {
+            return systemLanguageCode
+        }
+
+        switch savedLanguage {
+        case LanguageCode.system:
+            return systemLanguageCode
+        case LanguageCode.korean:
+            return LanguageCode.korean
+        case LanguageCode.english:
+            return LanguageCode.english
+        default:
+            return systemLanguageCode
+        }
+    }
+
+    /// 시스템 언어 코드 (폴백 포함)
+    public static var systemLanguageCode: String {
+        Locale.current.language.languageCode?.identifier ?? defaultLanguageCode
+    }
+}
+
 // MARK: - Localization Bundle Registry
 
 /// 모듈별 Bundle을 등록하고 관리하는 클래스
@@ -73,21 +114,8 @@ public extension String {
 
     /// Resolves the current language code from UserDefaults
     private static func resolveCurrentLanguageCode() -> String {
-        let userDefaultsKey = "SimpleCare.AppLanguage"
-
-        if let savedLanguage = UserDefaults.standard.string(forKey: userDefaultsKey) {
-            switch savedLanguage {
-            case "system":
-                return Locale.current.language.languageCode?.identifier ?? "ko"
-            case "ko":
-                return "ko"
-            case "en":
-                return "en"
-            default:
-                return Locale.current.language.languageCode?.identifier ?? "ko"
-            }
-        }
-        return Locale.current.language.languageCode?.identifier ?? "ko"
+        let savedLanguage = UserDefaults.standard.string(forKey: LocalizationConstants.userDefaultsKey)
+        return LocalizationConstants.resolveLanguageCode(from: savedLanguage)
     }
 }
 

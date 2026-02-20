@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import BaseDomain
 
 // MARK: - SimpleCare Colors
 
@@ -99,10 +100,10 @@ public extension Color {
     /// BMI 값에 따른 카테고리 라벨 반환
     static func bmiCategoryLabel(for bmi: Double) -> String {
         switch bmi {
-        case ..<18.5: return "저체중"
-        case 18.5..<25.0: return "정상"
-        case 25.0..<30.0: return "과체중"
-        default: return "비만"
+        case ..<18.5: return "weight.bmi.underweight".localized
+        case 18.5..<25.0: return "weight.bmi.normal".localized
+        case 25.0..<30.0: return "weight.bmi.overweight".localized
+        default: return "weight.bmi.obese".localized
         }
     }
 }
