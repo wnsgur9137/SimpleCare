@@ -70,6 +70,7 @@ public extension Project {
         dataDependencies: [TargetDependency] = [],
         domainDependencies: [TargetDependency] = [],
         presentationDependencies: [TargetDependency] = [],
+        hasDomainResources: Bool = false,
         hasPresentationResources: Bool = false,
         hasAggregator: Bool = true,
         hasTest: Bool = false,
@@ -85,6 +86,7 @@ public extension Project {
             deploymentTargets: deploymentTargets,
             infoPlist: .default,
             sources: ["Domain/Sources/**"],
+            resources: hasDomainResources ? ["Domain/Resources/**"] : nil,
             dependencies: domainDependencies,
             settings: settings
         )
