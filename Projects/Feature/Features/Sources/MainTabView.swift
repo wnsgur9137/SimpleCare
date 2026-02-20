@@ -47,7 +47,7 @@ public struct MainTabView: View {
                     // Progress (Weight)
                     coordinator.makeProgress()
                         .tabItem {
-                            Label("tab.progress".localized, systemImage: AppTab.progress.icon)
+                            Label("tab.weight".localized, systemImage: AppTab.progress.icon)
                         }
                         .tag(AppTab.progress)
 
