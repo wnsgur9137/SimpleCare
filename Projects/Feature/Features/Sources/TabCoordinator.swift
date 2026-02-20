@@ -83,19 +83,19 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return NavigationStack {
             VStack {
                 // TODO: Implement meal list view
-                Text("식사 기록")
+                Text("meal.recordTitle".localized)
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
                 Button {
                     self.showingMealRecord = true
                 } label: {
-                    Label("식사 기록하기", systemImage: "plus.circle.fill")
+                    Label("meal.addMeal".localized, systemImage: "plus.circle.fill")
                         .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
             }
-            .navigationTitle("식단")
+            .navigationTitle("tab.meal".localized)
             .sheet(isPresented: showingMealRecordBinding) { [weak self] in
                 if let self {
                     let container = self.diContainer.makeMealDIContainer()
@@ -112,19 +112,19 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return NavigationStack {
             VStack {
                 // TODO: Implement exercise list view
-                Text("운동 기록")
+                Text("exercise.recordTitle".localized)
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
                 Button {
                     self.showingExerciseRecord = true
                 } label: {
-                    Label("운동 기록하기", systemImage: "plus.circle.fill")
+                    Label("exercise.addExercise".localized, systemImage: "plus.circle.fill")
                         .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
             }
-            .navigationTitle("운동")
+            .navigationTitle("tab.exercise".localized)
             .sheet(isPresented: showingExerciseRecordBinding) { [weak self] in
                 if let self {
                     let container = self.diContainer.makeExerciseDIContainer()
@@ -147,18 +147,18 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     public func makeSettings() -> some View {
         return NavigationStack {
             List {
-                Section("계정") {
+                Section("settings.account".localized) {
                     NavigationLink {
                         let container = diContainer.makeProfileDIContainer()
                         ProfileCoordinator(dependencies: container).start()
                     } label: {
-                        Label("프로필 설정", systemImage: "person.circle")
+                        Label("settings.profile".localized, systemImage: "person.circle")
                     }
                 }
 
-                Section("앱 정보") {
+                Section("settings.appInfo".localized) {
                     HStack {
-                        Text("버전")
+                        Text("settings.version".localized)
                         Spacer()
                         Text("1.0.0")
                             .foregroundStyle(.secondary)
@@ -166,12 +166,12 @@ public final class TabCoordinator: ObservableObject, Coordinator {
                 }
 
                 Section {
-                    Text("AI 추정치는 참고용이며 의료적 조언이 아닙니다.")
+                    Text("onboarding.disclaimer".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("설정")
+            .navigationTitle("settings.title".localized)
         }
     }
 }
