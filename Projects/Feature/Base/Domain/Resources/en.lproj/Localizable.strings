@@ -1,0 +1,56 @@
+/*
+  Localizable.strings (English)
+  BaseDomain - Common strings shared across all features
+*/
+
+// MARK: - Common
+"common.cancel" = "Cancel";
+"common.confirm" = "Confirm";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.edit" = "Edit";
+"common.done" = "Done";
+"common.next" = "Next";
+"common.back" = "Back";
+"common.close" = "Close";
+"common.search" = "Search";
+"common.loading" = "Loading...";
+"common.error" = "Error";
+"common.success" = "Success";
+"common.retry" = "Retry";
+"common.today" = "Today";
+"common.yesterday" = "Yesterday";
+"common.week" = "Week";
+"common.month" = "Month";
+"common.year" = "Year";
+"common.date" = "Date";
+"common.kcal" = "kcal";
+
+// MARK: - Units
+"unit.kcal" = "kcal";
+"unit.g" = "g";
+"unit.mg" = "mg";
+"unit.cm" = "cm";
+"unit.kg" = "kg";
+"unit.min" = "min";
+"unit.hour" = "hr";
+
+// MARK: - Errors
+"error.network" = "Network error occurred";
+"error.server" = "Server error occurred";
+"error.unknown" = "An unknown error occurred";
+"error.invalidInput" = "Please check your input";
+"error.saveFailure" = "Failed to save";
+"error.loadFailure" = "Failed to load";
+"error.aiAnalysis" = "AI analysis failed";
+"error.weightNotFound" = "Weight record not found";
+"error.profileNotFound" = "Profile not found";
+"error.mealNotFound" = "Meal record not found";
+"error.exerciseNotFound" = "Exercise record not found";
+
+// MARK: - Tab Bar
+"tab.home" = "Home";
+"tab.meal" = "Meal";
+"tab.exercise" = "Exercise";
+"tab.weight" = "Weight";
+"tab.settings" = "Settings";
