@@ -15,21 +15,53 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios beta
+### ios current_version
 
 ```sh
-[bundle exec] fastlane ios beta
+[bundle exec] fastlane ios current_version
 ```
 
-Push a new beta build to TestFlight
+Get current version
 
-### ios build
+### ios bump
 
 ```sh
-[bundle exec] fastlane ios build
+[bundle exec] fastlane ios bump
 ```
 
-Build for release (creates IPA)
+Bump version. Options: version (e.g., '1.0.0'), build (e.g., '10')
+
+### ios bump_major
+
+```sh
+[bundle exec] fastlane ios bump_major
+```
+
+Bump major version (X.0.0)
+
+### ios bump_minor
+
+```sh
+[bundle exec] fastlane ios bump_minor
+```
+
+Bump minor version (0.X.0)
+
+### ios bump_patch
+
+```sh
+[bundle exec] fastlane ios bump_patch
+```
+
+Bump patch version (0.0.X)
+
+### ios bump_build
+
+```sh
+[bundle exec] fastlane ios bump_build
+```
+
+Bump build number only
 
 ### ios build_test
 
@@ -38,6 +70,22 @@ Build for release (creates IPA)
 ```
 
 Build test (compile only, no archive/export)
+
+### ios build
+
+```sh
+[bundle exec] fastlane ios build
+```
+
+Build for ad-hoc distribution (creates IPA with PROD config)
+
+### ios beta
+
+```sh
+[bundle exec] fastlane ios beta
+```
+
+Push a new beta build to TestFlight
 
 ### ios test
 
