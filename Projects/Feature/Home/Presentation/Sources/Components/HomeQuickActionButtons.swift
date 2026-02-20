@@ -18,21 +18,21 @@ struct HomeQuickActionButtons: View {
         HStack(spacing: 12) {
             HomeQuickActionButton(
                 icon: "fork.knife",
-                label: "식사",
+                label: "tab.meal".localized,
                 color: .scCalories,
                 action: onMealTap
             )
 
             HomeQuickActionButton(
                 icon: "figure.run",
-                label: "운동",
+                label: "tab.exercise".localized,
                 color: .scExercise,
                 action: onExerciseTap
             )
 
             HomeQuickActionButton(
                 icon: "scalemass",
-                label: "체중",
+                label: "tab.weight".localized,
                 color: .scPrimary,
                 action: onWeightTap
             )
