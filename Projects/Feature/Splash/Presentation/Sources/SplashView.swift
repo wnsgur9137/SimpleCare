@@ -48,7 +48,7 @@ public struct SplashView: View {
                     .opacity(store.isAnimating ? 1.0 : 0.0)
 
                 // Tagline
-                Text("건강한 하루를 기록하세요")
+                Text("splash.subtitle".localized)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
                     .opacity(store.isAnimating ? 1.0 : 0.0)

@@ -21,7 +21,7 @@ struct HomeTodayRecordsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("오늘의 기록")
+            Text("home.todayRecords".localized)
                 .font(.headline)
 
             if hasRecords {
@@ -135,12 +135,12 @@ struct HomeEmptyRecordView: View {
                 .font(.system(size: 32))
                 .foregroundStyle(.secondary)
 
-            Text("아직 기록이 없어요")
+            Text("home.noRecords".localized)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             Button(action: onAddTap) {
-                Text("첫 식사 기록하기")
+                Text("home.firstMealRecord".localized)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.white)

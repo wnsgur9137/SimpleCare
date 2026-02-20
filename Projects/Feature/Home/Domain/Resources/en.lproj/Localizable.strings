@@ -1,0 +1,69 @@
+/*
+  Localizable.strings (English)
+  HomeDomain
+*/
+
+// MARK: - Home
+"home.title" = "SimpleCare";
+"home.greeting.morning" = "Good morning!";
+"home.greeting.afternoon" = "Good afternoon!";
+"home.greeting.evening" = "Good evening!";
+"home.quickActions" = "Quick Actions";
+"home.todayRecords" = "Today's Records";
+"home.noRecords" = "No records yet";
+"home.calories" = "Calories";
+"home.remaining" = "remaining";
+"home.exceeded" = "exceeded";
+"home.weeklyTrend" = "Weekly Trend";
+"home.streak" = "Streak";
+"home.streak.days" = "%d days";
+"home.streak.consecutive" = "%d days in a row";
+"home.aiInsight" = "AI Insight";
+"home.aiInsight.default" = "Start your healthy day today!";
+"home.weeklyReport" = "Weekly/Monthly Report";
+"home.reportDescription" = "Calories, exercise, and weight changes at a glance";
+"home.firstMealRecord" = "Record your first meal";
+"home.thisWeek" = "This Week";
+"home.weekday.mon" = "Mon";
+"home.weekday.tue" = "Tue";
+"home.weekday.wed" = "Wed";
+"home.weekday.thu" = "Thu";
+"home.weekday.fri" = "Fri";
+"home.weekday.sat" = "Sat";
+"home.weekday.sun" = "Sun";
+
+// MARK: - Reports
+"report.title" = "Reports";
+"report.weekly" = "Weekly Report";
+"report.monthly" = "Monthly Report";
+"report.summary" = "Summary";
+"report.avgCalories" = "Average Calories";
+"report.avgExercise" = "Average Exercise";
+"report.weightChange" = "Weight Change";
+"report.goalProgress" = "Goal Progress";
+"report.insights" = "Insights";
+"report.period" = "Period";
+"report.nutritionSummary" = "Nutrition Summary";
+"report.exerciseSummary" = "Exercise Summary";
+"report.weightSummary" = "Weight Changes";
+"report.dailyAverage" = "Daily Average";
+"report.totalExercise" = "Total Exercise";
+"report.exerciseCalories" = "Exercise Calories";
+"report.startWeight" = "Start";
+"report.endWeight" = "Current";
+"report.totalChange" = "Total Change";
+"report.streak" = "Streak";
+"report.dailyCalories" = "Daily Calories";
+"report.goal" = "Goal";
+"report.totalTime" = "Total Time";
+"report.topExercises" = "Top Exercises";
+"report.achievementRate" = "Achievement Rate";
+"report.recordedDays" = "Recorded Days";
+"report.weeklyTrend" = "Weekly Calorie Trend";
+"report.macroAverage" = "Macro Average";
+
+// MARK: - Calorie Status
+"calorieStatus.onTrack" = "You're staying within your target range!";
+"calorieStatus.under" = "You can eat a bit more";
+"calorieStatus.over" = "You've exceeded a bit today";
+"calorieStatus.noData" = "Record your first meal today!";

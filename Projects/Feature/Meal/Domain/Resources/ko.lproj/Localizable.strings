@@ -1,0 +1,41 @@
+/*
+  Localizable.strings (Korean)
+  MealDomain
+*/
+
+// MARK: - Meal
+"meal.title" = "식사 기록";
+"meal.add" = "식사 추가";
+"meal.breakfast" = "아침";
+"meal.lunch" = "점심";
+"meal.dinner" = "저녁";
+"meal.snack" = "간식";
+"meal.inputPlaceholder" = "무엇을 드셨나요?";
+"meal.analyze" = "분석하기";
+"meal.analyzing" = "분석 중...";
+"meal.nutrition" = "영양 정보";
+"meal.calories" = "칼로리";
+"meal.protein" = "단백질";
+"meal.carbs" = "탄수화물";
+"meal.fat" = "지방";
+"meal.fiber" = "식이섬유";
+"meal.sodium" = "나트륨";
+"meal.favorites" = "즐겨찾기";
+"meal.recent" = "최근 기록";
+"meal.addToFavorites" = "즐겨찾기 추가";
+"meal.removeFromFavorites" = "즐겨찾기 제거";
+"meal.healthTip" = "건강 팁";
+"meal.type" = "식사 유형";
+"meal.foodInput" = "음식 입력";
+"meal.estimateResult" = "추정 결과";
+"meal.aiEstimate" = "AI 추정치";
+"meal.memo" = "메모 (선택)";
+"meal.memoPlaceholder" = "식사에 대한 메모를 남겨보세요";
+"meal.addFood" = "음식을 추가해주세요";
+"meal.saving" = "저장 중...";
+"meal.recordTitle" = "식사 기록";
+"meal.addMeal" = "식사 기록하기";
+"meal.estimateDisclaimer" = "AI 추정치는 참고용이며 실제와 다를 수 있습니다";
+"meal.noFavorites" = "저장된 즐겨찾기가 없습니다";
+"meal.noRecent" = "최근 7일간 기록이 없습니다";
+"meal.testFood" = "테스트 음식";

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 /// 홈 화면용 하루 요약 정보
 public struct HomeDailySummary: Equatable, Sendable {
@@ -123,9 +124,9 @@ public enum HomeCalorieStatus: Equatable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .under: return "부족"
-        case .onTrack: return "적정"
-        case .over: return "초과"
+        case .under: return "calorieStatus.under".localized
+        case .onTrack: return "calorieStatus.onTrack".localized
+        case .over: return "calorieStatus.over".localized
         }
     }
 }
@@ -142,7 +143,7 @@ public struct HomeInsight: Equatable, Sendable {
 
     public static var defaultInsight: HomeInsight {
         HomeInsight(
-            comment: "오늘도 건강한 하루를 시작해보세요!",
+            comment: "home.aiInsight.default".localized,
             emoji: "💪"
         )
     }

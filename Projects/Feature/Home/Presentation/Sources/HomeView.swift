@@ -62,7 +62,7 @@ public struct HomeView: View {
                 }
                 .padding()
             }
-            .navigationTitle("홈")
+            .navigationTitle("tab.home".localized)
             .refreshable {
                 await store.send(.refreshData).finish()
             }
@@ -98,7 +98,7 @@ public struct HomeView: View {
             Spacer()
 
             VStack(spacing: 2) {
-                Text(store.isToday ? "오늘" : formattedDate)
+                Text(store.isToday ? "common.today".localized : formattedDate)
                     .font(.title3)
                     .fontWeight(.bold)
 
@@ -199,7 +199,7 @@ public struct HomeView: View {
             // 남은 칼로리 / 운동 소모
             HStack(spacing: 32) {
                 VStack(spacing: 4) {
-                    Text("남은")
+                    Text("home.remaining".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text("\(summary.remainingCalories)")
@@ -213,7 +213,7 @@ public struct HomeView: View {
 
                 if summary.exerciseCalories > 0 {
                     VStack(spacing: 4) {
-                        Text("운동")
+                        Text("tab.exercise".localized)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Text("+\(summary.exerciseCalories)")
@@ -241,12 +241,12 @@ public struct HomeView: View {
                     .foregroundStyle(.scPrimary)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("주간/월간 리포트")
+                    Text("home.weeklyReport".localized)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)
 
-                    Text("칼로리, 운동, 체중 변화를 한눈에")
+                    Text("home.reportDescription".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

@@ -87,6 +87,7 @@ public final class MockAIService: AIServiceProtocol, @unchecked Sendable {
 
     // MARK: - Food Database
 
+    // swiftlint:disable line_length
     private static let foodDatabase: [(String, EstimatedFoodItem)] = [
         ("김치찌개", EstimatedFoodItem(name: "김치찌개", servingSize: 300, servingUnit: "g", calories: 210, protein: 12, carbs: 15, fat: 11, confidence: 0.9)),
         ("된장찌개", EstimatedFoodItem(name: "된장찌개", servingSize: 300, servingUnit: "g", calories: 180, protein: 10, carbs: 12, fat: 9, confidence: 0.9)),
@@ -119,4 +120,5 @@ public final class MockAIService: AIServiceProtocol, @unchecked Sendable {
         ("바나나", EstimatedFoodItem(name: "바나나", servingSize: 120, servingUnit: "g", calories: 105, protein: 1.3, carbs: 27, fat: 0.4, confidence: 0.95)),
         ("사과", EstimatedFoodItem(name: "사과", servingSize: 200, servingUnit: "g", calories: 95, protein: 0.5, carbs: 25, fat: 0.3, confidence: 0.95)),
     ]
+    // swiftlint:enable line_length
 }

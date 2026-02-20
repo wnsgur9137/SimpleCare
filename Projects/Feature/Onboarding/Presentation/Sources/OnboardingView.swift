@@ -52,7 +52,7 @@ public struct OnboardingView: View {
             // Navigation buttons
             HStack(spacing: 16) {
                 if !store.currentStep.isFirst {
-                    Button("이전") {
+                    Button("common.back".localized) {
                         store.send(.previousStep)
                     }
                     .buttonStyle(.bordered)
@@ -60,7 +60,7 @@ public struct OnboardingView: View {
 
                 Spacer()
 
-                Button(store.currentStep.isLast ? "시작하기" : "다음") {
+                Button(store.currentStep.isLast ? "onboarding.startUsing".localized : "common.next".localized) {
                     store.send(.nextStep)
                 }
                 .buttonStyle(.borderedProminent)
@@ -76,8 +76,8 @@ public struct OnboardingView: View {
                     .scaleEffect(1.5)
             }
         }
-        .alert("오류", isPresented: .constant(store.error != nil)) {
-            Button("확인") {
+        .alert("common.error".localized, isPresented: .constant(store.error != nil)) {
+            Button("common.confirm".localized) {
                 // Clear error handled by binding
             }
         } message: {
@@ -104,7 +104,7 @@ struct WelcomeStepView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
-                Text("건강한 식습관을 위한\n스마트한 파트너")
+                Text("onboarding.subtitle".localized)
                     .font(.title3)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -113,16 +113,16 @@ struct WelcomeStepView: View {
             Spacer()
 
             VStack(spacing: 16) {
-                FeatureRow(icon: "fork.knife", text: "AI 기반 영양 분석")
-                FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "체중 및 목표 관리")
-                FeatureRow(icon: "figure.run", text: "운동 칼로리 추적")
+                FeatureRow(icon: "fork.knife", text: "onboarding.feature.nutrition".localized)
+                FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "onboarding.feature.weight".localized)
+                FeatureRow(icon: "figure.run", text: "onboarding.feature.exercise".localized)
             }
             .padding()
             .glassCard(cornerRadius: 16)
 
             Spacer()
 
-            Text("AI 추정치는 참고용이며 의료적 조언이 아닙니다")
+            Text("onboarding.disclaimer".localized)
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -156,25 +156,25 @@ struct BasicInfoStepView: View {
         ScrollView {
             VStack(spacing: 32) {
                 StepHeader(
-                    title: "기본 정보",
-                    subtitle: "이름과 나이, 성별을 알려주세요"
+                    title: "onboarding.step.basicInfo".localized,
+                    subtitle: "onboarding.step.basicInfo.subtitle".localized
                 )
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("이름")
+                    Text("profile.name".localized)
                         .font(.headline)
-                    TextField("이름을 입력하세요", text: $store.name)
+                    TextField("onboarding.field.name.placeholder".localized, text: $store.name)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                 }
 
                 VStack(spacing: 8) {
-                    Text("나이")
+                    Text("profile.age".localized)
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(spacing: 0) {
-                        Picker("나이", selection: $store.age) {
+                        Picker("profile.age".localized, selection: $store.age) {
                             ForEach(10...100, id: \.self) { age in
                                 Text("\(age)").tag(age)
                             }
@@ -183,7 +183,7 @@ struct BasicInfoStepView: View {
                         .frame(width: 100)
                         .clipped()
 
-                        Text("세")
+                        Text("onboarding.field.age.unit".localized)
                             .font(.title2)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
@@ -194,9 +194,9 @@ struct BasicInfoStepView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("성별")
+                    Text("profile.gender".localized)
                         .font(.headline)
-                    Picker("성별", selection: $store.biologicalSex) {
+                    Picker("profile.gender".localized, selection: $store.biologicalSex) {
                         ForEach(BiologicalSex.allCases, id: \.self) { sex in
                             Text(sex.displayName).tag(sex)
                         }
@@ -244,18 +244,18 @@ struct BodyInfoStepView: View {
         ScrollView {
             VStack(spacing: 24) {
                 StepHeader(
-                    title: "신체 정보",
-                    subtitle: "키와 체중을 입력해주세요"
+                    title: "onboarding.step.bodyInfo".localized,
+                    subtitle: "onboarding.step.bodyInfo.subtitle".localized
                 )
 
                 // 키 입력
                 VStack(spacing: 8) {
-                    Text("키")
+                    Text("profile.height".localized)
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(spacing: 0) {
-                        Picker("키 정수", selection: heightWhole) {
+                        Picker("profile.height".localized, selection: heightWhole) {
                             ForEach(100...220, id: \.self) { cm in
                                 Text("\(cm)").tag(cm)
                             }
@@ -268,7 +268,7 @@ struct BodyInfoStepView: View {
                             .font(.title2)
                             .fontWeight(.medium)
 
-                        Picker("키 소수", selection: heightDecimal) {
+                        Picker("profile.height".localized, selection: heightDecimal) {
                             ForEach(0...9, id: \.self) { decimal in
                                 Text("\(decimal)").tag(decimal)
                             }
@@ -277,7 +277,7 @@ struct BodyInfoStepView: View {
                         .frame(width: 60)
                         .clipped()
 
-                        Text("cm")
+                        Text("unit.cm".localized)
                             .font(.title3)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
@@ -290,12 +290,12 @@ struct BodyInfoStepView: View {
 
                 // 현재 체중 입력
                 VStack(spacing: 8) {
-                    Text("현재 체중")
+                    Text("onboarding.field.currentWeight".localized)
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(spacing: 0) {
-                        Picker("체중 정수", selection: currentWeightWhole) {
+                        Picker("profile.weight".localized, selection: currentWeightWhole) {
                             ForEach(30...150, id: \.self) { kg in
                                 Text("\(kg)").tag(kg)
                             }
@@ -308,7 +308,7 @@ struct BodyInfoStepView: View {
                             .font(.title2)
                             .fontWeight(.medium)
 
-                        Picker("체중 소수", selection: currentWeightDecimal) {
+                        Picker("profile.weight".localized, selection: currentWeightDecimal) {
                             ForEach(0...9, id: \.self) { decimal in
                                 Text("\(decimal)").tag(decimal)
                             }
@@ -317,7 +317,7 @@ struct BodyInfoStepView: View {
                         .frame(width: 60)
                         .clipped()
 
-                        Text("kg")
+                        Text("unit.kg".localized)
                             .font(.title3)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
@@ -330,12 +330,12 @@ struct BodyInfoStepView: View {
 
                 // 목표 체중 입력
                 VStack(spacing: 8) {
-                    Text("목표 체중")
+                    Text("onboarding.field.targetWeight".localized)
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(spacing: 0) {
-                        Picker("목표 체중 정수", selection: targetWeightWhole) {
+                        Picker("onboarding.field.targetWeight".localized, selection: targetWeightWhole) {
                             ForEach(30...150, id: \.self) { kg in
                                 Text("\(kg)").tag(kg)
                             }
@@ -348,7 +348,7 @@ struct BodyInfoStepView: View {
                             .font(.title2)
                             .fontWeight(.medium)
 
-                        Picker("목표 체중 소수", selection: targetWeightDecimal) {
+                        Picker("onboarding.field.targetWeight".localized, selection: targetWeightDecimal) {
                             ForEach(0...9, id: \.self) { decimal in
                                 Text("\(decimal)").tag(decimal)
                             }
@@ -357,7 +357,7 @@ struct BodyInfoStepView: View {
                         .frame(width: 60)
                         .clipped()
 
-                        Text("kg")
+                        Text("unit.kg".localized)
                             .font(.title3)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
@@ -382,8 +382,8 @@ struct GoalSettingStepView: View {
         ScrollView {
             VStack(spacing: 32) {
                 StepHeader(
-                    title: "목표 설정",
-                    subtitle: "어떤 목표를 달성하고 싶으신가요?"
+                    title: "onboarding.step.goal".localized,
+                    subtitle: "onboarding.step.goal.subtitle".localized
                 )
 
                 VStack(spacing: 16) {
@@ -444,9 +444,9 @@ struct GoalOptionCard: View {
 
     private func goalDescription(for goal: GoalType) -> String {
         switch goal {
-        case .weightLoss: return "일일 칼로리 -500kcal 목표"
-        case .weightGain: return "일일 칼로리 +300kcal 목표"
-        case .maintenance: return "현재 체중 유지"
+        case .weightLoss: return "onboarding.goal.lose.description".localized
+        case .weightGain: return "onboarding.goal.gain.description".localized
+        case .maintenance: return "onboarding.goal.maintain.description".localized
         }
     }
 }
@@ -458,8 +458,8 @@ struct ActivityLevelStepView: View {
         ScrollView {
             VStack(spacing: 32) {
                 StepHeader(
-                    title: "활동 수준",
-                    subtitle: "평소 운동량을 선택해주세요"
+                    title: "onboarding.step.activity".localized,
+                    subtitle: "onboarding.step.activity.subtitle".localized
                 )
 
                 VStack(spacing: 12) {
@@ -516,30 +516,36 @@ struct SummaryStepView: View {
         ScrollView {
             VStack(spacing: 24) {
                 StepHeader(
-                    title: "설정 완료",
-                    subtitle: "입력하신 정보를 확인해주세요"
+                    title: "onboarding.step.summary".localized,
+                    subtitle: "onboarding.step.summary.subtitle".localized
                 )
 
                 VStack(spacing: 16) {
-                    SummaryRow(label: "이름", value: store.name)
-                    SummaryRow(label: "나이", value: "\(store.age)세")
-                    SummaryRow(label: "성별", value: store.biologicalSex.displayName)
-                    SummaryRow(label: "키", value: String(format: "%.1f cm", store.heightCm))
-                    SummaryRow(label: "현재 체중", value: String(format: "%.1f kg", store.currentWeightKg))
-                    SummaryRow(label: "목표 체중", value: String(format: "%.1f kg", store.targetWeightKg))
-                    SummaryRow(label: "목표", value: store.goalType.displayName)
-                    SummaryRow(label: "활동 수준", value: store.activityLevel.displayName)
+                    SummaryRow(label: "profile.name".localized, value: store.name)
+                    SummaryRow(label: "profile.age".localized, value: "\(store.age)\("onboarding.field.age.unit".localized)")
+                    SummaryRow(label: "profile.gender".localized, value: store.biologicalSex.displayName)
+                    SummaryRow(label: "profile.height".localized, value: String(format: "%.1f \("unit.cm".localized)", store.heightCm))
+                    SummaryRow(
+                        label: "onboarding.field.currentWeight".localized,
+                        value: String(format: "%.1f \("unit.kg".localized)", store.currentWeightKg)
+                    )
+                    SummaryRow(
+                        label: "onboarding.field.targetWeight".localized,
+                        value: String(format: "%.1f \("unit.kg".localized)", store.targetWeightKg)
+                    )
+                    SummaryRow(label: "profile.goal".localized, value: store.goalType.displayName)
+                    SummaryRow(label: "profile.activityLevel".localized, value: store.activityLevel.displayName)
                 }
                 .padding()
                 .glassCard(cornerRadius: 16)
 
                 VStack(spacing: 8) {
-                    Text("일일 목표 칼로리")
+                    Text("onboarding.summary.dailyCalories".localized)
                         .font(.headline)
-                    Text("\(store.calculatedCalories) kcal")
+                    Text("\(store.calculatedCalories) \("unit.kcal".localized)")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(.scPrimary)
-                    Text("기초대사량 \(Int(store.calculatedBMR)) kcal")
+                    Text("onboarding.summary.bmr".localized + " \(Int(store.calculatedBMR)) \("unit.kcal".localized)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -547,7 +553,7 @@ struct SummaryStepView: View {
                 .frame(maxWidth: .infinity)
                 .glassCard(tint: .scPrimary, cornerRadius: 16)
 
-                Text("이 정보는 Mifflin-St Jeor 공식을 기반으로 한 추정치입니다. 정확한 건강 조언은 전문가와 상담하세요.")
+                Text("onboarding.summary.disclaimer".localized)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

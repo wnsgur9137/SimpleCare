@@ -19,5 +19,6 @@ let project: Project = .feature(
     ],
     presentationDependencies: [
         .Project.Feature.Presentation.BasePresentation,
-    ]
+    ],
+    hasDomainResources: true
 )

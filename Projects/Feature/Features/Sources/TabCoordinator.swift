@@ -15,6 +15,7 @@ import Weight
 import Exercise
 import Profile
 import BasePresentation
+import BaseDomain
 
 public final class TabCoordinator: ObservableObject, Coordinator {
     private let diContainer: TabDIContainer
@@ -83,19 +84,19 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return NavigationStack {
             VStack {
                 // TODO: Implement meal list view
-                Text("식사 기록")
+                Text("meal.recordTitle".localized)
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
                 Button {
                     self.showingMealRecord = true
                 } label: {
-                    Label("식사 기록하기", systemImage: "plus.circle.fill")
+                    Label("meal.addMeal".localized, systemImage: "plus.circle.fill")
                         .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
             }
-            .navigationTitle("식단")
+            .navigationTitle("tab.meal".localized)
             .sheet(isPresented: showingMealRecordBinding) { [weak self] in
                 if let self {
                     let container = self.diContainer.makeMealDIContainer()
@@ -112,19 +113,19 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return NavigationStack {
             VStack {
                 // TODO: Implement exercise list view
-                Text("운동 기록")
+                Text("exercise.recordTitle".localized)
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
                 Button {
                     self.showingExerciseRecord = true
                 } label: {
-                    Label("운동 기록하기", systemImage: "plus.circle.fill")
+                    Label("exercise.addExercise".localized, systemImage: "plus.circle.fill")
                         .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
             }
-            .navigationTitle("운동")
+            .navigationTitle("tab.exercise".localized)
             .sheet(isPresented: showingExerciseRecordBinding) { [weak self] in
                 if let self {
                     let container = self.diContainer.makeExerciseDIContainer()
@@ -146,32 +147,64 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     public func makeSettings() -> some View {
         return NavigationStack {
-            List {
-                Section("계정") {
-                    NavigationLink {
-                        let container = diContainer.makeProfileDIContainer()
-                        ProfileCoordinator(dependencies: container).start()
+            SettingsContentView(diContainer: diContainer)
+        }
+    }
+}
+
+// MARK: - Settings Content View
+
+struct SettingsContentView: View {
+    let diContainer: TabDIContainer
+    @ObservedObject private var localizationManager = LocalizationManager.shared
+    @State private var refreshID = UUID()
+
+    var body: some View {
+        List {
+            Section("settings.account".localized) {
+                NavigationLink {
+                    let container = diContainer.makeProfileDIContainer()
+                    ProfileCoordinator(dependencies: container).start()
+                } label: {
+                    Label("settings.profile".localized, systemImage: "person.circle")
+                }
+            }
+
+            Section("settings.language".localized) {
+                ForEach(AppLanguage.allCases) { language in
+                    Button {
+                        localizationManager.setLanguage(language)
+                        refreshID = UUID()
                     } label: {
-                        Label("프로필 설정", systemImage: "person.circle")
+                        HStack {
+                            Text(language.displayName)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if localizationManager.currentLanguage == language {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.blue)
+                            }
+                        }
                     }
                 }
+            }
 
-                Section("앱 정보") {
-                    HStack {
-                        Text("버전")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Section {
-                    Text("AI 추정치는 참고용이며 의료적 조언이 아닙니다.")
-                        .font(.caption)
+            Section("settings.appInfo".localized) {
+                HStack {
+                    Text("settings.version".localized)
+                    Spacer()
+                    Text("1.0.0")
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("설정")
+
+            Section {
+                Text("onboarding.disclaimer".localized)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
+        .navigationTitle("settings.title".localized)
+        .id(refreshID)
     }
 }

@@ -1,0 +1,47 @@
+/*
+  Localizable.strings (English)
+  OnboardingDomain
+*/
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Welcome to SimpleCare";
+"onboarding.subtitle" = "Start your AI-powered health journey";
+"onboarding.getStarted" = "Get Started";
+"onboarding.step.profile" = "Profile Setup";
+"onboarding.step.goal" = "Goal Setup";
+"onboarding.step.complete" = "Setup Complete";
+"onboarding.enterName" = "Enter your name";
+"onboarding.selectGender" = "Select your gender";
+"onboarding.enterBirthdate" = "Enter your birthdate";
+"onboarding.enterHeight" = "Enter your height";
+"onboarding.enterWeight" = "Enter your weight";
+"onboarding.selectActivityLevel" = "Select your activity level";
+"onboarding.selectGoal" = "Select your goal";
+"onboarding.enterTargetWeight" = "Enter your target weight";
+"onboarding.complete" = "Setup complete!";
+"onboarding.startUsing" = "Start Using";
+"onboarding.feature.weight" = "Weight & Goal Management";
+"onboarding.feature.exercise" = "Exercise Calorie Tracking";
+"onboarding.feature.nutrition" = "AI-Based Nutrition Analysis";
+"onboarding.disclaimer" = "AI estimates are for reference only and not medical advice";
+"onboarding.step.basicInfo" = "Basic Info";
+"onboarding.step.basicInfo.subtitle" = "Tell us your name, age, and gender";
+"onboarding.step.bodyInfo" = "Body Info";
+"onboarding.step.bodyInfo.subtitle" = "Tell us your height and weight";
+"onboarding.step.activity" = "Activity Level";
+"onboarding.step.activity.subtitle" = "Select your usual activity level";
+"onboarding.step.goal.subtitle" = "Select your health goal";
+"onboarding.step.summary" = "Confirm Settings";
+"onboarding.step.summary.subtitle" = "Please confirm your information";
+"onboarding.field.name" = "Name";
+"onboarding.field.name.placeholder" = "Enter your name";
+"onboarding.field.age" = "Age";
+"onboarding.field.age.unit" = "years";
+"onboarding.field.currentWeight" = "Current Weight";
+"onboarding.field.targetWeight" = "Target Weight";
+"onboarding.goal.lose.description" = "Lose weight healthily";
+"onboarding.goal.maintain.description" = "Maintain current weight";
+"onboarding.goal.gain.description" = "Gain weight healthily";
+"onboarding.summary.dailyCalories" = "Daily Calorie Goal";
+"onboarding.summary.bmr" = "BMR";
+"onboarding.summary.disclaimer" = "These values are for reference and may vary individually";

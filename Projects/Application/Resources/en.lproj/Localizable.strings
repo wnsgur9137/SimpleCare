@@ -1,0 +1,407 @@
+/*
+  Localizable.strings (English)
+  SimpleCare
+
+  English translations.
+*/
+
+// MARK: - Common
+"common.cancel" = "Cancel";
+"common.confirm" = "Confirm";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.edit" = "Edit";
+"common.done" = "Done";
+"common.next" = "Next";
+"common.back" = "Back";
+"common.close" = "Close";
+"common.search" = "Search";
+"common.loading" = "Loading...";
+"common.error" = "Error";
+"common.success" = "Success";
+"common.retry" = "Retry";
+"common.today" = "Today";
+"common.yesterday" = "Yesterday";
+"common.week" = "Week";
+"common.month" = "Month";
+"common.year" = "Year";
+
+// MARK: - Tab Bar
+"tab.home" = "Home";
+"tab.meal" = "Meal";
+"tab.exercise" = "Exercise";
+"tab.weight" = "Weight";
+"tab.settings" = "Settings";
+
+// MARK: - Home
+"home.title" = "SimpleCare";
+"home.greeting.morning" = "Good morning!";
+"home.greeting.afternoon" = "Good afternoon!";
+"home.greeting.evening" = "Good evening!";
+"home.quickActions" = "Quick Actions";
+"home.todayRecords" = "Today's Records";
+"home.noRecords" = "No records yet";
+"home.calories" = "Calories";
+"home.remaining" = "remaining";
+"home.exceeded" = "exceeded";
+"home.weeklyTrend" = "Weekly Trend";
+"home.streak" = "Streak";
+"home.streak.days" = "%d days";
+"home.aiInsight" = "AI Insight";
+"home.aiInsight.default" = "Start your healthy day today!";
+
+// MARK: - Meal
+"meal.title" = "Meal Log";
+"meal.add" = "Add Meal";
+"meal.breakfast" = "Breakfast";
+"meal.lunch" = "Lunch";
+"meal.dinner" = "Dinner";
+"meal.snack" = "Snack";
+"meal.inputPlaceholder" = "What did you eat?";
+"meal.analyze" = "Analyze";
+"meal.analyzing" = "Analyzing...";
+"meal.nutrition" = "Nutrition";
+"meal.calories" = "Calories";
+"meal.protein" = "Protein";
+"meal.carbs" = "Carbs";
+"meal.fat" = "Fat";
+"meal.fiber" = "Fiber";
+"meal.sodium" = "Sodium";
+"meal.favorites" = "Favorites";
+"meal.recent" = "Recent";
+"meal.addToFavorites" = "Add to Favorites";
+"meal.removeFromFavorites" = "Remove from Favorites";
+"meal.healthTip" = "Health Tip";
+
+// MARK: - Exercise
+"exercise.title" = "Exercise Log";
+"exercise.add" = "Add Exercise";
+"exercise.type" = "Exercise Type";
+"exercise.duration" = "Duration";
+"exercise.minutes" = "min";
+"exercise.caloriesBurned" = "Calories Burned";
+"exercise.intensity" = "Intensity";
+"exercise.intensity.low" = "Low";
+"exercise.intensity.medium" = "Medium";
+"exercise.intensity.high" = "High";
+"exercise.category.cardio" = "Cardio";
+"exercise.category.strength" = "Strength";
+"exercise.category.flexibility" = "Flexibility";
+"exercise.category.sports" = "Sports";
+"exercise.category.other" = "Other";
+"exercise.custom" = "Custom Exercise";
+"exercise.addCustom" = "Add Custom Exercise";
+
+// MARK: - Weight
+"weight.title" = "Weight Log";
+"weight.add" = "Log Weight";
+"weight.current" = "Current Weight";
+"weight.goal" = "Goal Weight";
+"weight.unit.kg" = "kg";
+"weight.unit.lb" = "lb";
+"weight.trend" = "Weight Trend";
+"weight.period.week" = "7 Days";
+"weight.period.month" = "30 Days";
+"weight.period.quarter" = "90 Days";
+"weight.bmi" = "BMI";
+"weight.bmi.underweight" = "Underweight";
+"weight.bmi.normal" = "Normal";
+"weight.bmi.overweight" = "Overweight";
+"weight.bmi.obese" = "Obese";
+"weight.change" = "Change";
+"weight.noData" = "No data available";
+
+// MARK: - Profile
+"profile.title" = "Profile";
+"profile.name" = "Name";
+"profile.age" = "Age";
+"profile.gender" = "Gender";
+"profile.gender.male" = "Male";
+"profile.gender.female" = "Female";
+"profile.gender.other" = "Other";
+"profile.height" = "Height";
+"profile.weight" = "Weight";
+"profile.activityLevel" = "Activity Level";
+"profile.activityLevel.sedentary" = "Sedentary";
+"profile.activityLevel.light" = "Lightly Active";
+"profile.activityLevel.moderate" = "Moderately Active";
+"profile.activityLevel.active" = "Active";
+"profile.activityLevel.veryActive" = "Very Active";
+"profile.goal" = "Goal";
+"profile.goal.lose" = "Lose Weight";
+"profile.goal.maintain" = "Maintain Weight";
+"profile.goal.gain" = "Gain Weight";
+"profile.dailyCalorieGoal" = "Daily Calorie Goal";
+"profile.tdee" = "Daily Energy Expenditure";
+"profile.bmr" = "Basal Metabolic Rate";
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.profile" = "Profile Settings";
+"settings.notifications" = "Notifications";
+"settings.language" = "Language";
+"settings.language.system" = "System Default";
+"settings.language.korean" = "한국어";
+"settings.language.english" = "English";
+"settings.theme" = "Theme";
+"settings.theme.system" = "System";
+"settings.theme.light" = "Light";
+"settings.theme.dark" = "Dark";
+"settings.units" = "Units";
+"settings.data" = "Data";
+"settings.export" = "Export Data";
+"settings.import" = "Import Data";
+"settings.deleteAll" = "Delete All Data";
+"settings.deleteAll.confirm" = "Are you sure you want to delete all data?";
+"settings.about" = "About";
+"settings.version" = "Version";
+"settings.privacy" = "Privacy Policy";
+"settings.terms" = "Terms of Service";
+"settings.contact" = "Contact Us";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Welcome to SimpleCare";
+"onboarding.subtitle" = "Start your AI-powered health journey";
+"onboarding.getStarted" = "Get Started";
+"onboarding.step.profile" = "Profile Setup";
+"onboarding.step.goal" = "Goal Setup";
+"onboarding.step.complete" = "Setup Complete";
+"onboarding.enterName" = "Enter your name";
+"onboarding.selectGender" = "Select your gender";
+"onboarding.enterBirthdate" = "Enter your birthdate";
+"onboarding.enterHeight" = "Enter your height";
+"onboarding.enterWeight" = "Enter your weight";
+"onboarding.selectActivityLevel" = "Select your activity level";
+"onboarding.selectGoal" = "Select your goal";
+"onboarding.enterTargetWeight" = "Enter your target weight";
+"onboarding.complete" = "Setup complete!";
+"onboarding.startUsing" = "Start Using";
+
+// MARK: - Reports
+"report.title" = "Reports";
+"report.weekly" = "Weekly Report";
+"report.monthly" = "Monthly Report";
+"report.summary" = "Summary";
+"report.avgCalories" = "Average Calories";
+"report.avgExercise" = "Average Exercise";
+"report.weightChange" = "Weight Change";
+"report.goalProgress" = "Goal Progress";
+"report.insights" = "Insights";
+
+// MARK: - Errors
+"error.network" = "Network error occurred";
+"error.server" = "Server error occurred";
+"error.unknown" = "An unknown error occurred";
+"error.invalidInput" = "Please check your input";
+"error.saveFailure" = "Failed to save";
+"error.loadFailure" = "Failed to load";
+"error.aiAnalysis" = "AI analysis failed";
+
+// MARK: - Units
+"unit.kcal" = "kcal";
+"unit.g" = "g";
+"unit.mg" = "mg";
+"unit.cm" = "cm";
+"unit.kg" = "kg";
+"unit.min" = "min";
+"unit.hour" = "hr";
+
+// MARK: - Splash
+"splash.subtitle" = "Record your healthy day";
+
+// MARK: - Onboarding Additional
+"onboarding.feature.weight" = "Weight & Goal Management";
+"onboarding.feature.exercise" = "Exercise Calorie Tracking";
+"onboarding.disclaimer" = "AI estimates are for reference only and not medical advice";
+"onboarding.step.basicInfo" = "Basic Info";
+"onboarding.step.basicInfo.subtitle" = "Tell us your name, age, and gender";
+"onboarding.step.bodyInfo" = "Body Info";
+"onboarding.step.bodyInfo.subtitle" = "Tell us your height and weight";
+"onboarding.step.activity" = "Activity Level";
+"onboarding.step.activity.subtitle" = "Select your usual activity level";
+"onboarding.step.goal.subtitle" = "Select your health goal";
+"onboarding.step.summary" = "Confirm Settings";
+"onboarding.step.summary.subtitle" = "Please confirm your information";
+"onboarding.field.name" = "Name";
+"onboarding.field.age" = "Age";
+"onboarding.field.age.unit" = "years";
+"onboarding.goal.lose.description" = "Lose weight healthily";
+"onboarding.goal.maintain.description" = "Maintain current weight";
+"onboarding.goal.gain.description" = "Gain weight healthily";
+
+// MARK: - Home Additional
+"home.weeklyReport" = "Weekly/Monthly Report";
+"home.reportDescription" = "Calories, exercise, and weight changes at a glance";
+"home.firstMealRecord" = "Record your first meal";
+"home.thisWeek" = "This Week";
+"home.weekday.mon" = "Mon";
+"home.weekday.tue" = "Tue";
+"home.weekday.wed" = "Wed";
+"home.weekday.thu" = "Thu";
+"home.weekday.fri" = "Fri";
+"home.weekday.sat" = "Sat";
+"home.weekday.sun" = "Sun";
+"home.streak.consecutive" = "%d days in a row";
+
+// MARK: - Meal Additional
+"meal.type" = "Meal Type";
+"meal.foodInput" = "Food Input";
+"meal.estimateResult" = "Estimate Result";
+"meal.aiEstimate" = "AI Estimate";
+"meal.memo" = "Memo (optional)";
+"meal.memoPlaceholder" = "Leave a note about your meal";
+"meal.addFood" = "Please add food";
+"meal.saving" = "Saving...";
+
+// MARK: - Exercise Additional
+"exercise.clear" = "Clear";
+"exercise.selected" = "Selected";
+"exercise.metReference" = "Reference: Walking 3.5, Running 8.0, Yoga 2.5";
+"exercise.metValue" = "MET Value";
+"exercise.name" = "Exercise Name";
+"exercise.namePlaceholder" = "e.g., Jump rope";
+
+// MARK: - Weight Additional
+"weight.todayWeight" = "Today's Weight";
+"weight.memo" = "Memo (optional)";
+"weight.stats" = "Statistics";
+"weight.highest" = "Highest";
+"weight.lowest" = "Lowest";
+"weight.average" = "Average";
+
+// MARK: - Report Additional
+"report.period" = "Period";
+"report.nutritionSummary" = "Nutrition Summary";
+"report.exerciseSummary" = "Exercise Summary";
+"report.weightSummary" = "Weight Changes";
+"report.dailyAverage" = "Daily Average";
+"report.totalExercise" = "Total Exercise";
+"report.exerciseCalories" = "Exercise Calories";
+"report.startWeight" = "Start";
+"report.endWeight" = "Current";
+"report.totalChange" = "Total Change";
+
+// MARK: - Errors Additional
+"error.weightNotFound" = "Weight record not found";
+"error.profileNotFound" = "Profile not found";
+"error.mealNotFound" = "Meal record not found";
+"error.exerciseNotFound" = "Exercise record not found";
+
+// MARK: - Calorie Status
+"calorieStatus.onTrack" = "You're staying within your target range!";
+"calorieStatus.under" = "You can eat a bit more";
+"calorieStatus.over" = "You've exceeded a bit today";
+"calorieStatus.noData" = "Record your first meal today!";
+
+// MARK: - Common Additional
+"common.date" = "Date";
+"common.kcal" = "kcal";
+
+// MARK: - Onboarding Extended
+"onboarding.feature.nutrition" = "AI-Based Nutrition Analysis";
+"onboarding.field.currentWeight" = "Current Weight";
+"onboarding.field.targetWeight" = "Target Weight";
+"onboarding.field.name.placeholder" = "Enter your name";
+"onboarding.summary.dailyCalories" = "Daily Calorie Goal";
+"onboarding.summary.bmr" = "BMR";
+"onboarding.summary.disclaimer" = "These values are for reference and may vary individually";
+
+// MARK: - Meal Extended
+"meal.recordTitle" = "Meal Record";
+"meal.addMeal" = "Record Meal";
+"meal.estimateDisclaimer" = "AI estimates are for reference and may differ from actual values";
+"meal.noFavorites" = "No saved favorites";
+"meal.noRecent" = "No records in the last 7 days";
+"meal.testFood" = "Test Food";
+
+// MARK: - Exercise Extended
+"exercise.recordTitle" = "Exercise Record";
+"exercise.addExercise" = "Record Exercise";
+"exercise.myCustomExercises" = "My Custom Exercises";
+"exercise.estimatedCalories" = "Estimated Calories Burned";
+"exercise.notes" = "Notes (optional)";
+"exercise.notesPlaceholder" = "Leave a note about your exercise";
+"exercise.info" = "Exercise Info";
+"exercise.category" = "Category";
+"exercise.exercise" = "Exercise";
+"exercise.hours" = "hours";
+
+// MARK: - Weight Extended
+"weight.period" = "Period";
+"weight.toGoal" = "To Goal";
+"weight.weeklyChange" = "Weekly Change";
+"weight.monthlyChange" = "Monthly Change";
+
+// MARK: - Profile Extended
+"profile.section.basic" = "Basic Info";
+"profile.section.body" = "Body Info";
+"profile.section.activityAndGoal" = "Activity & Goal";
+"profile.section.estimatedCalories" = "Estimated Calories";
+"profile.section.bmi" = "BMI (Body Mass Index)";
+"profile.currentWeight" = "Current Weight";
+"profile.targetWeight" = "Target Weight";
+"profile.bmiCategory" = "Category";
+"profile.age.format" = "Age: %d years";
+
+// MARK: - Settings Extended
+"settings.account" = "Account";
+"settings.appInfo" = "App Info";
+
+// MARK: - Report Extended
+"report.streak" = "Streak";
+"report.dailyCalories" = "Daily Calories";
+"report.goal" = "Goal";
+"report.totalTime" = "Total Time";
+"report.topExercises" = "Top Exercises";
+"report.achievementRate" = "Achievement Rate";
+"report.recordedDays" = "Recorded Days";
+"report.weeklyTrend" = "Weekly Calorie Trend";
+"report.macroAverage" = "Macro Average";
+
+// MARK: - Profile Activity Levels (Domain)
+"profile.activityLevel.sedentary" = "Sedentary (little to no exercise)";
+"profile.activityLevel.lightlyActive" = "Lightly Active (1-3 days/week)";
+"profile.activityLevel.moderatelyActive" = "Moderately Active (3-5 days/week)";
+"profile.activityLevel.veryActive" = "Very Active (6-7 days/week)";
+"profile.activityLevel.extraActive" = "Extra Active (athlete level)";
+
+// MARK: - Profile Goals (Domain)
+"profile.goal.weightLoss" = "Weight Loss";
+"profile.goal.weightGain" = "Weight Gain";
+"profile.goal.maintenance" = "Maintenance";
+
+// MARK: - Exercise Intensity (Domain)
+"exercise.intensity.light" = "Light";
+"exercise.intensity.moderate" = "Moderate";
+"exercise.intensity.vigorous" = "Vigorous";
+
+// MARK: - Exercise Types (Domain)
+"exercise.type.walking" = "Walking";
+"exercise.type.running" = "Running";
+"exercise.type.cycling" = "Cycling";
+"exercise.type.swimming" = "Swimming";
+"exercise.type.hiking" = "Hiking";
+"exercise.type.stairClimbing" = "Stair Climbing";
+"exercise.type.jumpRope" = "Jump Rope";
+"exercise.type.elliptical" = "Elliptical";
+"exercise.type.rowing" = "Rowing";
+"exercise.type.dancing" = "Dancing";
+"exercise.type.weightLifting" = "Weight Training";
+"exercise.type.bodyweightExercise" = "Bodyweight Exercise";
+"exercise.type.resistanceBands" = "Resistance Bands";
+"exercise.type.pilates" = "Pilates";
+"exercise.type.yoga" = "Yoga";
+"exercise.type.stretching" = "Stretching";
+"exercise.type.basketball" = "Basketball";
+"exercise.type.soccer" = "Soccer";
+"exercise.type.tennis" = "Tennis";
+"exercise.type.badminton" = "Badminton";
+"exercise.type.golf" = "Golf";
+"exercise.type.tableTennis" = "Table Tennis";
+"exercise.type.volleyball" = "Volleyball";
+"exercise.type.other" = "Other";
+
+// MARK: - Calorie Status (Domain)
+"calorieStatus.under" = "Under";
+"calorieStatus.onTrack" = "On Track";
+"calorieStatus.over" = "Over";

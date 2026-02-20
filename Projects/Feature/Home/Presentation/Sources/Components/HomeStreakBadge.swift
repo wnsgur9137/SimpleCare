@@ -17,7 +17,7 @@ struct HomeStreakBadge: View {
             HStack(spacing: 4) {
                 Text("\u{1F525}") // 🔥
 
-                Text("\(days)일 연속")
+                Text("home.streak.consecutive".localized(with: days))
                     .font(.caption)
                     .fontWeight(.semibold)
             }
@@ -25,7 +25,7 @@ struct HomeStreakBadge: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .glassEffect(.regular.tint(.scWarning), in: .capsule)
-            .accessibilityLabel("\(days)일 연속 기록 중")
+            .accessibilityLabel("home.streak.consecutive".localized(with: days))
         }
     }
 }

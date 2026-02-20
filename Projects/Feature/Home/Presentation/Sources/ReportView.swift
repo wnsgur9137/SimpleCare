@@ -43,11 +43,11 @@ public struct ReportView: View {
                 }
                 .padding()
             }
-            .navigationTitle("리포트")
+            .navigationTitle("report.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("닫기") {
+                    Button("common.close".localized) {
                         store.send(.dismissReport)
                     }
                 }
@@ -58,12 +58,12 @@ public struct ReportView: View {
     // MARK: - Report Type Picker
 
     private var reportTypePicker: some View {
-        Picker("리포트 타입", selection: Binding(
+        Picker("report.type".localized, selection: Binding(
             get: { store.reportType },
             set: { store.send(.selectReportType($0)) }
         )) {
             ForEach(HomeFeature.State.ReportType.allCases, id: \.self) { type in
-                Text(type.rawValue).tag(type)
+                Text(type == .weekly ? "report.weekly".localized : "report.monthly".localized).tag(type)
             }
         }
         .pickerStyle(.segmented)
@@ -104,16 +104,16 @@ public struct ReportView: View {
 
             HStack(spacing: 24) {
                 ReportStatBox(
-                    title: "평균 칼로리",
+                    title: "report.avgCalories".localized,
                     value: "\(report.avgDailyCalories)",
-                    unit: "kcal",
+                    unit: "meal.calories.unit".localized,
                     color: .scPrimary
                 )
 
                 ReportStatBox(
-                    title: "연속 기록",
+                    title: "report.streak".localized,
                     value: "\(report.streakDays)",
-                    unit: "일",
+                    unit: "report.days".localized,
                     color: .scSuccess
                 )
             }
@@ -125,11 +125,19 @@ public struct ReportView: View {
 
     private func dailyCaloriesChart(_ report: WeeklyReport) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("일별 칼로리")
+            Text("report.dailyCalories".localized)
                 .font(.headline)
 
             let maxCalories = max(report.dailyCalories.max() ?? 1, report.goalCalories)
-            let dayLabels = ["월", "화", "수", "목", "금", "토", "일"]
+            let dayLabels = [
+                "home.weekday.mon".localized,
+                "home.weekday.tue".localized,
+                "home.weekday.wed".localized,
+                "home.weekday.thu".localized,
+                "home.weekday.fri".localized,
+                "home.weekday.sat".localized,
+                "home.weekday.sun".localized
+            ]
 
             HStack(alignment: .bottom, spacing: 8) {
                 ForEach(0..<7, id: \.self) { index in
@@ -156,7 +164,7 @@ public struct ReportView: View {
                 Rectangle()
                     .fill(Color.scWarning)
                     .frame(width: 16, height: 2)
-                Text("목표: \(report.goalCalories) kcal")
+                Text("report.goal".localized + ": \(report.goalCalories) " + "meal.calories.unit".localized)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -167,28 +175,28 @@ public struct ReportView: View {
 
     private func exerciseSummarySection(minutes: Int, calories: Int, topExercises: [ExerciseStat]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("운동 요약")
+            Text("report.exerciseSummary".localized)
                 .font(.headline)
 
             HStack(spacing: 24) {
                 ReportStatBox(
-                    title: "총 시간",
+                    title: "report.totalTime".localized,
                     value: formatDuration(minutes),
                     unit: "",
                     color: .scExercise
                 )
 
                 ReportStatBox(
-                    title: "소모 칼로리",
+                    title: "report.exerciseCalories".localized,
                     value: "\(calories)",
-                    unit: "kcal",
+                    unit: "meal.calories.unit".localized,
                     color: .scExercise
                 )
             }
 
             if !topExercises.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("주요 운동")
+                    Text("report.topExercises".localized)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
@@ -197,7 +205,7 @@ public struct ReportView: View {
                             Text(stat.name)
                                 .font(.subheadline)
                             Spacer()
-                            Text("\(stat.count)회")
+                            Text("\(stat.count)" + "report.times".localized)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
@@ -216,11 +224,11 @@ public struct ReportView: View {
                 .font(.title2)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("체중 변화")
+                Text("report.weightChange".localized)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                Text(String(format: "%+.1f kg", change))
+                Text(String(format: "%+.1f ", change) + "weight.unit".localized)
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundStyle(change < 0 ? .scSuccess : change > 0 ? .scWarning : .primary)
@@ -234,7 +242,7 @@ public struct ReportView: View {
 
     private func goalAchievementSection(rate: Double) -> some View {
         VStack(spacing: 8) {
-            Text("목표 달성률")
+            Text("report.achievementRate".localized)
                 .font(.headline)
 
             ZStack {
@@ -275,11 +283,11 @@ public struct ReportView: View {
 
             // Exercise summary
             VStack(alignment: .leading, spacing: 12) {
-                Text("운동 요약")
+                Text("report.exerciseSummary".localized)
                     .font(.headline)
 
                 ReportStatBox(
-                    title: "총 운동 시간",
+                    title: "report.totalExerciseTime".localized,
                     value: formatDuration(report.totalExerciseMinutes),
                     unit: "",
                     color: .scExercise
@@ -307,16 +315,16 @@ public struct ReportView: View {
 
             HStack(spacing: 24) {
                 ReportStatBox(
-                    title: "평균 칼로리",
+                    title: "report.avgCalories".localized,
                     value: "\(report.avgDailyCalories)",
-                    unit: "kcal",
+                    unit: "meal.calories.unit".localized,
                     color: .scPrimary
                 )
 
                 ReportStatBox(
-                    title: "기록 일수",
+                    title: "report.recordedDays".localized,
                     value: "\(report.recordedDays)",
-                    unit: "일",
+                    unit: "report.days".localized,
                     color: .scSuccess
                 )
             }
@@ -328,11 +336,11 @@ public struct ReportView: View {
 
     private func weeklyCalorieTrendChart(_ report: MonthlyReport) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("주간 칼로리 추이")
+            Text("report.weeklyTrend".localized)
                 .font(.headline)
 
             if report.weeklyCalorieTrend.isEmpty {
-                Text("데이터 없음")
+                Text("weight.noData".localized)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
@@ -351,7 +359,7 @@ public struct ReportView: View {
                                 .fill(barColor(calories: report.weeklyCalorieTrend[index], goal: report.goalCalories))
                                 .frame(height: max(8, CGFloat(report.weeklyCalorieTrend[index]) / CGFloat(maxVal) * 100))
 
-                            Text("\(index + 1)주차")
+                            Text("\(index + 1)" + "report.week".localized)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -367,7 +375,7 @@ public struct ReportView: View {
 
     private func macroAverageSection(_ macro: MacroAverage) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("영양소 평균")
+            Text("report.macroAverage".localized)
                 .font(.headline)
 
             // Horizontal bar proportions
@@ -392,9 +400,9 @@ public struct ReportView: View {
             .frame(height: 12)
 
             HStack(spacing: 16) {
-                MacroLabel(name: "단백질", value: macro.protein, color: .scProtein)
-                MacroLabel(name: "탄수화물", value: macro.carbs, color: .scCarbs)
-                MacroLabel(name: "지방", value: macro.fat, color: .scFat)
+                MacroLabel(name: "meal.protein".localized, value: macro.protein, color: .scProtein)
+                MacroLabel(name: "meal.carbs".localized, value: macro.carbs, color: .scCarbs)
+                MacroLabel(name: "meal.fat".localized, value: macro.fat, color: .scFat)
             }
         }
         .padding()
@@ -433,14 +441,14 @@ public struct ReportView: View {
 
     private func formatDuration(_ minutes: Int) -> String {
         if minutes < 60 {
-            return "\(minutes)분"
+            return "\(minutes)" + "exercise.minutes".localized
         }
         let hours = minutes / 60
         let mins = minutes % 60
         if mins == 0 {
-            return "\(hours)시간"
+            return "\(hours)" + "exercise.hours".localized
         }
-        return "\(hours)시간 \(mins)분"
+        return "\(hours)" + "exercise.hours".localized + " \(mins)" + "exercise.minutes".localized
     }
 
     private func weekDateRange(from startDate: Date) -> String {

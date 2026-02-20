@@ -15,11 +15,21 @@ struct HomeWeeklyTrendView: View {
     let selectedDayIndex: Int
     let onDayTap: (Int) -> Void
 
-    private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+    private var weekdays: [String] {
+        [
+            "home.weekday.mon".localized,
+            "home.weekday.tue".localized,
+            "home.weekday.wed".localized,
+            "home.weekday.thu".localized,
+            "home.weekday.fri".localized,
+            "home.weekday.sat".localized,
+            "home.weekday.sun".localized
+        ]
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("이번 주")
+            Text("home.thisWeek".localized)
                 .font(.headline)
 
             HStack(spacing: 0) {

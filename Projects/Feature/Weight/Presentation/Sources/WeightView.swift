@@ -35,11 +35,11 @@ public struct WeightView: View {
                 }
                 .padding()
             }
-            .navigationTitle("체중 관리")
+            .navigationTitle("weight.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("common.save".localized) {
                         store.send(.saveWeight)
                     }
                     .disabled(store.isLoading)
@@ -53,20 +53,20 @@ public struct WeightView: View {
 
     private var weightInputSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("오늘의 체중")
+            Text("weight.todayWeight".localized)
                 .font(.headline)
 
             HStack {
                 Text(String(format: "%.1f", store.newWeightKg))
                     .font(.system(size: 48, weight: .bold))
-                Text("kg")
+                Text("unit.kg".localized)
                     .font(.title2)
                     .foregroundStyle(.secondary)
             }
 
             Slider(value: $store.newWeightKg, in: 30...200, step: 0.1)
 
-            TextField("메모 (선택)", text: $store.notes)
+            TextField("weight.memo".localized, text: $store.notes)
                 .textFieldStyle(.roundedBorder)
         }
         .padding()
@@ -76,12 +76,12 @@ public struct WeightView: View {
     private func trendChartSection(trend: WeightTrend) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("체중 변화")
+                Text("weight.trend".localized)
                     .font(.headline)
 
                 Spacer()
 
-                Picker("기간", selection: Binding(
+                Picker("weight.period".localized, selection: Binding(
                     get: { store.selectedPeriod },
                     set: { store.send(.selectPeriod($0)) }
                 )) {
@@ -96,23 +96,23 @@ public struct WeightView: View {
             Chart {
                 ForEach(trend.records) { record in
                     LineMark(
-                        x: .value("날짜", record.date),
-                        y: .value("체중", record.weightKg)
+                        x: .value("common.date".localized, record.date),
+                        y: .value("weight.current".localized, record.weightKg)
                     )
                     .foregroundStyle(.scPrimary)
 
                     PointMark(
-                        x: .value("날짜", record.date),
-                        y: .value("체중", record.weightKg)
+                        x: .value("common.date".localized, record.date),
+                        y: .value("weight.current".localized, record.weightKg)
                     )
                     .foregroundStyle(.scPrimary)
                 }
 
-                RuleMark(y: .value("목표", trend.targetWeight))
+                RuleMark(y: .value("weight.goal".localized, trend.targetWeight))
                     .foregroundStyle(.scSuccess)
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 3]))
                     .annotation(position: .top, alignment: .trailing) {
-                        Text("목표 \(String(format: "%.1f", trend.targetWeight))kg")
+                        Text("\("weight.goal".localized) \(String(format: "%.1f", trend.targetWeight))\("unit.kg".localized)")
                             .font(.caption2)
                             .foregroundStyle(.scSuccess)
                     }
@@ -128,38 +128,38 @@ public struct WeightView: View {
 
     private func statisticsSection(trend: WeightTrend) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("통계")
+            Text("weight.stats".localized)
                 .font(.headline)
 
             HStack(spacing: 24) {
                 StatBox(
-                    title: "목표까지",
+                    title: "weight.toGoal".localized,
                     value: String(format: "%.1f", abs(trend.remainingToGoal)),
-                    unit: "kg",
+                    unit: "unit.kg".localized,
                     color: trend.remainingToGoal > 0 ? .scWarning : .scSuccess
                 )
 
                 if let weekly = trend.weeklyChange {
                     StatBox(
-                        title: "주간 변화",
+                        title: "weight.weeklyChange".localized,
                         value: String(format: "%+.1f", weekly),
-                        unit: "kg",
+                        unit: "unit.kg".localized,
                         color: weekly < 0 ? .scSuccess : .scWarning
                     )
                 }
 
                 if let monthly = trend.monthlyChange {
                     StatBox(
-                        title: "월간 변화",
+                        title: "weight.monthlyChange".localized,
                         value: String(format: "%+.1f", monthly),
-                        unit: "kg",
+                        unit: "unit.kg".localized,
                         color: monthly < 0 ? .scSuccess : .scWarning
                     )
                 }
 
                 if store.heightCm > 0 {
                     StatBox(
-                        title: "BMI",
+                        title: "weight.bmi".localized,
                         value: String(format: "%.1f", store.currentBMI),
                         unit: bmiCategoryLabel,
                         color: bmiColor
@@ -172,7 +172,7 @@ public struct WeightView: View {
     }
 
     private var bmiCategoryLabel: String {
-        .bmiCategoryLabel(for: store.currentBMI)
+        Color.bmiCategoryLabel(for: store.currentBMI)
     }
 
     private var bmiColor: Color {

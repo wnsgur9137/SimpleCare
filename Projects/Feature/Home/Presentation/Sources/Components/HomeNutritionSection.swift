@@ -15,26 +15,26 @@ struct HomeNutritionSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("영양소")
+            Text("meal.nutrition".localized)
                 .font(.headline)
 
             VStack(spacing: 16) {
                 HomeNutritionProgressRow(
-                    label: "단백질",
+                    label: "meal.protein".localized,
                     current: summary.totalProtein,
                     goal: summary.proteinGoal,
                     color: .scProtein
                 )
 
                 HomeNutritionProgressRow(
-                    label: "탄수화물",
+                    label: "meal.carbs".localized,
                     current: summary.totalCarbs,
                     goal: summary.carbsGoal,
                     color: .scCarbs
                 )
 
                 HomeNutritionProgressRow(
-                    label: "지방",
+                    label: "meal.fat".localized,
                     current: summary.totalFat,
                     goal: summary.fatGoal,
                     color: .scFat

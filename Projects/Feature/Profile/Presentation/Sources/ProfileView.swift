@@ -22,16 +22,16 @@ public struct ProfileView: View {
         NavigationStack {
             Form {
                 // 기본 정보 섹션
-                Section("기본 정보") {
-                    TextField("이름", text: $store.name)
+                Section("profile.section.basic".localized) {
+                    TextField("profile.name".localized, text: $store.name)
 
                     Stepper(
-                        "나이: \(store.age)세",
+                        String(format: "profile.age.format".localized, store.age),
                         value: $store.age,
                         in: 10...120
                     )
 
-                    Picker("성별", selection: $store.biologicalSex) {
+                    Picker("profile.gender".localized, selection: $store.biologicalSex) {
                         ForEach(BiologicalSex.allCases, id: \.self) { sex in
                             Text(sex.displayName).tag(sex)
                         }
@@ -39,38 +39,38 @@ public struct ProfileView: View {
                 }
 
                 // 신체 정보 섹션
-                Section("신체 정보") {
+                Section("profile.section.body".localized) {
                     HStack {
-                        Text("키")
+                        Text("profile.height".localized)
                         Spacer()
-                        Text(String(format: "%.1f cm", store.heightCm))
+                        Text(String(format: "%.1f %@", store.heightCm, "unit.cm".localized))
                     }
                     Slider(value: $store.heightCm, in: 100...250, step: 0.5)
 
                     HStack {
-                        Text("현재 체중")
+                        Text("profile.currentWeight".localized)
                         Spacer()
-                        Text(String(format: "%.1f kg", store.currentWeightKg))
+                        Text(String(format: "%.1f %@", store.currentWeightKg, "unit.kg".localized))
                     }
                     Slider(value: $store.currentWeightKg, in: 30...200, step: 0.1)
 
                     HStack {
-                        Text("목표 체중")
+                        Text("profile.targetWeight".localized)
                         Spacer()
-                        Text(String(format: "%.1f kg", store.targetWeightKg))
+                        Text(String(format: "%.1f %@", store.targetWeightKg, "unit.kg".localized))
                     }
                     Slider(value: $store.targetWeightKg, in: 30...200, step: 0.1)
                 }
 
                 // 활동 및 목표 섹션
-                Section("활동 및 목표") {
-                    Picker("활동 수준", selection: $store.activityLevel) {
+                Section("profile.section.activityAndGoal".localized) {
+                    Picker("profile.activityLevel".localized, selection: $store.activityLevel) {
                         ForEach(ActivityLevel.allCases, id: \.self) { level in
                             Text(level.displayName).tag(level)
                         }
                     }
 
-                    Picker("목표", selection: $store.goalType) {
+                    Picker("profile.goal".localized, selection: $store.goalType) {
                         ForEach(GoalType.allCases, id: \.self) { goal in
                             Label(goal.displayName, systemImage: goal.icon).tag(goal)
                         }
@@ -78,34 +78,34 @@ public struct ProfileView: View {
                 }
 
                 // 계산된 정보 섹션
-                Section("예상 칼로리") {
+                Section("profile.section.estimatedCalories".localized) {
                     HStack {
-                        Text("기초대사량 (BMR)")
+                        Text("profile.bmr".localized)
                         Spacer()
-                        Text("\(Int(store.calculatedBMR)) kcal")
+                        Text("\(Int(store.calculatedBMR)) \("unit.kcal".localized)")
                             .foregroundStyle(.secondary)
                     }
 
                     HStack {
-                        Text("일일 소비량 (TDEE)")
+                        Text("profile.tdee".localized)
                         Spacer()
-                        Text("\(Int(store.calculatedTDEE)) kcal")
+                        Text("\(Int(store.calculatedTDEE)) \("unit.kcal".localized)")
                             .foregroundStyle(.secondary)
                     }
 
                     HStack {
-                        Text("일일 목표 칼로리")
+                        Text("profile.dailyCalorieGoal".localized)
                         Spacer()
-                        Text("\(store.recommendedCalories) kcal")
+                        Text("\(store.recommendedCalories) \("unit.kcal".localized)")
                             .foregroundStyle(.scPrimary)
                             .fontWeight(.semibold)
                     }
                 }
 
                 // BMI 섹션
-                Section("BMI (체질량 지수)") {
+                Section("profile.section.bmi".localized) {
                     HStack {
-                        Text("BMI")
+                        Text("profile.bmi".localized)
                         Spacer()
                         Text(String(format: "%.1f", store.calculatedBMI))
                             .font(.title3)
@@ -114,7 +114,7 @@ public struct ProfileView: View {
                     }
 
                     HStack {
-                        Text("범위")
+                        Text("profile.bmiCategory".localized)
                         Spacer()
                         Text(store.bmiCategory)
                             .foregroundStyle(bmiColor)
@@ -124,15 +124,15 @@ public struct ProfileView: View {
 
                 // 면책 조항
                 Section {
-                    Text("이 정보는 추정치이며 실제 값과 다를 수 있습니다. 정확한 건강 조언은 전문가와 상담하세요.")
+                    Text("onboarding.disclaimer".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("프로필")
+            .navigationTitle("profile.title".localized)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("common.save".localized) {
                         store.send(.saveProfile)
                     }
                 }

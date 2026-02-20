@@ -1,0 +1,41 @@
+/*
+  Localizable.strings (English)
+  MealDomain
+*/
+
+// MARK: - Meal
+"meal.title" = "Meal Log";
+"meal.add" = "Add Meal";
+"meal.breakfast" = "Breakfast";
+"meal.lunch" = "Lunch";
+"meal.dinner" = "Dinner";
+"meal.snack" = "Snack";
+"meal.inputPlaceholder" = "What did you eat?";
+"meal.analyze" = "Analyze";
+"meal.analyzing" = "Analyzing...";
+"meal.nutrition" = "Nutrition";
+"meal.calories" = "Calories";
+"meal.protein" = "Protein";
+"meal.carbs" = "Carbs";
+"meal.fat" = "Fat";
+"meal.fiber" = "Fiber";
+"meal.sodium" = "Sodium";
+"meal.favorites" = "Favorites";
+"meal.recent" = "Recent";
+"meal.addToFavorites" = "Add to Favorites";
+"meal.removeFromFavorites" = "Remove from Favorites";
+"meal.healthTip" = "Health Tip";
+"meal.type" = "Meal Type";
+"meal.foodInput" = "Food Input";
+"meal.estimateResult" = "Estimate Result";
+"meal.aiEstimate" = "AI Estimate";
+"meal.memo" = "Memo (optional)";
+"meal.memoPlaceholder" = "Leave a note about your meal";
+"meal.addFood" = "Please add food";
+"meal.saving" = "Saving...";
+"meal.recordTitle" = "Meal Record";
+"meal.addMeal" = "Record Meal";
+"meal.estimateDisclaimer" = "AI estimates are for reference and may differ from actual values";
+"meal.noFavorites" = "No saved favorites";
+"meal.noRecent" = "No records in the last 7 days";
+"meal.testFood" = "Test Food";

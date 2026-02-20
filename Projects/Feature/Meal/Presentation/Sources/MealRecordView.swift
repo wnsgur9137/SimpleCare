@@ -45,14 +45,14 @@ public struct MealRecordView: View {
                 }
                 .padding()
             }
-            .navigationTitle("식사 기록")
+            .navigationTitle("meal.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("취소") { dismiss() }
+                    Button("common.cancel".localized) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("common.save".localized) {
                         store.send(.saveMeal)
                     }
                     .disabled(!store.canSave)
@@ -63,8 +63,8 @@ public struct MealRecordView: View {
                     loadingOverlay
                 }
             }
-            .alert("오류", isPresented: .constant(store.viewState.isError)) {
-                Button("확인") { store.send(.dismissError) }
+            .alert("common.error".localized, isPresented: .constant(store.viewState.isError)) {
+                Button("common.confirm".localized) { store.send(.dismissError) }
             } message: {
                 if case .error(let message) = store.viewState {
                     Text(message)
@@ -82,10 +82,10 @@ public struct MealRecordView: View {
 
     private var mealTypeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("식사 유형")
+            Text("meal.type".localized)
                 .font(.headline)
 
-            Picker("식사 유형", selection: $store.mealType) {
+            Picker("meal.type".localized, selection: $store.mealType) {
                 ForEach(MealType.allCases, id: \.self) { type in
                     Label(type.displayName, systemImage: type.icon)
                         .tag(type)
@@ -97,12 +97,12 @@ public struct MealRecordView: View {
 
     private var inputSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("음식 입력")
+            Text("meal.foodInput".localized)
                 .font(.headline)
 
             // 텍스트 입력
             HStack {
-                TextField("예: 김치찌개 1인분, 공기밥", text: $store.foodDescription, axis: .vertical)
+                TextField("meal.inputPlaceholder".localized, text: $store.foodDescription, axis: .vertical)
                     .lineLimit(2...4)
                     .textFieldStyle(.roundedBorder)
 
@@ -122,20 +122,20 @@ public struct MealRecordView: View {
     private var estimatedFoodsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("추정 결과")
+                Text("meal.estimateResult".localized)
                     .font(.headline)
                 Spacer()
-                Text("AI 추정치")
+                Text("meal.aiEstimate".localized)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
             // 총합
             HStack(spacing: 16) {
-                NutritionBadge(label: "칼로리", value: "\(store.totalCalories)", unit: "kcal", color: .scCalories)
-                NutritionBadge(label: "단백질", value: String(format: "%.1f", store.totalProtein), unit: "g", color: .scProtein)
-                NutritionBadge(label: "탄수화물", value: String(format: "%.1f", store.totalCarbs), unit: "g", color: .scCarbs)
-                NutritionBadge(label: "지방", value: String(format: "%.1f", store.totalFat), unit: "g", color: .scFat)
+                NutritionBadge(label: "meal.calories".localized, value: "\(store.totalCalories)", unit: "kcal", color: .scCalories)
+                NutritionBadge(label: "meal.protein".localized, value: String(format: "%.1f", store.totalProtein), unit: "g", color: .scProtein)
+                NutritionBadge(label: "meal.carbs".localized, value: String(format: "%.1f", store.totalCarbs), unit: "g", color: .scCarbs)
+                NutritionBadge(label: "meal.fat".localized, value: String(format: "%.1f", store.totalFat), unit: "g", color: .scFat)
             }
 
             // 개별 음식
@@ -147,7 +147,7 @@ public struct MealRecordView: View {
                 )
             }
 
-            Text("AI 추정치는 참고용이며 실제와 다를 수 있습니다")
+            Text("meal.estimateDisclaimer".localized)
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -163,7 +163,7 @@ public struct MealRecordView: View {
                 HStack {
                     Image(systemName: "star.fill")
                         .foregroundStyle(.yellow)
-                    Text("즐겨찾기")
+                    Text("meal.favorites".localized)
                         .font(.headline)
                     Spacer()
                     Image(systemName: store.showFavorites ? "chevron.up" : "chevron.down")
@@ -174,7 +174,7 @@ public struct MealRecordView: View {
 
             if store.showFavorites {
                 if store.favorites.isEmpty {
-                    Text("저장된 즐겨찾기가 없습니다")
+                    Text("meal.noFavorites".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
@@ -202,7 +202,7 @@ public struct MealRecordView: View {
                 HStack {
                     Image(systemName: "clock.arrow.circlepath")
                         .foregroundStyle(.scPrimary)
-                    Text("최근 기록")
+                    Text("meal.recent".localized)
                         .font(.headline)
                     Spacer()
                     Image(systemName: store.showRecentMeals ? "chevron.up" : "chevron.down")
@@ -213,7 +213,7 @@ public struct MealRecordView: View {
 
             if store.showRecentMeals {
                 if store.recentMeals.isEmpty {
-                    Text("최근 7일간 기록이 없습니다")
+                    Text("meal.noRecent".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
@@ -233,10 +233,10 @@ public struct MealRecordView: View {
 
     private var notesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("메모 (선택)")
+            Text("meal.memo".localized)
                 .font(.headline)
 
-            TextField("메모를 입력하세요", text: $store.notes, axis: .vertical)
+            TextField("meal.memoPlaceholder".localized, text: $store.notes, axis: .vertical)
                 .lineLimit(2...4)
                 .textFieldStyle(.roundedBorder)
         }
@@ -250,7 +250,7 @@ public struct MealRecordView: View {
             VStack(spacing: 16) {
                 ProgressView()
                     .scaleEffect(1.5)
-                Text(store.viewState == .estimating ? "AI가 분석 중..." : "저장 중...")
+                Text(store.viewState == .estimating ? "meal.analyzing".localized : "meal.saving".localized)
                     .foregroundStyle(.white)
             }
             .padding(32)
