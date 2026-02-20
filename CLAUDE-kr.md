@@ -15,7 +15,7 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 
 | Phase | 상태 | 설명 |
 |-------|------|------|
-| Phase L: 다국어 지원 | 🔴 최우선순위 | 한국어(기본), 영어 지원 |
+| Phase L: 다국어 지원 | ✅ 완료 | 한국어(기본), 영어 지원 + 런타임 언어 변경 |
 | Phase 0: DIContainer-Client 연결 | ✅ 완료 | 모든 Feature DIContainer에 실제 UseCase 연결 |
 | Phase 1: AI 기능 활성화 | 🟡 진행 중 | 텍스트 Mock 완료 (PR #29), 이미지 Phase 5로 이동 |
 | Phase 1.5: 알려진 Gap 수정 | ✅ 완료 | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |

@@ -124,24 +124,25 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 | 0.4 | ExerciseDIContainer - Client 연결 | ✅ 완료 |
 | 0.5 | ProfileDIContainer - Client 연결 | ✅ 완료 |
 
-### Phase L: 다국어 지원 🔴 (최우선순위)
+### ~~Phase L: 다국어 지원~~ ✅ 완료
 
 > 한국어(기본), 영어 지원 - 글로벌 출시 필수 요건
 
 | 순서 | 작업 | 예상 복잡도 | 상태 |
 |------|------|------------|------|
-| L.1 | Localizable.strings 기반 구축 | 중간 | 🔴 대기 |
-| L.2 | 기존 하드코딩 문자열 → Localizable.strings 이동 | 높음 | 🔴 대기 |
-| L.3 | 시스템 언어 자동 감지 및 적용 | 낮음 | 🔴 대기 |
-| L.4 | Settings 런타임 언어 변경 옵션 | 중간 | 🔴 대기 |
+| L.1 | Localizable.strings 기반 구축 | 중간 | ✅ 완료 |
+| L.2 | 기존 하드코딩 문자열 → Localizable.strings 이동 | 높음 | ✅ 완료 |
+| L.3 | 시스템 언어 자동 감지 및 적용 | 낮음 | ✅ 완료 |
+| L.4 | Settings 런타임 언어 변경 옵션 | 중간 | ✅ 완료 |
 
-**세부 요구사항**:
-- 지원 언어: 한국어 (ko, 기본값), 영어 (en)
-- 아이폰 설정 언어에 따라 앱 기본 언어 자동 적용
-- Settings 화면에서 런타임 중 언어 변경 가능
-- 변경 시 앱 전체 UI 즉시 반영 (재시작 불필요 권장)
+**구현 내역**:
+- 모듈별 Localizable.strings 분리 (9개 Feature 모듈)
+- LocalizationBundleRegistry: 모듈 Bundle 관리
+- LocalizationManager: 런타임 언어 변경 지원
+- Settings 화면에서 언어 선택 UI (시스템/한국어/English)
+- 앱 재시작 없이 UI 즉시 반영
 
-**완료 조건**:
+**완료 조건** ✅:
 - 모든 사용자 표시 문자열이 Localizable.strings로 관리됨
 - 한국어/영어 전환 시 UI 전체 반영
 
@@ -249,19 +250,14 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ## 7. 즉시 실행 권장 작업
 
-### 최고 ROI 작업: Phase L (다국어 지원) - 최우선순위
+### 최고 ROI 작업: Phase 1.3 (실제 API 연동)
 
-**우선순위 조정**:
-- **Phase L (다국어 지원)**: 글로벌 출시 필수 요건으로 최우선 배치
-- 이미지/음성 관련 기능은 Phase 5로 최후순위 배치
+**완료된 우선순위 작업**:
+- ~~**Phase L (다국어 지원)**~~: ✅ 완료
 
 **권장 순서**:
-1. **Phase L: 다국어 지원 (최우선순위)**
-   - L.1: Localizable.strings 기반 구축
-   - L.2: 기존 하드코딩 문자열 이동
-   - L.3: 시스템 언어 자동 감지
-   - L.4: Settings 런타임 언어 변경
-2. Phase 1.3: 실제 OpenAI API 연동
+1. ~~**Phase L: 다국어 지원**~~ ✅ 완료
+2. **Phase 1.3: 실제 OpenAI API 연동** ← 다음 작업
 3. Phase 4.1-4.2: HealthKit 연동
 4. Phase 4.3: 알림/리마인더 설정
 5. Phase 4.4-4.6: 데이터 내보내기/삭제/테마
@@ -285,7 +281,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [ ] Phase 1 이미지 분석 + 실제 API 연동 (→ Phase 5로 이동)
 - [x] Phase 1.5 완료 (Gap 수정)
 - [x] Phase 2 완료 (홈 화면 개선)
-- [ ] Phase L 완료 (다국어 지원)
+- [x] Phase L 완료 (다국어 지원)
 
 ### v1.2 - PRD §7.3
 - [x] Phase 3 완료 (즐겨찾기/최근 기록/커스텀 운동/리포트/BMI)
