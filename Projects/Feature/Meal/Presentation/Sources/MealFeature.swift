@@ -227,7 +227,7 @@ public struct MealFeature {
 
             case .saveMeal:
                 guard !state.estimatedFoods.isEmpty else {
-                    state.viewState = .error("음식을 추가해주세요")
+                    state.viewState = .error("meal.addFood".localized)
                     return .none
                 }
 
@@ -454,7 +454,7 @@ extension MealClient: DependencyKey {
                 NutritionEstimation(
                     foods: [
                         EstimatedFoodItem(
-                            name: "테스트 음식",
+                            name: "meal.testFood".localized,
                             servingSize: 100,
                             servingUnit: "g",
                             calories: 300,
