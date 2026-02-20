@@ -98,13 +98,6 @@ public final class ThemeManager: ObservableObject {
     public func setTheme(_ theme: AppTheme) {
         guard theme != currentTheme else { return }
         currentTheme = theme
-
-        // Post notification for views that need to update
-        NotificationCenter.default.post(
-            name: .themeDidChange,
-            object: nil,
-            userInfo: ["theme": theme]
-        )
     }
 
     /// Get the effective color scheme (resolves system to actual scheme)
@@ -116,31 +109,5 @@ public final class ThemeManager: ObservableObject {
 
     private func saveThemePreference() {
         UserDefaults.standard.set(currentTheme.rawValue, forKey: ThemeConstants.userDefaultsKey)
-    }
-}
-
-// MARK: - Notification Extension
-
-public extension Notification.Name {
-    static let themeDidChange = Notification.Name("SimpleCare.themeDidChange")
-}
-
-// MARK: - View Extension for Theme
-
-public extension View {
-    /// Applies the current app theme's color scheme
-    func applyAppTheme() -> some View {
-        self.modifier(AppThemeModifier())
-    }
-}
-
-// MARK: - App Theme Modifier
-
-struct AppThemeModifier: ViewModifier {
-    @ObservedObject private var themeManager = ThemeManager.shared
-
-    func body(content: Content) -> some View {
-        content
-            .preferredColorScheme(themeManager.effectiveColorScheme)
     }
 }
