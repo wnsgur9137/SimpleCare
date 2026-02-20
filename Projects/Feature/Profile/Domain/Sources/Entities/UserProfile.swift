@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 /// 사용자 프로필 엔티티
 public struct UserProfile: Equatable, Sendable {
@@ -122,13 +123,13 @@ public struct UserProfile: Equatable, Sendable {
         let value = bmi
         switch value {
         case ..<18.5:
-            return "저체중"
+            return "weight.bmi.underweight".localized
         case 18.5..<25.0:
-            return "정상"
+            return "weight.bmi.normal".localized
         case 25.0..<30.0:
-            return "과체중"
+            return "weight.bmi.overweight".localized
         default:
-            return "비만"
+            return "weight.bmi.obese".localized
         }
     }
 }
@@ -140,8 +141,8 @@ public enum BiologicalSex: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .male: return "남성"
-        case .female: return "여성"
+        case .male: return "profile.gender.male".localized
+        case .female: return "profile.gender.female".localized
         }
     }
 }
@@ -156,11 +157,11 @@ public enum ActivityLevel: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .sedentary: return "거의 운동 안 함"
-        case .lightlyActive: return "가벼운 활동 (주 1-3회)"
-        case .moderatelyActive: return "보통 활동 (주 3-5회)"
-        case .veryActive: return "활발한 활동 (주 6-7회)"
-        case .extraActive: return "매우 활발 (운동선수급)"
+        case .sedentary: return "profile.activityLevel.sedentary".localized
+        case .lightlyActive: return "profile.activityLevel.lightlyActive".localized
+        case .moderatelyActive: return "profile.activityLevel.moderatelyActive".localized
+        case .veryActive: return "profile.activityLevel.veryActive".localized
+        case .extraActive: return "profile.activityLevel.extraActive".localized
         }
     }
 
@@ -183,9 +184,9 @@ public enum GoalType: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .weightLoss: return "체중 감량"
-        case .weightGain: return "체중 증가"
-        case .maintenance: return "체중 유지"
+        case .weightLoss: return "profile.goal.weightLoss".localized
+        case .weightGain: return "profile.goal.weightGain".localized
+        case .maintenance: return "profile.goal.maintenance".localized
         }
     }
 
