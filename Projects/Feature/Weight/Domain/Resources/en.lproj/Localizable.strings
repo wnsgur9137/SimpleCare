@@ -1,0 +1,33 @@
+/*
+  Localizable.strings (English)
+  WeightDomain
+*/
+
+// MARK: - Weight
+"weight.title" = "Weight Log";
+"weight.add" = "Log Weight";
+"weight.current" = "Current Weight";
+"weight.goal" = "Goal Weight";
+"weight.unit.kg" = "kg";
+"weight.unit.lb" = "lb";
+"weight.trend" = "Weight Trend";
+"weight.period.week" = "7 Days";
+"weight.period.month" = "30 Days";
+"weight.period.quarter" = "90 Days";
+"weight.bmi" = "BMI";
+"weight.bmi.underweight" = "Underweight";
+"weight.bmi.normal" = "Normal";
+"weight.bmi.overweight" = "Overweight";
+"weight.bmi.obese" = "Obese";
+"weight.change" = "Change";
+"weight.noData" = "No data available";
+"weight.todayWeight" = "Today's Weight";
+"weight.memo" = "Memo (optional)";
+"weight.stats" = "Statistics";
+"weight.highest" = "Highest";
+"weight.lowest" = "Lowest";
+"weight.average" = "Average";
+"weight.period" = "Period";
+"weight.toGoal" = "To Goal";
+"weight.weeklyChange" = "Weekly Change";
+"weight.monthlyChange" = "Monthly Change";

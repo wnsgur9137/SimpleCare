@@ -1,0 +1,33 @@
+/*
+  Localizable.strings (Korean)
+  WeightDomain
+*/
+
+// MARK: - Weight
+"weight.title" = "체중 기록";
+"weight.add" = "체중 기록";
+"weight.current" = "현재 체중";
+"weight.goal" = "목표 체중";
+"weight.unit.kg" = "kg";
+"weight.unit.lb" = "lb";
+"weight.trend" = "체중 추세";
+"weight.period.week" = "7일";
+"weight.period.month" = "30일";
+"weight.period.quarter" = "90일";
+"weight.bmi" = "BMI";
+"weight.bmi.underweight" = "저체중";
+"weight.bmi.normal" = "정상";
+"weight.bmi.overweight" = "과체중";
+"weight.bmi.obese" = "비만";
+"weight.change" = "변화";
+"weight.noData" = "데이터가 없습니다";
+"weight.todayWeight" = "오늘의 체중";
+"weight.memo" = "메모 (선택)";
+"weight.stats" = "통계";
+"weight.highest" = "최고";
+"weight.lowest" = "최저";
+"weight.average" = "평균";
+"weight.period" = "기간";
+"weight.toGoal" = "목표까지";
+"weight.weeklyChange" = "주간 변화";
+"weight.monthlyChange" = "월간 변화";
