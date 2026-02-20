@@ -15,6 +15,7 @@ import Weight
 import Exercise
 import Profile
 import BasePresentation
+import BaseDomain
 
 public final class TabCoordinator: ObservableObject, Coordinator {
     private let diContainer: TabDIContainer
@@ -146,32 +147,64 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     public func makeSettings() -> some View {
         return NavigationStack {
-            List {
-                Section("settings.account".localized) {
-                    NavigationLink {
-                        let container = diContainer.makeProfileDIContainer()
-                        ProfileCoordinator(dependencies: container).start()
+            SettingsContentView(diContainer: diContainer)
+        }
+    }
+}
+
+// MARK: - Settings Content View
+
+struct SettingsContentView: View {
+    let diContainer: TabDIContainer
+    @ObservedObject private var localizationManager = LocalizationManager.shared
+    @State private var refreshID = UUID()
+
+    var body: some View {
+        List {
+            Section("settings.account".localized) {
+                NavigationLink {
+                    let container = diContainer.makeProfileDIContainer()
+                    ProfileCoordinator(dependencies: container).start()
+                } label: {
+                    Label("settings.profile".localized, systemImage: "person.circle")
+                }
+            }
+
+            Section("settings.language".localized) {
+                ForEach(AppLanguage.allCases) { language in
+                    Button {
+                        localizationManager.setLanguage(language)
+                        refreshID = UUID()
                     } label: {
-                        Label("settings.profile".localized, systemImage: "person.circle")
+                        HStack {
+                            Text(language.displayName)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if localizationManager.currentLanguage == language {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.blue)
+                            }
+                        }
                     }
                 }
+            }
 
-                Section("settings.appInfo".localized) {
-                    HStack {
-                        Text("settings.version".localized)
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Section {
-                    Text("onboarding.disclaimer".localized)
-                        .font(.caption)
+            Section("settings.appInfo".localized) {
+                HStack {
+                    Text("settings.version".localized)
+                    Spacer()
+                    Text("1.0.0")
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("settings.title".localized)
+
+            Section {
+                Text("onboarding.disclaimer".localized)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
+        .navigationTitle("settings.title".localized)
+        .id(refreshID)
     }
 }

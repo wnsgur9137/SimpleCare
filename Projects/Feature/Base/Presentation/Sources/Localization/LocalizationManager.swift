@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import BaseDomain
 
 // MARK: - Supported Languages
 
@@ -161,45 +162,6 @@ public final class LocalizationManager: ObservableObject {
 
 public extension Notification.Name {
     static let languageDidChange = Notification.Name("SimpleCare.languageDidChange")
-}
-
-// MARK: - String Extension for Localization
-
-public extension String {
-    /// Returns localized string using current language settings
-    /// Thread-safe: directly reads from UserDefaults and Bundle without MainActor dependency
-    var localized: String {
-        let languageCode = Self.resolveCurrentLanguageCode()
-
-        if let path = Bundle.main.path(forResource: languageCode, ofType: "lproj"),
-           let bundle = Bundle(path: path) {
-            return bundle.localizedString(forKey: self, value: self, table: nil)
-        }
-        return Bundle.main.localizedString(forKey: self, value: self, table: nil)
-    }
-
-    /// Returns localized string with format arguments
-    func localized(with arguments: CVarArg...) -> String {
-        String(format: self.localized, arguments: arguments)
-    }
-
-    /// Resolves the current language code from UserDefaults
-    private static func resolveCurrentLanguageCode() -> String {
-        let userDefaultsKey = "SimpleCare.AppLanguage"
-
-        if let savedLanguage = UserDefaults.standard.string(forKey: userDefaultsKey),
-           let language = AppLanguage(rawValue: savedLanguage) {
-            switch language {
-            case .system:
-                return Locale.current.language.languageCode?.identifier ?? "ko"
-            case .korean:
-                return "ko"
-            case .english:
-                return "en"
-            }
-        }
-        return Locale.current.language.languageCode?.identifier ?? "ko"
-    }
 }
 
 // MARK: - View Extension for Localization
