@@ -157,6 +157,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 struct SettingsContentView: View {
     let diContainer: TabDIContainer
     @ObservedObject private var localizationManager = LocalizationManager.shared
+    @ObservedObject private var themeManager = ThemeManager.shared
     @State private var refreshID = UUID()
 
     var body: some View {
@@ -167,6 +168,27 @@ struct SettingsContentView: View {
                     ProfileCoordinator(dependencies: container).start()
                 } label: {
                     Label("settings.profile".localized, systemImage: "person.circle")
+                }
+            }
+
+            Section("settings.theme".localized) {
+                ForEach(AppTheme.allCases) { theme in
+                    Button {
+                        themeManager.setTheme(theme)
+                    } label: {
+                        HStack {
+                            Image(systemName: theme.icon)
+                                .foregroundStyle(themeIconColor(for: theme))
+                                .frame(width: 24)
+                            Text(theme.displayName)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if themeManager.currentTheme == theme {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.blue)
+                            }
+                        }
+                    }
                 }
             }
 
@@ -206,5 +228,16 @@ struct SettingsContentView: View {
         }
         .navigationTitle("settings.title".localized)
         .id(refreshID)
+    }
+
+    private func themeIconColor(for theme: AppTheme) -> Color {
+        switch theme {
+        case .system:
+            return .primary
+        case .light:
+            return .orange
+        case .dark:
+            return .indigo
+        }
     }
 }
