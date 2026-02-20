@@ -1,0 +1,68 @@
+/*
+  Localizable.strings (Korean)
+  ExerciseDomain
+*/
+
+// MARK: - Exercise
+"exercise.title" = "운동 기록";
+"exercise.add" = "운동 추가";
+"exercise.type" = "운동 종류";
+"exercise.duration" = "운동 시간";
+"exercise.minutes" = "분";
+"exercise.hours" = "시간";
+"exercise.caloriesBurned" = "소모 칼로리";
+"exercise.intensity" = "강도";
+"exercise.intensity.low" = "낮음";
+"exercise.intensity.medium" = "보통";
+"exercise.intensity.high" = "높음";
+"exercise.intensity.light" = "가벼운";
+"exercise.intensity.moderate" = "보통";
+"exercise.intensity.vigorous" = "격렬한";
+"exercise.category.cardio" = "유산소";
+"exercise.category.strength" = "근력";
+"exercise.category.flexibility" = "유연성";
+"exercise.category.sports" = "스포츠";
+"exercise.category.other" = "기타";
+"exercise.custom" = "커스텀 운동";
+"exercise.addCustom" = "커스텀 운동 추가";
+"exercise.clear" = "해제";
+"exercise.selected" = "선택됨";
+"exercise.metReference" = "참고: 걷기 3.5, 달리기 8.0, 요가 2.5";
+"exercise.metValue" = "MET 값";
+"exercise.name" = "운동 이름";
+"exercise.namePlaceholder" = "예: 줄넘기";
+"exercise.recordTitle" = "운동 기록";
+"exercise.addExercise" = "운동 기록하기";
+"exercise.myCustomExercises" = "내 커스텀 운동";
+"exercise.estimatedCalories" = "예상 소모 칼로리";
+"exercise.notes" = "메모 (선택)";
+"exercise.notesPlaceholder" = "운동에 대한 메모를 남겨보세요";
+"exercise.info" = "운동 정보";
+"exercise.category" = "카테고리";
+"exercise.exercise" = "운동";
+
+// MARK: - Exercise Types
+"exercise.type.walking" = "걷기";
+"exercise.type.running" = "달리기";
+"exercise.type.cycling" = "자전거";
+"exercise.type.swimming" = "수영";
+"exercise.type.hiking" = "등산";
+"exercise.type.stairClimbing" = "계단 오르기";
+"exercise.type.jumpRope" = "줄넘기";
+"exercise.type.elliptical" = "일립티컬";
+"exercise.type.rowing" = "로잉";
+"exercise.type.dancing" = "춤";
+"exercise.type.weightLifting" = "웨이트 트레이닝";
+"exercise.type.bodyweightExercise" = "맨몸 운동";
+"exercise.type.resistanceBands" = "밴드 운동";
+"exercise.type.pilates" = "필라테스";
+"exercise.type.yoga" = "요가";
+"exercise.type.stretching" = "스트레칭";
+"exercise.type.basketball" = "농구";
+"exercise.type.soccer" = "축구";
+"exercise.type.tennis" = "테니스";
+"exercise.type.badminton" = "배드민턴";
+"exercise.type.golf" = "골프";
+"exercise.type.tableTennis" = "탁구";
+"exercise.type.volleyball" = "배구";
+"exercise.type.other" = "기타";

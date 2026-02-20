@@ -1,0 +1,68 @@
+/*
+  Localizable.strings (English)
+  ExerciseDomain
+*/
+
+// MARK: - Exercise
+"exercise.title" = "Exercise Log";
+"exercise.add" = "Add Exercise";
+"exercise.type" = "Exercise Type";
+"exercise.duration" = "Duration";
+"exercise.minutes" = "min";
+"exercise.hours" = "hours";
+"exercise.caloriesBurned" = "Calories Burned";
+"exercise.intensity" = "Intensity";
+"exercise.intensity.low" = "Low";
+"exercise.intensity.medium" = "Medium";
+"exercise.intensity.high" = "High";
+"exercise.intensity.light" = "Light";
+"exercise.intensity.moderate" = "Moderate";
+"exercise.intensity.vigorous" = "Vigorous";
+"exercise.category.cardio" = "Cardio";
+"exercise.category.strength" = "Strength";
+"exercise.category.flexibility" = "Flexibility";
+"exercise.category.sports" = "Sports";
+"exercise.category.other" = "Other";
+"exercise.custom" = "Custom Exercise";
+"exercise.addCustom" = "Add Custom Exercise";
+"exercise.clear" = "Clear";
+"exercise.selected" = "Selected";
+"exercise.metReference" = "Reference: Walking 3.5, Running 8.0, Yoga 2.5";
+"exercise.metValue" = "MET Value";
+"exercise.name" = "Exercise Name";
+"exercise.namePlaceholder" = "e.g., Jump rope";
+"exercise.recordTitle" = "Exercise Record";
+"exercise.addExercise" = "Record Exercise";
+"exercise.myCustomExercises" = "My Custom Exercises";
+"exercise.estimatedCalories" = "Estimated Calories Burned";
+"exercise.notes" = "Notes (optional)";
+"exercise.notesPlaceholder" = "Leave a note about your exercise";
+"exercise.info" = "Exercise Info";
+"exercise.category" = "Category";
+"exercise.exercise" = "Exercise";
+
+// MARK: - Exercise Types
+"exercise.type.walking" = "Walking";
+"exercise.type.running" = "Running";
+"exercise.type.cycling" = "Cycling";
+"exercise.type.swimming" = "Swimming";
+"exercise.type.hiking" = "Hiking";
+"exercise.type.stairClimbing" = "Stair Climbing";
+"exercise.type.jumpRope" = "Jump Rope";
+"exercise.type.elliptical" = "Elliptical";
+"exercise.type.rowing" = "Rowing";
+"exercise.type.dancing" = "Dancing";
+"exercise.type.weightLifting" = "Weight Training";
+"exercise.type.bodyweightExercise" = "Bodyweight Exercise";
+"exercise.type.resistanceBands" = "Resistance Bands";
+"exercise.type.pilates" = "Pilates";
+"exercise.type.yoga" = "Yoga";
+"exercise.type.stretching" = "Stretching";
+"exercise.type.basketball" = "Basketball";
+"exercise.type.soccer" = "Soccer";
+"exercise.type.tennis" = "Tennis";
+"exercise.type.badminton" = "Badminton";
+"exercise.type.golf" = "Golf";
+"exercise.type.tableTennis" = "Table Tennis";
+"exercise.type.volleyball" = "Volleyball";
+"exercise.type.other" = "Other";

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 /// 운동 강도
 public enum ExerciseIntensity: String, Codable, CaseIterable, Sendable {
@@ -15,9 +16,9 @@ public enum ExerciseIntensity: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .light: return "가벼운"
-        case .moderate: return "보통"
-        case .vigorous: return "격렬한"
+        case .light: return "exercise.intensity.light".localized
+        case .moderate: return "exercise.intensity.moderate".localized
+        case .vigorous: return "exercise.intensity.vigorous".localized
         }
     }
 }
@@ -32,11 +33,11 @@ public enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .cardio: return "유산소"
-        case .strength: return "근력"
-        case .flexibility: return "유연성"
-        case .sports: return "스포츠"
-        case .other: return "기타"
+        case .cardio: return "exercise.category.cardio".localized
+        case .strength: return "exercise.category.strength".localized
+        case .flexibility: return "exercise.category.flexibility".localized
+        case .sports: return "exercise.category.sports".localized
+        case .other: return "exercise.category.other".localized
         }
     }
 
@@ -71,30 +72,30 @@ public enum ExerciseType: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .walking: return "걷기"
-        case .running: return "달리기"
-        case .cycling: return "자전거"
-        case .swimming: return "수영"
-        case .hiking: return "등산"
-        case .stairClimbing: return "계단 오르기"
-        case .jumpRope: return "줄넘기"
-        case .elliptical: return "일립티컬"
-        case .rowing: return "로잉"
-        case .dancing: return "춤"
-        case .weightLifting: return "웨이트 트레이닝"
-        case .bodyweightExercise: return "맨몸 운동"
-        case .resistanceBands: return "밴드 운동"
-        case .pilates: return "필라테스"
-        case .yoga: return "요가"
-        case .stretching: return "스트레칭"
-        case .basketball: return "농구"
-        case .soccer: return "축구"
-        case .tennis: return "테니스"
-        case .badminton: return "배드민턴"
-        case .golf: return "골프"
-        case .tableTennis: return "탁구"
-        case .volleyball: return "배구"
-        case .other: return "기타"
+        case .walking: return "exercise.type.walking".localized
+        case .running: return "exercise.type.running".localized
+        case .cycling: return "exercise.type.cycling".localized
+        case .swimming: return "exercise.type.swimming".localized
+        case .hiking: return "exercise.type.hiking".localized
+        case .stairClimbing: return "exercise.type.stairClimbing".localized
+        case .jumpRope: return "exercise.type.jumpRope".localized
+        case .elliptical: return "exercise.type.elliptical".localized
+        case .rowing: return "exercise.type.rowing".localized
+        case .dancing: return "exercise.type.dancing".localized
+        case .weightLifting: return "exercise.type.weightLifting".localized
+        case .bodyweightExercise: return "exercise.type.bodyweightExercise".localized
+        case .resistanceBands: return "exercise.type.resistanceBands".localized
+        case .pilates: return "exercise.type.pilates".localized
+        case .yoga: return "exercise.type.yoga".localized
+        case .stretching: return "exercise.type.stretching".localized
+        case .basketball: return "exercise.type.basketball".localized
+        case .soccer: return "exercise.type.soccer".localized
+        case .tennis: return "exercise.type.tennis".localized
+        case .badminton: return "exercise.type.badminton".localized
+        case .golf: return "exercise.type.golf".localized
+        case .tableTennis: return "exercise.type.tableTennis".localized
+        case .volleyball: return "exercise.type.volleyball".localized
+        case .other: return "exercise.type.other".localized
         }
     }
 
@@ -247,15 +248,17 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
     }
 
     public var durationDisplayString: String {
+        let minUnit = "exercise.minutes".localized
+        let hourUnit = "exercise.hours".localized
         if durationMinutes < 60 {
-            return "\(durationMinutes)분"
+            return "\(durationMinutes)\(minUnit)"
         } else {
             let hours = durationMinutes / 60
             let mins = durationMinutes % 60
             if mins == 0 {
-                return "\(hours)시간"
+                return "\(hours)\(hourUnit)"
             } else {
-                return "\(hours)시간 \(mins)분"
+                return "\(hours)\(hourUnit) \(mins)\(minUnit)"
             }
         }
     }

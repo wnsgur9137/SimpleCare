@@ -22,15 +22,15 @@ public struct ExerciseRecordView: View {
         NavigationStack {
             Form {
                 // 운동 종류 선택
-                Section("운동 종류") {
-                    Picker("카테고리", selection: .constant(store.exerciseType.category)) {
+                Section("exercise.type".localized) {
+                    Picker("exercise.category".localized, selection: .constant(store.exerciseType.category)) {
                         ForEach(ExerciseCategory.allCases, id: \.self) { category in
                             Label(category.displayName, systemImage: category.icon)
                                 .tag(category)
                         }
                     }
 
-                    Picker("운동", selection: $store.exerciseType) {
+                    Picker("exercise.exercise".localized, selection: $store.exerciseType) {
                         ForEach(ExerciseType.allCases.filter { $0.category == store.exerciseType.category }, id: \.self) { type in
                             Text(type.displayName).tag(type)
                         }
@@ -43,7 +43,7 @@ public struct ExerciseRecordView: View {
                             Text(selected.name)
                                 .fontWeight(.medium)
                             Spacer()
-                            Button("해제") {
+                            Button("exercise.clear".localized) {
                                 store.send(.clearCustomSelection)
                             }
                             .font(.caption)
@@ -53,7 +53,7 @@ public struct ExerciseRecordView: View {
 
                 // 커스텀 운동
                 if !store.customExercises.isEmpty {
-                    Section("내 커스텀 운동") {
+                    Section("exercise.myCustomExercises".localized) {
                         ForEach(store.customExercises) { exercise in
                             HStack {
                                 Button {
@@ -84,7 +84,7 @@ public struct ExerciseRecordView: View {
                                 Button(role: .destructive) {
                                     store.send(.deleteCustomExercise(exercise))
                                 } label: {
-                                    Label("삭제", systemImage: "trash")
+                                    Label("common.delete".localized, systemImage: "trash")
                                 }
                             }
                         }
@@ -95,13 +95,13 @@ public struct ExerciseRecordView: View {
                     Button {
                         store.send(.showAddCustomExercise)
                     } label: {
-                        Label("커스텀 운동 추가", systemImage: "plus.circle")
+                        Label("exercise.addCustom".localized, systemImage: "plus.circle")
                     }
                 }
 
                 // 강도 선택
-                Section("강도") {
-                    Picker("강도", selection: $store.intensity) {
+                Section("exercise.intensity".localized) {
+                    Picker("exercise.intensity".localized, selection: $store.intensity) {
                         ForEach(ExerciseIntensity.allCases, id: \.self) { intensity in
                             Text(intensity.displayName).tag(intensity)
                         }
@@ -110,12 +110,12 @@ public struct ExerciseRecordView: View {
                 }
 
                 // 시간 입력
-                Section("운동 시간") {
-                    Stepper("\(store.durationMinutes)분", value: $store.durationMinutes, in: 5...300, step: 5)
+                Section("exercise.duration".localized) {
+                    Stepper("\(store.durationMinutes)\("exercise.minutes".localized)", value: $store.durationMinutes, in: 5...300, step: 5)
 
                     HStack {
                         ForEach([15, 30, 45, 60], id: \.self) { minutes in
-                            Button("\(minutes)분") {
+                            Button("\(minutes)\("exercise.minutes".localized)") {
                                 store.durationMinutes = minutes
                             }
                             .buttonStyle(.bordered)
@@ -125,14 +125,14 @@ public struct ExerciseRecordView: View {
                 }
 
                 // 예상 소모 칼로리
-                Section("예상 소모 칼로리") {
+                Section("exercise.estimatedCalories".localized) {
                     HStack {
                         Image(systemName: "flame.fill")
                             .foregroundStyle(.scExercise)
                         Text("\(store.estimatedCalories)")
                             .font(.title)
                             .fontWeight(.bold)
-                        Text("kcal")
+                        Text("common.kcal".localized)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -140,19 +140,19 @@ public struct ExerciseRecordView: View {
                 }
 
                 // 메모
-                Section("메모 (선택)") {
-                    TextField("운동 메모", text: $store.notes, axis: .vertical)
+                Section("exercise.notes".localized) {
+                    TextField("exercise.notesPlaceholder".localized, text: $store.notes, axis: .vertical)
                         .lineLimit(2...4)
                 }
             }
-            .navigationTitle("운동 기록")
+            .navigationTitle("exercise.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("취소") { dismiss() }
+                    Button("common.cancel".localized) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("common.save".localized) {
                         store.send(.saveExercise)
                     }
                     .disabled(store.isLoading)
@@ -170,10 +170,10 @@ public struct ExerciseRecordView: View {
     private var addCustomExerciseSheet: some View {
         NavigationStack {
             Form {
-                Section("운동 정보") {
-                    TextField("운동 이름", text: $store.customExerciseName)
+                Section("exercise.info".localized) {
+                    TextField("exercise.name".localized, text: $store.customExerciseName)
 
-                    Picker("카테고리", selection: $store.customExerciseCategory) {
+                    Picker("exercise.category".localized, selection: $store.customExerciseCategory) {
                         ForEach(ExerciseCategory.allCases, id: \.self) { category in
                             Label(category.displayName, systemImage: category.icon)
                                 .tag(category)
@@ -181,7 +181,7 @@ public struct ExerciseRecordView: View {
                     }
                 }
 
-                Section("MET 값") {
+                Section("exercise.metValue".localized) {
                     HStack {
                         Text("MET")
                         Spacer()
@@ -190,21 +190,21 @@ public struct ExerciseRecordView: View {
                     }
                     Slider(value: $store.customExerciseMET, in: 1.0...15.0, step: 0.5)
 
-                    Text("참고: 걷기 3.5, 달리기 8.0, 요가 2.5")
+                    Text("exercise.metReference".localized)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("커스텀 운동 추가")
+            .navigationTitle("exercise.addCustom".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("취소") {
+                    Button("common.cancel".localized) {
                         store.send(.dismissAddCustomExercise)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("common.save".localized) {
                         store.send(.saveCustomExercise)
                     }
                     .disabled(store.customExerciseName.isEmpty)
