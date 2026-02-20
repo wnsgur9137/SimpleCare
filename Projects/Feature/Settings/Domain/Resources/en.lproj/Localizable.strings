@@ -1,0 +1,30 @@
+/*
+  Localizable.strings (English)
+  SettingsDomain
+*/
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.profile" = "Profile Settings";
+"settings.notifications" = "Notifications";
+"settings.language" = "Language";
+"settings.language.system" = "System Default";
+"settings.language.korean" = "한국어";
+"settings.language.english" = "English";
+"settings.theme" = "Theme";
+"settings.theme.system" = "System";
+"settings.theme.light" = "Light";
+"settings.theme.dark" = "Dark";
+"settings.units" = "Units";
+"settings.data" = "Data";
+"settings.export" = "Export Data";
+"settings.import" = "Import Data";
+"settings.deleteAll" = "Delete All Data";
+"settings.deleteAll.confirm" = "Are you sure you want to delete all data?";
+"settings.about" = "About";
+"settings.version" = "Version";
+"settings.privacy" = "Privacy Policy";
+"settings.terms" = "Terms of Service";
+"settings.contact" = "Contact Us";
+"settings.account" = "Account";
+"settings.appInfo" = "App Info";
