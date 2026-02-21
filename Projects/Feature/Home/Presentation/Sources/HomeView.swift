@@ -50,7 +50,7 @@ public struct HomeView: View {
                         HomeWeeklyTrendView(
                             weeklyStatus: store.weeklyStatus,
                             selectedDayIndex: store.selectedDayIndex,
-                            onDayTap: { store.send(.selectWeekDay($0)) }
+                            onDayTap: { _ in }
                         )
 
                         // 리포트 진입점
