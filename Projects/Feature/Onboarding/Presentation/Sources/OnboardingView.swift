@@ -21,9 +21,19 @@ public struct OnboardingView: View {
     public var body: some View {
         VStack(spacing: 0) {
             // Progress bar
-            ProgressView(value: store.currentStep.progress)
-                .tint(.scPrimary)
-                .padding(.horizontal)
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(.quaternary)
+                        .frame(height: 4)
+                    Capsule()
+                        .fill(Color.scPrimary)
+                        .frame(width: geometry.size.width * store.currentStep.progress, height: 4)
+                }
+            }
+            .frame(height: 4)
+            .padding(.horizontal)
+            .animation(.easeInOut(duration: 0.3), value: store.currentStep)
 
             // Step content
             TabView(selection: $store.currentStep.sending(\.goToStep)) {
@@ -49,21 +59,33 @@ public struct OnboardingView: View {
             .animation(.easeInOut, value: store.currentStep)
 
             // Navigation buttons
-            HStack(spacing: 16) {
+            HStack(spacing: 12) {
                 if !store.currentStep.isFirst {
-                    Button("common.back".localized) {
+                    Button {
                         store.send(.previousStep)
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.body.weight(.semibold))
+                            .frame(width: 48, height: 48)
+                            .glassCard(cornerRadius: 12)
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.plain)
                 }
 
-                Spacer()
-
-                Button(store.currentStep.isLast ? "onboarding.startUsing".localized : "common.next".localized) {
+                Button {
                     store.send(.nextStep)
+                } label: {
+                    Text(store.currentStep.isLast ? "onboarding.startUsing".localized : "common.next".localized)
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 48)
+                        .background(Color.scPrimary)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.plain)
                 .disabled(!store.canProceed)
+                .opacity(store.canProceed ? 1.0 : 0.5)
             }
             .padding()
         }
