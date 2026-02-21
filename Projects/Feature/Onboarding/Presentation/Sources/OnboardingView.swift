@@ -437,6 +437,7 @@ struct GoalOptionCard: View {
                 }
             }
             .padding()
+            .contentShape(Rectangle())
             .glassCard(tint: isSelected ? .scPrimary : nil, cornerRadius: 16)
         }
         .buttonStyle(.plain)
@@ -503,6 +504,7 @@ struct ActivityLevelRow: View {
                 }
             }
             .padding()
+            .contentShape(Rectangle())
             .glassCard(tint: isSelected ? .scPrimary : nil, cornerRadius: 12)
         }
         .buttonStyle(.plain)
