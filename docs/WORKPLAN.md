@@ -1,7 +1,7 @@
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
-> 최종 수정일: 2026-02-19
+> 최종 수정일: 2026-02-21
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -201,12 +201,20 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | PRD 참조 | 예상 복잡도 | 상태 |
 |------|------|----------|------------|------|
-| 4.1 | HealthKitInfra 구현 | §4.3 | 높음 | 🔴 대기 |
+| 4.1 | HealthKitInfra 구현 | §4.3 | 높음 | ✅ 완료 |
 | 4.2 | 걸음수/활동 칼로리 연동 | §4.3 | 중간 | 🔴 대기 |
 | 4.3 | 알림/리마인더 설정 | §3.2.8 | 중간 | 🔴 대기 |
 | 4.4 | 데이터 내보내기 (CSV/JSON) | §3.2.7 | 중간 | 🔴 대기 |
 | 4.5 | 데이터 삭제/초기화 | §3.2.7 | 낮음 | 🔴 대기 |
 | 4.6 | 테마 설정 (다크/라이트) | §3.2.8 | 낮음 | ✅ 완료 |
+
+**4.1 구현 내역** (PR [#34](https://github.com/wnsgur9137/SimpleCare/pull/34)):
+- HealthKitInfra 모듈 생성 (Tuist framework)
+- HealthKitDataType: stepCount, activeEnergy, bodyMass 타입 정의
+- HealthKitManager: 권한 요청, 걸음수/활동 칼로리 조회, 체중 읽기/쓰기
+- HealthKitManagerProtocol 추출 (DI/테스트 가능성)
+- SimpleCare.entitlements HealthKit capability 추가
+- NSHealthShareUsageDescription, NSHealthUpdateUsageDescription Info.plist 키 추가
 
 **4.6 구현 내역**:
 - ThemeManager: 테마 상태 관리 (system/light/dark)
@@ -263,11 +271,12 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 **권장 순서**:
 1. ~~**Phase L: 다국어 지원**~~ ✅ 완료
-2. **Phase 1.3: 실제 OpenAI API 연동** ← 다음 작업
-3. Phase 4.1-4.2: HealthKit 연동
-4. Phase 4.3: 알림/리마인더 설정
-5. Phase 4.4-4.6: 데이터 내보내기/삭제/테마
-6. Phase 5: 이미지/음성 기능 (최후순위)
+2. ~~**Phase 4.1: HealthKitInfra 구현**~~ ✅ 완료
+3. **Phase 4.2: 걸음수/활동 칼로리 연동** ← 다음 작업
+4. **Phase 1.3: 실제 OpenAI API 연동**
+5. Phase 4.3: 알림/리마인더 설정
+6. Phase 4.4-4.5: 데이터 내보내기/삭제
+7. Phase 5: 이미지/음성 기능 (최후순위)
 
 **Phase 1 완료 시 사용자 경험**:
 - Home에서 개인화된 AI 건강 코멘트 확인
@@ -291,11 +300,12 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### v1.2 - PRD §7.3
 - [x] Phase 3 완료 (즐겨찾기/최근 기록/커스텀 운동/리포트/BMI)
-- [ ] Phase 4.1-4.2 완료 (HealthKit)
+- [x] Phase 4.1 완료 (HealthKitInfra)
+- [ ] Phase 4.2 완료 (HealthKit Feature 연동)
 - [ ] Phase 4.3 완료 (알림)
 
 ### v1.3
-- [ ] Phase 4.4-4.6 완료 (데이터 내보내기/삭제/테마)
+- [ ] Phase 4.4-4.5 완료 (데이터 내보내기/삭제)
 
 ### v2.0 - PRD §7.4
 - [ ] Phase 5 완료 (이미지/음성 기능)
@@ -330,6 +340,8 @@ Projects/Feature/Profile/Presentation/Sources/ProfileFeature.swift
 Projects/Infrastructure/AIServiceInfra/Sources/Services/DailyInsightService.swift
 Projects/Infrastructure/AIServiceInfra/Sources/Services/NutritionEstimationService.swift
 Projects/Infrastructure/StorageInfra/Sources/StorageContainer.swift
+Projects/Infrastructure/HealthKitInfra/Sources/HealthKitManager.swift
+Projects/Infrastructure/HealthKitInfra/Sources/HealthKitDataType.swift
 ```
 
 ### Tab Coordinator
@@ -339,5 +351,5 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 
 ---
 
-*문서 버전: 3.1*
-*최종 수정일: 2026-02-19*
+*문서 버전: 3.2*
+*최종 수정일: 2026-02-21*
