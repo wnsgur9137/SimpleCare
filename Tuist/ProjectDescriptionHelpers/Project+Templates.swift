@@ -44,7 +44,9 @@ public let defaultInfoPlist: [String: Plist.Value] = [
         "UIInterfaceOrientationPortraitUpsideDown",
         "UIInterfaceOrientationLandscapeLeft",
         "UIInterfaceOrientationLandscapeRight"
-    ]
+    ],
+    "NSHealthShareUsageDescription": "건강 데이터(걸음수, 활동 칼로리, 체중)를 읽어 건강 관리에 활용합니다.",
+    "NSHealthUpdateUsageDescription": "체중 기록을 건강 앱과 동기화합니다.",
 ]
 
 // MARK: - Default Settings
