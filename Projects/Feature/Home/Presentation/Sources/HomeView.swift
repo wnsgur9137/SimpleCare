@@ -65,10 +65,17 @@ public struct HomeView: View {
             .navigationTitle("tab.home".localized)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        store.send(.settingsButtonTapped)
-                    } label: {
-                        Image(systemName: "gearshape")
+                    HStack(spacing: 12) {
+                        Button {
+                            store.send(.profileButtonTapped)
+                        } label: {
+                            Image(systemName: "person.circle")
+                        }
+                        Button {
+                            store.send(.settingsButtonTapped)
+                        } label: {
+                            Image(systemName: "gearshape")
+                        }
                     }
                 }
             }

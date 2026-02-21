@@ -21,12 +21,17 @@ import BaseDomain
 public final class TabCoordinator: ObservableObject, Coordinator {
     let diContainer: TabDIContainer
 
+    // MARK: - Child Coordinators
+
+    private var homeCoordinator: HomeCoordinator?
+
     // MARK: - Published Properties
 
     @Published public var selectedTab: AppTab = .home
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
     @Published public var showSettings: Bool = false
+    @Published public var showProfile: Bool = false
     @Published public var isReady: Bool = false
 
     public init(diContainer: TabDIContainer) {
@@ -79,6 +84,10 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         coordinator.onNavigateToSettings = { [weak self] in
             self?.showSettings = true
         }
+        coordinator.onNavigateToProfile = { [weak self] in
+            self?.showProfile = true
+        }
+        self.homeCoordinator = coordinator
         return coordinator.start()
     }
 
@@ -153,95 +162,5 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     @MainActor
     public func makeCalendar() -> some View {
         return CalendarCoordinator().start()
-    }
-}
-
-// MARK: - Settings Content View
-
-struct SettingsContentView: View {
-    let diContainer: TabDIContainer
-    @ObservedObject private var localizationManager = LocalizationManager.shared
-    @ObservedObject private var themeManager = ThemeManager.shared
-    @State private var refreshID = UUID()
-
-    var body: some View {
-        List {
-            Section("settings.account".localized) {
-                NavigationLink {
-                    let container = diContainer.makeProfileDIContainer()
-                    ProfileCoordinator(dependencies: container).start()
-                } label: {
-                    Label("settings.profile".localized, systemImage: "person.circle")
-                }
-            }
-
-            Section("settings.theme".localized) {
-                ForEach(AppTheme.allCases) { theme in
-                    Button {
-                        themeManager.setTheme(theme)
-                    } label: {
-                        HStack {
-                            Image(systemName: theme.icon)
-                                .foregroundStyle(themeIconColor(for: theme))
-                                .frame(width: 24)
-                            Text(theme.displayName)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            if themeManager.currentTheme == theme {
-                                Image(systemName: "checkmark")
-                                    .foregroundStyle(.blue)
-                            }
-                        }
-                    }
-                }
-            }
-
-            Section("settings.language".localized) {
-                ForEach(AppLanguage.allCases) { language in
-                    Button {
-                        localizationManager.setLanguage(language)
-                        refreshID = UUID()
-                    } label: {
-                        HStack {
-                            Text(language.displayName)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            if localizationManager.currentLanguage == language {
-                                Image(systemName: "checkmark")
-                                    .foregroundStyle(.blue)
-                            }
-                        }
-                    }
-                }
-            }
-
-            Section("settings.appInfo".localized) {
-                HStack {
-                    Text("settings.version".localized)
-                    Spacer()
-                    Text("1.0.0")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Section {
-                Text("onboarding.disclaimer".localized)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .navigationTitle("settings.title".localized)
-        .id(refreshID)
-    }
-
-    private func themeIconColor(for theme: AppTheme) -> Color {
-        switch theme {
-        case .system:
-            return .primary
-        case .light:
-            return .orange
-        case .dark:
-            return .indigo
-        }
     }
 }

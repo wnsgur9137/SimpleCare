@@ -9,6 +9,8 @@
 import SwiftUI
 import BasePresentation
 import BaseDomain
+import Profile
+import Settings
 
 public struct MainTabView: View {
     @ObservedObject var coordinator: TabCoordinator
@@ -61,7 +63,13 @@ public struct MainTabView: View {
                 .tabBarMinimizeBehavior(.onScrollDown)
                 .sheet(isPresented: $coordinator.showSettings) {
                     NavigationStack {
-                        SettingsContentView(diContainer: coordinator.diContainer)
+                        SettingsCoordinator().start()
+                    }
+                }
+                .sheet(isPresented: $coordinator.showProfile) {
+                    NavigationStack {
+                        let container = coordinator.diContainer.makeProfileDIContainer()
+                        ProfileCoordinator(dependencies: container).start()
                     }
                 }
             } else {
