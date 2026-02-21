@@ -57,12 +57,26 @@ struct BasicInfoStepView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("profile.gender".localized)
                         .font(.headline)
-                    Picker("profile.gender".localized, selection: $store.biologicalSex) {
+                    HStack(spacing: 12) {
                         ForEach(BiologicalSex.allCases, id: \.self) { sex in
-                            Text(sex.displayName).tag(sex)
+                            Button {
+                                store.biologicalSex = sex
+                            } label: {
+                                VStack(spacing: 8) {
+                                    Image(systemName: sex == .male ? "figure.stand" : "figure.stand.dress")
+                                        .font(.title)
+                                    Text(sex.displayName)
+                                        .font(.subheadline)
+                                        .fontWeight(store.biologicalSex == sex ? .semibold : .regular)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .contentShape(Rectangle())
+                                .glassCard(tint: store.biologicalSex == sex ? .scPrimary : nil, cornerRadius: 12)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
-                    .pickerStyle(.segmented)
                 }
 
                 Spacer()

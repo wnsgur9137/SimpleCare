@@ -70,7 +70,7 @@ struct BodyInfoStepView: View {
                     decimalBinding: targetWeightDecimal,
                     wholeRange: 30...150,
                     unit: "unit.kg".localized,
-                    tint: .scSuccess
+                    tint: .scSecondary
                 )
 
                 Spacer()
