@@ -17,6 +17,7 @@ let project: Project = .project(
         .Project.Feature.Onboarding,
         .Project.Feature.Home,
         .Project.Feature.Settings,
+        .Project.Feature.CalendarFeature,
         // Healthcare Features
         .Project.Feature.Meal,
         .Project.Feature.Weight,

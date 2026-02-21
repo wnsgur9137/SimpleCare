@@ -10,6 +10,7 @@ import SwiftUI
 
 import Home
 import Settings
+import CalendarFeature
 import Meal
 import Weight
 import Exercise
@@ -18,13 +19,14 @@ import BasePresentation
 import BaseDomain
 
 public final class TabCoordinator: ObservableObject, Coordinator {
-    private let diContainer: TabDIContainer
+    let diContainer: TabDIContainer
 
     // MARK: - Published Properties
 
     @Published public var selectedTab: AppTab = .home
     @Published public var showingMealRecord: Bool = false
     @Published public var showingExerciseRecord: Bool = false
+    @Published public var showSettings: Bool = false
     @Published public var isReady: Bool = false
 
     public init(diContainer: TabDIContainer) {
@@ -73,6 +75,9 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         }
         coordinator.onNavigateToWeight = { [weak self] in
             self?.selectedTab = .progress
+        }
+        coordinator.onNavigateToSettings = { [weak self] in
+            self?.showSettings = true
         }
         return coordinator.start()
     }
@@ -143,12 +148,11 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         return WeightCoordinator(dependencies: container).start()
     }
 
-    // MARK: - Settings
+    // MARK: - Calendar
 
-    public func makeSettings() -> some View {
-        return NavigationStack {
-            SettingsContentView(diContainer: diContainer)
-        }
+    @MainActor
+    public func makeCalendar() -> some View {
+        return CalendarCoordinator().start()
     }
 }
 

@@ -34,6 +34,7 @@ public struct HomeFeature {
             case meal
             case exercise
             case weight
+            case settings
         }
 
         public enum ReportType: String, Equatable, CaseIterable {
@@ -99,6 +100,7 @@ public struct HomeFeature {
         case exerciseButtonTapped
         case weightButtonTapped
         case addRecordButtonTapped
+        case settingsButtonTapped
         case navigationHandled
 
         // Delegate
@@ -108,6 +110,7 @@ public struct HomeFeature {
             case navigateToMeal
             case navigateToExercise
             case navigateToWeight
+            case navigateToSettings
         }
 
         public static func == (lhs: Action, rhs: Action) -> Bool {
@@ -121,6 +124,7 @@ public struct HomeFeature {
                  (.exerciseButtonTapped, .exerciseButtonTapped),
                  (.weightButtonTapped, .weightButtonTapped),
                  (.addRecordButtonTapped, .addRecordButtonTapped),
+                 (.settingsButtonTapped, .settingsButtonTapped),
                  (.navigationHandled, .navigationHandled),
                  (.reportButtonTapped, .reportButtonTapped),
                  (.dismissReport, .dismissReport),
@@ -241,6 +245,10 @@ public struct HomeFeature {
             case .addRecordButtonTapped:
                 state.pendingNavigation = .meal
                 return .send(.delegate(.navigateToMeal))
+
+            case .settingsButtonTapped:
+                state.pendingNavigation = .settings
+                return .send(.delegate(.navigateToSettings))
 
             case .navigationHandled:
                 state.pendingNavigation = nil

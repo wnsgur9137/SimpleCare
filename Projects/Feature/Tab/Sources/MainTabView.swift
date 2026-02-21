@@ -51,14 +51,19 @@ public struct MainTabView: View {
                         }
                         .tag(AppTab.progress)
 
-                    // Settings
-                    coordinator.makeSettings()
+                    // Calendar
+                    coordinator.makeCalendar()
                         .tabItem {
-                            Label("tab.settings".localized, systemImage: AppTab.settings.icon)
+                            Label("tab.calendar".localized, systemImage: AppTab.calendar.icon)
                         }
-                        .tag(AppTab.settings)
+                        .tag(AppTab.calendar)
                 }
                 .tabBarMinimizeBehavior(.onScrollDown)
+                .sheet(isPresented: $coordinator.showSettings) {
+                    NavigationStack {
+                        SettingsContentView(diContainer: coordinator.diContainer)
+                    }
+                }
             } else {
                 ProgressView()
             }

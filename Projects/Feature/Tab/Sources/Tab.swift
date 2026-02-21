@@ -13,7 +13,7 @@ public enum AppTab: Hashable, CaseIterable {
     case meal           // 식단 기록
     case exercise       // 운동 기록
     case progress       // 진행 현황 (체중/목표)
-    case settings       // 설정
+    case calendar       // 캘린더
 
     public var title: String {
         switch self {
@@ -21,7 +21,7 @@ public enum AppTab: Hashable, CaseIterable {
         case .meal: return "식단"
         case .exercise: return "운동"
         case .progress: return "진행"
-        case .settings: return "설정"
+        case .calendar: return "캘린더"
         }
     }
 
@@ -31,7 +31,7 @@ public enum AppTab: Hashable, CaseIterable {
         case .meal: return "fork.knife"
         case .exercise: return "figure.run"
         case .progress: return "chart.line.uptrend.xyaxis"
-        case .settings: return "gearshape.fill"
+        case .calendar: return "calendar"
         }
     }
 }
