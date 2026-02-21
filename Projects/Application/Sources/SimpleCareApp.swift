@@ -7,10 +7,12 @@
 //
 
 import SwiftUI
+import BasePresentation
 
 @main
 struct SimpleCareApp: App {
     @StateObject private var appCoordinator: AppCoordinator
+    @ObservedObject private var themeManager = ThemeManager.shared
 
     init() {
         let diContainer = AppDIContainer()
@@ -20,6 +22,7 @@ struct SimpleCareApp: App {
     var body: some Scene {
         WindowGroup {
             AppCoordinatorView(coordinator: appCoordinator)
+                .preferredColorScheme(themeManager.effectiveColorScheme)
         }
     }
 }
