@@ -64,8 +64,9 @@ public struct HomeView: View {
             }
             .navigationTitle("tab.home".localized)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 12) {
+                ToolbarItemGroup(
+                    placement: .topBarTrailing,
+                    content: {
                         Button {
                             store.send(.profileButtonTapped)
                         } label: {
@@ -77,7 +78,7 @@ public struct HomeView: View {
                             Image(systemName: "gearshape")
                         }
                     }
-                }
+                )
             }
             .refreshable {
                 await store.send(.refreshData).finish()
