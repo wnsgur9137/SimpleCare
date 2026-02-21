@@ -10,7 +10,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project: Project = .feature(
-    name: "CalendarFeature",
+    name: "Calendar",
     dataDependencies: [
         .Project.Feature.Data.BaseData,
     ],
