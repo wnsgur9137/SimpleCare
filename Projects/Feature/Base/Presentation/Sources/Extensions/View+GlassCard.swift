@@ -21,6 +21,7 @@ public struct GlassCard: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
+            .foregroundStyle(tint != nil ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.clear)
