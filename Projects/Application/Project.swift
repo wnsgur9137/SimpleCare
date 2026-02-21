@@ -26,7 +26,7 @@ private let targets: [Target] = [
         infoPlist: .extendingDefault(with: defaultInfoPlist),
         sources: ["Sources/**"],
         resources: ["Resources/**"],
-        entitlements: "Sources/SimpleCare.entitlements",
+        entitlements: "SimpleCare.entitlements",
         scripts: scripts,
         dependencies: [
             .Project.Feature.Features,
