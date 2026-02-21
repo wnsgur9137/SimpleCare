@@ -493,14 +493,14 @@ struct ActivityLevelRow: View {
                     Text(level.displayName)
                         .font(.body)
                         .fontWeight(isSelected ? .semibold : .regular)
-                        .foregroundStyle(isSelected ? .scPrimary : .primary)
+                        .foregroundStyle(isSelected ? .white : .primary)
                 }
 
                 Spacer()
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.scPrimary)
+                        .foregroundStyle(.white)
                 }
             }
             .padding()
