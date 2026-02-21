@@ -198,6 +198,7 @@ public struct HomeView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
