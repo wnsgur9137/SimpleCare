@@ -47,7 +47,7 @@ struct BodyInfoStepView: View {
                     subtitle: "onboarding.step.bodyInfo.subtitle".localized
                 )
 
-                decimalPickerSection(
+                DecimalPickerSection(
                     title: "profile.height".localized,
                     wholeBinding: heightWhole,
                     decimalBinding: heightDecimal,
@@ -55,7 +55,7 @@ struct BodyInfoStepView: View {
                     unit: "unit.cm".localized
                 )
 
-                decimalPickerSection(
+                DecimalPickerSection(
                     title: "onboarding.field.currentWeight".localized,
                     wholeBinding: currentWeightWhole,
                     decimalBinding: currentWeightDecimal,
@@ -64,7 +64,7 @@ struct BodyInfoStepView: View {
                     tint: .scPrimary
                 )
 
-                decimalPickerSection(
+                DecimalPickerSection(
                     title: "onboarding.field.targetWeight".localized,
                     wholeBinding: targetWeightWhole,
                     decimalBinding: targetWeightDecimal,
@@ -78,17 +78,49 @@ struct BodyInfoStepView: View {
             .padding()
         }
     }
+}
 
-    // MARK: - Components
+// MARK: - DecimalPickerSection
 
-    @ViewBuilder
-    private func pickerRow(
-        title: String,
-        wholeBinding: Binding<Int>,
-        decimalBinding: Binding<Int>,
-        wholeRange: ClosedRange<Int>,
-        unit: String
-    ) -> some View {
+private struct DecimalPickerSection: View {
+    let title: String
+    let wholeBinding: Binding<Int>
+    let decimalBinding: Binding<Int>
+    let wholeRange: ClosedRange<Int>
+    let unit: String
+    var tint: Color?
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            PickerRow(
+                title: title,
+                wholeBinding: wholeBinding,
+                decimalBinding: decimalBinding,
+                wholeRange: wholeRange,
+                unit: unit
+            )
+            .frame(height: 120)
+            .frame(maxWidth: .infinity)
+            .applyDarkScheme(tint != nil)
+            .glassCard(tint: tint, cornerRadius: 16)
+        }
+    }
+}
+
+// MARK: - PickerRow
+
+private struct PickerRow: View {
+    let title: String
+    let wholeBinding: Binding<Int>
+    let decimalBinding: Binding<Int>
+    let wholeRange: ClosedRange<Int>
+    let unit: String
+
+    var body: some View {
         HStack(spacing: 0) {
             Picker(title, selection: wholeBinding) {
                 ForEach(wholeRange, id: \.self) { value in
@@ -117,28 +149,6 @@ struct BodyInfoStepView: View {
                 .fontWeight(.medium)
                 .foregroundStyle(.secondary)
                 .padding(.leading, 4)
-        }
-    }
-
-    @ViewBuilder
-    private func decimalPickerSection(
-        title: String,
-        wholeBinding: Binding<Int>,
-        decimalBinding: Binding<Int>,
-        wholeRange: ClosedRange<Int>,
-        unit: String,
-        tint: Color? = nil
-    ) -> some View {
-        VStack(spacing: 8) {
-            Text(title)
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            pickerRow(title: title, wholeBinding: wholeBinding, decimalBinding: decimalBinding, wholeRange: wholeRange, unit: unit)
-                .frame(height: 120)
-                .frame(maxWidth: .infinity)
-                .applyDarkScheme(tint != nil)
-                .glassCard(tint: tint, cornerRadius: 16)
         }
     }
 }
