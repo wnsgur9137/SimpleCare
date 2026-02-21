@@ -8,7 +8,7 @@
 
 import Foundation
 
-import Features
+import Tab
 import Splash
 import Onboarding
 import BasePresentation

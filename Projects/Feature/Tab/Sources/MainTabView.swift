@@ -9,6 +9,8 @@
 import SwiftUI
 import BasePresentation
 import BaseDomain
+import Profile
+import Settings
 
 public struct MainTabView: View {
     @ObservedObject var coordinator: TabCoordinator
@@ -51,14 +53,25 @@ public struct MainTabView: View {
                         }
                         .tag(AppTab.progress)
 
-                    // Settings
-                    coordinator.makeSettings()
+                    // Calendar
+                    coordinator.makeCalendar()
                         .tabItem {
-                            Label("tab.settings".localized, systemImage: AppTab.settings.icon)
+                            Label("tab.calendar".localized, systemImage: AppTab.calendar.icon)
                         }
-                        .tag(AppTab.settings)
+                        .tag(AppTab.calendar)
                 }
                 .tabBarMinimizeBehavior(.onScrollDown)
+                .sheet(isPresented: $coordinator.showSettings) {
+                    NavigationStack {
+                        SettingsCoordinator().start()
+                    }
+                }
+                .sheet(isPresented: $coordinator.showProfile) {
+                    NavigationStack {
+                        let container = coordinator.diContainer.makeProfileDIContainer()
+                        ProfileCoordinator(dependencies: container).start()
+                    }
+                }
             } else {
                 ProgressView()
             }

@@ -28,6 +28,8 @@ public final class HomeCoordinator: ObservableObject, Coordinator {
     public var onNavigateToMeal: (() -> Void)?
     public var onNavigateToExercise: (() -> Void)?
     public var onNavigateToWeight: (() -> Void)?
+    public var onNavigateToSettings: (() -> Void)?
+    public var onNavigateToProfile: (() -> Void)?
 
     public init(dependencies: HomeCoordinatorDependency) {
         self.dependencies = dependencies
@@ -42,7 +44,9 @@ public final class HomeCoordinator: ObservableObject, Coordinator {
             homeClient: dependencies.homeClient,
             onNavigateToMeal: { [weak self] in self?.onNavigateToMeal?() },
             onNavigateToExercise: { [weak self] in self?.onNavigateToExercise?() },
-            onNavigateToWeight: { [weak self] in self?.onNavigateToWeight?() }
+            onNavigateToWeight: { [weak self] in self?.onNavigateToWeight?() },
+            onNavigateToSettings: { [weak self] in self?.onNavigateToSettings?() },
+            onNavigateToProfile: { [weak self] in self?.onNavigateToProfile?() }
         )
     }
 }
@@ -54,6 +58,8 @@ private struct HomeContainerView: View {
     let onNavigateToMeal: () -> Void
     let onNavigateToExercise: () -> Void
     let onNavigateToWeight: () -> Void
+    let onNavigateToSettings: () -> Void
+    let onNavigateToProfile: () -> Void
 
     init(
         userProfileId: UUID,
@@ -62,7 +68,9 @@ private struct HomeContainerView: View {
         homeClient: HomeClient,
         onNavigateToMeal: @escaping () -> Void,
         onNavigateToExercise: @escaping () -> Void,
-        onNavigateToWeight: @escaping () -> Void
+        onNavigateToWeight: @escaping () -> Void,
+        onNavigateToSettings: @escaping () -> Void,
+        onNavigateToProfile: @escaping () -> Void
     ) {
         self._store = State(
             initialValue: Store(
@@ -80,6 +88,8 @@ private struct HomeContainerView: View {
         self.onNavigateToMeal = onNavigateToMeal
         self.onNavigateToExercise = onNavigateToExercise
         self.onNavigateToWeight = onNavigateToWeight
+        self.onNavigateToSettings = onNavigateToSettings
+        self.onNavigateToProfile = onNavigateToProfile
     }
 
     var body: some View {
@@ -90,6 +100,8 @@ private struct HomeContainerView: View {
                 case .meal: onNavigateToMeal()
                 case .exercise: onNavigateToExercise()
                 case .weight: onNavigateToWeight()
+                case .settings: onNavigateToSettings()
+                case .profile: onNavigateToProfile()
                 }
                 store.send(.navigationHandled)
             }

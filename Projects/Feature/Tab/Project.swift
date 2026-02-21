@@ -10,13 +10,14 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project: Project = .project(
-    name: "Features",
+    name: "Tab",
     product: .framework,
     dependencies: [
         .Project.Feature.Splash,
         .Project.Feature.Onboarding,
         .Project.Feature.Home,
         .Project.Feature.Settings,
+        .Project.Feature.CalendarFeature,
         // Healthcare Features
         .Project.Feature.Meal,
         .Project.Feature.Weight,

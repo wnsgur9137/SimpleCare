@@ -149,6 +149,11 @@ MET 기반 운동 기록 및 칼로리 계산
 
 ![Settings Graph](graphs/settings-graph.png)
 
+#### CalendarFeature
+월별 캘린더 및 일별 요약
+
+![Calendar Graph](graphs/calendar-graph.png)
+
 ---
 
 ## 아키텍처

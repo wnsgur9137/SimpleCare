@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+@_exported import SettingsData
+@_exported import SettingsDomain
+@_exported import SettingsPresentation
