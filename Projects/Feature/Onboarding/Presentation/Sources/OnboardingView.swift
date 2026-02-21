@@ -422,18 +422,17 @@ struct GoalOptionCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(goal.displayName)
                         .font(.headline)
-                        .foregroundStyle(isSelected ? .white : .primary)
 
                     Text(goalDescription(for: goal))
                         .font(.caption)
-                        .foregroundStyle(isSelected ? .white.opacity(0.8) : .secondary)
+                        .opacity(isSelected ? 0.8 : 1.0)
+                        .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(.secondary))
                 }
 
                 Spacer()
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.white)
                 }
             }
             .padding()
@@ -493,14 +492,12 @@ struct ActivityLevelRow: View {
                     Text(level.displayName)
                         .font(.body)
                         .fontWeight(isSelected ? .semibold : .regular)
-                        .foregroundStyle(isSelected ? .white : .primary)
                 }
 
                 Spacer()
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.white)
                 }
             }
             .padding()
@@ -544,13 +541,11 @@ struct SummaryStepView: View {
                 VStack(spacing: 8) {
                     Text("onboarding.summary.dailyCalories".localized)
                         .font(.headline)
-                        .foregroundStyle(.white)
                     Text("\(store.calculatedCalories) \("unit.kcal".localized)")
                         .font(.system(size: 48, weight: .bold))
-                        .foregroundStyle(.white)
                     Text("onboarding.summary.bmr".localized + " \(Int(store.calculatedBMR)) \("unit.kcal".localized)")
                         .font(.caption)
-                        .foregroundStyle(.white.opacity(0.8))
+                        .opacity(0.8)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
