@@ -88,9 +88,9 @@ public extension TargetDependency.Project.Infrastructure {
 
 // MARK: - Feature
 public extension TargetDependency.Project.Feature {
-    static let Features: TargetDependency = .project(
+    static let Tab: TargetDependency = .project(
         layer: .Feature,
-        name: "Features"
+        name: "Tab"
     )
 
     static let Splash: TargetDependency = .project(
@@ -148,6 +148,7 @@ public extension TargetDependency.Project.Feature {
         domain: .Notification,
         name: "Notification"
     )
+
 
     static let HealthKitFeature: TargetDependency = .project(
         domain: .HealthKitFeature,
@@ -218,6 +219,7 @@ public extension TargetDependency.Project.Feature.Data {
         name: "NotificationData"
     )
 
+
     static let HealthKitFeatureData: TargetDependency = .project(
         domain: .HealthKitFeature,
         name: "HealthKitFeatureData"
@@ -287,6 +289,7 @@ public extension TargetDependency.Project.Feature.Domain {
         name: "NotificationDomain"
     )
 
+
     static let HealthKitFeatureDomain: TargetDependency = .project(
         domain: .HealthKitFeature,
         name: "HealthKitFeatureDomain"
@@ -355,6 +358,7 @@ public extension TargetDependency.Project.Feature.Presentation {
         domain: .Notification,
         name: "NotificationPresentation"
     )
+
 
     static let HealthKitFeaturePresentation: TargetDependency = .project(
         domain: .HealthKitFeature,

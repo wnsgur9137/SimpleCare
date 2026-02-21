@@ -29,7 +29,7 @@ private let targets: [Target] = [
         entitlements: "SimpleCare.entitlements",
         scripts: scripts,
         dependencies: [
-            .Project.Feature.Features,
+            .Project.Feature.Tab,
             .Project.InjectionManager.InjectionManager
         ],
         settings: .settings(

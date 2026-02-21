@@ -10,7 +10,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project: Project = .project(
-    name: "Features",
+    name: "Tab",
     product: .framework,
     dependencies: [
         .Project.Feature.Splash,

@@ -14,6 +14,6 @@ let project: Project = .project(
     product: .staticFramework,
     dependencies: [
         .Project.Infrastructure.Network,
-        .Project.Feature.Features
+        .Project.Feature.Tab
     ]
 )
