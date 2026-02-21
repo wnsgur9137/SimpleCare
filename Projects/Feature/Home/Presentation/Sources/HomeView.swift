@@ -22,9 +22,6 @@ public struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    // 날짜 선택
-                    dateNavigationSection
-
                     // AI 인사이트
                     insightSection
 
@@ -63,6 +60,7 @@ public struct HomeView: View {
                 .padding()
             }
             .navigationTitle("tab.home".localized)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(
                     placement: .topBarTrailing,
@@ -101,44 +99,6 @@ public struct HomeView: View {
     }
 
     // MARK: - Sections
-
-    private var dateNavigationSection: some View {
-        HStack {
-            Button {
-                store.send(.goToPreviousDay)
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            VStack(spacing: 2) {
-                Text(store.isToday ? "common.today".localized : formattedDate)
-                    .font(.title3)
-                    .fontWeight(.bold)
-
-                if !store.isToday {
-                    Text(formattedWeekday)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Spacer()
-
-            Button {
-                store.send(.goToNextDay)
-            } label: {
-                Image(systemName: "chevron.right")
-                    .font(.title3)
-                    .foregroundStyle(store.canGoToNextDay ? Color.secondary : Color.clear)
-            }
-            .disabled(!store.canGoToNextDay)
-        }
-        .padding(.horizontal, 8)
-    }
 
     private var insightSection: some View {
         HStack(spacing: 12) {
@@ -281,19 +241,6 @@ public struct HomeView: View {
     }
 
     // MARK: - Helpers
-
-    private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일"
-        return formatter.string(from: store.selectedDate)
-    }
-
-    private var formattedWeekday: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"
-        formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.string(from: store.selectedDate)
-    }
 
     private func calorieColor(for status: HomeCalorieStatus) -> Color {
         switch status {
