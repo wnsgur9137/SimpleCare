@@ -544,12 +544,13 @@ struct SummaryStepView: View {
                 VStack(spacing: 8) {
                     Text("onboarding.summary.dailyCalories".localized)
                         .font(.headline)
+                        .foregroundStyle(.white)
                     Text("\(store.calculatedCalories) \("unit.kcal".localized)")
                         .font(.system(size: 48, weight: .bold))
-                        .foregroundStyle(.scPrimary)
+                        .foregroundStyle(.white)
                     Text("onboarding.summary.bmr".localized + " \(Int(store.calculatedBMR)) \("unit.kcal".localized)")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white.opacity(0.8))
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
