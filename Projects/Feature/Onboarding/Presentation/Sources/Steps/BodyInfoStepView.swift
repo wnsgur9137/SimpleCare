@@ -82,6 +82,45 @@ struct BodyInfoStepView: View {
     // MARK: - Components
 
     @ViewBuilder
+    private func pickerRow(
+        title: String,
+        wholeBinding: Binding<Int>,
+        decimalBinding: Binding<Int>,
+        wholeRange: ClosedRange<Int>,
+        unit: String
+    ) -> some View {
+        HStack(spacing: 0) {
+            Picker(title, selection: wholeBinding) {
+                ForEach(wholeRange, id: \.self) { value in
+                    Text("\(value)").tag(value)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(width: 80)
+            .clipped()
+
+            Text(".")
+                .font(.title2)
+                .fontWeight(.medium)
+
+            Picker(title, selection: decimalBinding) {
+                ForEach(0...9, id: \.self) { decimal in
+                    Text("\(decimal)").tag(decimal)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(width: 60)
+            .clipped()
+
+            Text(unit)
+                .font(.title3)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .padding(.leading, 4)
+        }
+    }
+
+    @ViewBuilder
     private func decimalPickerSection(
         title: String,
         wholeBinding: Binding<Int>,
@@ -95,38 +134,24 @@ struct BodyInfoStepView: View {
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            HStack(spacing: 0) {
-                Picker(title, selection: wholeBinding) {
-                    ForEach(wholeRange, id: \.self) { value in
-                        Text("\(value)").tag(value)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 80)
-                .clipped()
+            pickerRow(title: title, wholeBinding: wholeBinding, decimalBinding: decimalBinding, wholeRange: wholeRange, unit: unit)
+                .frame(height: 120)
+                .frame(maxWidth: .infinity)
+                .applyDarkScheme(tint != nil)
+                .glassCard(tint: tint, cornerRadius: 16)
+        }
+    }
+}
 
-                Text(".")
-                    .font(.title2)
-                    .fontWeight(.medium)
+// MARK: - View Extension
 
-                Picker(title, selection: decimalBinding) {
-                    ForEach(0...9, id: \.self) { decimal in
-                        Text("\(decimal)").tag(decimal)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 60)
-                .clipped()
-
-                Text(unit)
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-                    .padding(.leading, 4)
-            }
-            .frame(height: 120)
-            .frame(maxWidth: .infinity)
-            .glassCard(tint: tint, cornerRadius: 16)
+private extension View {
+    @ViewBuilder
+    func applyDarkScheme(_ active: Bool) -> some View {
+        if active {
+            self.environment(\.colorScheme, .dark)
+        } else {
+            self
         }
     }
 }
