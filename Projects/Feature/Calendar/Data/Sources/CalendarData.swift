@@ -1,6 +1,6 @@
 //
 //  CalendarData.swift
-//  CalendarFeatureData
+//  CalendarData
 //
 //  Created by JunHyeok Lee on 2/21/26.
 //

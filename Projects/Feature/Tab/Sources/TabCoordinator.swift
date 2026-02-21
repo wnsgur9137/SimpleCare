@@ -10,7 +10,7 @@ import SwiftUI
 
 import Home
 import Settings
-import CalendarFeature
+import Calendar
 import Meal
 import Weight
 import Exercise

@@ -36,7 +36,7 @@ public enum ProjectDomain: String {
     case AI
     case Profile
     case Notification
-    case CalendarFeature
+    case Calendar
     case HealthKitFeature
 }
 
@@ -150,9 +150,9 @@ public extension TargetDependency.Project.Feature {
         name: "Notification"
     )
 
-    static let CalendarFeature: TargetDependency = .project(
-        domain: .CalendarFeature,
-        name: "CalendarFeature"
+    static let Calendar: TargetDependency = .project(
+        domain: .Calendar,
+        name: "Calendar"
     )
 
     static let HealthKitFeature: TargetDependency = .project(
@@ -224,9 +224,9 @@ public extension TargetDependency.Project.Feature.Data {
         name: "NotificationData"
     )
 
-    static let CalendarFeatureData: TargetDependency = .project(
-        domain: .CalendarFeature,
-        name: "CalendarFeatureData"
+    static let CalendarData: TargetDependency = .project(
+        domain: .Calendar,
+        name: "CalendarData"
     )
 
     static let HealthKitFeatureData: TargetDependency = .project(
@@ -298,9 +298,9 @@ public extension TargetDependency.Project.Feature.Domain {
         name: "NotificationDomain"
     )
 
-    static let CalendarFeatureDomain: TargetDependency = .project(
-        domain: .CalendarFeature,
-        name: "CalendarFeatureDomain"
+    static let CalendarDomain: TargetDependency = .project(
+        domain: .Calendar,
+        name: "CalendarDomain"
     )
 
     static let HealthKitFeatureDomain: TargetDependency = .project(
@@ -372,9 +372,9 @@ public extension TargetDependency.Project.Feature.Presentation {
         name: "NotificationPresentation"
     )
 
-    static let CalendarFeaturePresentation: TargetDependency = .project(
-        domain: .CalendarFeature,
-        name: "CalendarFeaturePresentation"
+    static let CalendarPresentation: TargetDependency = .project(
+        domain: .Calendar,
+        name: "CalendarPresentation"
     )
 
     static let HealthKitFeaturePresentation: TargetDependency = .project(

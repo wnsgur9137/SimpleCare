@@ -45,10 +45,10 @@ settings-graph:
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/settings-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/setting-graph.png"
 	
-# CalendarFeature 타겟 그래프
+# Calendar 타겟 그래프
 calendar-graph:
 	@mkdir -p $(GRAPH_DIR)
-	tuist graph -t CalendarFeature -d -o $(GRAPH_DIR)
+	tuist graph -t Calendar -d -o $(GRAPH_DIR)
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/calendar-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/calendar-graph.png"
 

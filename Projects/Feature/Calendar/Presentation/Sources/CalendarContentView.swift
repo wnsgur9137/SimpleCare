@@ -1,6 +1,6 @@
 //
 //  CalendarContentView.swift
-//  CalendarFeaturePresentation
+//  CalendarPresentation
 //
 //  Created by JunHyeok Lee on 2/21/26.
 //
