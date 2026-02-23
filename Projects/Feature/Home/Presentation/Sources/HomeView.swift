@@ -247,7 +247,7 @@ public struct HomeView: View {
                     .foregroundStyle(.scPrimary)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("home.steps".localized)
+                    Text(HomeDomainStrings.Home.steps)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text("\(summary.steps.formatted())")
@@ -268,7 +268,7 @@ public struct HomeView: View {
                     .foregroundStyle(.scExercise)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("home.activeCalories".localized)
+                    Text(HomeDomainStrings.Home.activeCalories)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
