@@ -10,6 +10,7 @@ import BasePresentation
 import HomeDomain
 import HomeData
 import HomePresentation
+import HealthKitInfra
 
 /// Home DI Container
 public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
@@ -31,12 +32,14 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
 
-        let homeRepository = HomeRepository()
+        let homeRepository = HomeRepository(healthKitManager: HealthKitManager.shared)
         let insightService = MockHomeInsightService()
         let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
         let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
         let weeklyReportUseCase = GetWeeklyReportUseCase(repository: homeRepository)
         let monthlyReportUseCase = GetMonthlyReportUseCase(repository: homeRepository)
+
+        let healthKitManager = HealthKitManager.shared
 
         self.homeClient = HomeClient(
             getDailySummary: { date, userProfileId, goalCalories, macroGoals in
@@ -53,6 +56,10 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
             },
             getMonthlyReport: { baseDate, userProfileId, goalCalories in
                 try await monthlyReportUseCase.execute(baseDate: baseDate, userProfileId: userProfileId, goalCalories: goalCalories)
+            },
+            requestHealthKitAuth: {
+                guard HealthKitManager.isAvailable else { return }
+                try? await healthKitManager.requestAuthorization()
             }
         )
     }
