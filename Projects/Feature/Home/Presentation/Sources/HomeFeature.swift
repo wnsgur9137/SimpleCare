@@ -29,6 +29,8 @@ public struct HomeFeature {
         public var weeklyReport: WeeklyReport?
         public var monthlyReport: MonthlyReport?
         public var isLoadingReport: Bool = false
+        public var isHealthKitAvailable: Bool = false
+        public var isHealthKitAuthorized: Bool = false
 
         public enum NavigationTarget: Equatable {
             case meal
@@ -96,6 +98,10 @@ public struct HomeFeature {
         case loadWeeklyReportResponse(Result<WeeklyReport, Error>)
         case loadMonthlyReportResponse(Result<MonthlyReport, Error>)
 
+        // HealthKit
+        case healthKitAuthStatusChanged(Bool)
+        case openHealthSettingsTapped
+
         // Quick Actions
         case mealButtonTapped
         case exerciseButtonTapped
@@ -133,8 +139,11 @@ public struct HomeFeature {
                  (.reportButtonTapped, .reportButtonTapped),
                  (.dismissReport, .dismissReport),
                  (.loadWeeklyReport, .loadWeeklyReport),
-                 (.loadMonthlyReport, .loadMonthlyReport):
+                 (.loadMonthlyReport, .loadMonthlyReport),
+                 (.openHealthSettingsTapped, .openHealthSettingsTapped):
                 return true
+            case (.healthKitAuthStatusChanged(let l), .healthKitAuthStatusChanged(let r)):
+                return l == r
             case (.selectDate(let l), .selectDate(let r)):
                 return l == r
             case (.selectWeekDay(let l), .selectWeekDay(let r)):
@@ -181,10 +190,13 @@ public struct HomeFeature {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.isHealthKitAvailable = homeClient.isHealthKitAvailable()
                 return .merge(
                     .send(.loadHome),
-                    .run { [homeClient] _ in
+                    .run { [homeClient] send in
                         await homeClient.requestHealthKitAuth()
+                        let isAuthorized = homeClient.checkHealthKitAuthStatus()
+                        await send(.healthKitAuthStatusChanged(isAuthorized))
                     }
                 )
 
@@ -205,7 +217,22 @@ public struct HomeFeature {
                 }
 
             case .refreshData:
-                return .send(.loadHome)
+                return .merge(
+                    .send(.loadHome),
+                    .run { [homeClient] send in
+                        let isAuthorized = homeClient.checkHealthKitAuthStatus()
+                        await send(.healthKitAuthStatusChanged(isAuthorized))
+                    }
+                )
+
+            case .healthKitAuthStatusChanged(let isAuthorized):
+                state.isHealthKitAuthorized = isAuthorized
+                return .none
+
+            case .openHealthSettingsTapped:
+                return .run { [homeClient] _ in
+                    await homeClient.openHealthSettings()
+                }
 
             case .selectDate(let date):
                 state.selectedDate = date
@@ -395,6 +422,9 @@ public struct HomeClient {
     public var getWeeklyReport: @Sendable (Date, UUID, Int) async throws -> WeeklyReport
     public var getMonthlyReport: @Sendable (Date, UUID, Int) async throws -> MonthlyReport
     public var requestHealthKitAuth: @Sendable () async -> Void
+    public var isHealthKitAvailable: @Sendable () -> Bool
+    public var checkHealthKitAuthStatus: @Sendable () -> Bool
+    public var openHealthSettings: @Sendable () async -> Void
 
     public init(
         getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
@@ -402,7 +432,10 @@ public struct HomeClient {
         getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?],
         getWeeklyReport: @escaping @Sendable (Date, UUID, Int) async throws -> WeeklyReport,
         getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport,
-        requestHealthKitAuth: @escaping @Sendable () async -> Void
+        requestHealthKitAuth: @escaping @Sendable () async -> Void,
+        isHealthKitAvailable: @escaping @Sendable () -> Bool,
+        checkHealthKitAuthStatus: @escaping @Sendable () -> Bool,
+        openHealthSettings: @escaping @Sendable () async -> Void
     ) {
         self.getDailySummary = getDailySummary
         self.generateInsight = generateInsight
@@ -410,6 +443,9 @@ public struct HomeClient {
         self.getWeeklyReport = getWeeklyReport
         self.getMonthlyReport = getMonthlyReport
         self.requestHealthKitAuth = requestHealthKitAuth
+        self.isHealthKitAvailable = isHealthKitAvailable
+        self.checkHealthKitAuthStatus = checkHealthKitAuthStatus
+        self.openHealthSettings = openHealthSettings
     }
 }
 
@@ -448,7 +484,10 @@ extension HomeClient: DependencyKey {
                     goalCalories: goalCalories
                 )
             },
-            requestHealthKitAuth: {}
+            requestHealthKitAuth: {},
+            isHealthKitAvailable: { false },
+            checkHealthKitAuthStatus: { false },
+            openHealthSettings: {}
         )
     }
 
@@ -533,7 +572,10 @@ extension HomeClient: DependencyKey {
                     recordedDays: 25
                 )
             },
-            requestHealthKitAuth: {}
+            requestHealthKitAuth: {},
+            isHealthKitAvailable: { true },
+            checkHealthKitAuthStatus: { true },
+            openHealthSettings: {}
         )
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import BasePresentation
 import HomeDomain
 import HomeData
@@ -60,6 +61,19 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
             requestHealthKitAuth: {
                 guard HealthKitManager.isAvailable else { return }
                 try? await healthKitManager.requestAuthorization()
+            },
+            isHealthKitAvailable: {
+                HealthKitManager.isAvailable
+            },
+            checkHealthKitAuthStatus: {
+                guard HealthKitManager.isAvailable else { return false }
+                return healthKitManager.authorizationStatus(for: .bodyMass) == .sharingAuthorized
+            },
+            openHealthSettings: {
+                await MainActor.run {
+                    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                    UIApplication.shared.open(url)
+                }
             }
         )
     }

@@ -29,8 +29,10 @@ public struct HomeView: View {
                     if let summary = store.dailySummary {
                         calorieSummarySection(summary: summary)
 
-                        // 걸음수 / 활동 칼로리
-                        healthKitSection(summary: summary)
+                        // 걸음수 / 활동 칼로리 (HealthKit)
+                        if store.isHealthKitAvailable {
+                            healthKitSection(summary: summary)
+                        }
 
                         // 영양소 프로그레스
                         HomeNutritionSection(summary: summary)
@@ -238,53 +240,83 @@ public struct HomeView: View {
         .buttonStyle(.plain)
     }
 
+    @ViewBuilder
     private func healthKitSection(summary: HomeDailySummary) -> some View {
-        HStack(spacing: 12) {
-            // 걸음수 카드
-            HStack(spacing: 8) {
-                Image(systemName: "figure.walk")
-                    .font(.title3)
-                    .foregroundStyle(.scPrimary)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(HomeDomainStrings.Home.steps)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("\(summary.steps.formatted())")
+        if store.isHealthKitAuthorized {
+            HStack(spacing: 12) {
+                // 걸음수 카드
+                HStack(spacing: 8) {
+                    Image(systemName: "figure.walk")
                         .font(.title3)
-                        .fontWeight(.bold)
-                }
+                        .foregroundStyle(.scPrimary)
 
-                Spacer()
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .glassEffect(.regular, in: .rect(cornerRadius: 12))
-
-            // 활동 칼로리 카드
-            HStack(spacing: 8) {
-                Image(systemName: "flame.fill")
-                    .font(.title3)
-                    .foregroundStyle(.scExercise)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(HomeDomainStrings.Home.activeCalories)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(summary.activeCalories)")
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(HomeDomainStrings.Home.steps)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("\(summary.steps.formatted())")
                             .font(.title3)
                             .fontWeight(.bold)
-                        Text("kcal")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
                     }
-                }
 
-                Spacer()
+                    Spacer()
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .glassEffect(.regular, in: .rect(cornerRadius: 12))
+
+                // 활동 칼로리 카드
+                HStack(spacing: 8) {
+                    Image(systemName: "flame.fill")
+                        .font(.title3)
+                        .foregroundStyle(.scExercise)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(HomeDomainStrings.Home.activeCalories)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text("\(summary.activeCalories)")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                            Text("kcal")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Spacer()
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .glassEffect(.regular, in: .rect(cornerRadius: 12))
             }
-            .padding()
+        } else {
+            // 건강 권한 미허용 안내
+            VStack(spacing: 12) {
+                Image(systemName: "heart.text.clipboard")
+                    .font(.title2)
+                    .foregroundStyle(.scPrimary)
+
+                Text(HomeDomainStrings.Home.HealthKit.permissionRequired)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+
+                Button {
+                    store.send(.openHealthSettingsTapped)
+                } label: {
+                    Text(HomeDomainStrings.Home.HealthKit.openSettings)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 8)
+                        .background(.scPrimary, in: .capsule)
+                }
+            }
             .frame(maxWidth: .infinity)
+            .padding()
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
         }
     }
