@@ -8,6 +8,7 @@
 import Foundation
 import HomeDomain
 import StorageInfra
+import HealthKitInfra
 
 /// Home Repository 구현 - StorageInfra에서 식사/운동 데이터를 집계
 public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeReportRepositoryProtocol, @unchecked Sendable {
@@ -15,15 +16,18 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeRepor
     private let mealStorage: MealRecordRepository
     private let exerciseStorage: ExerciseRecordRepository
     private let weightStorage: WeightRecordRepository
+    private let healthKitManager: HealthKitManagerProtocol
 
     public init(
         mealStorage: MealRecordRepository = MealRecordRepository(),
         exerciseStorage: ExerciseRecordRepository = ExerciseRecordRepository(),
-        weightStorage: WeightRecordRepository = WeightRecordRepository()
+        weightStorage: WeightRecordRepository = WeightRecordRepository(),
+        healthKitManager: HealthKitManagerProtocol = HealthKitManager.shared
     ) {
         self.mealStorage = mealStorage
         self.exerciseStorage = exerciseStorage
         self.weightStorage = weightStorage
+        self.healthKitManager = healthKitManager
     }
 
     public func getDailySummary(date: Date, userProfileId: UUID, goalCalories: Int, macroGoals: MacroGoals) async throws -> HomeDailySummary {
@@ -41,6 +45,24 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeRepor
 
         let streakDays = try await calculateStreakDays(userProfileId: userProfileId, from: date)
 
+        // HealthKit 데이터 조회 (실패 시 0으로 fallback)
+        var steps = 0
+        var activeCalories = 0
+        if HealthKitManager.isAvailable {
+            do {
+                let stepData = try await healthKitManager.fetchStepCount(for: date)
+                steps = stepData.steps
+            } catch {
+                // HealthKit 실패 시 graceful fallback
+            }
+            do {
+                let activityData = try await healthKitManager.fetchActiveEnergy(for: date)
+                activeCalories = activityData.activeCalories
+            } catch {
+                // HealthKit 실패 시 graceful fallback
+            }
+        }
+
         return HomeDailySummary(
             date: date,
             totalCalories: totalCalories,
@@ -54,7 +76,9 @@ public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeRepor
             streakDays: streakDays,
             proteinGoal: macroGoals.proteinGoal,
             carbsGoal: macroGoals.carbsGoal,
-            fatGoal: macroGoals.fatGoal
+            fatGoal: macroGoals.fatGoal,
+            steps: steps,
+            activeCalories: activeCalories
         )
     }
 
