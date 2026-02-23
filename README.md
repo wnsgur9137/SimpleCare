@@ -119,11 +119,6 @@ Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동�
 
 ![Home Graph](graphs/home-graph.png)
 
-#### Dashboard
-일일 영양/운동 요약 대시보드
-
-![Dashboard Graph](graphs/dashboard-graph.png)
-
 #### Meal
 AI 기반 식단 기록 및 영양 분석
 

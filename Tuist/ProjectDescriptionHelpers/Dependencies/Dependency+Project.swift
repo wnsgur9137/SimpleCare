@@ -29,7 +29,6 @@ public enum ProjectDomain: String {
     case Settings
 
     // Healthcare Features
-    case Dashboard
     case Meal
     case Weight
     case Exercise
@@ -115,11 +114,6 @@ public extension TargetDependency.Project.Feature {
     )
 
     // Healthcare Features
-    static let Dashboard: TargetDependency = .project(
-        domain: .Dashboard,
-        name: "Dashboard"
-    )
-
     static let Meal: TargetDependency = .project(
         domain: .Meal,
         name: "Meal"
@@ -189,11 +183,6 @@ public extension TargetDependency.Project.Feature.Data {
     )
 
     // Healthcare Features Data
-    static let DashboardData: TargetDependency = .project(
-        domain: .Dashboard,
-        name: "DashboardData"
-    )
-
     static let MealData: TargetDependency = .project(
         domain: .Meal,
         name: "MealData"
@@ -263,11 +252,6 @@ public extension TargetDependency.Project.Feature.Domain {
     )
 
     // Healthcare Features Domain
-    static let DashboardDomain: TargetDependency = .project(
-        domain: .Dashboard,
-        name: "DashboardDomain"
-    )
-
     static let MealDomain: TargetDependency = .project(
         domain: .Meal,
         name: "MealDomain"
@@ -337,11 +321,6 @@ public extension TargetDependency.Project.Feature.Presentation {
     )
 
     // Healthcare Features Presentation
-    static let DashboardPresentation: TargetDependency = .project(
-        domain: .Dashboard,
-        name: "DashboardPresentation"
-    )
-
     static let MealPresentation: TargetDependency = .project(
         domain: .Meal,
         name: "MealPresentation"

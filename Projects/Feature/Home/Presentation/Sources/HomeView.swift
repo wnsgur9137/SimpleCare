@@ -130,47 +130,41 @@ public struct HomeView: View {
 
     private func calorieSummarySection(summary: HomeDailySummary) -> some View {
         VStack(spacing: 16) {
-            HStack(alignment: .top) {
-                Spacer()
+            // 원형 프로그레스
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 16)
 
-                // 원형 프로그레스
-                ZStack {
-                    Circle()
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 16)
+                Circle()
+                    .trim(from: 0, to: min(summary.calorieProgress, 1.0))
+                    .stroke(
+                        calorieColor(for: summary.calorieStatus),
+                        style: StrokeStyle(lineWidth: 16, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeOut(duration: 0.5), value: summary.calorieProgress)
 
-                    Circle()
-                        .trim(from: 0, to: min(summary.calorieProgress, 1.0))
-                        .stroke(
-                            calorieColor(for: summary.calorieStatus),
-                            style: StrokeStyle(lineWidth: 16, lineCap: .round)
-                        )
-                        .rotationEffect(.degrees(-90))
-                        .animation(.easeOut(duration: 0.5), value: summary.calorieProgress)
+                VStack(spacing: 2) {
+                    Text("\(summary.totalCalories)")
+                        .font(.system(size: 32, weight: .bold))
 
-                    VStack(spacing: 2) {
-                        Text("\(summary.totalCalories)")
-                            .font(.system(size: 32, weight: .bold))
+                    Text("/ \(summary.goalCalories) kcal")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
 
-                        Text("/ \(summary.goalCalories) kcal")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        Text(summary.calorieStatus.displayName)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(calorieColor(for: summary.calorieStatus))
-                    }
+                    Text(summary.calorieStatus.displayName)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(calorieColor(for: summary.calorieStatus))
                 }
-                .frame(width: 160, height: 160)
-
-                Spacer()
-
+            }
+            .frame(width: 160, height: 160)
+            .overlay(alignment: .topTrailing) {
                 // 스트릭 배지
                 if summary.streakDays > 0 {
                     HomeStreakBadge(days: summary.streakDays)
+                        .offset(x: 60, y: -8)
                 }
-
-                Spacer()
             }
 
             // 남은 칼로리 / 운동 소모
@@ -204,6 +198,7 @@ public struct HomeView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }

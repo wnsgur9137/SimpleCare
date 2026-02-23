@@ -2,9 +2,9 @@
 
 GRAPH_DIR := graphs
 
-.PHONY: generate graph graph-clean common-graph splash-graph onboarding-graph home-graph settings-graph calendar-graph dashboard-graph exercise-graph meal-graph profile-graph weight-graph
+.PHONY: generate graph graph-clean common-graph base-graph splash-graph onboarding-graph home-graph tab-graph settings-graph calendar-graph exercise-graph meal-graph profile-graph weight-graph
 
-graph: common-graph splash-graph onboarding-graph home-graph settings-graph calendar-graph dashboard-graph exercise-graph meal-graph profile-graph weight-graph
+graph: common-graph base-graph splash-graph onboarding-graph home-graph tab-graph settings-graph calendar-graph exercise-graph meal-graph profile-graph weight-graph
 
 generate:
 	TUIST_ROOT_DIR=${PWD} tuist generate
@@ -16,6 +16,13 @@ common-graph:
 	tuist graph -d -o $(GRAPH_DIR)
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/common-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/graph.png"
+
+# Base 타겟 그래프
+base-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Base -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/base-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/base-graph.png"
 
 # Splash 타겟 그래프
 splash-graph:
@@ -43,21 +50,21 @@ settings-graph:
 	@mkdir -p $(GRAPH_DIR)
 	tuist graph -t Settings -d -o $(GRAPH_DIR)
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/settings-graph.png
-	@echo "✅ Generated: $(GRAPH_DIR)/setting-graph.png"
-	
+	@echo "✅ Generated: $(GRAPH_DIR)/settings-graph.png"
+
+# Tab 타겟 그래프
+tab-graph:
+	@mkdir -p $(GRAPH_DIR)
+	tuist graph -t Tab -d -o $(GRAPH_DIR)
+	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/tab-graph.png
+	@echo "✅ Generated: $(GRAPH_DIR)/tab-graph.png"
+
 # Calendar 타겟 그래프
 calendar-graph:
 	@mkdir -p $(GRAPH_DIR)
 	tuist graph -t Calendar -d -o $(GRAPH_DIR)
 	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/calendar-graph.png
 	@echo "✅ Generated: $(GRAPH_DIR)/calendar-graph.png"
-
-# Dashboard 타겟 그래프
-dashboard-graph:
-	@mkdir -p $(GRAPH_DIR)
-	tuist graph -t Dashboard -d -o $(GRAPH_DIR)
-	mv $(GRAPH_DIR)/graph.png $(GRAPH_DIR)/dashboard-graph.png
-	@echo "✅ Generated: $(GRAPH_DIR)/dashboard-graph.png"
 
 # Exercise 타겟 그래프
 exercise-graph:
