@@ -181,7 +181,12 @@ public struct HomeFeature {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .send(.loadHome)
+                return .merge(
+                    .send(.loadHome),
+                    .run { [homeClient] _ in
+                        await homeClient.requestHealthKitAuth()
+                    }
+                )
 
             case .loadHome:
                 state.viewState = .loading
@@ -389,19 +394,22 @@ public struct HomeClient {
     public var getWeeklyStatus: @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
     public var getWeeklyReport: @Sendable (Date, UUID, Int) async throws -> WeeklyReport
     public var getMonthlyReport: @Sendable (Date, UUID, Int) async throws -> MonthlyReport
+    public var requestHealthKitAuth: @Sendable () async -> Void
 
     public init(
         getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
         generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight,
         getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?],
         getWeeklyReport: @escaping @Sendable (Date, UUID, Int) async throws -> WeeklyReport,
-        getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport
+        getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport,
+        requestHealthKitAuth: @escaping @Sendable () async -> Void
     ) {
         self.getDailySummary = getDailySummary
         self.generateInsight = generateInsight
         self.getWeeklyStatus = getWeeklyStatus
         self.getWeeklyReport = getWeeklyReport
         self.getMonthlyReport = getMonthlyReport
+        self.requestHealthKitAuth = requestHealthKitAuth
     }
 }
 
@@ -439,7 +447,8 @@ extension HomeClient: DependencyKey {
                     macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0),
                     goalCalories: goalCalories
                 )
-            }
+            },
+            requestHealthKitAuth: {}
         )
     }
 
@@ -485,7 +494,9 @@ extension HomeClient: DependencyKey {
                     streakDays: 7,
                     proteinGoal: 100,
                     carbsGoal: 250,
-                    fatGoal: 70
+                    fatGoal: 70,
+                    steps: 8500,
+                    activeCalories: 320
                 )
             },
             generateInsight: { _ in
@@ -521,7 +532,8 @@ extension HomeClient: DependencyKey {
                     goalCalories: 2000,
                     recordedDays: 25
                 )
-            }
+            },
+            requestHealthKitAuth: {}
         )
     }
 }
