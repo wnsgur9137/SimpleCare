@@ -15,6 +15,7 @@ let project: Project = .feature(
         .Project.Feature.Data.BaseData,
         .Project.Infrastructure.Storage,
         .Project.Infrastructure.AIService,
+        .Project.Infrastructure.HealthKit,
     ],
     domainDependencies: [
         .Project.Feature.Domain.BaseDomain,

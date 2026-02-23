@@ -23,6 +23,10 @@
 "home.weeklyReport" = "Weekly/Monthly Report";
 "home.reportDescription" = "Calories, exercise, and weight changes at a glance";
 "home.firstMealRecord" = "Record your first meal";
+"home.steps" = "Steps";
+"home.activeCalories" = "Active Calories";
+"home.healthKit.permissionRequired" = "Allow Health access\nto view steps and active calories";
+"home.healthKit.openSettings" = "Open Settings";
 "home.thisWeek" = "This Week";
 "home.weekday.mon" = "Mon";
 "home.weekday.tue" = "Tue";

@@ -29,6 +29,8 @@ public struct HomeFeature {
         public var weeklyReport: WeeklyReport?
         public var monthlyReport: MonthlyReport?
         public var isLoadingReport: Bool = false
+        public var isHealthKitAvailable: Bool = false
+        public var isHealthKitAuthorized: Bool = false
 
         public enum NavigationTarget: Equatable {
             case meal
@@ -96,6 +98,10 @@ public struct HomeFeature {
         case loadWeeklyReportResponse(Result<WeeklyReport, Error>)
         case loadMonthlyReportResponse(Result<MonthlyReport, Error>)
 
+        // HealthKit
+        case healthKitAuthStatusChanged(Bool)
+        case openHealthSettingsTapped
+
         // Quick Actions
         case mealButtonTapped
         case exerciseButtonTapped
@@ -133,8 +139,11 @@ public struct HomeFeature {
                  (.reportButtonTapped, .reportButtonTapped),
                  (.dismissReport, .dismissReport),
                  (.loadWeeklyReport, .loadWeeklyReport),
-                 (.loadMonthlyReport, .loadMonthlyReport):
+                 (.loadMonthlyReport, .loadMonthlyReport),
+                 (.openHealthSettingsTapped, .openHealthSettingsTapped):
                 return true
+            case (.healthKitAuthStatusChanged(let l), .healthKitAuthStatusChanged(let r)):
+                return l == r
             case (.selectDate(let l), .selectDate(let r)):
                 return l == r
             case (.selectWeekDay(let l), .selectWeekDay(let r)):
@@ -181,7 +190,15 @@ public struct HomeFeature {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .send(.loadHome)
+                state.isHealthKitAvailable = homeClient.isHealthKitAvailable()
+                return .merge(
+                    .send(.loadHome),
+                    .run { [homeClient] send in
+                        await homeClient.requestHealthKitAuth()
+                        let isAuthorized = homeClient.checkHealthKitAuthStatus()
+                        await send(.healthKitAuthStatusChanged(isAuthorized))
+                    }
+                )
 
             case .loadHome:
                 state.viewState = .loading
@@ -200,7 +217,22 @@ public struct HomeFeature {
                 }
 
             case .refreshData:
-                return .send(.loadHome)
+                return .merge(
+                    .send(.loadHome),
+                    .run { [homeClient] send in
+                        let isAuthorized = homeClient.checkHealthKitAuthStatus()
+                        await send(.healthKitAuthStatusChanged(isAuthorized))
+                    }
+                )
+
+            case .healthKitAuthStatusChanged(let isAuthorized):
+                state.isHealthKitAuthorized = isAuthorized
+                return .none
+
+            case .openHealthSettingsTapped:
+                return .run { [homeClient] _ in
+                    await homeClient.openHealthSettings()
+                }
 
             case .selectDate(let date):
                 state.selectedDate = date
@@ -389,19 +421,31 @@ public struct HomeClient {
     public var getWeeklyStatus: @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?]
     public var getWeeklyReport: @Sendable (Date, UUID, Int) async throws -> WeeklyReport
     public var getMonthlyReport: @Sendable (Date, UUID, Int) async throws -> MonthlyReport
+    public var requestHealthKitAuth: @Sendable () async -> Void
+    public var isHealthKitAvailable: @Sendable () -> Bool
+    public var checkHealthKitAuthStatus: @Sendable () -> Bool
+    public var openHealthSettings: @Sendable () async -> Void
 
     public init(
         getDailySummary: @escaping @Sendable (Date, UUID, Int, MacroGoals) async throws -> HomeDailySummary,
         generateInsight: @escaping @Sendable (HomeDailySummary) async throws -> HomeInsight,
         getWeeklyStatus: @escaping @Sendable (Date, UUID, Int) async throws -> [HomeCalorieStatus?],
         getWeeklyReport: @escaping @Sendable (Date, UUID, Int) async throws -> WeeklyReport,
-        getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport
+        getMonthlyReport: @escaping @Sendable (Date, UUID, Int) async throws -> MonthlyReport,
+        requestHealthKitAuth: @escaping @Sendable () async -> Void,
+        isHealthKitAvailable: @escaping @Sendable () -> Bool,
+        checkHealthKitAuthStatus: @escaping @Sendable () -> Bool,
+        openHealthSettings: @escaping @Sendable () async -> Void
     ) {
         self.getDailySummary = getDailySummary
         self.generateInsight = generateInsight
         self.getWeeklyStatus = getWeeklyStatus
         self.getWeeklyReport = getWeeklyReport
         self.getMonthlyReport = getMonthlyReport
+        self.requestHealthKitAuth = requestHealthKitAuth
+        self.isHealthKitAvailable = isHealthKitAvailable
+        self.checkHealthKitAuthStatus = checkHealthKitAuthStatus
+        self.openHealthSettings = openHealthSettings
     }
 }
 
@@ -439,7 +483,11 @@ extension HomeClient: DependencyKey {
                     macroAverage: MacroAverage(protein: 0, carbs: 0, fat: 0),
                     goalCalories: goalCalories
                 )
-            }
+            },
+            requestHealthKitAuth: {},
+            isHealthKitAvailable: { false },
+            checkHealthKitAuthStatus: { false },
+            openHealthSettings: {}
         )
     }
 
@@ -485,7 +533,9 @@ extension HomeClient: DependencyKey {
                     streakDays: 7,
                     proteinGoal: 100,
                     carbsGoal: 250,
-                    fatGoal: 70
+                    fatGoal: 70,
+                    steps: 8500,
+                    activeCalories: 320
                 )
             },
             generateInsight: { _ in
@@ -521,7 +571,11 @@ extension HomeClient: DependencyKey {
                     goalCalories: 2000,
                     recordedDays: 25
                 )
-            }
+            },
+            requestHealthKitAuth: {},
+            isHealthKitAvailable: { true },
+            checkHealthKitAuthStatus: { true },
+            openHealthSettings: {}
         )
     }
 }
