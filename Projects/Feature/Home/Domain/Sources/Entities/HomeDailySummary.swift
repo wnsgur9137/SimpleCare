@@ -23,6 +23,8 @@ public struct HomeDailySummary: Equatable, Sendable {
     public let proteinGoal: Double
     public let carbsGoal: Double
     public let fatGoal: Double
+    public let steps: Int
+    public let activeCalories: Int
 
     public init(
         date: Date,
@@ -37,7 +39,9 @@ public struct HomeDailySummary: Equatable, Sendable {
         streakDays: Int = 0,
         proteinGoal: Double = 100,
         carbsGoal: Double = 250,
-        fatGoal: Double = 70
+        fatGoal: Double = 70,
+        steps: Int = 0,
+        activeCalories: Int = 0
     ) {
         self.date = date
         self.totalCalories = totalCalories
@@ -52,6 +56,8 @@ public struct HomeDailySummary: Equatable, Sendable {
         self.proteinGoal = proteinGoal
         self.carbsGoal = carbsGoal
         self.fatGoal = fatGoal
+        self.steps = steps
+        self.activeCalories = activeCalories
     }
 
     /// 남은 칼로리
