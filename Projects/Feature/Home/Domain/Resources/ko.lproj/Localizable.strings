@@ -23,6 +23,8 @@
 "home.weeklyReport" = "주간/월간 리포트";
 "home.reportDescription" = "칼로리, 운동, 체중 변화를 한눈에";
 "home.firstMealRecord" = "첫 식사 기록하기";
+"home.steps" = "걸음수";
+"home.activeCalories" = "활동 칼로리";
 "home.thisWeek" = "이번 주";
 "home.weekday.mon" = "월";
 "home.weekday.tue" = "화";
