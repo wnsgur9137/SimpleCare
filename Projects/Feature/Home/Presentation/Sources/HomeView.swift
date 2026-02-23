@@ -29,6 +29,9 @@ public struct HomeView: View {
                     if let summary = store.dailySummary {
                         calorieSummarySection(summary: summary)
 
+                        // 걸음수 / 활동 칼로리
+                        healthKitSection(summary: summary)
+
                         // 영양소 프로그레스
                         HomeNutritionSection(summary: summary)
 
@@ -233,6 +236,57 @@ public struct HomeView: View {
             .glassEffect(.regular.tint(.scPrimary.opacity(0.3)), in: .rect(cornerRadius: 12))
         }
         .buttonStyle(.plain)
+    }
+
+    private func healthKitSection(summary: HomeDailySummary) -> some View {
+        HStack(spacing: 12) {
+            // 걸음수 카드
+            HStack(spacing: 8) {
+                Image(systemName: "figure.walk")
+                    .font(.title3)
+                    .foregroundStyle(.scPrimary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("home.steps".localized)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(summary.steps.formatted())")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                }
+
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+
+            // 활동 칼로리 카드
+            HStack(spacing: 8) {
+                Image(systemName: "flame.fill")
+                    .font(.title3)
+                    .foregroundStyle(.scExercise)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("home.activeCalories".localized)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(summary.activeCalories)")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        Text("kcal")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        }
     }
 
     // MARK: - Helpers
