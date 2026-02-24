@@ -79,8 +79,7 @@ public struct MainTabView: View {
                 }
                 .sheet(isPresented: $coordinator.showingExerciseDetail) {
                     if let exerciseId = coordinator.selectedExerciseId {
-                        // TODO: ExerciseDetailView 구현 후 연결
-                        Text("Exercise Detail: \(exerciseId)")
+                        coordinator.makeExerciseDetailView(exerciseId: exerciseId)
                     }
                 }
             } else {

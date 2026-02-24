@@ -143,6 +143,14 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     // MARK: - Exercise
 
     @MainActor
+    public func makeExerciseDetailView(exerciseId: UUID) -> some View {
+        let container = diContainer.makeExerciseDIContainer()
+        return NavigationStack {
+            ExerciseCoordinator(dependencies: container).makeDetailView(for: exerciseId)
+        }
+    }
+
+    @MainActor
     public func makeExerciseList() -> some View {
         return NavigationStack {
             VStack {
