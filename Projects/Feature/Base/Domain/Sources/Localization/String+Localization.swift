@@ -133,18 +133,15 @@ public extension Bundle {
 
 // MARK: - BaseDomain Bundle Helper
 
-/// BaseDomain 번들을 찾기 위한 마커 클래스
-private final class BaseDomainBundleMarker {}
-
-/// BaseDomain 번들 반환
+/// BaseDomain 리소스 번들 반환 (Tuist 생성 Bundle.module 사용)
 public var baseDomainBundle: Bundle {
-    Bundle(for: BaseDomainBundleMarker.self)
+    .module
 }
 
 // MARK: - Auto-registration for BaseDomain
 
 private let _baseDomainBundleRegistration: Void = {
-    baseDomainBundle.registerForLocalization()
+    Bundle.module.registerForLocalization()
 }()
 
 /// Call this to ensure BaseDomain bundle is registered
