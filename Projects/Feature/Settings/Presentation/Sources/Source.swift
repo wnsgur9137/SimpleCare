@@ -202,8 +202,20 @@ public struct SettingsView: View {
 struct NotificationToggleRow: View {
     let category: NotificationCategory
     @ObservedObject var manager: NotificationManager
-    @State private var isEnabled: Bool = false
-    @State private var selectedTime: Date = Date()
+
+    private var isEnabled: Binding<Bool> {
+        Binding(
+            get: { manager.setting(for: category).isEnabled },
+            set: { manager.updateSetting(for: category, isEnabled: $0) }
+        )
+    }
+
+    private var selectedTime: Binding<Date> {
+        Binding(
+            get: { manager.setting(for: category).timeDate },
+            set: { manager.updateTime(for: category, date: $0) }
+        )
+    }
 
     var body: some View {
         VStack(spacing: 8) {
@@ -215,14 +227,11 @@ struct NotificationToggleRow: View {
                 }
                 Text(category.displayName)
                 Spacer()
-                Toggle("", isOn: $isEnabled)
+                Toggle("", isOn: isEnabled)
                     .labelsHidden()
-                    .onChange(of: isEnabled) { _, newValue in
-                        manager.updateSetting(for: category, isEnabled: newValue)
-                    }
             }
 
-            if isEnabled {
+            if isEnabled.wrappedValue {
                 HStack {
                     Text("notification.time".localized)
                         .font(.subheadline)
@@ -230,21 +239,13 @@ struct NotificationToggleRow: View {
                     Spacer()
                     DatePicker(
                         "",
-                        selection: $selectedTime,
+                        selection: selectedTime,
                         displayedComponents: .hourAndMinute
                     )
                     .labelsHidden()
-                    .onChange(of: selectedTime) { _, newValue in
-                        manager.updateTime(for: category, date: newValue)
-                    }
                 }
                 .padding(.leading, category.group.categories.count == 1 ? 32 : 0)
             }
-        }
-        .onAppear {
-            let setting = manager.setting(for: category)
-            isEnabled = setting.isEnabled
-            selectedTime = setting.timeDate
         }
     }
 

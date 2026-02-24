@@ -265,7 +265,7 @@ public final class NotificationManager: ObservableObject {
         guard isAuthorized else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "SimpleCare"
+        content.title = "app.name".localized
         content.body = category.notificationBody
         content.sound = .default
 

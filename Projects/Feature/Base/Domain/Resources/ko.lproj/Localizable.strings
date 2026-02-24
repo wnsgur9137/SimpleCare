@@ -3,6 +3,9 @@
   BaseDomain - Common strings shared across all features
 */
 
+// MARK: - App
+"app.name" = "SimpleCare";
+
 // MARK: - Common
 "common.cancel" = "취소";
 "common.confirm" = "확인";
