@@ -55,3 +55,19 @@
 "tab.weight" = "Weight";
 "tab.settings" = "Settings";
 "tab.calendar" = "Calendar";
+
+// MARK: - Notifications
+"notification.enablePermission" = "Enable Notifications";
+"notification.permissionDescription" = "Please allow notifications to receive reminders";
+"notification.meal" = "Meal Reminders";
+"notification.meal.breakfast" = "Breakfast";
+"notification.meal.lunch" = "Lunch";
+"notification.meal.dinner" = "Dinner";
+"notification.exercise" = "Exercise Reminder";
+"notification.weight" = "Weight Check Reminder";
+"notification.time" = "Notification Time";
+"notification.meal.breakfast.body" = "Time to log your breakfast!";
+"notification.meal.lunch.body" = "Time to log your lunch!";
+"notification.meal.dinner.body" = "Time to log your dinner!";
+"notification.exercise.body" = "Don't forget to log your exercise today!";
+"notification.weight.body" = "Time to measure and log your weight!";

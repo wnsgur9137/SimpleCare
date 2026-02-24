@@ -55,3 +55,19 @@
 "tab.weight" = "체중";
 "tab.settings" = "설정";
 "tab.calendar" = "캘린더";
+
+// MARK: - Notifications
+"notification.enablePermission" = "알림 권한 허용하기";
+"notification.permissionDescription" = "알림을 받으려면 권한을 허용해주세요";
+"notification.meal" = "식사 리마인더";
+"notification.meal.breakfast" = "아침 식사";
+"notification.meal.lunch" = "점심 식사";
+"notification.meal.dinner" = "저녁 식사";
+"notification.exercise" = "운동 리마인더";
+"notification.weight" = "체중 측정 리마인더";
+"notification.time" = "알림 시간";
+"notification.meal.breakfast.body" = "아침 식사를 기록해주세요!";
+"notification.meal.lunch.body" = "점심 식사를 기록해주세요!";
+"notification.meal.dinner.body" = "저녁 식사를 기록해주세요!";
+"notification.exercise.body" = "오늘 운동을 기록해주세요!";
+"notification.weight.body" = "체중을 측정하고 기록해주세요!";
