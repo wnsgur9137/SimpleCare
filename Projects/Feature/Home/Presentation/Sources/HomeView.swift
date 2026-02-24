@@ -48,7 +48,9 @@ public struct HomeView: View {
                         HomeTodayRecordsSection(
                             meals: summary.meals,
                             exercises: summary.exercises,
-                            onAddTap: { store.send(.addRecordButtonTapped) }
+                            onAddTap: { store.send(.addRecordButtonTapped) },
+                            onMealTap: { mealId in store.send(.mealDetailTapped(mealId)) },
+                            onExerciseTap: { exerciseId in store.send(.exerciseDetailTapped(exerciseId)) }
                         )
 
                         // 주간 트렌드

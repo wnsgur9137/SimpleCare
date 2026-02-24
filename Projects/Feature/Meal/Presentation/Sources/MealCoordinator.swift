@@ -43,6 +43,14 @@ public final class MealCoordinator: ObservableObject, Coordinator {
             mealClient: dependencies.mealClient
         )
     }
+
+    @MainActor @ViewBuilder
+    public func makeDetailView(for mealId: UUID) -> some View {
+        MealDetailByIdContainerView(
+            mealId: mealId,
+            mealClient: dependencies.mealClient
+        )
+    }
 }
 
 // MARK: - Container View
@@ -102,5 +110,48 @@ private struct MealDetailContainerView: View {
 
     var body: some View {
         MealDetailView(store: store)
+    }
+}
+
+// MARK: - Detail By ID Container View
+
+private struct MealDetailByIdContainerView: View {
+    let mealId: UUID
+    let mealClient: MealClient
+
+    @State private var meal: MealRecord?
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+
+    var body: some View {
+        Group {
+            if isLoading {
+                ProgressView()
+            } else if let meal {
+                MealDetailContainerView(meal: meal, mealClient: mealClient)
+            } else if let errorMessage {
+                ContentUnavailableView(
+                    "common.error".localized,
+                    systemImage: "exclamationmark.triangle",
+                    description: Text(errorMessage)
+                )
+            }
+        }
+        .task {
+            await loadMeal()
+        }
+    }
+
+    private func loadMeal() async {
+        isLoading = true
+        do {
+            meal = try await mealClient.fetchMeal(mealId)
+            if meal == nil {
+                errorMessage = "meal.notFound".localized
+            }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
     }
 }

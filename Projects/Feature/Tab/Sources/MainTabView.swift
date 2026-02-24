@@ -72,6 +72,17 @@ public struct MainTabView: View {
                         ProfileCoordinator(dependencies: container).start()
                     }
                 }
+                .sheet(isPresented: $coordinator.showingMealDetail) {
+                    if let mealId = coordinator.selectedMealId {
+                        coordinator.makeMealDetailView(mealId: mealId)
+                    }
+                }
+                .sheet(isPresented: $coordinator.showingExerciseDetail) {
+                    if let exerciseId = coordinator.selectedExerciseId {
+                        // TODO: ExerciseDetailView 구현 후 연결
+                        Text("Exercise Detail: \(exerciseId)")
+                    }
+                }
             } else {
                 ProgressView()
             }
