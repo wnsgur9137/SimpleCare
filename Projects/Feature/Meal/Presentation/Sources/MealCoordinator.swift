@@ -35,6 +35,14 @@ public final class MealCoordinator: ObservableObject, Coordinator {
             }
         )
     }
+
+    @MainActor @ViewBuilder
+    public func makeDetailView(for meal: MealRecord) -> some View {
+        MealDetailContainerView(
+            meal: meal,
+            mealClient: dependencies.mealClient
+        )
+    }
 }
 
 // MARK: - Container View
@@ -67,5 +75,32 @@ private struct MealContainerView: View {
 
     var body: some View {
         MealRecordView(store: store)
+    }
+}
+
+// MARK: - Detail Container View
+
+private struct MealDetailContainerView: View {
+    let meal: MealRecord
+    let mealClient: MealClient
+
+    @State private var store: StoreOf<MealDetailFeature>
+
+    init(meal: MealRecord, mealClient: MealClient) {
+        self.meal = meal
+        self.mealClient = mealClient
+        self._store = State(
+            initialValue: Store(
+                initialState: MealDetailFeature.State(meal: meal)
+            ) {
+                MealDetailFeature()
+            } withDependencies: {
+                $0.mealClient = mealClient
+            }
+        )
+    }
+
+    var body: some View {
+        MealDetailView(store: store)
     }
 }
