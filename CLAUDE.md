@@ -21,7 +21,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 | Phase 1.5: Known Gap Fixes | ✅ Done | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
 | Phase 2: Home UI & Visualization | ✅ Done | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
 | Phase 3: Extended Features | ✅ Done | PR [#28](https://github.com/wnsgur9137/SimpleCare/pull/28) |
-| Phase 4: Integration & Extras | 🟡 In Progress | Theme settings done, HealthKit/notifications pending |
+| Phase 4: Integration & Extras | 🟡 In Progress | Theme/HealthKit done, notifications/export pending |
 | Phase 5: Image/Voice Features | 🔵 Low Priority | Meal image picker/analysis (deferred) |
 
 ## Tech Stack

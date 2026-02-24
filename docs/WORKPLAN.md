@@ -1,7 +1,7 @@
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
-> 최종 수정일: 2026-02-21
+> 최종 수정일: 2026-02-24
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -202,7 +202,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 | 순서 | 작업 | PRD 참조 | 예상 복잡도 | 상태 |
 |------|------|----------|------------|------|
 | 4.1 | HealthKitInfra 구현 | §4.3 | 높음 | ✅ 완료 |
-| 4.2 | 걸음수/활동 칼로리 연동 | §4.3 | 중간 | 🔴 대기 |
+| 4.2 | 걸음수/활동 칼로리 연동 | §4.3 | 중간 | ✅ 완료 |
 | 4.3 | 알림/리마인더 설정 | §3.2.8 | 중간 | 🔴 대기 |
 | 4.4 | 데이터 내보내기 (CSV/JSON) | §3.2.7 | 중간 | 🔴 대기 |
 | 4.5 | 데이터 삭제/초기화 | §3.2.7 | 낮음 | 🔴 대기 |
@@ -215,6 +215,11 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - HealthKitManagerProtocol 추출 (DI/테스트 가능성)
 - SimpleCare.entitlements HealthKit capability 추가
 - NSHealthShareUsageDescription, NSHealthUpdateUsageDescription Info.plist 키 추가
+
+**4.2 구현 내역** (PR [#42](https://github.com/wnsgur9137/SimpleCare/pull/42)):
+- HomeFeature에 HealthKit 걸음수/활동 칼로리 연동
+- 홈 화면에 걸음수 및 활동 칼로리 표시 UI 추가
+- HealthKitManager를 통한 실시간 데이터 조회
 
 **4.6 구현 내역**:
 - ThemeManager: 테마 상태 관리 (system/light/dark)
@@ -264,19 +269,22 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ## 7. 즉시 실행 권장 작업
 
-### 최고 ROI 작업: Phase 1.3 (실제 API 연동)
+### 최고 ROI 작업: Phase 4.3 (알림/리마인더 설정)
 
 **완료된 우선순위 작업**:
 - ~~**Phase L (다국어 지원)**~~: ✅ 완료
+- ~~**Phase 4.1-4.2 (HealthKit 연동)**~~: ✅ 완료
+- ~~**Phase 4.6 (테마 설정)**~~: ✅ 완료
 
 **권장 순서**:
 1. ~~**Phase L: 다국어 지원**~~ ✅ 완료
 2. ~~**Phase 4.1: HealthKitInfra 구현**~~ ✅ 완료
-3. **Phase 4.2: 걸음수/활동 칼로리 연동** ← 다음 작업
-4. **Phase 1.3: 실제 OpenAI API 연동**
-5. Phase 4.3: 알림/리마인더 설정
+3. ~~**Phase 4.2: 걸음수/활동 칼로리 연동**~~ ✅ 완료
+4. ~~**Phase 4.6: 테마 설정**~~ ✅ 완료
+5. **Phase 4.3: 알림/리마인더 설정** ← 다음 작업
 6. Phase 4.4-4.5: 데이터 내보내기/삭제
-7. Phase 5: 이미지/음성 기능 (최후순위)
+7. Phase 1.3: 실제 OpenAI API 연동
+8. Phase 5: 이미지/음성 기능 (최후순위)
 
 **Phase 1 완료 시 사용자 경험**:
 - Home에서 개인화된 AI 건강 코멘트 확인
@@ -301,7 +309,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 ### v1.2 - PRD §7.3
 - [x] Phase 3 완료 (즐겨찾기/최근 기록/커스텀 운동/리포트/BMI)
 - [x] Phase 4.1 완료 (HealthKitInfra)
-- [ ] Phase 4.2 완료 (HealthKit Feature 연동)
+- [x] Phase 4.2 완료 (HealthKit Feature 연동)
+- [x] Phase 4.6 완료 (테마 설정)
 - [ ] Phase 4.3 완료 (알림)
 
 ### v1.3
@@ -351,5 +360,5 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 
 ---
 
-*문서 버전: 3.2*
-*최종 수정일: 2026-02-21*
+*문서 버전: 3.3*
+*최종 수정일: 2026-02-24*
