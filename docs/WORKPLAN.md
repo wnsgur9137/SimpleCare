@@ -203,7 +203,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 |------|------|----------|------------|------|
 | 4.1 | HealthKitInfra 구현 | §4.3 | 높음 | ✅ 완료 |
 | 4.2 | 걸음수/활동 칼로리 연동 | §4.3 | 중간 | ✅ 완료 |
-| 4.3 | 알림/리마인더 설정 | §3.2.8 | 중간 | 🔴 대기 |
+| 4.3 | 알림/리마인더 설정 | §3.2.8 | 중간 | ✅ 완료 |
 | 4.4 | 데이터 내보내기 (CSV/JSON) | §3.2.7 | 중간 | 🔴 대기 |
 | 4.5 | 데이터 삭제/초기화 | §3.2.7 | 낮음 | 🔴 대기 |
 | 4.6 | 테마 설정 (다크/라이트) | §3.2.8 | 낮음 | ✅ 완료 |
@@ -220,6 +220,16 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - HomeFeature에 HealthKit 걸음수/활동 칼로리 연동
 - 홈 화면에 걸음수 및 활동 칼로리 표시 UI 추가
 - HealthKitManager를 통한 실시간 데이터 조회
+
+**4.3 구현 내역** (PR [#43](https://github.com/wnsgur9137/SimpleCare/pull/43)):
+- NotificationManager 싱글톤: 5개 카테고리별 알림 관리
+- NotificationCategory: breakfast, lunch, dinner, exercise, weight
+- NotificationSetting: isEnabled, hour, minute 저장
+- UNUserNotificationCenter 연동: 로컬 알림 스케줄링
+- UserDefaults JSON 인코딩 저장
+- Settings 화면: 알림 권한 요청, 카테고리별 토글/시간 설정
+- NotificationEnableBanner: 식사/운동/체중 탭에서 알림 활성화 유도
+- 홈 화면 진입 시 알림 권한 요청
 
 **4.6 구현 내역**:
 - ThemeManager: 테마 상태 관리 (system/light/dark)
@@ -269,20 +279,21 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ## 7. 즉시 실행 권장 작업
 
-### 최고 ROI 작업: Phase 4.3 (알림/리마인더 설정)
+### 최고 ROI 작업: Phase 4.4-4.5 (데이터 내보내기/삭제)
 
 **완료된 우선순위 작업**:
 - ~~**Phase L (다국어 지원)**~~: ✅ 완료
 - ~~**Phase 4.1-4.2 (HealthKit 연동)**~~: ✅ 완료
 - ~~**Phase 4.6 (테마 설정)**~~: ✅ 완료
+- ~~**Phase 4.3 (알림/리마인더 설정)**~~: ✅ 완료
 
 **권장 순서**:
 1. ~~**Phase L: 다국어 지원**~~ ✅ 완료
 2. ~~**Phase 4.1: HealthKitInfra 구현**~~ ✅ 완료
 3. ~~**Phase 4.2: 걸음수/활동 칼로리 연동**~~ ✅ 완료
 4. ~~**Phase 4.6: 테마 설정**~~ ✅ 완료
-5. **Phase 4.3: 알림/리마인더 설정** ← 다음 작업
-6. Phase 4.4-4.5: 데이터 내보내기/삭제
+5. ~~**Phase 4.3: 알림/리마인더 설정**~~ ✅ 완료
+6. **Phase 4.4-4.5: 데이터 내보내기/삭제** ← 다음 작업
 7. Phase 1.3: 실제 OpenAI API 연동
 8. Phase 5: 이미지/음성 기능 (최후순위)
 
@@ -311,7 +322,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [x] Phase 4.1 완료 (HealthKitInfra)
 - [x] Phase 4.2 완료 (HealthKit Feature 연동)
 - [x] Phase 4.6 완료 (테마 설정)
-- [ ] Phase 4.3 완료 (알림)
+- [x] Phase 4.3 완료 (알림)
 
 ### v1.3
 - [ ] Phase 4.4-4.5 완료 (데이터 내보내기/삭제)

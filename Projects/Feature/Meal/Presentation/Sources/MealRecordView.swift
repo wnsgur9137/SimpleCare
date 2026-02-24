@@ -23,6 +23,9 @@ public struct MealRecordView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    // 알림 활성화 배너
+                    NotificationEnableBanner(categories: [.breakfast, .lunch, .dinner])
+
                     // 식사 유형 선택
                     mealTypeSection
 

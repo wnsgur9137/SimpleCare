@@ -13,6 +13,7 @@ import BasePresentation
 struct SimpleCareApp: App {
     @StateObject private var appCoordinator: AppCoordinator
     @ObservedObject private var themeManager = ThemeManager.shared
+    @ObservedObject private var notificationManager = NotificationManager.shared
 
     init() {
         let diContainer = AppDIContainer()
@@ -23,6 +24,9 @@ struct SimpleCareApp: App {
         WindowGroup {
             AppCoordinatorView(coordinator: appCoordinator)
                 .preferredColorScheme(themeManager.effectiveColorScheme)
+                .task {
+                    await notificationManager.checkAuthorizationStatus()
+                }
         }
     }
 }
