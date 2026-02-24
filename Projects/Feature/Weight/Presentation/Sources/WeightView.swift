@@ -24,6 +24,9 @@ public struct WeightView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    // 알림 활성화 배너
+                    NotificationEnableBanner(category: .weight)
+
                     // 현재 체중 입력
                     weightInputSection
 

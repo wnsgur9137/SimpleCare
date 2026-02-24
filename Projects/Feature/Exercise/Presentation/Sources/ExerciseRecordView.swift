@@ -21,6 +21,13 @@ public struct ExerciseRecordView: View {
     public var body: some View {
         NavigationStack {
             Form {
+                // 알림 활성화 배너
+                Section {
+                    NotificationEnableBanner(category: .exercise)
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+
                 // 운동 종류 선택
                 Section("exercise.type".localized) {
                     Picker("exercise.category".localized, selection: .constant(store.exerciseType.category)) {
