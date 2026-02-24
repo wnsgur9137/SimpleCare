@@ -71,3 +71,6 @@
 "notification.meal.dinner.body" = "Time to log your dinner!";
 "notification.exercise.body" = "Don't forget to log your exercise today!";
 "notification.weight.body" = "Time to measure and log your weight!";
+"notification.banner.title" = "Enable notifications";
+"notification.banner.description" = "Get %@ reminders";
+"notification.banner.enable" = "Enable";

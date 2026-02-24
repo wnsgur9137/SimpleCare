@@ -71,3 +71,6 @@
 "notification.meal.dinner.body" = "저녁 식사를 기록해주세요!";
 "notification.exercise.body" = "오늘 운동을 기록해주세요!";
 "notification.weight.body" = "체중을 측정하고 기록해주세요!";
+"notification.banner.title" = "알림을 켜보세요";
+"notification.banner.description" = "%@ 리마인더를 받아보세요";
+"notification.banner.enable" = "켜기";
