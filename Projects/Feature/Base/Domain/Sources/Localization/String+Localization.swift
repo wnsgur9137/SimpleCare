@@ -84,6 +84,9 @@ public final class LocalizationBundleRegistry: @unchecked Sendable {
 public extension String {
     /// Returns localized string searching through registered module bundles
     var localized: String {
+        // BaseDomain 번들이 등록되었는지 확인
+        ensureBaseDomainLocalizationRegistered()
+
         let languageCode = Self.resolveCurrentLanguageCode()
 
         // 등록된 모든 번들에서 탐색
@@ -128,12 +131,20 @@ public extension Bundle {
     }
 }
 
+// MARK: - BaseDomain Bundle Helper
+
+/// BaseDomain 번들을 찾기 위한 마커 클래스
+private final class BaseDomainBundleMarker {}
+
+/// BaseDomain 번들 반환
+public var baseDomainBundle: Bundle {
+    Bundle(for: BaseDomainBundleMarker.self)
+}
+
 // MARK: - Auto-registration for BaseDomain
 
 private let _baseDomainBundleRegistration: Void = {
-    if let bundle = Bundle(identifier: "com.junhyeok.SimpleCare.BaseDomain") {
-        bundle.registerForLocalization()
-    }
+    baseDomainBundle.registerForLocalization()
 }()
 
 /// Call this to ensure BaseDomain bundle is registered
