@@ -67,6 +67,18 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         GetMealHistoryUseCase(repository: makeMealRepository())
     }
 
+    private func makeUpdateMealUseCase() -> UpdateMealUseCaseProtocol {
+        UpdateMealUseCase(repository: makeMealRepository())
+    }
+
+    private func makeDeleteMealUseCase() -> DeleteMealUseCaseProtocol {
+        DeleteMealUseCase(repository: makeMealRepository())
+    }
+
+    private func makeFetchMealUseCase() -> FetchMealUseCaseProtocol {
+        FetchMealUseCase(repository: makeMealRepository())
+    }
+
     private func makeGetFavoriteFoodsUseCase() -> GetFavoriteFoodsUseCaseProtocol {
         GetFavoriteFoodsUseCase(repository: favoriteFoodRepository)
     }
@@ -89,6 +101,9 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         let estimateUseCase = makeEstimateNutritionUseCase()
         let analyzeUseCase = makeAnalyzeMealImageUseCase()
         let recordUseCase = makeRecordMealUseCase()
+        let updateUseCase = makeUpdateMealUseCase()
+        let deleteUseCase = makeDeleteMealUseCase()
+        let fetchUseCase = makeFetchMealUseCase()
         let dailyMealsUseCase = makeGetDailyMealsUseCase()
         let historyUseCase = makeGetMealHistoryUseCase()
         let getFavoritesUseCase = makeGetFavoriteFoodsUseCase()
@@ -105,6 +120,15 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
             },
             recordMeal: { meal in
                 try await recordUseCase.execute(meal: meal)
+            },
+            updateMeal: { meal in
+                try await updateUseCase.execute(meal: meal)
+            },
+            deleteMeal: { meal in
+                try await deleteUseCase.execute(meal: meal)
+            },
+            fetchMeal: { id in
+                try await fetchUseCase.execute(id: id)
             },
             fetchDailyMeals: { date, userProfileId in
                 try await dailyMealsUseCase.execute(date: date, userProfileId: userProfileId)
