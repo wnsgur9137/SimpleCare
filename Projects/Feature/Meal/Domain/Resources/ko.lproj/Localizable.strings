@@ -39,3 +39,11 @@
 "meal.noFavorites" = "저장된 즐겨찾기가 없습니다";
 "meal.noRecent" = "최근 7일간 기록이 없습니다";
 "meal.testFood" = "테스트 음식";
+
+// MARK: - Meal Detail
+"meal.detail.nutrition" = "영양 정보";
+"meal.detail.foods" = "음식 목록";
+"meal.detail.foodCount" = "개";
+"meal.detail.delete" = "기록 삭제";
+"meal.detail.deleteConfirm.title" = "식사 기록 삭제";
+"meal.detail.deleteConfirm.message" = "이 식사 기록을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.";
