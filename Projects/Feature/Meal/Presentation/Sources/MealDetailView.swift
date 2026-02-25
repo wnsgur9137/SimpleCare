@@ -25,8 +25,8 @@ public struct MealDetailView: View {
                 headerSection
                 nutritionSummarySection
                 foodItemsSection
-                if let notes = store.meal.notes, !notes.isEmpty {
-                    notesSection(notes)
+                if store.isEditing || !(store.meal.notes?.isEmpty ?? true) {
+                    notesSection
                 }
                 deleteButton
             }
@@ -197,7 +197,7 @@ public struct MealDetailView: View {
 
     // MARK: - Notes Section
 
-    private func notesSection(_ notes: String) -> some View {
+    private var notesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("meal.memo".localized)
                 .font(.headline)
@@ -209,7 +209,7 @@ public struct MealDetailView: View {
                 ), axis: .vertical)
                 .lineLimit(2...4)
                 .textFieldStyle(.roundedBorder)
-            } else {
+            } else if let notes = store.meal.notes, !notes.isEmpty {
                 Text(notes)
                     .font(.body)
                     .foregroundStyle(.secondary)
@@ -261,10 +261,14 @@ public struct MealDetailView: View {
 
     // MARK: - Helpers
 
-    private var formattedDate: String {
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd (E) HH:mm"
-        return formatter.string(from: store.meal.date)
+        return formatter
+    }()
+
+    private var formattedDate: String {
+        Self.dateFormatter.string(from: store.meal.date)
     }
 
     private var mealTypeColor: Color {

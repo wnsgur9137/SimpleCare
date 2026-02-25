@@ -9,6 +9,20 @@ import Foundation
 import ComposableArchitecture
 import MealDomain
 
+// MARK: - Equatable Error Wrapper
+
+public struct EquatableError: Error, Equatable {
+    public let description: String
+
+    public init(_ error: Error) {
+        self.description = error.localizedDescription
+    }
+
+    public static func == (lhs: EquatableError, rhs: EquatableError) -> Bool {
+        lhs.description == rhs.description
+    }
+}
+
 @Reducer
 public struct MealDetailFeature {
     // MARK: - State
@@ -44,62 +58,21 @@ public struct MealDetailFeature {
         case binding(BindingAction<State>)
         case onAppear
         case refreshMeal
-        case refreshMealResponse(Result<MealRecord?, Error>)
+        case refreshMealResponse(Result<MealRecord?, EquatableError>)
         case editButtonTapped
         case cancelEdit
         case saveChanges
-        case saveChangesResponse(Result<Void, Error>)
+        case saveChangesResponse(Result<Bool, EquatableError>)
         case deleteButtonTapped
         case confirmDelete
         case cancelDelete
-        case deleteResponse(Result<Void, Error>)
+        case deleteResponse(Result<Bool, EquatableError>)
         case dismissError
         case delegate(Delegate)
 
         public enum Delegate: Equatable {
             case mealUpdated(MealRecord)
             case mealDeleted(UUID)
-        }
-
-        public static func == (lhs: Action, rhs: Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.binding(let l), .binding(let r)):
-                return l == r
-            case (.onAppear, .onAppear):
-                return true
-            case (.refreshMeal, .refreshMeal):
-                return true
-            case (.refreshMealResponse(.success(let l)), .refreshMealResponse(.success(let r))):
-                return l == r
-            case (.refreshMealResponse(.failure), .refreshMealResponse(.failure)):
-                return true
-            case (.editButtonTapped, .editButtonTapped):
-                return true
-            case (.cancelEdit, .cancelEdit):
-                return true
-            case (.saveChanges, .saveChanges):
-                return true
-            case (.saveChangesResponse(.success), .saveChangesResponse(.success)):
-                return true
-            case (.saveChangesResponse(.failure), .saveChangesResponse(.failure)):
-                return true
-            case (.deleteButtonTapped, .deleteButtonTapped):
-                return true
-            case (.confirmDelete, .confirmDelete):
-                return true
-            case (.cancelDelete, .cancelDelete):
-                return true
-            case (.deleteResponse(.success), .deleteResponse(.success)):
-                return true
-            case (.deleteResponse(.failure), .deleteResponse(.failure)):
-                return true
-            case (.dismissError, .dismissError):
-                return true
-            case (.delegate(let l), .delegate(let r)):
-                return l == r
-            default:
-                return false
-            }
         }
     }
 
@@ -130,7 +103,7 @@ public struct MealDetailFeature {
                         let meal = try await mealClient.fetchMeal(mealId)
                         await send(.refreshMealResponse(.success(meal)))
                     } catch {
-                        await send(.refreshMealResponse(.failure(error)))
+                        await send(.refreshMealResponse(.failure(EquatableError(error))))
                     }
                 }
 
@@ -142,7 +115,7 @@ public struct MealDetailFeature {
                 return .none
 
             case .refreshMealResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.description)
                 return .none
 
             case .editButtonTapped:
@@ -159,9 +132,9 @@ public struct MealDetailFeature {
                 return .run { send in
                     do {
                         try await mealClient.updateMeal(meal)
-                        await send(.saveChangesResponse(.success(())))
+                        await send(.saveChangesResponse(.success(true)))
                     } catch {
-                        await send(.saveChangesResponse(.failure(error)))
+                        await send(.saveChangesResponse(.failure(EquatableError(error))))
                     }
                 }
 
@@ -171,7 +144,7 @@ public struct MealDetailFeature {
                 return .send(.delegate(.mealUpdated(state.meal)))
 
             case .saveChangesResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.description)
                 return .none
 
             case .deleteButtonTapped:
@@ -185,9 +158,9 @@ public struct MealDetailFeature {
                 return .run { send in
                     do {
                         try await mealClient.deleteMeal(meal)
-                        await send(.deleteResponse(.success(())))
+                        await send(.deleteResponse(.success(true)))
                     } catch {
-                        await send(.deleteResponse(.failure(error)))
+                        await send(.deleteResponse(.failure(EquatableError(error))))
                     }
                 }
 
@@ -200,7 +173,7 @@ public struct MealDetailFeature {
                 return .send(.delegate(.mealDeleted(state.meal.id)))
 
             case .deleteResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.description)
                 return .none
 
             case .dismissError:
