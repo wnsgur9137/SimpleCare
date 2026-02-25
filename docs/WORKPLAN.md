@@ -237,29 +237,28 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - 앱 전역 preferredColorScheme 적용
 - UserDefaults 저장으로 설정 유지
 
-### Phase 5: 식사/운동 상세 페이지 🔴
+### ~~Phase 5: 식사/운동 상세 페이지~~ ✅ 완료
 
-> 기록된 식사/운동 데이터 상세 보기 및 편집 기능
+> PR [#45](https://github.com/wnsgur9137/SimpleCare/pull/45)
 
 | 순서 | 작업 | 예상 복잡도 | 상태 |
 |------|------|------------|------|
-| 5.1 | MealClient/ExerciseClient 확장 (delete, update, copy) | 중간 | 🔴 대기 |
-| 5.2 | MealDetailFeature TCA Reducer 구현 | 중간 | 🔴 대기 |
-| 5.3 | MealDetailView UI 구현 | 중간 | 🔴 대기 |
-| 5.4 | ExerciseDetailFeature TCA Reducer 구현 | 중간 | 🔴 대기 |
-| 5.5 | ExerciseDetailView UI 구현 | 중간 | 🔴 대기 |
-| 5.6 | 캘린더/홈에서 상세 페이지 네비게이션 연결 | 낮음 | 🔴 대기 |
-| 5.7 | 상세 페이지 로컬라이제이션 추가 | 낮음 | 🔴 대기 |
-| 5.8 | 공통 컴포넌트 추출 (DetailHeaderView, SummaryCard) | 낮음 | 🔴 대기 |
+| 5.1 | MealClient/ExerciseClient 확장 (delete, update, fetch) | 중간 | ✅ 완료 |
+| 5.2 | MealDetailFeature TCA Reducer 구현 | 중간 | ✅ 완료 |
+| 5.3 | MealDetailView UI 구현 | 중간 | ✅ 완료 |
+| 5.4 | ExerciseDetailFeature TCA Reducer 구현 | 중간 | ✅ 완료 |
+| 5.5 | ExerciseDetailView UI 구현 | 중간 | ✅ 완료 |
+| 5.6 | 홈에서 상세 페이지 네비게이션 연결 | 낮음 | ✅ 완료 |
+| 5.7 | 상세 페이지 로컬라이제이션 추가 | 낮음 | ✅ 완료 |
+| 5.8 | 캘린더에서 상세 페이지 네비게이션 연결 | 낮음 | 🔴 별도 PR |
 
-**주요 기능**:
-- 식사 상세: 영양소 요약, 음식 목록, 편집/삭제, 즐겨찾기 추가, 복사
-- 운동 상세: 운동 요약, 칼로리 분석, 편집/삭제, 복사
-- 진입 경로: 캘린더 탭, 홈 화면, 최근 기록
-
-**완료 조건**:
-- 식사/운동 기록 상세 보기 및 편집 가능
-- 기록 삭제 및 다른 날짜로 복사 가능
+**구현 내역**:
+- MealDetailFeature/View: 영양소 요약, 음식 목록, 편집/삭제 기능
+- ExerciseDetailFeature/View: 운동 정보, 강도/시간 편집, 삭제 기능
+- 홈 화면에서 식사/운동 기록 탭 → 상세 페이지 이동
+- MealClient: updateMeal, deleteMeal, fetchMeal 추가
+- ExerciseClient: updateExercise, deleteExercise, fetchExercise 추가
+- DIContainer 업데이트 (UseCase 연결)
 
 ### Phase 6: 이미지/음성 기능 (최후순위)
 
@@ -317,8 +316,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 3. ~~**Phase 4.2: 걸음수/활동 칼로리 연동**~~ ✅ 완료
 4. ~~**Phase 4.6: 테마 설정**~~ ✅ 완료
 5. ~~**Phase 4.3: 알림/리마인더 설정**~~ ✅ 완료
-6. **Phase 5: 식사/운동 상세 페이지** ← 다음 작업
-7. Phase 4.4-4.5: 데이터 내보내기/삭제
+6. ~~**Phase 5: 식사/운동 상세 페이지**~~ ✅ 완료
+7. **Phase 4.4-4.5: 데이터 내보내기/삭제** ← 다음 작업
 8. Phase 1.3: 실제 OpenAI API 연동
 9. Phase 6: 이미지/음성 기능 (최후순위)
 
@@ -350,10 +349,11 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [x] Phase 4.3 완료 (알림)
 
 ### v1.3
+- [x] Phase 5 완료 (식사/운동 상세 페이지)
 - [ ] Phase 4.4-4.5 완료 (데이터 내보내기/삭제)
 
 ### v2.0 - PRD §7.4
-- [ ] Phase 5 완료 (이미지/음성 기능)
+- [ ] Phase 6 완료 (이미지/음성 기능)
 - [ ] Widget / Live Activity
 - [ ] AI 맞춤 추천
 - [ ] 전체 Phase 완료
