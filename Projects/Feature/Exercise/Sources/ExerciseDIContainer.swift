@@ -68,21 +68,45 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         DeleteCustomExerciseUseCase(repository: customExerciseRepository)
     }
 
+    private func makeUpdateExerciseUseCase() -> UpdateExerciseUseCaseProtocol {
+        UpdateExerciseUseCase(repository: makeExerciseRepository())
+    }
+
+    private func makeDeleteExerciseUseCase() -> DeleteExerciseUseCaseProtocol {
+        DeleteExerciseUseCase(repository: makeExerciseRepository())
+    }
+
+    private func makeFetchExerciseUseCase() -> FetchExerciseUseCaseProtocol {
+        FetchExerciseUseCase(repository: makeExerciseRepository())
+    }
+
     // MARK: - TCA Dependencies
 
     public var exerciseClient: ExerciseClient {
         let recordUseCase = makeRecordExerciseUseCase()
-        let fetchUseCase = makeGetDailyExercisesUseCase()
+        let fetchDailyUseCase = makeGetDailyExercisesUseCase()
         let getCustomUseCase = makeGetCustomExercisesUseCase()
         let saveCustomUseCase = makeSaveCustomExerciseUseCase()
         let deleteCustomUseCase = makeDeleteCustomExerciseUseCase()
+        let updateUseCase = makeUpdateExerciseUseCase()
+        let deleteUseCase = makeDeleteExerciseUseCase()
+        let fetchUseCase = makeFetchExerciseUseCase()
 
         return ExerciseClient(
             recordExercise: { record in
                 try await recordUseCase.execute(exercise: record)
             },
+            updateExercise: { record in
+                try await updateUseCase.execute(exercise: record)
+            },
+            deleteExercise: { record in
+                try await deleteUseCase.execute(exercise: record)
+            },
+            fetchExercise: { id in
+                try await fetchUseCase.execute(id: id)
+            },
             fetchExercises: { date, userProfileId in
-                try await fetchUseCase.execute(date: date, userProfileId: userProfileId)
+                try await fetchDailyUseCase.execute(date: date, userProfileId: userProfileId)
             },
             getCustomExercises: { userProfileId in
                 try await getCustomUseCase.execute(userProfileId: userProfileId)

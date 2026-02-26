@@ -36,6 +36,14 @@ public final class ExerciseCoordinator: ObservableObject, Coordinator {
             }
         )
     }
+
+    @MainActor @ViewBuilder
+    public func makeDetailView(for exerciseId: UUID) -> some View {
+        ExerciseDetailByIdContainerView(
+            exerciseId: exerciseId,
+            exerciseClient: dependencies.exerciseClient
+        )
+    }
 }
 
 // MARK: - Container View
@@ -80,5 +88,77 @@ private struct ExerciseContainerView: View {
                 // saveExerciseResponse(.success) 후 isLoading이 false가 되면
                 // 저장 완료로 간주
             }
+    }
+}
+
+// MARK: - Detail By ID Container View
+
+private struct ExerciseDetailByIdContainerView: View {
+    let exerciseId: UUID
+    let exerciseClient: ExerciseClient
+
+    @State private var exercise: ExerciseRecord?
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        Group {
+            if isLoading {
+                ProgressView()
+            } else if let exercise {
+                ExerciseDetailContainerView(
+                    exercise: exercise,
+                    exerciseClient: exerciseClient
+                )
+            } else {
+                ContentUnavailableView(
+                    "exercise.notFound".localized,
+                    systemImage: "figure.run.circle",
+                    description: Text(errorMessage ?? "")
+                )
+            }
+        }
+        .task {
+            await loadExercise()
+        }
+    }
+
+    private func loadExercise() async {
+        isLoading = true
+        do {
+            exercise = try await exerciseClient.fetchExercise(exerciseId)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+}
+
+// MARK: - Detail Container View
+
+private struct ExerciseDetailContainerView: View {
+    let exercise: ExerciseRecord
+    let exerciseClient: ExerciseClient
+
+    @State private var store: StoreOf<ExerciseDetailFeature>
+    @Environment(\.dismiss) private var dismiss
+
+    init(exercise: ExerciseRecord, exerciseClient: ExerciseClient) {
+        self.exercise = exercise
+        self.exerciseClient = exerciseClient
+        self._store = State(
+            initialValue: Store(
+                initialState: ExerciseDetailFeature.State(exercise: exercise)
+            ) {
+                ExerciseDetailFeature()
+            } withDependencies: {
+                $0.exerciseClient = exerciseClient
+            }
+        )
+    }
+
+    var body: some View {
+        ExerciseDetailView(store: store)
     }
 }

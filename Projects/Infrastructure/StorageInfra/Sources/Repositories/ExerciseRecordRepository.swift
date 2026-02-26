@@ -10,6 +10,7 @@ import SwiftData
 
 /// 운동 기록 저장소 프로토콜
 public protocol ExerciseRecordRepositoryProtocol: Sendable {
+    func fetchExercise(id: UUID) async throws -> ExerciseRecordModel?
     func fetchExercises(for date: Date, userProfileId: UUID) async throws -> [ExerciseRecordModel]
     func fetchExercises(from startDate: Date, to endDate: Date, userProfileId: UUID) async throws -> [ExerciseRecordModel]
     func saveExercise(_ exercise: ExerciseRecordModel) async throws
@@ -24,6 +25,15 @@ public final class ExerciseRecordRepository: ExerciseRecordRepositoryProtocol {
 
     nonisolated public init(container: ModelContainer = StorageContainer.shared.container) {
         self.container = container
+    }
+
+    public func fetchExercise(id: UUID) async throws -> ExerciseRecordModel? {
+        let context = container.mainContext
+        let predicate = #Predicate<ExerciseRecordModel> { exercise in
+            exercise.id == id
+        }
+        let descriptor = FetchDescriptor<ExerciseRecordModel>(predicate: predicate)
+        return try context.fetch(descriptor).first
     }
 
     public func fetchExercises(for date: Date, userProfileId: UUID) async throws -> [ExerciseRecordModel] {

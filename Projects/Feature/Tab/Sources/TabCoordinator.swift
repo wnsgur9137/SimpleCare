@@ -29,7 +29,11 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @Published public var selectedTab: AppTab = .home
     @Published public var showingMealRecord: Bool = false
+    @Published public var showingMealDetail: Bool = false
+    @Published public var selectedMealId: UUID?
     @Published public var showingExerciseRecord: Bool = false
+    @Published public var showingExerciseDetail: Bool = false
+    @Published public var selectedExerciseId: UUID?
     @Published public var showSettings: Bool = false
     @Published public var showProfile: Bool = false
     @Published public var isReady: Bool = false
@@ -75,8 +79,16 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         coordinator.onNavigateToMeal = { [weak self] in
             self?.selectedTab = .meal
         }
+        coordinator.onNavigateToMealDetail = { [weak self] mealId in
+            self?.selectedMealId = mealId
+            self?.showingMealDetail = true
+        }
         coordinator.onNavigateToExercise = { [weak self] in
             self?.selectedTab = .exercise
+        }
+        coordinator.onNavigateToExerciseDetail = { [weak self] exerciseId in
+            self?.selectedExerciseId = exerciseId
+            self?.showingExerciseDetail = true
         }
         coordinator.onNavigateToWeight = { [weak self] in
             self?.selectedTab = .progress
@@ -92,6 +104,14 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     }
 
     // MARK: - Meal
+
+    @MainActor
+    public func makeMealDetailView(mealId: UUID) -> some View {
+        let container = diContainer.makeMealDIContainer()
+        return NavigationStack {
+            MealCoordinator(dependencies: container).makeDetailView(for: mealId)
+        }
+    }
 
     @MainActor
     public func makeMealList() -> some View {
@@ -121,6 +141,14 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     }
 
     // MARK: - Exercise
+
+    @MainActor
+    public func makeExerciseDetailView(exerciseId: UUID) -> some View {
+        let container = diContainer.makeExerciseDIContainer()
+        return NavigationStack {
+            ExerciseCoordinator(dependencies: container).makeDetailView(for: exerciseId)
+        }
+    }
 
     @MainActor
     public func makeExerciseList() -> some View {

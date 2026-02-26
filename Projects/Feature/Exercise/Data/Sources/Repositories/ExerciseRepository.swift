@@ -16,6 +16,13 @@ public final class ExerciseRepository: ExerciseRepositoryProtocol, @unchecked Se
         self.storage = storage
     }
 
+    public func getExercise(id: UUID) async throws -> ExerciseRecord? {
+        guard let model = try await storage.fetchExercise(id: id) else {
+            return nil
+        }
+        return model.toEntity()
+    }
+
     public func getExercises(for date: Date, userProfileId: UUID) async throws -> [ExerciseRecord] {
         let models = try await storage.fetchExercises(for: date, userProfileId: userProfileId)
         return models.map { $0.toEntity() }

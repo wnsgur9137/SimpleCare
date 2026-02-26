@@ -34,7 +34,9 @@ public struct HomeFeature {
 
         public enum NavigationTarget: Equatable {
             case meal
+            case mealDetail(UUID)
             case exercise
+            case exerciseDetail(UUID)
             case weight
             case settings
             case profile
@@ -104,7 +106,9 @@ public struct HomeFeature {
 
         // Quick Actions
         case mealButtonTapped
+        case mealDetailTapped(UUID)
         case exerciseButtonTapped
+        case exerciseDetailTapped(UUID)
         case weightButtonTapped
         case addRecordButtonTapped
         case settingsButtonTapped
@@ -116,7 +120,9 @@ public struct HomeFeature {
 
         public enum Delegate: Equatable {
             case navigateToMeal
+            case navigateToMealDetail(UUID)
             case navigateToExercise
+            case navigateToExerciseDetail(UUID)
             case navigateToWeight
             case navigateToSettings
             case navigateToProfile
@@ -142,6 +148,10 @@ public struct HomeFeature {
                  (.loadMonthlyReport, .loadMonthlyReport),
                  (.openHealthSettingsTapped, .openHealthSettingsTapped):
                 return true
+            case (.mealDetailTapped(let l), .mealDetailTapped(let r)):
+                return l == r
+            case (.exerciseDetailTapped(let l), .exerciseDetailTapped(let r)):
+                return l == r
             case (.healthKitAuthStatusChanged(let l), .healthKitAuthStatusChanged(let r)):
                 return l == r
             case (.selectDate(let l), .selectDate(let r)):
@@ -270,9 +280,17 @@ public struct HomeFeature {
                 state.pendingNavigation = .meal
                 return .send(.delegate(.navigateToMeal))
 
+            case .mealDetailTapped(let mealId):
+                state.pendingNavigation = .mealDetail(mealId)
+                return .send(.delegate(.navigateToMealDetail(mealId)))
+
             case .exerciseButtonTapped:
                 state.pendingNavigation = .exercise
                 return .send(.delegate(.navigateToExercise))
+
+            case .exerciseDetailTapped(let exerciseId):
+                state.pendingNavigation = .exerciseDetail(exerciseId)
+                return .send(.delegate(.navigateToExerciseDetail(exerciseId)))
 
             case .weightButtonTapped:
                 state.pendingNavigation = .weight

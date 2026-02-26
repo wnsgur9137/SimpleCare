@@ -399,6 +399,9 @@ public struct MealClient {
     public var estimateNutrition: @Sendable (String) async throws -> NutritionEstimation
     public var analyzeMealImage: @Sendable (Data) async throws -> NutritionEstimation
     public var recordMeal: @Sendable (MealRecord) async throws -> Void
+    public var updateMeal: @Sendable (MealRecord) async throws -> Void
+    public var deleteMeal: @Sendable (MealRecord) async throws -> Void
+    public var fetchMeal: @Sendable (UUID) async throws -> MealRecord?
     public var fetchDailyMeals: @Sendable (Date, UUID) async throws -> [MealRecord]
     public var fetchMealHistory: @Sendable (Date, Date, UUID) async throws -> [MealRecord]
     public var getFavorites: @Sendable (UUID) async throws -> [FavoriteFood]
@@ -410,6 +413,9 @@ public struct MealClient {
         estimateNutrition: @escaping @Sendable (String) async throws -> NutritionEstimation,
         analyzeMealImage: @escaping @Sendable (Data) async throws -> NutritionEstimation,
         recordMeal: @escaping @Sendable (MealRecord) async throws -> Void,
+        updateMeal: @escaping @Sendable (MealRecord) async throws -> Void,
+        deleteMeal: @escaping @Sendable (MealRecord) async throws -> Void,
+        fetchMeal: @escaping @Sendable (UUID) async throws -> MealRecord?,
         fetchDailyMeals: @escaping @Sendable (Date, UUID) async throws -> [MealRecord],
         fetchMealHistory: @escaping @Sendable (Date, Date, UUID) async throws -> [MealRecord],
         getFavorites: @escaping @Sendable (UUID) async throws -> [FavoriteFood],
@@ -420,6 +426,9 @@ public struct MealClient {
         self.estimateNutrition = estimateNutrition
         self.analyzeMealImage = analyzeMealImage
         self.recordMeal = recordMeal
+        self.updateMeal = updateMeal
+        self.deleteMeal = deleteMeal
+        self.fetchMeal = fetchMeal
         self.fetchDailyMeals = fetchDailyMeals
         self.fetchMealHistory = fetchMealHistory
         self.getFavorites = getFavorites
@@ -439,6 +448,9 @@ extension MealClient: DependencyKey {
                 NutritionEstimation(foods: [], totalCalories: 0)
             },
             recordMeal: { _ in },
+            updateMeal: { _ in },
+            deleteMeal: { _ in },
+            fetchMeal: { _ in nil },
             fetchDailyMeals: { _, _ in [] },
             fetchMealHistory: { _, _, _ in [] },
             getFavorites: { _ in [] },
@@ -471,6 +483,9 @@ extension MealClient: DependencyKey {
                 NutritionEstimation(foods: [], totalCalories: 0)
             },
             recordMeal: { _ in },
+            updateMeal: { _ in },
+            deleteMeal: { _ in },
+            fetchMeal: { _ in nil },
             fetchDailyMeals: { _, _ in [] },
             fetchMealHistory: { _, _, _ in [] },
             getFavorites: { _ in [] },

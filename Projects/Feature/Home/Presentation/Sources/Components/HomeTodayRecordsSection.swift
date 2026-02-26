@@ -14,6 +14,8 @@ struct HomeTodayRecordsSection: View {
     let meals: [HomeMealSummary]
     let exercises: [HomeExerciseSummary]
     let onAddTap: () -> Void
+    var onMealTap: ((UUID) -> Void)?
+    var onExerciseTap: ((UUID) -> Void)?
 
     private var hasRecords: Bool {
         !meals.isEmpty || !exercises.isEmpty
@@ -38,7 +40,12 @@ struct HomeTodayRecordsSection: View {
     private var recordsList: some View {
         VStack(spacing: 0) {
             ForEach(meals) { meal in
-                HomeMealRecordRow(meal: meal)
+                Button {
+                    onMealTap?(meal.id)
+                } label: {
+                    HomeMealRecordRow(meal: meal)
+                }
+                .buttonStyle(.plain)
 
                 if meal.id != meals.last?.id || !exercises.isEmpty {
                     Divider()
@@ -47,7 +54,12 @@ struct HomeTodayRecordsSection: View {
             }
 
             ForEach(exercises) { exercise in
-                HomeExerciseRecordRow(exercise: exercise)
+                Button {
+                    onExerciseTap?(exercise.id)
+                } label: {
+                    HomeExerciseRecordRow(exercise: exercise)
+                }
+                .buttonStyle(.plain)
 
                 if exercise.id != exercises.last?.id {
                     Divider()
