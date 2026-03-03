@@ -115,28 +115,32 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     public func makeMealList() -> some View {
-        return NavigationStack {
-            VStack {
-                // TODO: Implement meal list view
-                Text("meal.recordTitle".localized)
-                    .font(.largeTitle)
-                    .foregroundStyle(.secondary)
+        let container = diContainer.makeMealDIContainer()
+        let coordinator = MealCoordinator(dependencies: container)
+        coordinator.onNavigateToDetail = { [weak self] meal in
+            // TODO: Navigate to detail view (Phase 5.10)
+            print("Navigate to meal detail: \(meal.id)")
+        }
+        coordinator.onNavigateToRecord = { [weak self] in
+            self?.showingMealRecord = true
+        }
+        coordinator.onSaveComplete = { [weak self] in
+            self?.showingMealRecord = false
+        }
 
-                Button {
-                    self.showingMealRecord = true
-                } label: {
-                    Label("meal.addMeal".localized, systemImage: "plus.circle.fill")
-                        .font(.title2)
+        return NavigationStack {
+            coordinator.makeListView()
+                .sheet(isPresented: showingMealRecordBinding) { [weak self] in
+                    if let self {
+                        let recordContainer = self.diContainer.makeMealDIContainer()
+                        let recordCoordinator = MealCoordinator(dependencies: recordContainer)
+                        recordCoordinator.onSaveComplete = {
+                            self.showingMealRecord = false
+                        }
+                        return recordCoordinator.start()
+                    }
+                    return EmptyView()
                 }
-                .buttonStyle(.borderedProminent)
-            }
-            .navigationTitle("tab.meal".localized)
-            .sheet(isPresented: showingMealRecordBinding) { [weak self] in
-                if let self {
-                    let container = self.diContainer.makeMealDIContainer()
-                    MealCoordinator(dependencies: container).start()
-                }
-            }
         }
     }
 

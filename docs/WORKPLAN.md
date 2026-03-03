@@ -1,7 +1,7 @@
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
-> 최종 수정일: 2026-02-24
+> 최종 수정일: 2026-03-03
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -237,12 +237,13 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - 앱 전역 preferredColorScheme 적용
 - UserDefaults 저장으로 설정 유지
 
-### ~~Phase 5: 식사/운동 상세 페이지~~ ✅ 완료
+### Phase 5: 식사/운동 상세 페이지 🟡
 
-> PR [#45](https://github.com/wnsgur9137/SimpleCare/pull/45)
+> PR [#45](https://github.com/wnsgur9137/SimpleCare/pull/45) (Detail), PR [#46](https://github.com/wnsgur9137/SimpleCare/pull/46) (List)
 
 | 순서 | 작업 | 예상 복잡도 | 상태 |
 |------|------|------------|------|
+| 5.0 | MealListFeature/MealListView 구현 | 중간 | 🟡 진행중 |
 | 5.1 | MealClient/ExerciseClient 확장 (delete, update, fetch) | 중간 | ✅ 완료 |
 | 5.2 | MealDetailFeature TCA Reducer 구현 | 중간 | ✅ 완료 |
 | 5.3 | MealDetailView UI 구현 | 중간 | ✅ 완료 |
@@ -251,6 +252,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 | 5.6 | 홈에서 상세 페이지 네비게이션 연결 | 낮음 | ✅ 완료 |
 | 5.7 | 상세 페이지 로컬라이제이션 추가 | 낮음 | ✅ 완료 |
 | 5.8 | 캘린더에서 상세 페이지 네비게이션 연결 | 낮음 | 🔴 별도 PR |
+| 5.9 | ExerciseListFeature/ExerciseListView 구현 | 중간 | 🔴 대기 |
 
 **구현 내역**:
 - MealDetailFeature/View: 영양소 요약, 음식 목록, 편집/삭제 기능
@@ -316,8 +318,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 3. ~~**Phase 4.2: 걸음수/활동 칼로리 연동**~~ ✅ 완료
 4. ~~**Phase 4.6: 테마 설정**~~ ✅ 완료
 5. ~~**Phase 4.3: 알림/리마인더 설정**~~ ✅ 완료
-6. ~~**Phase 5: 식사/운동 상세 페이지**~~ ✅ 완료
-7. **Phase 4.4-4.5: 데이터 내보내기/삭제** ← 다음 작업
+6. **Phase 5: 식사/운동 상세 페이지** ← 🟡 진행중 (Detail ✅, List 🟡)
+7. Phase 4.4-4.5: 데이터 내보내기/삭제
 8. Phase 1.3: 실제 OpenAI API 연동
 9. Phase 6: 이미지/음성 기능 (최후순위)
 
@@ -397,4 +399,4 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 ---
 
 *문서 버전: 3.3*
-*최종 수정일: 2026-02-24*
+*최종 수정일: 2026-03-03*
