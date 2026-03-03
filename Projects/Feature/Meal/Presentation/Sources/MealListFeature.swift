@@ -11,6 +11,12 @@ import MealDomain
 
 @Reducer
 public struct MealListFeature {
+    // MARK: - Constants
+
+    private enum Constants {
+        static let mealHistoryFetchDays = 30
+    }
+
     // MARK: - State
 
     @ObservableState
@@ -54,7 +60,7 @@ public struct MealListFeature {
         case loadMealsResponse(Result<[MealRecord], Error>)
         case mealTapped(MealRecord)
         case deleteMeal(MealRecord)
-        case deleteMealResponse(Result<Void, Error>)
+        case deleteMealResponse(Result<UUID, Error>)
         case addMealButtonTapped
         case dismissError
         case delegate(Delegate)
@@ -79,8 +85,8 @@ public struct MealListFeature {
                 return l == r
             case (.deleteMeal(let l), .deleteMeal(let r)):
                 return l == r
-            case (.deleteMealResponse(.success), .deleteMealResponse(.success)):
-                return true
+            case (.deleteMealResponse(.success(let l)), .deleteMealResponse(.success(let r))):
+                return l == r
             case (.deleteMealResponse(.failure), .deleteMealResponse(.failure)):
                 return true
             case (.addMealButtonTapped, .addMealButtonTapped):
@@ -114,7 +120,11 @@ public struct MealListFeature {
 
                 let userProfileId = state.userProfileId
                 let endDate = Date()
-                let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate) ?? endDate
+                let startDate = Calendar.current.date(
+                    byAdding: .day,
+                    value: -Constants.mealHistoryFetchDays,
+                    to: endDate
+                ) ?? endDate
 
                 return .run { send in
                     do {
@@ -138,19 +148,26 @@ public struct MealListFeature {
                 return .send(.delegate(.navigateToDetail(meal)))
 
             case .deleteMeal(let meal):
+                // Security: Verify ownership before deletion
+                guard meal.userProfileId == state.userProfileId else { return .none }
+
                 state.viewState = .loading
+                let mealId = meal.id
 
                 return .run { send in
                     do {
                         try await mealClient.deleteMeal(meal)
-                        await send(.deleteMealResponse(.success(())))
+                        await send(.deleteMealResponse(.success(mealId)))
                     } catch {
                         await send(.deleteMealResponse(.failure(error)))
                     }
                 }
 
-            case .deleteMealResponse(.success):
-                return .send(.loadMeals)
+            case .deleteMealResponse(.success(let deletedMealId)):
+                // Optimized: Update local state instead of reloading all meals
+                state.meals.removeAll { $0.id == deletedMealId }
+                state.viewState = .loaded
+                return .none
 
             case .deleteMealResponse(.failure(let error)):
                 state.viewState = .error(error.localizedDescription)
