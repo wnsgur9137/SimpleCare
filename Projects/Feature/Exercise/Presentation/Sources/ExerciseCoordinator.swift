@@ -215,10 +215,18 @@ struct ExerciseListContainerView: View {
     }
 
     var body: some View {
-        ExerciseListView(
-            store: store,
-            onNavigateToDetail: onNavigateToDetail,
-            onNavigateToRecord: onNavigateToRecord
-        )
+        ExerciseListView(store: store)
+            .onChange(of: store.selectedExerciseForDetail) { _, exercise in
+                if let exercise {
+                    onNavigateToDetail(exercise)
+                    store.send(.resetNavigation)
+                }
+            }
+            .onChange(of: store.shouldNavigateToRecord) { _, shouldNavigate in
+                if shouldNavigate {
+                    onNavigateToRecord()
+                    store.send(.resetNavigation)
+                }
+            }
     }
 }

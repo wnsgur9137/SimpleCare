@@ -25,6 +25,10 @@ public struct ExerciseListFeature {
         public var viewState: ViewState = .idle
         public var userProfileId: UUID
 
+        // Navigation state for TCA-compliant navigation
+        public var selectedExerciseForDetail: ExerciseRecord?
+        public var shouldNavigateToRecord: Bool = false
+
         public enum ViewState: Equatable {
             case idle
             case loading
@@ -63,6 +67,7 @@ public struct ExerciseListFeature {
         case deleteExerciseResponse(Result<UUID, Error>)
         case addExerciseButtonTapped
         case dismissError
+        case resetNavigation
         case delegate(Delegate)
 
         public enum Delegate: Equatable {
@@ -79,19 +84,21 @@ public struct ExerciseListFeature {
                 return true
             case (.loadExercisesResponse(.success(let l)), .loadExercisesResponse(.success(let r))):
                 return l == r
-            case (.loadExercisesResponse(.failure), .loadExercisesResponse(.failure)):
-                return true
+            case let (.loadExercisesResponse(.failure(l)), .loadExercisesResponse(.failure(r))):
+                return l.localizedDescription == r.localizedDescription
             case (.exerciseTapped(let l), .exerciseTapped(let r)):
                 return l == r
             case (.deleteExercise(let l), .deleteExercise(let r)):
                 return l == r
             case (.deleteExerciseResponse(.success(let l)), .deleteExerciseResponse(.success(let r))):
                 return l == r
-            case (.deleteExerciseResponse(.failure), .deleteExerciseResponse(.failure)):
-                return true
+            case let (.deleteExerciseResponse(.failure(l)), .deleteExerciseResponse(.failure(r))):
+                return l.localizedDescription == r.localizedDescription
             case (.addExerciseButtonTapped, .addExerciseButtonTapped):
                 return true
             case (.dismissError, .dismissError):
+                return true
+            case (.resetNavigation, .resetNavigation):
                 return true
             case (.delegate(let l), .delegate(let r)):
                 return l == r
@@ -149,6 +156,7 @@ public struct ExerciseListFeature {
                 return .none
 
             case .exerciseTapped(let exercise):
+                state.selectedExerciseForDetail = exercise
                 return .send(.delegate(.navigateToDetail(exercise)))
 
             case .deleteExercise(let exercise):
@@ -178,10 +186,16 @@ public struct ExerciseListFeature {
                 return .none
 
             case .addExerciseButtonTapped:
+                state.shouldNavigateToRecord = true
                 return .send(.delegate(.navigateToRecord))
 
             case .dismissError:
                 state.viewState = .idle
+                return .none
+
+            case .resetNavigation:
+                state.selectedExerciseForDetail = nil
+                state.shouldNavigateToRecord = false
                 return .none
 
             case .delegate:

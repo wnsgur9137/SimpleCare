@@ -12,17 +12,9 @@ import BasePresentation
 
 public struct ExerciseListView: View {
     @Bindable var store: StoreOf<ExerciseListFeature>
-    var onNavigateToDetail: ((ExerciseRecord) -> Void)?
-    var onNavigateToRecord: (() -> Void)?
 
-    public init(
-        store: StoreOf<ExerciseListFeature>,
-        onNavigateToDetail: ((ExerciseRecord) -> Void)? = nil,
-        onNavigateToRecord: (() -> Void)? = nil
-    ) {
+    public init(store: StoreOf<ExerciseListFeature>) {
         self.store = store
-        self.onNavigateToDetail = onNavigateToDetail
-        self.onNavigateToRecord = onNavigateToRecord
     }
 
     public var body: some View {
@@ -32,7 +24,6 @@ public struct ExerciseListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         store.send(.addExerciseButtonTapped)
-                        onNavigateToRecord?()
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -68,7 +59,6 @@ public struct ExerciseListView: View {
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 store.send(.exerciseTapped(exercise))
-                                onNavigateToDetail?(exercise)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
@@ -94,7 +84,6 @@ public struct ExerciseListView: View {
         } actions: {
             Button {
                 store.send(.addExerciseButtonTapped)
-                onNavigateToRecord?()
             } label: {
                 Text("exercise.addExercise".localized)
             }
