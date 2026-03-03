@@ -48,3 +48,11 @@
 "meal.detail.deleteConfirm.title" = "식사 기록 삭제";
 "meal.detail.deleteConfirm.message" = "이 식사 기록을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.";
 "meal.notFound" = "식사 기록을 찾을 수 없습니다";
+
+// MARK: - Meal List
+"meal.list.empty" = "기록된 식사가 없습니다";
+"meal.list.emptyDescription" = "식사를 기록하고 영양 섭취를 관리해보세요";
+"meal.list.delete" = "삭제";
+"meal.list.deleteConfirm" = "이 식사 기록을 삭제하시겠습니까?";
+"meal.list.and" = "외";
+"meal.list.items" = "개";

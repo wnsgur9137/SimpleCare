@@ -19,6 +19,8 @@ public protocol MealCoordinatorDependency {
 public final class MealCoordinator: ObservableObject, Coordinator {
     private let dependencies: MealCoordinatorDependency
     public var onSaveComplete: (() -> Void)?
+    public var onNavigateToDetail: ((MealRecord) -> Void)?
+    public var onNavigateToRecord: (() -> Void)?
 
     public init(dependencies: MealCoordinatorDependency, onSaveComplete: (() -> Void)? = nil) {
         self.dependencies = dependencies
@@ -49,6 +51,20 @@ public final class MealCoordinator: ObservableObject, Coordinator {
         MealDetailByIdContainerView(
             mealId: mealId,
             mealClient: dependencies.mealClient
+        )
+    }
+
+    @MainActor @ViewBuilder
+    public func makeListView() -> some View {
+        MealListContainerView(
+            userProfileId: dependencies.userProfileId,
+            mealClient: dependencies.mealClient,
+            onNavigateToDetail: { [weak self] meal in
+                self?.onNavigateToDetail?(meal)
+            },
+            onNavigateToRecord: { [weak self] in
+                self?.onNavigateToRecord?()
+            }
         )
     }
 }
@@ -153,5 +169,41 @@ private struct MealDetailByIdContainerView: View {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+}
+
+// MARK: - List Container View
+
+private struct MealListContainerView: View {
+    let onNavigateToDetail: (MealRecord) -> Void
+    let onNavigateToRecord: () -> Void
+
+    @State private var store: StoreOf<MealListFeature>
+
+    init(
+        userProfileId: UUID,
+        mealClient: MealClient,
+        onNavigateToDetail: @escaping (MealRecord) -> Void,
+        onNavigateToRecord: @escaping () -> Void
+    ) {
+        self.onNavigateToDetail = onNavigateToDetail
+        self.onNavigateToRecord = onNavigateToRecord
+        self._store = State(
+            initialValue: Store(
+                initialState: MealListFeature.State(userProfileId: userProfileId)
+            ) {
+                MealListFeature()
+            } withDependencies: {
+                $0.mealClient = mealClient
+            }
+        )
+    }
+
+    var body: some View {
+        MealListView(
+            store: store,
+            onNavigateToDetail: onNavigateToDetail,
+            onNavigateToRecord: onNavigateToRecord
+        )
     }
 }
