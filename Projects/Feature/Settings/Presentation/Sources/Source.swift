@@ -63,18 +63,20 @@ public struct SettingsView: View {
             await notificationManager.checkAuthorizationStatus()
         }
         .sheet(isPresented: $showExportSheet) {
-            ExportFormatSheet(
-                userProfileId: userProfileId!,
-                onExportComplete: { url in
-                    exportFileURL = url
-                    showExportSheet = false
-                    showExportSuccess = true
-                },
-                onError: { error in
-                    errorMessage = error
-                    showExportSheet = false
-                }
-            )
+            if let userProfileId = userProfileId {
+                ExportFormatSheet(
+                    userProfileId: userProfileId,
+                    onExportComplete: { url in
+                        exportFileURL = url
+                        showExportSheet = false
+                        showExportSuccess = true
+                    },
+                    onError: { error in
+                        errorMessage = error
+                        showExportSheet = false
+                    }
+                )
+            }
         }
         .sheet(item: $exportFileURL) { url in
             ShareSheet(activityItems: [url])
@@ -83,8 +85,8 @@ public struct SettingsView: View {
             Button("common.ok".localized, role: .cancel) {}
         }
         .alert("settings.deleteAll.title".localized, isPresented: $showDeleteConfirmation) {
-            Button("settings.cancel".localized, role: .cancel) {}
-            Button("settings.delete".localized, role: .destructive) {
+            Button("common.cancel".localized, role: .cancel) {}
+            Button("common.delete".localized, role: .destructive) {
                 Task {
                     await deleteAllData()
                 }
@@ -388,7 +390,7 @@ struct ExportFormatSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("settings.cancel".localized) {
+                    Button("common.cancel".localized) {
                         dismiss()
                     }
                 }

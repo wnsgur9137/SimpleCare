@@ -41,5 +41,3 @@
 "settings.deleteAll.warning" = "이 작업은 되돌릴 수 없습니다. 정말로 모든 데이터를 삭제하시겠습니까?";
 "settings.deleteAll.success" = "모든 데이터가 삭제되었습니다";
 "settings.deleteAll.error" = "데이터 삭제 실패";
-"settings.delete" = "삭제";
-"settings.cancel" = "취소";

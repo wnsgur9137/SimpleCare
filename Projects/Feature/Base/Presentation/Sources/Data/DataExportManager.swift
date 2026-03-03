@@ -42,6 +42,13 @@ public final class DataExportManager: ObservableObject {
     @Published public var isDeleting = false
     @Published public var exportError: String?
 
+    // Static DateFormatter for performance
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+
     private init() {}
 
     // MARK: - Export
@@ -128,8 +135,8 @@ public final class DataExportManager: ObservableObject {
         csvContent += "=== MEALS ===\n"
         csvContent += "Date,Type,Foods,Calories,Protein(g),Carbs(g),Fat(g),Notes\n"
         for meal in data.meals {
-            let foods = meal.foods.map { $0.name }.joined(separator: "; ")
-            let notes = meal.notes?.replacingOccurrences(of: ",", with: ";") ?? ""
+            let foods = escapeCSVField(meal.foods.map { $0.name }.joined(separator: "; "))
+            let notes = escapeCSVField(meal.notes ?? "")
             csvContent += "\(formatDate(meal.date)),\(meal.mealType),\"\(foods)\",\(meal.totalCalories),\(String(format: "%.1f", meal.totalProtein)),\(String(format: "%.1f", meal.totalCarbs)),\(String(format: "%.1f", meal.totalFat)),\"\(notes)\"\n"
         }
 
@@ -139,7 +146,7 @@ public final class DataExportManager: ObservableObject {
         csvContent += "=== EXERCISES ===\n"
         csvContent += "Date,Type,Duration(min),Intensity,Calories,Notes\n"
         for exercise in data.exercises {
-            let notes = exercise.notes?.replacingOccurrences(of: ",", with: ";") ?? ""
+            let notes = escapeCSVField(exercise.notes ?? "")
             csvContent += "\(formatDate(exercise.date)),\(exercise.exerciseType),\(exercise.durationMinutes),\(exercise.intensity),\(exercise.caloriesBurned),\"\(notes)\"\n"
         }
 
@@ -150,7 +157,7 @@ public final class DataExportManager: ObservableObject {
         csvContent += "Date,Weight(kg),BodyFat(%),Notes\n"
         for weight in data.weights {
             let bodyFat = weight.bodyFatPercentage.map { String(format: "%.1f", $0) } ?? ""
-            let notes = weight.notes?.replacingOccurrences(of: ",", with: ";") ?? ""
+            let notes = escapeCSVField(weight.notes ?? "")
             csvContent += "\(formatDate(weight.date)),\(String(format: "%.1f", weight.weightKg)),\(bodyFat),\"\(notes)\"\n"
         }
 
@@ -162,55 +169,58 @@ public final class DataExportManager: ObservableObject {
     }
 
     private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: date)
+        Self.dateFormatter.string(from: date)
+    }
+
+    /// CSV 필드 이스케이프 (CSV Injection 방지)
+    private func escapeCSVField(_ value: String) -> String {
+        var escaped = value.replacingOccurrences(of: "\"", with: "\"\"")
+        // Formula injection 방지: 수식 시작 문자 앞에 ' 추가
+        if escaped.hasPrefix("=") || escaped.hasPrefix("+") ||
+           escaped.hasPrefix("-") || escaped.hasPrefix("@") {
+            escaped = "'" + escaped
+        }
+        return escaped
     }
 
     // MARK: - Delete All Data
 
-    /// 모든 사용자 데이터 삭제
+    /// 모든 사용자 데이터 삭제 (배치 삭제로 성능 최적화)
     public func deleteAllData(userProfileId: UUID) async throws {
         isDeleting = true
         defer { isDeleting = false }
 
         let context = StorageContainer.shared.mainContext
 
-        // Delete meals
-        let meals = try fetchMeals(context: context, userProfileId: userProfileId)
-        for meal in meals {
-            context.delete(meal)
-        }
-
-        // Delete exercises
-        let exercises = try fetchExercises(context: context, userProfileId: userProfileId)
-        for exercise in exercises {
-            context.delete(exercise)
-        }
-
-        // Delete weights
-        let weights = try fetchWeights(context: context, userProfileId: userProfileId)
-        for weight in weights {
-            context.delete(weight)
-        }
-
-        // Delete favorites
-        let favoritesDescriptor = FetchDescriptor<FavoriteFoodModel>(
-            predicate: #Predicate { $0.userProfileId == userProfileId }
+        // Batch delete meals
+        try context.delete(
+            model: MealRecordModel.self,
+            where: #Predicate { $0.userProfileId == userProfileId }
         )
-        let favorites = try context.fetch(favoritesDescriptor)
-        for favorite in favorites {
-            context.delete(favorite)
-        }
 
-        // Delete custom exercises
-        let customExercisesDescriptor = FetchDescriptor<CustomExerciseModel>(
-            predicate: #Predicate { $0.userProfileId == userProfileId }
+        // Batch delete exercises
+        try context.delete(
+            model: ExerciseRecordModel.self,
+            where: #Predicate { $0.userProfileId == userProfileId }
         )
-        let customExercises = try context.fetch(customExercisesDescriptor)
-        for customExercise in customExercises {
-            context.delete(customExercise)
-        }
+
+        // Batch delete weights
+        try context.delete(
+            model: WeightRecordModel.self,
+            where: #Predicate { $0.userProfileId == userProfileId }
+        )
+
+        // Batch delete favorites
+        try context.delete(
+            model: FavoriteFoodModel.self,
+            where: #Predicate { $0.userProfileId == userProfileId }
+        )
+
+        // Batch delete custom exercises
+        try context.delete(
+            model: CustomExerciseModel.self,
+            where: #Predicate { $0.userProfileId == userProfileId }
+        )
 
         try context.save()
     }

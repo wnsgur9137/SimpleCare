@@ -41,5 +41,3 @@
 "settings.deleteAll.warning" = "This action cannot be undone. Are you sure you want to delete all data?";
 "settings.deleteAll.success" = "All data has been deleted";
 "settings.deleteAll.error" = "Failed to delete data";
-"settings.delete" = "Delete";
-"settings.cancel" = "Cancel";
