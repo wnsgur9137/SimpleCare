@@ -6,16 +6,21 @@
 //
 
 import SwiftUI
+import UIKit
 import BasePresentation
 
 // MARK: - SettingsCoordinator
 
 public final class SettingsCoordinator: ObservableObject, Coordinator {
-    public init() {}
+    private let userProfileId: UUID?
+
+    public init(userProfileId: UUID? = nil) {
+        self.userProfileId = userProfileId
+    }
 
     @ViewBuilder
     public func start() -> some View {
-        SettingsView()
+        SettingsView(userProfileId: userProfileId)
     }
 }
 
@@ -25,16 +30,30 @@ public struct SettingsView: View {
     @ObservedObject private var localizationManager = LocalizationManager.shared
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var notificationManager = NotificationManager.shared
+    @ObservedObject private var dataExportManager = DataExportManager.shared
     @State private var refreshID = UUID()
     @State private var mealRemindersExpanded = false
+    @State private var showExportSheet = false
+    @State private var showDeleteConfirmation = false
+    @State private var exportFileURL: URL?
+    @State private var showExportSuccess = false
+    @State private var showDeleteSuccess = false
+    @State private var errorMessage: String?
 
-    public init() {}
+    private let userProfileId: UUID?
+
+    public init(userProfileId: UUID? = nil) {
+        self.userProfileId = userProfileId
+    }
 
     public var body: some View {
         List {
             themeSection
             languageSection
             notificationSection
+            if userProfileId != nil {
+                dataManagementSection
+            }
             appInfoSection
             disclaimerSection
         }
@@ -42,6 +61,115 @@ public struct SettingsView: View {
         .id(refreshID)
         .task {
             await notificationManager.checkAuthorizationStatus()
+        }
+        .sheet(isPresented: $showExportSheet) {
+            ExportFormatSheet(
+                userProfileId: userProfileId!,
+                onExportComplete: { url in
+                    exportFileURL = url
+                    showExportSheet = false
+                    showExportSuccess = true
+                },
+                onError: { error in
+                    errorMessage = error
+                    showExportSheet = false
+                }
+            )
+        }
+        .sheet(item: $exportFileURL) { url in
+            ShareSheet(activityItems: [url])
+        }
+        .alert("settings.export.success".localized, isPresented: $showExportSuccess) {
+            Button("common.ok".localized, role: .cancel) {}
+        }
+        .alert("settings.deleteAll.title".localized, isPresented: $showDeleteConfirmation) {
+            Button("settings.cancel".localized, role: .cancel) {}
+            Button("settings.delete".localized, role: .destructive) {
+                Task {
+                    await deleteAllData()
+                }
+            }
+        } message: {
+            Text("settings.deleteAll.warning".localized)
+        }
+        .alert("settings.deleteAll.success".localized, isPresented: $showDeleteSuccess) {
+            Button("common.ok".localized, role: .cancel) {}
+        }
+        .alert("common.error".localized, isPresented: .init(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("common.ok".localized, role: .cancel) {}
+        } message: {
+            if let error = errorMessage {
+                Text(error)
+            }
+        }
+    }
+
+    // MARK: - Data Management Section
+
+    private var dataManagementSection: some View {
+        Section("settings.dataManagement".localized) {
+            // Export Data
+            Button {
+                showExportSheet = true
+            } label: {
+                HStack {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundStyle(.blue)
+                        .frame(width: 24)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("settings.export.title".localized)
+                            .foregroundStyle(.primary)
+                        Text("settings.export.description".localized)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if dataExportManager.isExporting {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(dataExportManager.isExporting)
+
+            // Delete All Data
+            Button {
+                showDeleteConfirmation = true
+            } label: {
+                HStack {
+                    Image(systemName: "trash")
+                        .foregroundStyle(.red)
+                        .frame(width: 24)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("settings.deleteAll.title".localized)
+                            .foregroundStyle(.red)
+                        Text("settings.deleteAll.description".localized)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if dataExportManager.isDeleting {
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(dataExportManager.isDeleting)
+        }
+    }
+
+    private func deleteAllData() async {
+        guard let userProfileId else { return }
+        do {
+            try await dataExportManager.deleteAllData(userProfileId: userProfileId)
+            showDeleteSuccess = true
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 
@@ -195,6 +323,108 @@ public struct SettingsView: View {
             return .indigo
         }
     }
+}
+
+// MARK: - NotificationToggleRow
+
+// MARK: - Export Format Sheet
+
+struct ExportFormatSheet: View {
+    let userProfileId: UUID
+    let onExportComplete: (URL) -> Void
+    let onError: (String) -> Void
+
+    @ObservedObject private var dataExportManager = DataExportManager.shared
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedFormat: ExportFormat = .json
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("settings.export.format".localized) {
+                    ForEach(ExportFormat.allCases) { format in
+                        Button {
+                            selectedFormat = format
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(format.displayName)
+                                        .foregroundStyle(.primary)
+                                    Text(".\(format.fileExtension)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if selectedFormat == format {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Section {
+                    Button {
+                        Task {
+                            await exportData()
+                        }
+                    } label: {
+                        HStack {
+                            Spacer()
+                            if dataExportManager.isExporting {
+                                ProgressView()
+                                    .padding(.trailing, 8)
+                            }
+                            Text("settings.export.title".localized)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                    }
+                    .disabled(dataExportManager.isExporting)
+                }
+            }
+            .navigationTitle("settings.export.title".localized)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("settings.cancel".localized) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func exportData() async {
+        do {
+            let url = try await dataExportManager.exportAllData(
+                format: selectedFormat,
+                userProfileId: userProfileId
+            )
+            onExportComplete(url)
+        } catch {
+            onError(error.localizedDescription)
+        }
+    }
+}
+
+// MARK: - Share Sheet
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+// MARK: - URL Extension for Identifiable
+
+extension URL: @retroactive Identifiable {
+    public var id: String { absoluteString }
 }
 
 // MARK: - NotificationToggleRow

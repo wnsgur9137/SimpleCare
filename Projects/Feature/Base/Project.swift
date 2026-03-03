@@ -22,6 +22,7 @@ let project: Project = .feature(
         .Project.LibraryManager.ReactiveLibraries,
         .Project.LibraryManager.LayoutLibraries,
         .Project.LibraryManager.UILibraries,
+        .Project.Infrastructure.Storage,
     ],
     hasDomainResources: true,
     hasPresentationResources: true,

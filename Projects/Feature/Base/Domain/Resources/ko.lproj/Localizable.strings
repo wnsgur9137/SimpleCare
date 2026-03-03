@@ -9,6 +9,7 @@
 // MARK: - Common
 "common.cancel" = "취소";
 "common.confirm" = "확인";
+"common.ok" = "확인";
 "common.save" = "저장";
 "common.delete" = "삭제";
 "common.edit" = "편집";

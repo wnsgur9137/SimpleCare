@@ -42,6 +42,12 @@ public final class TabDIContainer: DIContainer {
         cachedUserProfile = try? await storage.fetchProfile()
     }
 
+    /// 현재 사용자 프로필 ID
+    @MainActor
+    public var userProfileId: UUID? {
+        cachedUserProfile?.id
+    }
+
     // MARK: - Profile
 
     public func makeProfileDIContainer() -> ProfileDIContainer {

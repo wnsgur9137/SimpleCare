@@ -9,6 +9,7 @@
 // MARK: - Common
 "common.cancel" = "Cancel";
 "common.confirm" = "Confirm";
+"common.ok" = "OK";
 "common.save" = "Save";
 "common.delete" = "Delete";
 "common.edit" = "Edit";
