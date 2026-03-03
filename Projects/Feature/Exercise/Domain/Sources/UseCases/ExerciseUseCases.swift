@@ -120,6 +120,23 @@ public struct FetchExerciseUseCase: FetchExerciseUseCaseProtocol {
     }
 }
 
+/// 운동 기록 히스토리 조회 UseCase
+public protocol GetExerciseHistoryUseCaseProtocol: Sendable {
+    func execute(from startDate: Date, to endDate: Date, userProfileId: UUID) async throws -> [ExerciseRecord]
+}
+
+public struct GetExerciseHistoryUseCase: GetExerciseHistoryUseCaseProtocol {
+    private let repository: ExerciseRepositoryProtocol
+
+    public init(repository: ExerciseRepositoryProtocol) {
+        self.repository = repository
+    }
+
+    public func execute(from startDate: Date, to endDate: Date, userProfileId: UUID) async throws -> [ExerciseRecord] {
+        try await repository.getExercises(from: startDate, to: endDate, userProfileId: userProfileId)
+    }
+}
+
 /// Exercise Repository 프로토콜
 public protocol ExerciseRepositoryProtocol: Sendable {
     func getExercise(id: UUID) async throws -> ExerciseRecord?

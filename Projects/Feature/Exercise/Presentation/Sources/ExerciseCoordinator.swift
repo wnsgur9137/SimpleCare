@@ -19,6 +19,8 @@ public protocol ExerciseCoordinatorDependency {
 public final class ExerciseCoordinator: ObservableObject, Coordinator {
     private let dependencies: ExerciseCoordinatorDependency
     public var onSaveComplete: (() -> Void)?
+    public var onNavigateToDetail: ((ExerciseRecord) -> Void)?
+    public var onNavigateToRecord: (() -> Void)?
 
     public init(dependencies: ExerciseCoordinatorDependency, onSaveComplete: (() -> Void)? = nil) {
         self.dependencies = dependencies
@@ -42,6 +44,28 @@ public final class ExerciseCoordinator: ObservableObject, Coordinator {
         ExerciseDetailByIdContainerView(
             exerciseId: exerciseId,
             exerciseClient: dependencies.exerciseClient
+        )
+    }
+
+    @MainActor @ViewBuilder
+    public func makeDetailView(for exercise: ExerciseRecord) -> some View {
+        ExerciseDetailContainerView(
+            exercise: exercise,
+            exerciseClient: dependencies.exerciseClient
+        )
+    }
+
+    @MainActor @ViewBuilder
+    public func makeListView() -> some View {
+        ExerciseListContainerView(
+            userProfileId: dependencies.userProfileId,
+            exerciseClient: dependencies.exerciseClient,
+            onNavigateToDetail: { [weak self] exercise in
+                self?.onNavigateToDetail?(exercise)
+            },
+            onNavigateToRecord: { [weak self] in
+                self?.onNavigateToRecord?()
+            }
         )
     }
 }
@@ -137,7 +161,7 @@ private struct ExerciseDetailByIdContainerView: View {
 
 // MARK: - Detail Container View
 
-private struct ExerciseDetailContainerView: View {
+struct ExerciseDetailContainerView: View {
     let exercise: ExerciseRecord
     let exerciseClient: ExerciseClient
 
@@ -160,5 +184,41 @@ private struct ExerciseDetailContainerView: View {
 
     var body: some View {
         ExerciseDetailView(store: store)
+    }
+}
+
+// MARK: - List Container View
+
+struct ExerciseListContainerView: View {
+    let onNavigateToDetail: (ExerciseRecord) -> Void
+    let onNavigateToRecord: () -> Void
+
+    @State private var store: StoreOf<ExerciseListFeature>
+
+    init(
+        userProfileId: UUID,
+        exerciseClient: ExerciseClient,
+        onNavigateToDetail: @escaping (ExerciseRecord) -> Void,
+        onNavigateToRecord: @escaping () -> Void
+    ) {
+        self.onNavigateToDetail = onNavigateToDetail
+        self.onNavigateToRecord = onNavigateToRecord
+        self._store = State(
+            initialValue: Store(
+                initialState: ExerciseListFeature.State(userProfileId: userProfileId)
+            ) {
+                ExerciseListFeature()
+            } withDependencies: {
+                $0.exerciseClient = exerciseClient
+            }
+        )
+    }
+
+    var body: some View {
+        ExerciseListView(
+            store: store,
+            onNavigateToDetail: onNavigateToDetail,
+            onNavigateToRecord: onNavigateToRecord
+        )
     }
 }
