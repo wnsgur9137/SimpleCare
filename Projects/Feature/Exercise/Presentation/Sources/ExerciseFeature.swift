@@ -296,6 +296,7 @@ public struct ExerciseClient {
     public var deleteExercise: @Sendable (ExerciseRecord) async throws -> Void
     public var fetchExercise: @Sendable (UUID) async throws -> ExerciseRecord?
     public var fetchExercises: @Sendable (Date, UUID) async throws -> [ExerciseRecord]
+    public var fetchExerciseHistory: @Sendable (Date, Date, UUID) async throws -> [ExerciseRecord]
     public var getCustomExercises: @Sendable (UUID) async throws -> [CustomExercise]
     public var saveCustomExercise: @Sendable (CustomExercise) async throws -> Void
     public var deleteCustomExercise: @Sendable (CustomExercise) async throws -> Void
@@ -306,6 +307,7 @@ public struct ExerciseClient {
         deleteExercise: @escaping @Sendable (ExerciseRecord) async throws -> Void,
         fetchExercise: @escaping @Sendable (UUID) async throws -> ExerciseRecord?,
         fetchExercises: @escaping @Sendable (Date, UUID) async throws -> [ExerciseRecord],
+        fetchExerciseHistory: @escaping @Sendable (Date, Date, UUID) async throws -> [ExerciseRecord],
         getCustomExercises: @escaping @Sendable (UUID) async throws -> [CustomExercise],
         saveCustomExercise: @escaping @Sendable (CustomExercise) async throws -> Void,
         deleteCustomExercise: @escaping @Sendable (CustomExercise) async throws -> Void
@@ -315,6 +317,7 @@ public struct ExerciseClient {
         self.deleteExercise = deleteExercise
         self.fetchExercise = fetchExercise
         self.fetchExercises = fetchExercises
+        self.fetchExerciseHistory = fetchExerciseHistory
         self.getCustomExercises = getCustomExercises
         self.saveCustomExercise = saveCustomExercise
         self.deleteCustomExercise = deleteCustomExercise
@@ -329,6 +332,7 @@ extension ExerciseClient: DependencyKey {
             deleteExercise: { _ in },
             fetchExercise: { _ in nil },
             fetchExercises: { _, _ in [] },
+            fetchExerciseHistory: { _, _, _ in [] },
             getCustomExercises: { _ in [] },
             saveCustomExercise: { _ in },
             deleteCustomExercise: { _ in }
@@ -342,6 +346,7 @@ extension ExerciseClient: DependencyKey {
             deleteExercise: { _ in },
             fetchExercise: { _ in nil },
             fetchExercises: { _, _ in [] },
+            fetchExerciseHistory: { _, _, _ in [] },
             getCustomExercises: { _ in [] },
             saveCustomExercise: { _ in },
             deleteCustomExercise: { _ in }

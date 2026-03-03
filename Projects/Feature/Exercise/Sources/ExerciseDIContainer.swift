@@ -80,6 +80,10 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         FetchExerciseUseCase(repository: makeExerciseRepository())
     }
 
+    private func makeGetExerciseHistoryUseCase() -> GetExerciseHistoryUseCaseProtocol {
+        GetExerciseHistoryUseCase(repository: makeExerciseRepository())
+    }
+
     // MARK: - TCA Dependencies
 
     public var exerciseClient: ExerciseClient {
@@ -91,6 +95,7 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
         let updateUseCase = makeUpdateExerciseUseCase()
         let deleteUseCase = makeDeleteExerciseUseCase()
         let fetchUseCase = makeFetchExerciseUseCase()
+        let historyUseCase = makeGetExerciseHistoryUseCase()
 
         return ExerciseClient(
             recordExercise: { record in
@@ -107,6 +112,9 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
             },
             fetchExercises: { date, userProfileId in
                 try await fetchDailyUseCase.execute(date: date, userProfileId: userProfileId)
+            },
+            fetchExerciseHistory: { startDate, endDate, userProfileId in
+                try await historyUseCase.execute(from: startDate, to: endDate, userProfileId: userProfileId)
             },
             getCustomExercises: { userProfileId in
                 try await getCustomUseCase.execute(userProfileId: userProfileId)
