@@ -6,12 +6,13 @@
 3. [Phase 2: 핵심 기능](#phase-2-핵심-기능)
 4. [Phase 3: 확장 기능](#phase-3-확장-기능)
 5. [Phase 4: 연동 및 부가 기능](#phase-4-연동-및-부가-기능)
-6. [Phase 5: 이미지/음성 기능 (최후순위)](#phase-5-이미지음성-기능-최후순위)
-7. [구현 상태](#구현-상태)
+6. [Phase 5: 식사/운동 상세 페이지](#phase-5-식사운동-상세-페이지-)
+7. [Phase 6: 이미지/음성 기능 (최후순위)](#phase-6-이미지음성-기능-최후순위)
+8. [구현 상태](#구현-상태)
 
 ---
 
-## Phase L: 다국어 지원 (최우선순위)
+## Phase L: 다국어 지원 (최우선순위) ✅
 
 ### 목표
 한국어(기본), 영어 지원 - 글로벌 출시 필수 요건
@@ -19,23 +20,23 @@
 ### 작업 목록
 
 #### Localization 기반 구축
-- [ ] Localizable.strings 파일 생성 (ko, en)
-- [ ] String Catalog 또는 기존 방식 선택
-- [ ] 공통 문자열 키 네이밍 규칙 정의
+- [x] Localizable.strings 파일 생성 (ko, en)
+- [x] String Catalog 또는 기존 방식 선택
+- [x] 공통 문자열 키 네이밍 규칙 정의
 
 #### 기존 문자열 마이그레이션
-- [ ] 모든 Feature 모듈 하드코딩 문자열 추출
-- [ ] Localizable.strings로 이동
-- [ ] NSLocalizedString 또는 String(localized:) 적용
+- [x] 모든 Feature 모듈 하드코딩 문자열 추출
+- [x] Localizable.strings로 이동
+- [x] NSLocalizedString 또는 String(localized:) 적용
 
 #### 시스템 언어 연동
-- [ ] Bundle.main.preferredLocalizations 기반 자동 감지
-- [ ] 앱 시작 시 시스템 언어 적용
+- [x] Bundle.main.preferredLocalizations 기반 자동 감지
+- [x] 앱 시작 시 시스템 언어 적용
 
 #### 런타임 언어 변경
-- [ ] Settings 화면 언어 선택 UI
-- [ ] UserDefaults 기반 언어 설정 저장
-- [ ] 앱 전체 UI 즉시 반영 (재시작 불필요 권장)
+- [x] Settings 화면 언어 선택 UI
+- [x] UserDefaults 기반 언어 설정 저장
+- [x] 앱 전체 UI 즉시 반영 (재시작 불필요 권장)
 
 ---
 
@@ -185,15 +186,15 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 ### 작업 목록
 
 #### HealthKitInfra
-- [ ] HealthKit 권한 요청
-- [ ] 걸음수 읽기
-- [ ] 활동 칼로리 읽기
+- [x] HealthKit 권한 요청
+- [x] 걸음수 읽기
+- [x] 활동 칼로리 읽기
 - [ ] 체중 데이터 동기화
 
 #### Notification Feature
-- [ ] 리마인더 알림 설정
-- [ ] 로컬 알림 스케줄링
-- [ ] 식사/운동 기록 알림
+- [x] 리마인더 알림 설정
+- [x] 로컬 알림 스케줄링
+- [x] 식사/운동 기록 알림
 
 #### Widget
 - [ ] 일일 칼로리 요약 위젯
@@ -202,8 +203,8 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 #### Settings 완성
 - [ ] 데이터 내보내기 (CSV/JSON)
 - [ ] 데이터 삭제
-- [ ] 알림 설정
-- [ ] 테마 설정
+- [x] 알림 설정
+- [x] 테마 설정
 
 #### AI 고도화
 - [ ] 개인화된 추천 기능
@@ -212,7 +213,37 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 ---
 
-## Phase 5: 이미지/음성 기능 (최후순위)
+## Phase 5: 식사/운동 상세 페이지 🟡
+
+### 목표
+기록된 식사/운동 데이터 상세 보기 및 편집 기능 구현
+
+### 작업 목록
+
+#### MealList 화면
+- [x] MealListFeature TCA Reducer 구현 (WIP)
+- [x] MealListView UI 구현 (WIP)
+- [x] MealCoordinator 네비게이션 연결
+- [x] TabCoordinator 식사 탭 연동
+- [x] 로컬라이제이션 추가 (ko/en)
+
+#### MealDetail 화면
+- [ ] MealClient 확장 (delete, update, copy)
+- [ ] MealDetailFeature TCA Reducer 구현
+- [ ] MealDetailView UI 구현
+
+#### ExerciseDetail 화면
+- [ ] ExerciseClient 확장 (delete, update, copy)
+- [ ] ExerciseDetailFeature TCA Reducer 구현
+- [ ] ExerciseDetailView UI 구현
+
+#### 공통
+- [ ] 캘린더/홈에서 상세 페이지 네비게이션 연결
+- [ ] 공통 컴포넌트 추출 (DetailHeaderView, SummaryCard)
+
+---
+
+## Phase 6: 이미지/음성 기능 (최후순위)
 
 ### 목표
 이미지 및 음성 기반 AI 기능 구현 (최후순위로 배치)
@@ -248,20 +279,20 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 | **StorageInfra** | 완료 | 100% |
 | **AIServiceInfra** | 완료 | 100% |
 | **NetworkInfra** | 기본 완료 | 80% |
-| **HealthKitInfra** | 미시작 | 0% |
-| **Notification** | 미시작 | 0% |
+| **HealthKitInfra** | 완료 | 100% |
+| **Notification** | 완료 | 100% |
 | **Widget** | 미시작 | 0% |
 
 ### 전체 진행률
 ```
-Phase L: ░░░░░░░░░░░░░░░░░░░░   0% (최우선순위)
+Phase L: ████████████████████ 100% ✅
 Phase 1: ████████████████████ 100%
 Phase 2: ████████████████████ 100%
 Phase 3: ████████████████████ 100%
-Phase 4: ████░░░░░░░░░░░░░░░░  20%
-Phase 5: ░░░░░░░░░░░░░░░░░░░░   0% (최후순위)
+Phase 4: ████████████████░░░░  80%
+Phase 5: ██░░░░░░░░░░░░░░░░░░  10% (진행중)
 ---------------------------------
-Total:   ██████████░░░░░░░░░░  53%
+Total:   ████████████████░░░░  82%
 ```
 
 ---
@@ -270,12 +301,13 @@ Total:   ██████████░░░░░░░░░░  53%
 
 | 우선순위 | 설명 | 포함 기능 |
 |---------|------|----------|
-| **P-L** | 최우선순위 | 다국어 지원 (한국어/영어) |
-| **P0** | 필수 기능 | Dashboard, Meal, AI서비스 |
-| **P1** | 핵심 기능 | Exercise, Weight, Profile |
+| **P-L** | 최우선순위 | 다국어 지원 (한국어/영어) ✅ |
+| **P0** | 필수 기능 | Dashboard, Meal, AI서비스 ✅ |
+| **P1** | 핵심 기능 | Exercise, Weight, Profile ✅ |
 | **P2** | 부가 기능 | HealthKit, Notification, Widget |
-| **P3** | 고도화 | AI 추천, 분석 |
-| **P4** | 최후순위 | 이미지/음성 기능 |
+| **P3** | 상세 페이지 | 식사/운동 상세 보기, 편집/삭제 🟡 |
+| **P4** | 고도화 | AI 추천, 분석 |
+| **P5** | 최후순위 | 이미지/음성 기능 |
 
 ---
 
