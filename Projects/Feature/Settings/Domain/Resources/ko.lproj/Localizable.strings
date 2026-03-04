@@ -28,3 +28,16 @@
 "settings.contact" = "문의하기";
 "settings.account" = "계정";
 "settings.appInfo" = "앱 정보";
+
+// MARK: - Data Management
+"settings.dataManagement" = "데이터 관리";
+"settings.export.title" = "데이터 내보내기";
+"settings.export.description" = "모든 기록을 파일로 내보냅니다";
+"settings.export.format" = "내보내기 형식";
+"settings.export.success" = "내보내기 완료";
+"settings.export.error" = "내보내기 실패";
+"settings.deleteAll.title" = "모든 데이터 삭제";
+"settings.deleteAll.description" = "모든 식사, 운동, 체중 기록이 삭제됩니다";
+"settings.deleteAll.warning" = "이 작업은 되돌릴 수 없습니다. 정말로 모든 데이터를 삭제하시겠습니까?";
+"settings.deleteAll.success" = "모든 데이터가 삭제되었습니다";
+"settings.deleteAll.error" = "데이터 삭제 실패";

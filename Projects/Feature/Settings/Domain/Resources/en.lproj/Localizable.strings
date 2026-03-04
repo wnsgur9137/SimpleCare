@@ -28,3 +28,16 @@
 "settings.contact" = "Contact Us";
 "settings.account" = "Account";
 "settings.appInfo" = "App Info";
+
+// MARK: - Data Management
+"settings.dataManagement" = "Data Management";
+"settings.export.title" = "Export Data";
+"settings.export.description" = "Export all records to a file";
+"settings.export.format" = "Export Format";
+"settings.export.success" = "Export Complete";
+"settings.export.error" = "Export Failed";
+"settings.deleteAll.title" = "Delete All Data";
+"settings.deleteAll.description" = "All meal, exercise, and weight records will be deleted";
+"settings.deleteAll.warning" = "This action cannot be undone. Are you sure you want to delete all data?";
+"settings.deleteAll.success" = "All data has been deleted";
+"settings.deleteAll.error" = "Failed to delete data";
