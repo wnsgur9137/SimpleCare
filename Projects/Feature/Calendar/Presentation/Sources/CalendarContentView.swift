@@ -15,6 +15,7 @@ public struct CalendarContentView: View {
     @State private var currentMonth: Date = Date()
     @State private var dailySummary: HomeDailySummary?
     @State private var isLoading: Bool = false
+    @State private var fetchError: Error?
 
     private let userProfileId: UUID
     private let goalCalories: Int
@@ -158,6 +159,8 @@ public struct CalendarContentView: View {
             if isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, minHeight: 100)
+            } else if fetchError != nil {
+                errorStateView
             } else if let summary = dailySummary {
                 VStack(spacing: 12) {
                     // Summary overview
@@ -194,7 +197,7 @@ public struct CalendarContentView: View {
                 Text("tab.meal".localized)
                     .foregroundStyle(.primary)
                 Spacer()
-                Text("\(summary.meals.count)건 · \(summary.totalCalories)kcal")
+                Text(String(format: "calendar.summary".localized, summary.meals.count, summary.totalCalories))
                     .foregroundStyle(.secondary)
             }
 
@@ -205,7 +208,7 @@ public struct CalendarContentView: View {
                 Text("tab.exercise".localized)
                     .foregroundStyle(.primary)
                 Spacer()
-                Text("\(summary.exercises.count)건 · \(summary.exerciseCalories)kcal")
+                Text(String(format: "calendar.summary".localized, summary.exercises.count, summary.exerciseCalories))
                     .foregroundStyle(.secondary)
             }
         }
@@ -248,7 +251,7 @@ public struct CalendarContentView: View {
 
                             Spacer()
 
-                            Text("\(meal.totalCalories)kcal")
+                            Text(String(format: "calendar.caloriesSuffix".localized, meal.totalCalories))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
 
@@ -300,7 +303,7 @@ public struct CalendarContentView: View {
 
                             Spacer()
 
-                            Text("\(exercise.caloriesBurned)kcal")
+                            Text(String(format: "calendar.caloriesSuffix".localized, exercise.caloriesBurned))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
 
@@ -339,10 +342,40 @@ public struct CalendarContentView: View {
         }
     }
 
+    private var errorStateView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundStyle(.orange)
+
+            Text("calendar.fetchError".localized)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Button {
+                Task {
+                    await fetchDailySummary()
+                }
+            } label: {
+                Text("calendar.retry".localized)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+            .buttonStyle(.bordered)
+        }
+        .frame(maxWidth: .infinity, minHeight: 100)
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.regularMaterial)
+        }
+    }
+
     // MARK: - Data Fetching
 
     private func fetchDailySummary() async {
         isLoading = true
+        fetchError = nil
         do {
             let summary = try await homeClient.getDailySummary(
                 selectedDate,
@@ -353,6 +386,7 @@ public struct CalendarContentView: View {
             dailySummary = summary
         } catch {
             dailySummary = nil
+            fetchError = error
         }
         isLoading = false
     }

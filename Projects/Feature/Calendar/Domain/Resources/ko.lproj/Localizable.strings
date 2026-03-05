@@ -9,3 +9,6 @@
 "calendar.noRecords" = "기록이 없습니다";
 "calendar.count" = "%d건";
 "calendar.caloriesSuffix" = "%dkcal";
+"calendar.summary" = "%d건 · %dkcal";
+"calendar.fetchError" = "데이터를 불러오는데 실패했습니다";
+"calendar.retry" = "다시 시도";
