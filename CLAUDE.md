@@ -170,8 +170,7 @@ When Gemini Code Assist leaves review comments on a PR:
 1. **Review comments**: Check PR comments using GitHub MCP (`get_pull_request_review_comments`)
 2. **Fix issues**: Address each comment with appropriate code changes
 3. **Commit fixes**: Create a commit with the fixes (reference the review in commit message)
-4. **Request re-review**: Run `/gemini review` to trigger Gemini Code Assist re-review
-5. **Document resolution**: Add a comment to the PR using the template below
+4. **Document resolution**: Add a comment to the PR using the template below
 
 #### Review Feedback Response Template
 

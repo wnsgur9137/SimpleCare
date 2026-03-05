@@ -170,8 +170,7 @@ Gemini Code Assist가 PR에 리뷰 코멘트를 남긴 경우:
 1. **코멘트 확인**: GitHub MCP로 PR 코멘트 확인 (`get_pull_request_review_comments`)
 2. **이슈 수정**: 각 코멘트에 대해 적절한 코드 수정
 3. **수정 커밋**: 수정 사항 커밋 (커밋 메시지에 리뷰 참조)
-4. **재검토 요청**: `/gemini review` 실행하여 Gemini Code Assist 재검토 트리거
-5. **해결 기록**: 아래 템플릿으로 PR에 코멘트 추가
+4. **해결 기록**: 아래 템플릿으로 PR에 코멘트 추가
 
 #### 리뷰 피드백 응답 템플릿
 
