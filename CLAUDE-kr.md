@@ -163,6 +163,42 @@ PR 생성 시 **GitHub MCP**를 사용합니다 (`gh` CLI가 아님). `.github/P
 **모든 Git 관련 작업**(PR 생성/수정, 이슈 관리, 브랜치 작업 등)은 `gh` CLI 대신 **GitHub MCP**를 사용합니다.
 GitHub MCP는 `.mcp.json`을 통해 설정되며 Docker 컨테이너로 실행됩니다.
 
+### PR 리뷰 코멘트 처리
+
+Gemini Code Assist가 PR에 리뷰 코멘트를 남긴 경우:
+
+1. **코멘트 확인**: GitHub MCP로 PR 코멘트 확인 (`get_pull_request_review_comments`)
+2. **이슈 수정**: 각 코멘트에 대해 적절한 코드 수정
+3. **수정 커밋**: 수정 사항 커밋 (커밋 메시지에 리뷰 참조)
+4. **재검토 요청**: `/gemini review` 실행하여 Gemini Code Assist 재검토 트리거
+5. **해결 기록**: 아래 템플릿으로 PR에 코멘트 추가
+
+#### 리뷰 피드백 응답 템플릿
+
+```markdown
+리뷰 피드백 반영 완료 ✅
+
+@gemini-code-assist 님의 리뷰 피드백을 반영하였습니다.
+
+1. **[심각도]: [이슈 제목]** ✅
+   - 문제: [문제에 대한 간략한 설명]
+   - 해결: [어떻게 해결했는지]
+   - 파일: `path/to/file.swift`
+
+2. **[심각도]: [이슈 제목]** ✅
+   - 문제: [간략한 설명]
+   - 해결: [해결 방법]
+   - 파일: `path/to/file.swift`
+
+커밋: [커밋 해시]
+```
+
+#### 심각도 수준
+- **Critical**: 보안 취약점, 크래시, 데이터 손실
+- **High**: 설계 원칙 위반 (SOLID), 주요 버그
+- **Medium**: 코드 품질 문제, 에러 처리 누락
+- **Low**: 스타일 이슈, 소소한 개선
+
 ## 주요 패턴
 
 ### TCA Reducer
