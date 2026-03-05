@@ -15,6 +15,7 @@ import Meal
 import Weight
 import Exercise
 import Profile
+import Calendar
 import BasePresentation
 import StorageInfra
 
@@ -124,6 +125,33 @@ public final class TabDIContainer: DIContainer {
             dependencies: ExerciseDIContainer.Dependencies(
                 userProfileId: userProfileId,
                 userWeightKg: userWeightKg
+            )
+        )
+    }
+
+    // MARK: - Calendar
+
+    @MainActor
+    public func makeCalendarDIContainer() -> CalendarDIContainer {
+        let userProfileId = cachedUserProfile?.id ?? UUID()
+        let goalCalories = cachedUserProfile?.recommendedDailyCalories ?? 2000
+        let macroGoals: MacroGoals
+        if let profile = cachedUserProfile {
+            let effectiveCalories = Double(profile.recommendedDailyCalories)
+            macroGoals = MacroGoals(
+                proteinGoal: Double(profile.dailyProteinGoal ?? Int(profile.currentWeightKg * 1.6)),
+                carbsGoal: Double(profile.dailyCarbsGoal ?? Int(effectiveCalories * 0.5 / 4.0)),
+                fatGoal: Double(profile.dailyFatGoal ?? Int(effectiveCalories * 0.25 / 9.0))
+            )
+        } else {
+            macroGoals = .default
+        }
+
+        return CalendarDIContainer(
+            dependencies: CalendarDIContainer.Dependencies(
+                userProfileId: userProfileId,
+                goalCalories: goalCalories,
+                macroGoals: macroGoals
             )
         )
     }

@@ -7,14 +7,39 @@
 
 import SwiftUI
 import BasePresentation
+import HomeDomain
+import CalendarDomain
 
 public struct CalendarContentView: View {
     @State private var selectedDate: Date = Date()
     @State private var currentMonth: Date = Date()
+    @State private var dailySummary: HomeDailySummary?
+    @State private var isLoading: Bool = false
+
+    private let userProfileId: UUID
+    private let goalCalories: Int
+    private let macroGoals: MacroGoals
+    private let homeClient: HomeClient
+    private let onNavigateToMealDetail: (UUID) -> Void
+    private let onNavigateToExerciseDetail: (UUID) -> Void
 
     private var calendar: Calendar { Calendar.current }
 
-    public init() {}
+    public init(
+        userProfileId: UUID,
+        goalCalories: Int,
+        macroGoals: MacroGoals,
+        homeClient: HomeClient,
+        onNavigateToMealDetail: @escaping (UUID) -> Void,
+        onNavigateToExerciseDetail: @escaping (UUID) -> Void
+    ) {
+        self.userProfileId = userProfileId
+        self.goalCalories = goalCalories
+        self.macroGoals = macroGoals
+        self.homeClient = homeClient
+        self.onNavigateToMealDetail = onNavigateToMealDetail
+        self.onNavigateToExerciseDetail = onNavigateToExerciseDetail
+    }
 
     public var body: some View {
         ScrollView {
@@ -27,6 +52,9 @@ public struct CalendarContentView: View {
             .padding()
         }
         .navigationTitle("tab.calendar".localized)
+        .task(id: selectedDate) {
+            await fetchDailySummary()
+        }
     }
 
     // MARK: - Month Navigation
@@ -127,31 +155,206 @@ public struct CalendarContentView: View {
             Text(dailySummaryTitle)
                 .font(.headline)
 
-            VStack(spacing: 8) {
-                summaryRow(icon: "fork.knife", title: "tab.meal".localized, value: "-")
-                summaryRow(icon: "figure.run", title: "tab.exercise".localized, value: "-")
-                summaryRow(icon: "scalemass", title: "tab.weight".localized, value: "-")
-            }
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.regularMaterial)
+            if isLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, minHeight: 100)
+            } else if let summary = dailySummary {
+                VStack(spacing: 12) {
+                    // Summary overview
+                    summaryOverview(summary: summary)
+
+                    // Meal records
+                    if !summary.meals.isEmpty {
+                        mealRecordsSection(meals: summary.meals)
+                    }
+
+                    // Exercise records
+                    if !summary.exercises.isEmpty {
+                        exerciseRecordsSection(exercises: summary.exercises)
+                    }
+
+                    // Empty state
+                    if summary.meals.isEmpty && summary.exercises.isEmpty {
+                        emptyStateView
+                    }
+                }
+            } else {
+                emptyStateView
             }
         }
         .padding(.top, 8)
     }
 
-    private func summaryRow(icon: String, title: String, value: String) -> some View {
-        HStack {
-            Image(systemName: icon)
+    private func summaryOverview(summary: HomeDailySummary) -> some View {
+        VStack(spacing: 8) {
+            HStack {
+                Image(systemName: "fork.knife")
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24)
+                Text("tab.meal".localized)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Text("\(summary.meals.count)건 · \(summary.totalCalories)kcal")
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack {
+                Image(systemName: "figure.run")
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24)
+                Text("tab.exercise".localized)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Text("\(summary.exercises.count)건 · \(summary.exerciseCalories)kcal")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.regularMaterial)
+        }
+    }
+
+    private func mealRecordsSection(meals: [HomeMealSummary]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("calendar.mealRecords".localized)
+                .font(.subheadline)
+                .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
-                .frame(width: 24)
-            Text(title)
-                .foregroundStyle(.primary)
-            Spacer()
-            Text(value)
+
+            VStack(spacing: 8) {
+                ForEach(meals) { meal in
+                    Button {
+                        onNavigateToMealDetail(meal.id)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: meal.mealType.icon)
+                                .font(.title3)
+                                .foregroundStyle(.accent)
+                                .frame(width: 32)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(meal.mealType.displayName)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+
+                                Text(meal.foodNamesText)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
+
+                            Spacer()
+
+                            Text("\(meal.totalCalories)kcal")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(.regularMaterial)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private func exerciseRecordsSection(exercises: [HomeExerciseSummary]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("calendar.exerciseRecords".localized)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+
+            VStack(spacing: 8) {
+                ForEach(exercises) { exercise in
+                    Button {
+                        onNavigateToExerciseDetail(exercise.id)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "figure.run")
+                                .font(.title3)
+                                .foregroundStyle(.green)
+                                .frame(width: 32)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(exercise.exerciseName)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+
+                                Text(exercise.durationText)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            Text("\(exercise.caloriesBurned)kcal")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(.regularMaterial)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private var emptyStateView: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "calendar.badge.exclamationmark")
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+
+            Text("calendar.noRecords".localized)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, minHeight: 100)
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.regularMaterial)
+        }
+    }
+
+    // MARK: - Data Fetching
+
+    private func fetchDailySummary() async {
+        isLoading = true
+        do {
+            let summary = try await homeClient.getDailySummary(
+                selectedDate,
+                userProfileId,
+                goalCalories,
+                macroGoals
+            )
+            dailySummary = summary
+        } catch {
+            dailySummary = nil
+        }
+        isLoading = false
     }
 
     // MARK: - Helpers

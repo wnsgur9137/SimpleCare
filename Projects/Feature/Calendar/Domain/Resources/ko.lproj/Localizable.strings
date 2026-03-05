@@ -1,0 +1,11 @@
+/*
+  Localizable.strings (Korean)
+  CalendarDomain
+*/
+
+// MARK: - Calendar
+"calendar.mealRecords" = "식사 기록";
+"calendar.exerciseRecords" = "운동 기록";
+"calendar.noRecords" = "기록이 없습니다";
+"calendar.count" = "%d건";
+"calendar.caloriesSuffix" = "%dkcal";
