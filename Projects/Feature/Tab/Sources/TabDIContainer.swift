@@ -15,6 +15,7 @@ import Meal
 import Weight
 import Exercise
 import Profile
+import Calendar
 import BasePresentation
 import StorageInfra
 
@@ -48,6 +49,21 @@ public final class TabDIContainer: DIContainer {
         cachedUserProfile?.id
     }
 
+    // MARK: - Helpers
+
+    /// 프로필 기반 MacroGoals 계산
+    private func makeMacroGoals(for profile: UserProfileModel?) -> MacroGoals {
+        guard let profile = profile else {
+            return .default
+        }
+        let effectiveCalories = Double(profile.recommendedDailyCalories)
+        return MacroGoals(
+            proteinGoal: Double(profile.dailyProteinGoal ?? Int(profile.currentWeightKg * 1.6)),
+            carbsGoal: Double(profile.dailyCarbsGoal ?? Int(effectiveCalories * 0.5 / 4.0)),
+            fatGoal: Double(profile.dailyFatGoal ?? Int(effectiveCalories * 0.25 / 9.0))
+        )
+    }
+
     // MARK: - Profile
 
     public func makeProfileDIContainer() -> ProfileDIContainer {
@@ -60,17 +76,7 @@ public final class TabDIContainer: DIContainer {
     public func makeHomeDIContainer() -> HomeDIContainer {
         let userProfileId = cachedUserProfile?.id ?? UUID()
         let goalCalories = cachedUserProfile?.recommendedDailyCalories ?? 2000
-        let macroGoals: MacroGoals
-        if let profile = cachedUserProfile {
-            let effectiveCalories = Double(profile.recommendedDailyCalories)
-            macroGoals = MacroGoals(
-                proteinGoal: Double(profile.dailyProteinGoal ?? Int(profile.currentWeightKg * 1.6)),
-                carbsGoal: Double(profile.dailyCarbsGoal ?? Int(effectiveCalories * 0.5 / 4.0)),
-                fatGoal: Double(profile.dailyFatGoal ?? Int(effectiveCalories * 0.25 / 9.0))
-            )
-        } else {
-            macroGoals = .default
-        }
+        let macroGoals = makeMacroGoals(for: cachedUserProfile)
 
         return HomeDIContainer(
             dependencies: HomeDIContainer.Dependencies(
@@ -124,6 +130,23 @@ public final class TabDIContainer: DIContainer {
             dependencies: ExerciseDIContainer.Dependencies(
                 userProfileId: userProfileId,
                 userWeightKg: userWeightKg
+            )
+        )
+    }
+
+    // MARK: - Calendar
+
+    @MainActor
+    public func makeCalendarDIContainer() -> CalendarDIContainer {
+        let userProfileId = cachedUserProfile?.id ?? UUID()
+        let goalCalories = cachedUserProfile?.recommendedDailyCalories ?? 2000
+        let macroGoals = makeMacroGoals(for: cachedUserProfile)
+
+        return CalendarDIContainer(
+            dependencies: CalendarDIContainer.Dependencies(
+                userProfileId: userProfileId,
+                goalCalories: goalCalories,
+                macroGoals: macroGoals
             )
         )
     }

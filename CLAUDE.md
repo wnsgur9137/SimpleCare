@@ -163,6 +163,41 @@ Commits must be split per logical unit of work. Do NOT bundle unrelated changes 
 Use GitHub MCP for **all Git-related operations** (PR creation/update, issue management, branch operations, etc.) instead of the `gh` CLI.
 GitHub MCP is configured via `.mcp.json` and runs as a Docker container.
 
+### PR Review Comment Handling
+
+When Gemini Code Assist leaves review comments on a PR:
+
+1. **Review comments**: Check PR comments using GitHub MCP (`get_pull_request_review_comments`)
+2. **Fix issues**: Address each comment with appropriate code changes
+3. **Commit fixes**: Create a commit with the fixes (reference the review in commit message)
+4. **Document resolution**: Add a comment to the PR using the template below
+
+#### Review Feedback Response Template
+
+```markdown
+리뷰 피드백 반영 완료 ✅
+
+@gemini-code-assist 님의 리뷰 피드백을 반영하였습니다.
+
+1. **[Severity]: [Issue Title]** ✅
+   - 문제: [Brief description of the issue]
+   - 해결: [How it was resolved]
+   - 파일: `path/to/file.swift`
+
+2. **[Severity]: [Issue Title]** ✅
+   - 문제: [Brief description]
+   - 해결: [Resolution]
+   - 파일: `path/to/file.swift`
+
+커밋: [commit hash]
+```
+
+#### Severity Levels
+- **Critical**: Security vulnerabilities, crashes, data loss
+- **High**: Design principle violations (SOLID), major bugs
+- **Medium**: Code quality issues, missing error handling
+- **Low**: Style issues, minor improvements
+
 ## Key Patterns
 
 ### TCA Reducer

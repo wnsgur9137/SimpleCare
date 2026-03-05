@@ -1,0 +1,14 @@
+/*
+  Localizable.strings (English)
+  CalendarDomain
+*/
+
+// MARK: - Calendar
+"calendar.mealRecords" = "Meal Records";
+"calendar.exerciseRecords" = "Exercise Records";
+"calendar.noRecords" = "No records";
+"calendar.count" = "%d entries";
+"calendar.caloriesSuffix" = "%d kcal";
+"calendar.summary" = "%d entries · %d kcal";
+"calendar.fetchError" = "Failed to load data";
+"calendar.retry" = "Retry";

@@ -193,6 +193,16 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     public func makeCalendar() -> some View {
-        return CalendarCoordinator().start()
+        let container = diContainer.makeCalendarDIContainer()
+        let coordinator = CalendarCoordinator(dependencies: container)
+        coordinator.onNavigateToMealDetail = { [weak self] mealId in
+            self?.selectedMealId = mealId
+            self?.showingMealDetail = true
+        }
+        coordinator.onNavigateToExerciseDetail = { [weak self] exerciseId in
+            self?.selectedExerciseId = exerciseId
+            self?.showingExerciseDetail = true
+        }
+        return coordinator.start()
     }
 }
