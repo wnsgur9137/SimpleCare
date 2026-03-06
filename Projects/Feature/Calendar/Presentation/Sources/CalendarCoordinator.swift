@@ -8,7 +8,7 @@
 import SwiftUI
 import BasePresentation
 import HomeDomain
-@_exported import HomePresentation
+import HomePresentation
 
 /// Calendar Coordinator 의존성
 public protocol CalendarCoordinatorDependency {

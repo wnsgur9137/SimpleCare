@@ -72,6 +72,7 @@ public extension Project {
         dataDependencies: [TargetDependency] = [],
         domainDependencies: [TargetDependency] = [],
         presentationDependencies: [TargetDependency] = [],
+        aggregatorDependencies: [TargetDependency] = [],
         hasDomainResources: Bool = false,
         hasPresentationResources: Bool = false,
         hasAggregator: Bool = true,
@@ -137,7 +138,7 @@ public extension Project {
                     .target(name: "\(name)Data"),
                     .target(name: "\(name)Domain"),
                     .target(name: "\(name)Presentation")
-                ],
+                ] + aggregatorDependencies,
                 settings: settings
             )
             targets.append(aggregatorTarget)

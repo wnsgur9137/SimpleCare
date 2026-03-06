@@ -23,5 +23,8 @@ let project: Project = .feature(
         .Project.Feature.Presentation.BasePresentation,
         .Project.Feature.Presentation.HomePresentation,
     ],
+    aggregatorDependencies: [
+        .Project.Feature.Presentation.HomePresentation,
+    ],
     hasDomainResources: true
 )
