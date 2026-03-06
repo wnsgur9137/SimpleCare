@@ -137,7 +137,11 @@ public final class DataExportManager: ObservableObject {
         for meal in data.meals {
             let foods = escapeCSVField(meal.foods.map { $0.name }.joined(separator: "; "))
             let notes = escapeCSVField(meal.notes ?? "")
-            csvContent += "\(formatDate(meal.date)),\(meal.mealType),\"\(foods)\",\(meal.totalCalories),\(String(format: "%.1f", meal.totalProtein)),\(String(format: "%.1f", meal.totalCarbs)),\(String(format: "%.1f", meal.totalFat)),\"\(notes)\"\n"
+            let protein = String(format: "%.1f", meal.totalProtein)
+            let carbs = String(format: "%.1f", meal.totalCarbs)
+            let fat = String(format: "%.1f", meal.totalFat)
+            csvContent += "\(formatDate(meal.date)),\(meal.mealType),\"\(foods)\","
+            csvContent += "\(meal.totalCalories),\(protein),\(carbs),\(fat),\"\(notes)\"\n"
         }
 
         csvContent += "\n"
@@ -147,7 +151,8 @@ public final class DataExportManager: ObservableObject {
         csvContent += "Date,Type,Duration(min),Intensity,Calories,Notes\n"
         for exercise in data.exercises {
             let notes = escapeCSVField(exercise.notes ?? "")
-            csvContent += "\(formatDate(exercise.date)),\(exercise.exerciseType),\(exercise.durationMinutes),\(exercise.intensity),\(exercise.caloriesBurned),\"\(notes)\"\n"
+            csvContent += "\(formatDate(exercise.date)),\(exercise.exerciseType),"
+            csvContent += "\(exercise.durationMinutes),\(exercise.intensity),\(exercise.caloriesBurned),\"\(notes)\"\n"
         }
 
         csvContent += "\n"
