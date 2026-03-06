@@ -150,8 +150,9 @@ public final class DataExportManager: ObservableObject {
         csvContent += "=== EXERCISES ===\n"
         csvContent += "Date,Type,Duration(min),Intensity,Calories,Notes\n"
         for exercise in data.exercises {
+            let exerciseType = escapeCSVField(exercise.exerciseType)
             let notes = escapeCSVField(exercise.notes ?? "")
-            csvContent += "\(formatDate(exercise.date)),\(exercise.exerciseType),"
+            csvContent += "\(formatDate(exercise.date)),\"\(exerciseType)\","
             csvContent += "\(exercise.durationMinutes),\(exercise.intensity),\(exercise.caloriesBurned),\"\(notes)\"\n"
         }
 
