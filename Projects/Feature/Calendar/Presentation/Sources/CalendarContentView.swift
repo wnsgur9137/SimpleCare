@@ -8,6 +8,7 @@
 import SwiftUI
 import BasePresentation
 import HomeDomain
+import HomePresentation
 import CalendarDomain
 
 public struct CalendarContentView: View {
@@ -234,7 +235,7 @@ public struct CalendarContentView: View {
                         HStack(spacing: 12) {
                             Image(systemName: meal.mealType.icon)
                                 .font(.title3)
-                                .foregroundStyle(.accent)
+                                .foregroundStyle(Color.scAccent)
                                 .frame(width: 32)
 
                             VStack(alignment: .leading, spacing: 4) {

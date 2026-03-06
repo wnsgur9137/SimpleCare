@@ -130,18 +130,20 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
         return NavigationStack {
             coordinator.makeListView()
-                .sheet(isPresented: showingMealRecordBinding) { [weak self] in
-                    if let self {
-                        let recordContainer = self.diContainer.makeMealDIContainer()
-                        let recordCoordinator = MealCoordinator(dependencies: recordContainer)
-                        recordCoordinator.onSaveComplete = {
-                            self.showingMealRecord = false
-                        }
-                        return recordCoordinator.start()
-                    }
-                    return EmptyView()
+                .sheet(isPresented: showingMealRecordBinding) {
+                    self.makeMealRecordSheet()
                 }
         }
+    }
+
+    @MainActor
+    private func makeMealRecordSheet() -> some View {
+        let recordContainer = diContainer.makeMealDIContainer()
+        let recordCoordinator = MealCoordinator(dependencies: recordContainer)
+        recordCoordinator.onSaveComplete = { [weak self] in
+            self?.showingMealRecord = false
+        }
+        return recordCoordinator.start()
     }
 
     // MARK: - Exercise
