@@ -21,6 +21,8 @@
 "weight.bmi.obese" = "Obese";
 "weight.change" = "Change";
 "weight.noData" = "No data available";
+"weight.empty.banner.title" = "Start tracking your weight";
+"weight.empty.banner.description" = "Record your first weight to see your trend graph";
 "weight.todayWeight" = "Today's Weight";
 "weight.memo" = "Memo (optional)";
 "weight.stats" = "Statistics";

@@ -21,6 +21,8 @@
 "weight.bmi.obese" = "비만";
 "weight.change" = "변화";
 "weight.noData" = "데이터가 없습니다";
+"weight.empty.banner.title" = "체중 기록을 시작해보세요";
+"weight.empty.banner.description" = "첫 번째 체중을 기록하면 추세 그래프를 확인할 수 있어요";
 "weight.todayWeight" = "오늘의 체중";
 "weight.memo" = "메모 (선택)";
 "weight.stats" = "통계";
