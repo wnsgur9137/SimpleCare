@@ -170,6 +170,16 @@ public struct WeightView: View {
     private func statisticsSection(trend: WeightTrend) -> some View {
         let isEmpty = trend.records.isEmpty
 
+        func changeStatValue(for change: Double?) -> String {
+            guard !isEmpty, let change = change else { return "--" }
+            return String(format: "%+.1f", change)
+        }
+
+        func changeStatColor(for change: Double?) -> Color {
+            guard !isEmpty, let change = change else { return .secondary }
+            return change < 0 ? .scSuccess : .scWarning
+        }
+
         return VStack(alignment: .leading, spacing: 12) {
             Text("weight.stats".localized)
                 .font(.headline)
@@ -184,16 +194,16 @@ public struct WeightView: View {
 
                 StatBox(
                     title: "weight.weeklyChange".localized,
-                    value: isEmpty ? "--" : (trend.weeklyChange.map { String(format: "%+.1f", $0) } ?? "--"),
+                    value: changeStatValue(for: trend.weeklyChange),
                     unit: "unit.kg".localized,
-                    color: isEmpty ? .secondary : (trend.weeklyChange.map { $0 < 0 ? .scSuccess : .scWarning } ?? .secondary)
+                    color: changeStatColor(for: trend.weeklyChange)
                 )
 
                 StatBox(
                     title: "weight.monthlyChange".localized,
-                    value: isEmpty ? "--" : (trend.monthlyChange.map { String(format: "%+.1f", $0) } ?? "--"),
+                    value: changeStatValue(for: trend.monthlyChange),
                     unit: "unit.kg".localized,
-                    color: isEmpty ? .secondary : (trend.monthlyChange.map { $0 < 0 ? .scSuccess : .scWarning } ?? .secondary)
+                    color: changeStatColor(for: trend.monthlyChange)
                 )
 
                 if store.heightCm > 0 {
