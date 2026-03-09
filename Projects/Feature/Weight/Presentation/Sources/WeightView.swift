@@ -30,8 +30,11 @@ public struct WeightView: View {
                     // 현재 체중 입력
                     weightInputSection
 
-                    // 추세 차트
-                    if let trend = store.weightTrend, !trend.records.isEmpty {
+                    // Empty State 배너
+                    emptyStateBanner
+
+                    // 추세 차트 (항상 표시)
+                    if let trend = store.weightTrend {
                         trendChartSection(trend: trend)
                         statisticsSection(trend: trend)
                     }
@@ -51,6 +54,29 @@ public struct WeightView: View {
             .task {
                 store.send(.onAppear)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var emptyStateBanner: some View {
+        if let trend = store.weightTrend, trend.records.isEmpty {
+            HStack(spacing: 12) {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .font(.title3)
+                    .foregroundStyle(.scPrimary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("weight.empty.banner.title".localized)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    Text("weight.empty.banner.description".localized)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+            .padding()
+            .background(Color.scPrimary.opacity(0.1), in: .rect(cornerRadius: 12))
         }
     }
 
