@@ -150,6 +150,18 @@ public struct WeightView: View {
             .chartYAxis {
                 AxisMarks(position: .leading)
             }
+            .overlay {
+                if trend.records.isEmpty {
+                    VStack(spacing: 8) {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                            .font(.largeTitle)
+                            .foregroundStyle(.tertiary)
+                        Text("weight.noData".localized)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
