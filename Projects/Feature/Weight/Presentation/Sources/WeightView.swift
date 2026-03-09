@@ -168,42 +168,40 @@ public struct WeightView: View {
     }
 
     private func statisticsSection(trend: WeightTrend) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let isEmpty = trend.records.isEmpty
+
+        return VStack(alignment: .leading, spacing: 12) {
             Text("weight.stats".localized)
                 .font(.headline)
 
             HStack(spacing: 24) {
                 StatBox(
                     title: "weight.toGoal".localized,
-                    value: String(format: "%.1f", abs(trend.remainingToGoal)),
+                    value: isEmpty ? "--" : String(format: "%.1f", abs(trend.remainingToGoal)),
                     unit: "unit.kg".localized,
-                    color: trend.remainingToGoal > 0 ? .scWarning : .scSuccess
+                    color: isEmpty ? .secondary : (trend.remainingToGoal > 0 ? .scWarning : .scSuccess)
                 )
 
-                if let weekly = trend.weeklyChange {
-                    StatBox(
-                        title: "weight.weeklyChange".localized,
-                        value: String(format: "%+.1f", weekly),
-                        unit: "unit.kg".localized,
-                        color: weekly < 0 ? .scSuccess : .scWarning
-                    )
-                }
+                StatBox(
+                    title: "weight.weeklyChange".localized,
+                    value: isEmpty ? "--" : (trend.weeklyChange.map { String(format: "%+.1f", $0) } ?? "--"),
+                    unit: "unit.kg".localized,
+                    color: isEmpty ? .secondary : (trend.weeklyChange.map { $0 < 0 ? .scSuccess : .scWarning } ?? .secondary)
+                )
 
-                if let monthly = trend.monthlyChange {
-                    StatBox(
-                        title: "weight.monthlyChange".localized,
-                        value: String(format: "%+.1f", monthly),
-                        unit: "unit.kg".localized,
-                        color: monthly < 0 ? .scSuccess : .scWarning
-                    )
-                }
+                StatBox(
+                    title: "weight.monthlyChange".localized,
+                    value: isEmpty ? "--" : (trend.monthlyChange.map { String(format: "%+.1f", $0) } ?? "--"),
+                    unit: "unit.kg".localized,
+                    color: isEmpty ? .secondary : (trend.monthlyChange.map { $0 < 0 ? .scSuccess : .scWarning } ?? .secondary)
+                )
 
                 if store.heightCm > 0 {
                     StatBox(
                         title: "weight.bmi".localized,
-                        value: String(format: "%.1f", store.currentBMI),
-                        unit: bmiCategoryLabel,
-                        color: bmiColor
+                        value: isEmpty ? "--" : String(format: "%.1f", store.currentBMI),
+                        unit: isEmpty ? "" : bmiCategoryLabel,
+                        color: isEmpty ? .secondary : bmiColor
                     )
                 }
             }
