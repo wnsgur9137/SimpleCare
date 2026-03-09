@@ -167,11 +167,11 @@ public struct ExerciseFeature {
             case let .selectCategory(category):
                 state.selectedCategory = category
                 // 카테고리 변경 시 해당 카테고리의 첫 번째 운동 타입으로 변경
+                // Note: exerciseType 변경 시 .onChange(of: \.exerciseType)에서
+                // selectedCustomExercise = nil 및 updateCalorieEstimate()가 자동 호출됨
                 if let firstType = ExerciseType.allCases.first(where: { $0.category == category }) {
                     state.exerciseType = firstType
                 }
-                state.selectedCustomExercise = nil
-                state.updateCalorieEstimate()
                 return .none
 
             case .saveExercise:
