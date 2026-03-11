@@ -1,0 +1,62 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git show:*)",
+      "Bash(git rebase:*)",
+      "Bash(git rm:*)",
+      "Bash(GIT_EDITOR=true git rebase:*)",
+      "Bash(gh pr create:*)",
+      "Bash(/opt/homebrew/bin/gh pr create:*)",
+      "Bash(git log:*)",
+      "mcp__github__get_pull_request_review_comments",
+      "mcp__github__get_issue_comments",
+      "mcp__github__get_pull_request_reviews",
+      "Bash(git push:*)",
+      "Skill(oh-my-claudecode:mcp-setup)",
+      "Skill(oh-my-claudecode:help)",
+      "mcp__sosumi__searchAppleDocumentation",
+      "WebSearch",
+      "Bash(xcodebuild:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "mcp__github__get_pull_request",
+      "mcp__github__add_issue_comment",
+      "mcp__plugin_oh-my-claudecode_t__lsp_diagnostics",
+      "Bash(fastlane ios build_test:*)",
+      "mcp__shrimp-task-manager__list_tasks"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "shrimp-task-manager"
+  ],
+  "outputStyle": "default",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/doc-sync-reminder.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/doc-sync-check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
