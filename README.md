@@ -322,6 +322,15 @@ fastlane ios beta                 # TestFlight 배포
 
 `CLAUDE.md` 파일이 프로젝트 루트에 위치하며, Claude Code가 대화 시작 시 자동으로 읽어들여 프로젝트 구조, 컨벤션, 명령어 등을 파악합니다.
 
+### Hooks (문서 동기화 자동화)
+
+`.claude/hooks/` 디렉토리에 등록된 자동화 스크립트:
+
+| Hook | 이벤트 | 기능 |
+|------|--------|------|
+| `doc-sync-reminder.sh` | PostToolUse | Swift 소스 수정 시 관련 문서 리마인더 출력 |
+| `doc-sync-check.sh` | Stop | 응답 완료 시 문서 업데이트 누락 경고 |
+
 ### 커스텀 슬래시 명령
 
 `.claude/commands/` 디렉토리에 등록된 명령어:
@@ -354,7 +363,7 @@ fastlane ios beta                 # TestFlight 배포
 | [API.md](./docs/03-구현/API.md) | 구현 | AI API 연동 명세 |
 | [FASTLANE.md](./docs/03-구현/FASTLANE.md) | 구현 | Fastlane 가이드 |
 | [AI_TOOLS.md](./docs/04-도구/AI_TOOLS.md) | 도구 | AI 도구 활용 가이드 |
-| [CLAUDE_CODE_GUIDE.md](./docs/04-도구/CLAUDE_CODE_GUIDE.md) | 도구 | Claude Code 설정 가이드 |
+| [CLAUDE_CODE_GUIDE.md](./docs/04-도구/CLAUDE_CODE_GUIDE.md) | 도구 | Claude Code 설정 가이드 (Hooks, 슬래시 명령 포함) |
 | [OMC_GUIDE.md](./docs/04-도구/OMC_GUIDE.md) | 도구 | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
 
 ---

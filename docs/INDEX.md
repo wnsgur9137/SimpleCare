@@ -51,5 +51,5 @@ AI 도구, Claude Code, OMC 등 개발 도구 관련 문서
 | 문서 | 설명 |
 |------|------|
 | [AI_TOOLS](./04-도구/AI_TOOLS.md) | AI 도구 활용 가이드 |
-| [CLAUDE_CODE_GUIDE](./04-도구/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
+| [CLAUDE_CODE_GUIDE](./04-도구/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 (Hooks, 슬래시 명령 포함) |
 | [OMC_GUIDE](./04-도구/OMC_GUIDE.md) | oh-my-claudecode 멀티 에이전트 가이드 |
