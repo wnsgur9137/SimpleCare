@@ -105,6 +105,16 @@ public enum AppTab: Hashable {
 | Coordinator | `CalendarCoordinator.swift` | 캘린더 네비게이션 |
 | View | `CalendarContentView.swift` | 캘린더 뷰 |
 
+**화면 구성**:
+- 월별 캘린더 그리드 (이전/다음 월 네비게이션)
+- 선택 날짜 하이라이트 (파란 원), 오늘 날짜 표시 (파란 테두리)
+- 미래 날짜 비활성화
+- 선택 날짜의 식사/운동 기록 목록 (칼로리 표시)
+- 기록 탭 시 상세 화면 이동 (MealDetail / ExerciseDetail)
+- 빈 상태 / 에러 상태 / 로딩 표시
+
+**의존성**: HomeClient를 통해 일일 요약 데이터(`HomeDailySummary`) 조회
+
 ---
 
 ### Meal
@@ -248,6 +258,20 @@ TDEE = BMR × 활동계수
 | **Aggregator** | | |
 | DIContainer | `ProfileDIContainer.swift` | 의존성 조립 |
 
+**프로필 정보**:
+- 이름, 나이(10–120), 성별(남/여)
+- 키, 현재 체중, 목표 체중
+- 활동 수준 (좌식 ~ 매우 활발)
+- 목표 유형 (감량/증량/유지) + 아이콘
+
+**자동 계산 항목**:
+- BMR (Mifflin-St Jeor), TDEE, 일일 권장 칼로리
+- 일일 권장 단백질(체중 × 1.6g), 탄수화물(50%), 지방(25%)
+- BMI + 카테고리 (저체중/정상/과체중/비만) + 색상 코딩
+- 목표별 칼로리 조정 (감량: −500kcal, 증량: +300kcal)
+
+**화면 구성**: 폼 기반 프로필 에디터, 실시간 계산 업데이트, 건강 면책 조항 표시
+
 ---
 
 ### Onboarding
@@ -299,6 +323,15 @@ TDEE = BMR × 활동계수
 | Aggregator | `Splash.swift` | 모듈 진입점 |
 | DIContainer | `SplashDIContainer.swift` | 의존성 조립 |
 
+**화면 구성**:
+- 그라데이션 배경 (teal → purple)
+- 로고 + 글래스 카드 효과 애니메이션
+- "SimpleCare" 앱 이름 페이드인
+- 태그라인 페이드인
+- 최소 표시 시간 1.5초 후 자동 전환
+
+**동작 방식**: 타이머 기반 → 완료 delegate → AppCoordinator로 화면 전환
+
 ---
 
 ### Base
@@ -330,11 +363,20 @@ TDEE = BMR × 활동계수
 | **Data** | | |
 | Manager | `DataExportManager.swift` | JSON/CSV 데이터 내보내기 |
 
+**하위 시스템별 기능**:
+- **ThemeManager**: system/light/dark 전환, UserDefaults 영속화, 실시간 `ColorScheme` 반영
+- **LocalizationManager**: system/한국어/영어 런타임 전환, 모듈별 Bundle 관리, 재시작 불필요
+- **NotificationManager**: 5개 카테고리별 알림 (아침/점심/저녁 식사, 운동, 체중), 시간 설정, `UNUserNotificationCenter` 연동
+- **DataExportManager**: JSON/CSV 내보내기 (CSV injection 방지), 전체 데이터 삭제
+- **Color+SimpleCare**: Primary(teal) / Secondary(blue) / Accent(purple), 영양소별 색상, BMI 색상 매핑
+- **View+GlassCard**: 글래스모피즘 카드/버튼/캡슐 스타일
+- **Debug**: 디바이스 정보, 캐시/UserDefaults 초기화, 강제 크래시 (DEBUG 전용)
+
 ---
 
 ### Settings
 
-**역할**: 앱 설정 (현재 골격 상태)
+**역할**: 앱 설정 (모듈 골격 + 실제 UI는 Tab/Base 모듈에서 구현)
 
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
@@ -343,9 +385,15 @@ TDEE = BMR × 활동계수
 | Presentation | `Source.swift` | 플레이스홀더 |
 | Aggregator | `Source.swift` | 플레이스홀더 |
 
-> **Note**: 설정 관련 실제 로직은 Base 모듈에 분산 구현되어 있습니다.
-> ThemeManager, NotificationManager, LocalizationManager, DataExportManager 등이 설정 기능을 담당합니다.
-> SettingsCoordinator는 Tab 모듈의 TabCoordinator에서 sheet로 표시됩니다.
+> **Note**: Settings 모듈 자체는 골격 상태입니다.
+> 설정 UI(`SettingsCoordinator`, `SettingsView`)는 Tab 모듈에, 실제 로직(ThemeManager, LocalizationManager, NotificationManager, DataExportManager)은 Base 모듈에 구현되어 있습니다.
+
+**화면 구성** (Tab 모듈 `SettingsCoordinator` / Base 모듈 매니저):
+- 테마 설정: system/light/dark 선택 (체크마크 표시)
+- 언어 설정: system/한국어/English 선택 (체크마크 표시)
+- 알림 설정: 권한 요청 버튼, 카테고리별 토글 + 시간 선택기
+- 데이터 관리: 내보내기 형식 선택 시트 (JSON/CSV), 전체 삭제 + 확인 알림
+- 앱 정보: 버전 표시, 건강 면책 조항
 
 ---
 
@@ -451,6 +499,22 @@ public final class MealRecordModel {
 | Model | `HealthKitWeightData.swift` | HealthKit 체중 데이터 |
 | Model | `HealthKitStepData.swift` | HealthKit 걸음수 데이터 |
 | Model | `HealthKitActivityData.swift` | HealthKit 활동 칼로리 데이터 |
+
+**지원 데이터 타입**:
+- `stepCount` — 일일 걸음수 (`HKQuantityType`)
+- `activeEnergy` — 활동 칼로리 (kcal)
+- `bodyMass` — 체중 (kg, 읽기+쓰기)
+
+**주요 기능**:
+- 권한 요청 (읽기: stepCount, activeEnergy, bodyMass / 쓰기: bodyMass만)
+- 일일 걸음수/활동 칼로리 조회 (날짜 범위 기반)
+- 체중 기록 조회 (기간별) + 최신 체중 조회
+- 체중 저장 (HealthKit에 쓰기)
+- 디바이스 HealthKit 지원 여부 확인
+
+**에러 처리**: `notAvailable`, `authorizationDenied`, `queryFailed`
+
+**연동**: HomeFeature(걸음수/활동 칼로리 표시), WeightFeature(체중 동기화)
 
 ---
 
