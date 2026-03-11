@@ -359,9 +359,9 @@ xcodebuild build -scheme Meal -destination 'platform=iOS Simulator,name=iPhone 1
 ## 참고
 
 ### 관련 문서
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - 아키텍처 설계
-- [MODULES.md](./MODULES.md) - 모듈 상세 정의
-- [API.md](./API.md) - API 명세
+- [ARCHITECTURE.md](../02-설계/ARCHITECTURE.md) - 아키텍처 설계
+- [MODULES.md](../02-설계/MODULES.md) - 모듈 상세 정의
+- [API.md](../03-구현/API.md) - API 명세
 
 ### 외부 참고
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)

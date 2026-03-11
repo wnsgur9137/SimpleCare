@@ -11,7 +11,7 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 
 ## 현재 진행 상황
 
-> 상세 계획: [WORKPLAN.md](./docs/WORKPLAN.md) | [ROADMAP.md](./docs/ROADMAP.md)
+> 상세 계획: [WORKPLAN.md](./docs/01-전략/WORKPLAN.md) | [ROADMAP.md](./docs/01-전략/ROADMAP.md)
 
 | Phase | 상태 | 설명 |
 |-------|------|------|

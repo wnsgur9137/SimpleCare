@@ -11,7 +11,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 
 ## Current Progress
 
-> Detailed plans: [WORKPLAN.md](./docs/WORKPLAN.md) | [ROADMAP.md](./docs/ROADMAP.md)
+> Detailed plans: [WORKPLAN.md](./docs/01-전략/WORKPLAN.md) | [ROADMAP.md](./docs/01-전략/ROADMAP.md)
 
 | Phase | Status | Description |
 |-------|--------|-------------|
