@@ -32,7 +32,23 @@ status: active
 | 문서 | 설명 |
 |------|------|
 | [ARCHITECTURE](./02-설계/ARCHITECTURE.md) | 프로젝트 아키텍처 설계 |
-| [MODULES](./02-설계/MODULES.md) | 모듈 상세 정의 |
+| [MODULES](./02-설계/MODULES.md) | 모듈 상세 정의 (MOC) |
+| ↳ [Home](./02-설계/modules/Home.md) | 메인 홈 화면 모듈 |
+| ↳ [Tab](./02-설계/modules/Tab.md) | 탭 네비게이션 모듈 |
+| ↳ [Calendar](./02-설계/modules/Calendar.md) | 캘린더 모듈 |
+| ↳ [Meal](./02-설계/modules/Meal.md) | 식단 기록 모듈 |
+| ↳ [Exercise](./02-설계/modules/Exercise.md) | 운동 기록 모듈 |
+| ↳ [Weight](./02-설계/modules/Weight.md) | 체중 관리 모듈 |
+| ↳ [Profile](./02-설계/modules/Profile.md) | 프로필 모듈 |
+| ↳ [Onboarding](./02-설계/modules/Onboarding.md) | 온보딩 모듈 |
+| ↳ [Splash](./02-설계/modules/Splash.md) | 스플래시 모듈 |
+| ↳ [Base](./02-설계/modules/Base.md) | 공통 UI/유틸리티 모듈 |
+| ↳ [Settings](./02-설계/modules/Settings.md) | 설정 모듈 |
+| ↳ [Features](./02-설계/modules/Features.md) | Feature 통합 모듈 |
+| ↳ [StorageInfra](./02-설계/modules/StorageInfra.md) | SwiftData 영속화 모듈 |
+| ↳ [AIServiceInfra](./02-설계/modules/AIServiceInfra.md) | AI API 연동 모듈 |
+| ↳ [NetworkInfra](./02-설계/modules/NetworkInfra.md) | 네트워크 통신 모듈 |
+| ↳ [HealthKitInfra](./02-설계/modules/HealthKitInfra.md) | HealthKit 연동 모듈 |
 
 ## 03-구현
 
