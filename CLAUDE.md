@@ -231,15 +231,26 @@ struct FeatureReducer {
 
 ## Documentation
 
-Detailed documentation is stored in the `/docs/` directory:
-README.md, ARCHITECTURE.md, MODULES.md, API.md, PRD.md, FASTLANE.md, CLAUDE_CODE_GUIDE.md, etc.
+Documentation is managed as an Obsidian vault in the `/docs/` directory:
 
-### Documentation Update Rules
+```
+docs/
+├── INDEX.md            # MOC (Map of Contents)
+├── 01-전략/            # PRD, ROADMAP, WORKPLAN, HOME_SCREEN_PLAN
+├── 02-설계/            # ARCHITECTURE, MODULES
+├── 03-구현/            # SETUP, API, FASTLANE
+├── 04-도구/            # AI_TOOLS, CLAUDE_CODE_GUIDE, OMC_GUIDE
+└── _templates/         # Obsidian templates
+```
 
-When adding, modifying, or deleting documents in the `/docs/` directory, the document list table in the root `README.md` must also be updated accordingly.
-- On addition: Add the document link and description to the table
-- On deletion: Remove the corresponding entry from the table
-- On description change: Update the description column in the table
+### Documentation Management Rules
+
+1. **Source of truth**: The Obsidian vault (`docs/`) is the canonical source for all project documentation
+2. **Frontmatter required**: Every document must have YAML frontmatter (title, aliases, tags, created, updated, status)
+3. **Markdown links**: Use standard markdown links `[text](path)` with relative paths (not Wikilinks)
+4. **Templates**: New documents should use templates from `docs/_templates/`
+5. **README sync**: When adding/removing documents in `docs/`, update the document table in root `README.md`
+6. **Updated field**: When modifying a document, update the `updated` field in frontmatter to the current date
 
 ## Language
 

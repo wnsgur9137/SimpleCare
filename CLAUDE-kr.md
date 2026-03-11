@@ -231,15 +231,26 @@ struct FeatureReducer {
 
 ## 문서
 
-`/docs/` 디렉토리에 상세 문서 보관:
-README.md, ARCHITECTURE.md, MODULES.md, API.md, PRD.md, FASTLANE.md, CLAUDE_CODE_GUIDE.md 등
+문서는 `/docs/` 디렉토리를 Obsidian vault로 관리합니다:
 
-### 문서 업데이트 규칙
+```
+docs/
+├── INDEX.md            # MOC (Map of Contents)
+├── 01-전략/            # PRD, ROADMAP, WORKPLAN, HOME_SCREEN_PLAN
+├── 02-설계/            # ARCHITECTURE, MODULES
+├── 03-구현/            # SETUP, API, FASTLANE
+├── 04-도구/            # AI_TOOLS, CLAUDE_CODE_GUIDE, OMC_GUIDE
+└── _templates/         # Obsidian 템플릿
+```
 
-`/docs/` 디렉토리의 문서를 추가, 수정, 삭제한 경우 반드시 루트 `README.md`의 문서 목록 테이블도 함께 업데이트해야 합니다.
-- 문서 추가 시: 테이블에 해당 문서의 링크와 설명 추가
-- 문서 삭제 시: 테이블에서 해당 항목 제거
-- 문서 설명 변경 시: 테이블의 설명 컬럼 업데이트
+### 문서 관리 규칙
+
+1. **원본 = vault**: Obsidian vault(`docs/`)가 모든 프로젝트 문서의 원본입니다
+2. **Frontmatter 필수**: 모든 문서에 YAML frontmatter 포함 (title, aliases, tags, created, updated, status)
+3. **마크다운 링크**: 상대 경로의 표준 마크다운 링크 `[텍스트](경로)` 사용 (Wikilink 사용 금지)
+4. **템플릿 사용**: 새 문서 작성 시 `docs/_templates/`의 템플릿 활용
+5. **README 동기화**: `docs/`에 문서 추가/삭제 시 루트 `README.md`의 문서 테이블도 업데이트
+6. **updated 필드 갱신**: 문서 수정 시 frontmatter의 `updated` 필드를 현재 날짜로 변경
 
 ## 언어
 
