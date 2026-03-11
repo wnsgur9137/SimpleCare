@@ -7,15 +7,19 @@ AI 기반 개인 건강 관리 iOS 앱
 ## 목차
 
 1. [제품 비전](#제품-비전)
-2. [기술 스택](#기술-스택)
-3. [주요 기능](#주요-기능)
-4. [빠른 시작](#빠른-시작)
-5. [AI 개발 도구](#ai-개발-도구)
-6. [모듈 구조](#모듈-구조)
-7. [아키텍처](#아키텍처)
-8. [문서](#문서)
-9. [면책 조항](#면책-조항)
-10. [라이선스](#라이선스)
+2. [현재 버전](#현재-버전)
+3. [기술 스택](#기술-스택)
+4. [주요 기능](#주요-기능)
+5. [개발 진행 상황](#개발-진행-상황)
+6. [빠른 시작](#빠른-시작)
+7. [AI 개발 도구](#ai-개발-도구)
+8. [모듈 구조](#모듈-구조)
+9. [아키텍처](#아키텍처)
+10. [Fastlane 명령어](#fastlane-명령어)
+11. [Claude Code 설정](#claude-code-설정)
+12. [문서](#문서)
+13. [면책 조항](#면책-조항)
+14. [라이선스](#라이선스)
 
 ---
 
@@ -25,25 +29,66 @@ AI 기반 개인 건강 관리 iOS 앱
 
 ---
 
+## 현재 버전
+
+| 항목 | 값 |
+|------|-----|
+| **버전** | 0.0.1 |
+| **빌드 번호** | 1 |
+| **최소 iOS** | 18.0+ |
+| **Swift** | 6.0 |
+
+---
+
 ## 기술 스택
 
 | 분류 | 기술 |
 |-----|------|
-| **Platform** | iOS 18.0+, SwiftUI, SwiftData |
-| **Architecture** | Clean Architecture + TCA |
+| **Platform** | iOS 18.0+, Swift 6.0, SwiftUI, SwiftData |
+| **Architecture** | Clean Architecture + TCA 1.22.0+ |
 | **Network** | Moya, Alamofire |
 | **UI Components** | Kingfisher, Lottie, IQKeyboardManager |
-| **AI** | OpenAI GPT-4o |
-| **Build & CI/CD** | Tuist, Fastlane |
+| **AI** | OpenAI GPT-4o (REST API) |
+| **Health** | Apple HealthKit |
+| **Build & CI/CD** | Tuist 4.x, Fastlane |
+| **Lint/Format** | SwiftLint, SwiftFormat |
 
 ---
 
 ## 주요 기능
 
-- **AI 영양 분석**: 텍스트/사진 입력으로 음식 영양소 자동 추정
+### 핵심 기능
+
+- **AI 영양 분석**: 텍스트 입력으로 음식 영양소 자동 추정 (GPT-4o)
 - **운동 기록**: MET 기반 칼로리 소모량 계산
 - **체중 관리**: 목표 설정 및 추세 분석
 - **대시보드**: 일일 영양/운동 요약 시각화
+
+### 확장 기능
+
+- **캘린더**: 월별 캘린더 및 일별 기록 요약
+- **HealthKit 연동**: Apple 건강 앱과 데이터 동기화
+- **테마 설정**: 라이트/다크/시스템 테마 지원
+- **알림 기능**: 식사/운동/체중 기록 리마인더
+- **데이터 내보내기**: JSON/CSV 형식 데이터 백업
+- **다국어 지원**: 한국어(기본), 영어 런타임 전환
+
+---
+
+## 개발 진행 상황
+
+| Phase | 상태 | 설명 |
+|-------|------|------|
+| Phase L: Localization | ✅ 완료 | 한국어(기본), 영어 런타임 전환 |
+| Phase 0: DIContainer | ✅ 완료 | 모든 Feature DIContainer 연결 |
+| Phase 1: AI Feature | 🟡 진행중 | 텍스트 분석 완료, 이미지 분석 연기 |
+| Phase 1.5: Known Gaps | ✅ 완료 | 알려진 갭 수정 |
+| Phase 2: Home UI | ✅ 완료 | 홈 화면 시각화 |
+| Phase 3: Extended Features | ✅ 완료 | 확장 기능 구현 |
+| Phase 4: Integration | 🟡 진행중 | 테마/HealthKit 완료, 알림/내보내기 진행중 |
+| Phase 5: Image/Voice | 🔵 예정 | 이미지 분석 기능 (연기됨) |
+
+> 자세한 진행 상황은 [ROADMAP.md](./docs/ROADMAP.md)와 [WORKPLAN.md](./docs/WORKPLAN.md)를 참고하세요.
 
 ---
 
@@ -100,9 +145,35 @@ Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동�
 
 ![Common Graph](graphs/common-graph.png)
 
-### Feature 모듈별 의존성
+### Feature 모듈 (12개)
 
 각 Feature 모듈은 Clean Architecture + TCA 패턴을 따르며, Data/Domain/Presentation 레이어로 구성됩니다.
+
+| 모듈 | 설명 |
+|------|------|
+| **Splash** | 앱 시작 시 표시되는 스플래시 화면 |
+| **Onboarding** | 사용자 프로필 및 목표 설정 |
+| **Home** | 메인 홈 화면 (일일 요약, 빠른 기록) |
+| **Tab** | 메인 탭 네비게이션 관리 |
+| **Meal** | AI 기반 식단 기록 및 영양 분석 |
+| **Exercise** | MET 기반 운동 기록 및 칼로리 계산 |
+| **Weight** | 체중 기록 및 목표 관리 |
+| **Calendar** | 월별 캘린더 및 일별 요약 |
+| **Profile** | 사용자 프로필 관리 |
+| **Settings** | 앱 설정 (테마, 알림, 데이터 관리) |
+| **Base** | 공유 UI 컴포넌트, 색상, 유틸리티 |
+| **Features** | Feature 모듈 집합 (Aggregator) |
+
+### Infrastructure 모듈 (4개)
+
+| 모듈 | 설명 |
+|------|------|
+| **StorageInfra** | SwiftData 기반 로컬 저장소 |
+| **NetworkInfra** | Moya/Alamofire 기반 네트워크 레이어 |
+| **AIServiceInfra** | OpenAI GPT-4o API 연동 |
+| **HealthKitInfra** | Apple HealthKit 연동 |
+
+### Feature 모듈별 의존성 그래프
 
 #### Splash
 앱 시작 시 표시되는 스플래시 화면
@@ -114,10 +185,15 @@ Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동�
 
 ![Onboarding Graph](graphs/onboarding-graph.png)
 
-#### Home (Tab Coordinator)
-메인 탭 네비게이션 관리
+#### Home
+메인 홈 화면 (일일 영양/운동 요약, 주간 트렌드)
 
 ![Home Graph](graphs/home-graph.png)
+
+#### Dashboard
+일일 영양/운동 요약 시각화 (그래프, 진행률)
+
+![Dashboard Graph](graphs/dashboard-graph.png)
 
 #### Meal
 AI 기반 식단 기록 및 영양 분석
@@ -134,6 +210,11 @@ MET 기반 운동 기록 및 칼로리 계산
 
 ![Weight Graph](graphs/weight-graph.png)
 
+#### Calendar
+월별 캘린더 및 일별 요약
+
+![Calendar Graph](graphs/calendar-graph.png)
+
 #### Profile
 사용자 프로필 관리
 
@@ -143,11 +224,6 @@ MET 기반 운동 기록 및 칼로리 계산
 앱 설정
 
 ![Settings Graph](graphs/settings-graph.png)
-
-#### Calendar
-월별 캘린더 및 일별 요약
-
-![Calendar Graph](graphs/calendar-graph.png)
 
 ---
 
@@ -176,10 +252,10 @@ MET 기반 운동 기록 및 칼로리 계산
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 ├─────────────────────────────────────────────────────────┤
 │                   Infrastructure                        │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │StorageInfra │  │AIServiceInfra│ │ NetworkInfra│     │
-│  │ (SwiftData) │  │  (OpenAI)   │  │   (Moya)    │     │
-│  └─────────────┘  └─────────────┘  └─────────────┘     │
+│  ┌───────────┐ ┌─────────────┐ ┌───────────┐ ┌───────┐│
+│  │StorageInfra│ │AIServiceInfra│ │NetworkInfra│ │HealthKit││
+│  │(SwiftData)│ │  (OpenAI)   │ │  (Moya)   │ │ Infra ││
+│  └───────────┘ └─────────────┘ └───────────┘ └───────┘│
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -206,24 +282,35 @@ MET 기반 운동 기록 및 칼로리 계산
 
 ---
 
-## 문서
+## Fastlane 명령어
 
-자세한 기술 문서는 [docs/](./docs/) 폴더를 참고하세요.
+### 버전 관리
 
-| 문서 | 설명 |
-|-----|------|
-| [SETUP.md](./docs/SETUP.md) | 개발 환경 설정 가이드 |
-| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | 프로젝트 아키텍처 설계 |
-| [MODULES.md](./docs/MODULES.md) | 모듈 상세 정의 |
-| [API.md](./docs/API.md) | AI API 연동 명세 |
-| [PRD.md](./docs/PRD.md) | 제품 요구사항 문서 |
-| [WORKPLAN.md](./docs/WORKPLAN.md) | 작업 계획서 |
-| [HOME_SCREEN_PLAN.md](./docs/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
-| [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
-| [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
-| [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
-| [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
-| [OMC_GUIDE.md](./docs/OMC_GUIDE.md) | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
+```bash
+fastlane ios current_version      # 현재 버전/빌드 확인
+fastlane ios bump version:X.Y.Z   # 특정 버전 설정
+fastlane ios bump_major           # 메이저 버전 증가 (X.0.0)
+fastlane ios bump_minor           # 마이너 버전 증가 (0.X.0)
+fastlane ios bump_patch           # 패치 버전 증가 (0.0.X)
+fastlane ios bump_build           # 빌드 번호 증가
+fastlane ios bump build:N         # 특정 빌드 번호 설정
+```
+
+### 빌드 & 테스트
+
+```bash
+fastlane ios build_test           # 컴파일 검증 (DEV)
+fastlane ios build                # Ad-hoc 빌드 (PROD)
+fastlane ios test                 # 유닛 테스트 실행
+```
+
+### 배포
+
+```bash
+fastlane ios beta                 # TestFlight 배포
+```
+
+> 자세한 내용은 [FASTLANE.md](./docs/FASTLANE.md)를 참고하세요.
 
 ---
 
@@ -248,6 +335,27 @@ MET 기반 운동 기록 및 칼로리 계산
 | `/test` | 유닛 테스트 실행 + 결과 분석 |
 
 > 자세한 내용은 [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md)를 참고하세요.
+
+---
+
+## 문서
+
+자세한 기술 문서는 [docs/](./docs/) 폴더를 참고하세요.
+
+| 문서 | 설명 |
+|-----|------|
+| [SETUP.md](./docs/SETUP.md) | 개발 환경 설정 가이드 |
+| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | 프로젝트 아키텍처 설계 |
+| [MODULES.md](./docs/MODULES.md) | 모듈 상세 정의 |
+| [API.md](./docs/API.md) | AI API 연동 명세 |
+| [PRD.md](./docs/PRD.md) | 제품 요구사항 문서 |
+| [WORKPLAN.md](./docs/WORKPLAN.md) | 작업 계획서 |
+| [HOME_SCREEN_PLAN.md](./docs/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
+| [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
+| [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
+| [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
+| [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
+| [OMC_GUIDE.md](./docs/OMC_GUIDE.md) | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
 
 ---
 
