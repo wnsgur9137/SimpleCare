@@ -291,6 +291,14 @@ After completing code changes, BEFORE committing, check if documentation updates
 3. Update `updated` field in YAML frontmatter to today's date
 4. Create a SEPARATE commit for doc updates
 
+#### Automated Enforcement
+
+Documentation sync is enforced via Claude Code hooks:
+- **PostToolUse hook**: Reminds about relevant docs when Swift source files are edited
+- **Stop hook**: Warns if Swift files changed but no docs/ updates were made
+
+Hook scripts are located in `.claude/hooks/` and configured in `.claude/settings.local.json`.
+
 #### Commit Format
 `📝 Docs: [모듈명] 코드 변경에 따른 문서 동기화`
 

@@ -291,6 +291,14 @@ docs/
 3. YAML frontmatter의 `updated` 필드를 오늘 날짜로 변경
 4. 문서 업데이트는 별도 커밋으로 분리
 
+#### 자동화된 실행 보장
+
+문서 동기화는 Claude Code hooks를 통해 자동으로 실행이 보장됩니다:
+- **PostToolUse hook**: Swift 소스 파일 수정 시 관련 문서를 리마인드
+- **Stop hook**: Swift 파일이 변경되었으나 docs/ 업데이트가 없으면 경고
+
+Hook 스크립트는 `.claude/hooks/`에 위치하며, `.claude/settings.local.json`에서 설정됩니다.
+
 #### 커밋 형식
 `📝 Docs: [모듈명] 코드 변경에 따른 문서 동기화`
 
