@@ -1,3 +1,14 @@
+---
+title: "아키텍처 설계"
+aliases: ["아키텍처"]
+tags:
+  - 설계
+  - 설계/아키텍처
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 아키텍처 문서
 
 ## 목차
@@ -58,20 +69,22 @@ SimpleCare/
 │   ├── Feature/                  # 기능 모듈
 │   │   ├── Features/             # Feature 통합 모듈
 │   │   ├── Base/                 # 공통 UI/유틸리티
-│   │   ├── Dashboard/            # 대시보드
+│   │   ├── Splash/               # 스플래시
+│   │   ├── Onboarding/           # 온보딩
+│   │   ├── Home/                 # 홈 (대시보드 통합)
+│   │   ├── Tab/                  # 메인 탭 네비게이션
 │   │   ├── Meal/                 # 식단 기록
 │   │   ├── Exercise/             # 운동 기록
 │   │   ├── Weight/               # 체중 관리
+│   │   ├── Calendar/             # 캘린더
 │   │   ├── Profile/              # 프로필/목표 설정
-│   │   ├── Onboarding/           # 온보딩
-│   │   ├── Settings/             # 설정
-│   │   ├── Splash/               # 스플래시
-│   │   └── Home/                 # 홈 (미사용)
+│   │   └── Settings/             # 설정
 │   │
 │   ├── Infrastructure/           # 인프라 모듈
 │   │   ├── StorageInfra/         # SwiftData 저장소
 │   │   ├── AIServiceInfra/       # OpenAI API
-│   │   └── NetworkInfra/         # 네트워크 계층
+│   │   ├── NetworkInfra/         # 네트워크 계층
+│   │   └── HealthKitInfra/       # HealthKit 연동
 │   │
 │   ├── LibraryManager/           # 외부 라이브러리 래퍼
 │   │   ├── ReactiveLibraries/
@@ -125,13 +138,42 @@ Feature/{FeatureName}/
 
 | 모듈 | 역할 | 주요 컴포넌트 |
 |-----|------|-------------|
-| **Dashboard** | 일일 요약 대시보드 | 칼로리/영양소 시각화, AI 코멘트 |
-| **Meal** | 식단 기록 | AI 영양 추정, 이미지 분석 |
-| **Exercise** | 운동 기록 | MET 기반 칼로리 계산 |
-| **Weight** | 체중 관리 | 목표 설정, 추세 분석 |
+| **Home** | 메인 홈 화면 (대시보드 통합) | AI 인사이트, 일일 요약, 주간 트렌드 |
+| **Tab** | 메인 탭 네비게이션 | 5개 탭 관리, Sheet 표시 |
+| **Meal** | 식단 기록 | AI 영양 추정, 즐겨찾기 |
+| **Exercise** | 운동 기록 | MET 기반 칼로리 계산, 커스텀 운동 |
+| **Weight** | 체중 관리 | 목표 설정, 추세 분석, BMR/TDEE |
+| **Calendar** | 캘린더 | 월별 캘린더, 일별 기록 요약 |
 | **Profile** | 사용자 프로필 | 기본 정보, 목표 설정 |
-| **Onboarding** | 초기 설정 | 단계별 정보 입력 |
-| **Base** | 공통 컴포넌트 | Coordinator 프로토콜, 공통 UI |
+| **Onboarding** | 초기 설정 | 6단계 정보 입력 |
+| **Base** | 공통 컴포넌트 | Coordinator/DIContainer 프로토콜, 테마, 알림, 내보내기 |
+
+---
+
+### 앱 흐름도
+
+```
+AppCoordinator (ObservableObject)
+├── SplashCoordinator ─── 완료 시 해제
+├── OnboardingCoordinator ─── 완료 시 해제 (프로필 미존재 시)
+└── TabCoordinator ─── 메인 화면
+    ├── HomeCoordinator ──── 홈 탭
+    ├── MealCoordinator ──── 식단 탭 (리스트/기록/상세)
+    ├── ExerciseCoordinator ── 운동 탭 (리스트/기록/상세)
+    ├── WeightCoordinator ── 체중 탭
+    ├── CalendarCoordinator ── 캘린더 탭
+    ├── ProfileCoordinator ── Sheet
+    └── SettingsCoordinator ── Sheet
+```
+
+**앱 시작 흐름**:
+1. `SimpleCareApp` → `AppCoordinator` 생성
+2. `SplashCoordinator` → 스플래시 표시 → 완료 시 해제
+3. 프로필 존재 여부 확인
+   - 없음 → `OnboardingCoordinator` → 6단계 프로필 설정 → 완료
+   - 있음 → 바로 다음 단계
+4. `TabCoordinator` → `MainTabView` 표시 (5개 탭)
+5. `ensureProfileLoaded()` → 프로필 로드 완료 후 UI 표시
 
 ---
 
@@ -275,41 +317,46 @@ extension MealClient: DependencyKey {
 Application
     │
     ▼
-Features ─────────────────────────────────┐
+Tab ──────────────────────────────────────┐
     │                                      │
-    ├── Dashboard ──┬── DashboardDomain    │
-    │               ├── DashboardData      │
-    │               └── DashboardPresentation
+    ├── Home ──────┬── HomeDomain          │
+    │              ├── HomeData            │
+    │              └── HomePresentation    │
     │                                      │
-    ├── Meal ───────┬── MealDomain         │
-    │               ├── MealData           │
-    │               └── MealPresentation   │
+    ├── Meal ──────┬── MealDomain          │
+    │              ├── MealData            │
+    │              └── MealPresentation    │
     │                                      │
-    ├── Exercise ───┬── ExerciseDomain     │
-    │               ├── ExerciseData       │
-    │               └── ExercisePresentation
+    ├── Exercise ──┬── ExerciseDomain      │
+    │              ├── ExerciseData        │
+    │              └── ExercisePresentation│
     │                                      │
-    ├── Weight ─────┬── WeightDomain       │
-    │               ├── WeightData         │
-    │               └── WeightPresentation │
+    ├── Weight ────┬── WeightDomain        │
+    │              ├── WeightData          │
+    │              └── WeightPresentation  │
     │                                      │
-    └── Profile ────┬── ProfileDomain      │
-                    ├── ProfileData        │
-                    └── ProfilePresentation
-                              │
-                              ▼
-                    ┌─────────────────────┐
-                    │   Infrastructure    │
-                    ├─────────────────────┤
-                    │  StorageInfra       │
-                    │  AIServiceInfra     │
-                    │  NetworkInfra       │
-                    └─────────────────────┘
-                              │
-                              ▼
-                    ┌─────────────────────┐
-                    │   LibraryManager    │
-                    └─────────────────────┘
+    ├── Calendar ──┬── CalendarDomain      │
+    │              ├── CalendarData        │
+    │              └── CalendarPresentation│
+    │                                      │
+    └── Profile ───┬── ProfileDomain       │
+                   ├── ProfileData         │
+                   └── ProfilePresentation │
+                             │
+                             ▼
+                   ┌─────────────────────┐
+                   │   Infrastructure    │
+                   ├─────────────────────┤
+                   │  StorageInfra       │
+                   │  AIServiceInfra     │
+                   │  NetworkInfra       │
+                   │  HealthKitInfra     │
+                   └─────────────────────┘
+                             │
+                             ▼
+                   ┌─────────────────────┐
+                   │   LibraryManager    │
+                   └─────────────────────┘
 ```
 
 ### 의존성 규칙

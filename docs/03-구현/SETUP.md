@@ -1,3 +1,14 @@
+---
+title: "개발 환경 설정"
+aliases: ["셋업", "설정"]
+tags:
+  - 구현
+  - 구현/환경설정
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 개발 환경 설정
 
 ## 목차

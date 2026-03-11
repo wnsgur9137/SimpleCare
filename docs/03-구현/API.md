@@ -1,3 +1,14 @@
+---
+title: "API 연동 명세"
+aliases: ["API"]
+tags:
+  - 구현
+  - 구현/API
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare API 문서
 
 ## 목차

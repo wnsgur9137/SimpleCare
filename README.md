@@ -88,7 +88,7 @@ AI 기반 개인 건강 관리 iOS 앱
 | Phase 4: Integration | 🟡 진행중 | 테마/HealthKit 완료, 알림/내보내기 진행중 |
 | Phase 5: Image/Voice | 🔵 예정 | 이미지 분석 기능 (연기됨) |
 
-> 자세한 진행 상황은 [ROADMAP.md](./docs/ROADMAP.md)와 [WORKPLAN.md](./docs/WORKPLAN.md)를 참고하세요.
+> 자세한 진행 상황은 [ROADMAP.md](./docs/01-전략/ROADMAP.md)와 [WORKPLAN.md](./docs/01-전략/WORKPLAN.md)를 참고하세요.
 
 ---
 
@@ -135,7 +135,7 @@ Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동�
 - **Sosumi**: Apple Developer Documentation 검색
 - **Shrimp Task Manager**: 태스크 관리 (GUI 지원)
 
-> 자세한 내용은 [AI_TOOLS.md](./docs/AI_TOOLS.md)를 참고하세요.
+> 자세한 내용은 [AI_TOOLS.md](./docs/04-도구/AI_TOOLS.md)를 참고하세요.
 
 ---
 
@@ -310,7 +310,7 @@ fastlane ios test                 # 유닛 테스트 실행
 fastlane ios beta                 # TestFlight 배포
 ```
 
-> 자세한 내용은 [FASTLANE.md](./docs/FASTLANE.md)를 참고하세요.
+> 자세한 내용은 [FASTLANE.md](./docs/03-구현/FASTLANE.md)를 참고하세요.
 
 ---
 
@@ -321,6 +321,15 @@ fastlane ios beta                 # TestFlight 배포
 ### 프로젝트 컨텍스트
 
 `CLAUDE.md` 파일이 프로젝트 루트에 위치하며, Claude Code가 대화 시작 시 자동으로 읽어들여 프로젝트 구조, 컨벤션, 명령어 등을 파악합니다.
+
+### Hooks (문서 동기화 자동화)
+
+`.claude/hooks/` 디렉토리에 등록된 자동화 스크립트:
+
+| Hook | 이벤트 | 기능 |
+|------|--------|------|
+| `doc-sync-reminder.sh` | PostToolUse | Swift 소스 수정 시 관련 문서 리마인더 출력 |
+| `doc-sync-check.sh` | Stop | 응답 완료 시 문서 업데이트 누락 경고 |
 
 ### 커스텀 슬래시 명령
 
@@ -334,7 +343,7 @@ fastlane ios beta                 # TestFlight 배포
 | `/review` | main 대비 변경사항 코드 리뷰 |
 | `/test` | 유닛 테스트 실행 + 결과 분석 |
 
-> 자세한 내용은 [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md)를 참고하세요.
+> 자세한 내용은 [CLAUDE_CODE_GUIDE.md](./docs/04-도구/CLAUDE_CODE_GUIDE.md)를 참고하세요.
 
 ---
 
@@ -342,20 +351,23 @@ fastlane ios beta                 # TestFlight 배포
 
 자세한 기술 문서는 [docs/](./docs/) 폴더를 참고하세요.
 
-| 문서 | 설명 |
-|-----|------|
-| [SETUP.md](./docs/SETUP.md) | 개발 환경 설정 가이드 |
-| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | 프로젝트 아키텍처 설계 |
-| [MODULES.md](./docs/MODULES.md) | 모듈 상세 정의 |
-| [API.md](./docs/API.md) | AI API 연동 명세 |
-| [PRD.md](./docs/PRD.md) | 제품 요구사항 문서 |
-| [WORKPLAN.md](./docs/WORKPLAN.md) | 작업 계획서 |
-| [HOME_SCREEN_PLAN.md](./docs/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
-| [ROADMAP.md](./docs/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
-| [AI_TOOLS.md](./docs/AI_TOOLS.md) | AI 도구 활용 가이드 |
-| [FASTLANE.md](./docs/FASTLANE.md) | Fastlane 가이드 |
-| [CLAUDE_CODE_GUIDE.md](./docs/CLAUDE_CODE_GUIDE.md) | Claude Code 설정 가이드 |
-| [OMC_GUIDE.md](./docs/OMC_GUIDE.md) | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
+| 문서 | 카테고리 | 설명 |
+|-----|---------|------|
+| [PRD.md](./docs/01-전략/PRD.md) | 전략 | 제품 요구사항 문서 |
+| [ROADMAP.md](./docs/01-전략/ROADMAP.md) | 전략 | 개발 로드맵 및 진행 상황 |
+| [WORKPLAN.md](./docs/01-전략/WORKPLAN.md) | 전략 | 작업 계획서 |
+| [HOME_SCREEN_PLAN.md](./docs/01-전략/HOME_SCREEN_PLAN.md) | 전략 | 홈 화면 계획서 |
+| [ARCHITECTURE.md](./docs/02-설계/ARCHITECTURE.md) | 설계 | 프로젝트 아키텍처 설계 |
+| [MODULES.md](./docs/02-설계/MODULES.md) | 설계 | 모듈 상세 정의 |
+| [SETUP.md](./docs/03-구현/SETUP.md) | 구현 | 개발 환경 설정 가이드 |
+| [API.md](./docs/03-구현/API.md) | 구현 | AI API 연동 명세 |
+| [FASTLANE.md](./docs/03-구현/FASTLANE.md) | 구현 | Fastlane 가이드 |
+| [DATA_FLOW.md](./docs/03-구현/DATA_FLOW.md) | 구현 | 데이터 흐름 문서 |
+| [NAVIGATION.md](./docs/03-구현/NAVIGATION.md) | 구현 | 화면 전환 흐름 |
+| [TESTING.md](./docs/03-구현/TESTING.md) | 구현 | 테스트 전략 가이드 |
+| [AI_TOOLS.md](./docs/04-도구/AI_TOOLS.md) | 도구 | AI 도구 활용 가이드 |
+| [CLAUDE_CODE_GUIDE.md](./docs/04-도구/CLAUDE_CODE_GUIDE.md) | 도구 | Claude Code 설정 가이드 (Hooks, 슬래시 명령 포함) |
+| [OMC_GUIDE.md](./docs/04-도구/OMC_GUIDE.md) | 도구 | oh-my-claudecode(OMC) 멀티 에이전트 가이드 |
 
 ---
 

@@ -11,7 +11,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 
 ## Current Progress
 
-> Detailed plans: [WORKPLAN.md](./docs/WORKPLAN.md) | [ROADMAP.md](./docs/ROADMAP.md)
+> Detailed plans: [WORKPLAN.md](./docs/01-전략/WORKPLAN.md) | [ROADMAP.md](./docs/01-전략/ROADMAP.md)
 
 | Phase | Status | Description |
 |-------|--------|-------------|
@@ -231,15 +231,85 @@ struct FeatureReducer {
 
 ## Documentation
 
-Detailed documentation is stored in the `/docs/` directory:
-README.md, ARCHITECTURE.md, MODULES.md, API.md, PRD.md, FASTLANE.md, CLAUDE_CODE_GUIDE.md, etc.
+Documentation is managed as an Obsidian vault in the `/docs/` directory:
 
-### Documentation Update Rules
+```
+docs/
+├── INDEX.md            # MOC (Map of Contents)
+├── 01-전략/            # PRD, ROADMAP, WORKPLAN, HOME_SCREEN_PLAN
+├── 02-설계/            # ARCHITECTURE, MODULES
+├── 03-구현/            # SETUP, API, FASTLANE
+├── 04-도구/            # AI_TOOLS, CLAUDE_CODE_GUIDE, OMC_GUIDE
+└── _templates/         # Obsidian templates
+```
 
-When adding, modifying, or deleting documents in the `/docs/` directory, the document list table in the root `README.md` must also be updated accordingly.
-- On addition: Add the document link and description to the table
-- On deletion: Remove the corresponding entry from the table
-- On description change: Update the description column in the table
+### Code-Documentation Reference Rule
+
+When working on code changes, read the relevant docs/ before implementation:
+
+| Working on | Read first |
+|-----------|-----------|
+| Any Feature module | `docs/02-설계/ARCHITECTURE.md`, `docs/02-설계/MODULES.md` (relevant section) |
+| Meal Feature | `docs/03-구현/API.md` (AI API integration) |
+| Home Feature | `docs/01-전략/HOME_SCREEN_PLAN.md` |
+| Infrastructure | `docs/02-설계/ARCHITECTURE.md` |
+| Build / CI | `docs/03-구현/FASTLANE.md` |
+| New feature planning | `docs/01-전략/PRD.md`, `docs/01-전략/ROADMAP.md` |
+
+> **Bidirectional rule**: Read the relevant docs BEFORE implementation, and update them AFTER if changes affect documented interfaces, structures, or workflows.
+
+### Post-Change Documentation Sync Rule
+
+After completing code changes, BEFORE committing, check if documentation updates are needed.
+
+#### Trigger Matrix
+
+| Code Change Type | Affected Docs | Update Action |
+|-----------------|---------------|---------------|
+| New/renamed/deleted Entity or UseCase | `docs/02-설계/MODULES.md` | Add/update/remove row in module table |
+| New/renamed/deleted View/Coordinator | `docs/02-설계/MODULES.md` | Add/update/remove component row |
+| New Feature module added | `docs/02-설계/MODULES.md`, `docs/02-설계/ARCHITECTURE.md` | Add module section, update tree |
+| Dependency graph change (Tuist) | `docs/02-설계/ARCHITECTURE.md` | Update dependency flow section |
+| New/changed API endpoint or prompt | `docs/03-구현/API.md` | Update endpoint/prompt section |
+| Fastlane lane added/changed | `docs/03-구현/FASTLANE.md` | Update lane table |
+| Build config / Tuist change | `docs/03-구현/SETUP.md` | Update setup instructions |
+| Phase completion or status change | `docs/01-전략/ROADMAP.md`, `docs/01-전략/WORKPLAN.md` | Update phase status |
+| Home screen layout change | `docs/01-전략/HOME_SCREEN_PLAN.md` | Update screen plan |
+| Doc added/removed in docs/ | `docs/INDEX.md`, root `README.md` | Update MOC and README doc table |
+
+#### Exclusions (do NOT trigger doc updates)
+
+- Pure formatting/whitespace/comment-only changes
+- SwiftLint/SwiftFormat auto-fixes
+- Test file changes (unless new public API revealed)
+- Internal refactoring with no public interface change
+
+#### Process
+
+1. After code edits, review the trigger matrix
+2. Update matching doc(s)
+3. Update `updated` field in YAML frontmatter to today's date
+4. Create a SEPARATE commit for doc updates
+
+#### Automated Enforcement
+
+Documentation sync is enforced via Claude Code hooks:
+- **PostToolUse hook**: Reminds about relevant docs when Swift source files are edited
+- **Stop hook**: Warns if Swift files changed but no docs/ updates were made
+
+Hook scripts are located in `.claude/hooks/` and configured in `.claude/settings.local.json`.
+
+#### Commit Format
+`📝 Docs: [모듈명] 코드 변경에 따른 문서 동기화`
+
+### Documentation Management Rules
+
+1. **Source of truth**: The Obsidian vault (`docs/`) is the canonical source for all project documentation
+2. **Frontmatter required**: Every document must have YAML frontmatter (title, aliases, tags, created, updated, status)
+3. **Markdown links**: Use standard markdown links `[text](path)` with relative paths (not Wikilinks)
+4. **Templates**: New documents should use templates from `docs/_templates/`
+5. **README sync**: When adding/removing documents in `docs/`, update the document table in root `README.md`
+6. **Updated field**: When modifying a document, update the `updated` field in frontmatter to the current date
 
 ## Language
 

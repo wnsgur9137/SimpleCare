@@ -1,3 +1,14 @@
+---
+title: "개발 로드맵"
+aliases: ["로드맵"]
+tags:
+  - 전략
+  - 전략/로드맵
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 개발 로드맵
 
 ## 목차
@@ -282,6 +293,11 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 | **HealthKitInfra** | 완료 | 100% |
 | **Notification** | 완료 | 100% |
 | **Widget** | 미시작 | 0% |
+| **Home** | 완료 | 100% |
+| **Tab** | 완료 | 100% |
+| **Calendar** | 완료 | 100% |
+| **Settings** | 골격 | 20% |
+| **Splash** | 완료 | 100% |
 
 ### 전체 진행률
 ```
@@ -290,9 +306,9 @@ Phase 1: ████████████████████ 100%
 Phase 2: ████████████████████ 100%
 Phase 3: ████████████████████ 100%
 Phase 4: ████████████████░░░░  80%
-Phase 5: ██░░░░░░░░░░░░░░░░░░  10% (진행중)
+Phase 5: ████████████████████ 100% ✅
 ---------------------------------
-Total:   ████████████████░░░░  82%
+Total:   ██████████████████░░  90%
 ```
 
 ---
@@ -316,11 +332,11 @@ Total:   ████████████████░░░░  82%
 ### 현재 이슈
 1. ~~DIContainer가 Presentation 레이어에 위치~~ → **해결됨** (Feature 루트로 이동)
 2. ~~Coordinator가 DIContainer 직접 의존~~ → **해결됨** (Delegate 패턴 적용)
-3. Splash 화면 미구현 (현재 스킵)
-4. Home Feature 미사용 (Dashboard로 대체)
+3. Dashboard → Home 통합 완료
+4. Splash 화면 구현 완료 (SplashCoordinator)
 
 ### 리팩토링 계획
-- [ ] 미사용 모듈 정리 (Home, Splash)
+- [ ] 미사용 모듈 정리 (Settings 골격 상태)
 - [ ] 테스트 코드 작성
 - [ ] 에러 처리 고도화
 - [ ] 접근성(Accessibility) 개선
@@ -359,9 +375,9 @@ xcodebuild build -scheme Meal -destination 'platform=iOS Simulator,name=iPhone 1
 ## 참고
 
 ### 관련 문서
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - 아키텍처 설계
-- [MODULES.md](./MODULES.md) - 모듈 상세 정의
-- [API.md](./API.md) - API 명세
+- [ARCHITECTURE.md](../02-설계/ARCHITECTURE.md) - 아키텍처 설계
+- [MODULES.md](../02-설계/MODULES.md) - 모듈 상세 정의
+- [API.md](../03-구현/API.md) - API 명세
 
 ### 외부 참고
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
