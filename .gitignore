@@ -81,6 +81,9 @@ XCConfig/PROD.xcconfig
 ### oh-my-claudecode ###
 .omc/
 
+### Obsidian ###
+docs/.obsidian/
+
 ### Fastlane ###
 fastlane/report.xml
 fastlane/Preview.html
