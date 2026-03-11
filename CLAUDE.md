@@ -243,6 +243,19 @@ docs/
 └── _templates/         # Obsidian templates
 ```
 
+### Code-Documentation Reference Rule
+
+When working on code changes, read the relevant docs/ before implementation:
+
+| Working on | Read first |
+|-----------|-----------|
+| Any Feature module | `docs/02-설계/ARCHITECTURE.md`, `docs/02-설계/MODULES.md` (relevant section) |
+| Meal Feature | `docs/03-구현/API.md` (AI API integration) |
+| Home Feature | `docs/01-전략/HOME_SCREEN_PLAN.md` |
+| Infrastructure | `docs/02-설계/ARCHITECTURE.md` |
+| Build / CI | `docs/03-구현/FASTLANE.md` |
+| New feature planning | `docs/01-전략/PRD.md`, `docs/01-전략/ROADMAP.md` |
+
 ### Documentation Management Rules
 
 1. **Source of truth**: The Obsidian vault (`docs/`) is the canonical source for all project documentation

@@ -243,6 +243,19 @@ docs/
 └── _templates/         # Obsidian 템플릿
 ```
 
+### 코드-문서 참조 규칙
+
+코드 변경 작업 시, 구현 전에 관련 docs/ 문서를 먼저 확인합니다:
+
+| 작업 대상 | 먼저 읽을 문서 |
+|-----------|---------------|
+| 모든 Feature 모듈 | `docs/02-설계/ARCHITECTURE.md`, `docs/02-설계/MODULES.md` (해당 섹션) |
+| Meal Feature | `docs/03-구현/API.md` (AI API 연동) |
+| Home Feature | `docs/01-전략/HOME_SCREEN_PLAN.md` |
+| Infrastructure | `docs/02-설계/ARCHITECTURE.md` |
+| Build / CI | `docs/03-구현/FASTLANE.md` |
+| 새 기능 기획 | `docs/01-전략/PRD.md`, `docs/01-전략/ROADMAP.md` |
+
 ### 문서 관리 규칙
 
 1. **원본 = vault**: Obsidian vault(`docs/`)가 모든 프로젝트 문서의 원본입니다
