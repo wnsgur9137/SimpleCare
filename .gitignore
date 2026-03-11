@@ -82,7 +82,7 @@ XCConfig/PROD.xcconfig
 .omc/
 
 ### Obsidian ###
-docs/.obsidian/
+.obsidian/
 
 ### Fastlane ###
 fastlane/report.xml
