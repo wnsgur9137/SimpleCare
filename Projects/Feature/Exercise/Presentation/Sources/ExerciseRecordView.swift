@@ -30,7 +30,7 @@ public struct ExerciseRecordView: View {
 
                 // 운동 종류 선택
                 Section("exercise.type".localized) {
-                    Picker("exercise.category".localized, selection: .constant(store.exerciseType.category)) {
+                    Picker("exercise.category".localized, selection: $store.selectedCategory.sending(\.selectCategory)) {
                         ForEach(ExerciseCategory.allCases, id: \.self) { category in
                             Label(category.displayName, systemImage: category.icon)
                                 .tag(category)
@@ -38,7 +38,7 @@ public struct ExerciseRecordView: View {
                     }
 
                     Picker("exercise.exercise".localized, selection: $store.exerciseType) {
-                        ForEach(ExerciseType.allCases.filter { $0.category == store.exerciseType.category }, id: \.self) { type in
+                        ForEach(ExerciseType.allCases.filter { $0.category == store.selectedCategory }, id: \.self) { type in
                             Text(type.displayName).tag(type)
                         }
                     }

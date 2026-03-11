@@ -16,6 +16,7 @@ public struct ExerciseFeature {
     @ObservableState
     public struct State: Equatable {
         public var isLoading: Bool = false
+        public var selectedCategory: ExerciseCategory = .cardio
         public var exerciseType: ExerciseType = .walking
         public var intensity: ExerciseIntensity = .moderate
         public var durationMinutes: Int = 30
@@ -57,6 +58,7 @@ public struct ExerciseFeature {
     public enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case onAppear
+        case selectCategory(ExerciseCategory)
         case saveExercise
         case saveExerciseResponse(Result<Void, Error>)
         // Custom exercises
@@ -82,6 +84,8 @@ public struct ExerciseFeature {
                 return l == r
             case (.onAppear, .onAppear):
                 return true
+            case (.selectCategory(let l), .selectCategory(let r)):
+                return l == r
             case (.saveExercise, .saveExercise):
                 return true
             case (.saveExerciseResponse(.success), .saveExerciseResponse(.success)):
@@ -159,6 +163,16 @@ public struct ExerciseFeature {
 
             case .onAppear:
                 return .send(.loadCustomExercises)
+
+            case let .selectCategory(category):
+                state.selectedCategory = category
+                // 카테고리 변경 시 해당 카테고리의 첫 번째 운동 타입으로 변경
+                // Note: exerciseType 변경 시 .onChange(of: \.exerciseType)에서
+                // selectedCustomExercise = nil 및 updateCalorieEstimate()가 자동 호출됨
+                if let firstType = ExerciseType.allCases.first(where: { $0.category == category }) {
+                    state.exerciseType = firstType
+                }
+                return .none
 
             case .saveExercise:
                 state.isLoading = true
