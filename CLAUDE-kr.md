@@ -256,6 +256,44 @@ docs/
 | Build / CI | `docs/03-구현/FASTLANE.md` |
 | 새 기능 기획 | `docs/01-전략/PRD.md`, `docs/01-전략/ROADMAP.md` |
 
+> **양방향 규칙**: 구현 전에 관련 문서를 먼저 읽고, 변경 후에는 문서화된 인터페이스, 구조, 워크플로우에 영향이 있으면 문서도 업데이트합니다.
+
+### 코드 변경 후 문서 동기화 규칙
+
+코드 변경 완료 후, 커밋 전에 문서 업데이트가 필요한지 확인합니다.
+
+#### 트리거 매트릭스
+
+| 코드 변경 유형 | 영향받는 문서 | 업데이트 액션 |
+|---------------|-------------|-------------|
+| Entity/UseCase 추가/이름변경/삭제 | `docs/02-설계/MODULES.md` | 모듈 테이블 행 추가/수정/삭제 |
+| View/Coordinator 추가/이름변경/삭제 | `docs/02-설계/MODULES.md` | 컴포넌트 행 추가/수정/삭제 |
+| 새 Feature 모듈 추가 | `docs/02-설계/MODULES.md`, `docs/02-설계/ARCHITECTURE.md` | 모듈 섹션 추가, 트리 업데이트 |
+| 의존성 그래프 변경 (Tuist) | `docs/02-설계/ARCHITECTURE.md` | 의존성 흐름 섹션 업데이트 |
+| API 엔드포인트/프롬프트 추가/변경 | `docs/03-구현/API.md` | 엔드포인트/프롬프트 섹션 업데이트 |
+| Fastlane lane 추가/변경 | `docs/03-구현/FASTLANE.md` | lane 테이블 업데이트 |
+| 빌드 설정 / Tuist 변경 | `docs/03-구현/SETUP.md` | 설정 가이드 업데이트 |
+| Phase 완료 또는 상태 변경 | `docs/01-전략/ROADMAP.md`, `docs/01-전략/WORKPLAN.md` | Phase 상태 업데이트 |
+| 홈 화면 레이아웃 변경 | `docs/01-전략/HOME_SCREEN_PLAN.md` | 화면 기획 업데이트 |
+| docs/ 내 문서 추가/삭제 | `docs/INDEX.md`, 루트 `README.md` | MOC 및 README 문서 테이블 업데이트 |
+
+#### 제외 조건 (문서 업데이트 불필요)
+
+- 순수 포맷팅/공백/주석만 변경한 경우
+- SwiftLint/SwiftFormat 자동 수정
+- 테스트 파일 변경 (새로운 public API가 드러나지 않는 한)
+- public 인터페이스 변경 없는 내부 리팩토링
+
+#### 프로세스
+
+1. 코드 편집 후, 트리거 매트릭스 확인
+2. 해당하는 문서 업데이트
+3. YAML frontmatter의 `updated` 필드를 오늘 날짜로 변경
+4. 문서 업데이트는 별도 커밋으로 분리
+
+#### 커밋 형식
+`📝 Docs: [모듈명] 코드 변경에 따른 문서 동기화`
+
 ### 문서 관리 규칙
 
 1. **원본 = vault**: Obsidian vault(`docs/`)가 모든 프로젝트 문서의 원본입니다

@@ -256,6 +256,44 @@ When working on code changes, read the relevant docs/ before implementation:
 | Build / CI | `docs/03-구현/FASTLANE.md` |
 | New feature planning | `docs/01-전략/PRD.md`, `docs/01-전략/ROADMAP.md` |
 
+> **Bidirectional rule**: Read the relevant docs BEFORE implementation, and update them AFTER if changes affect documented interfaces, structures, or workflows.
+
+### Post-Change Documentation Sync Rule
+
+After completing code changes, BEFORE committing, check if documentation updates are needed.
+
+#### Trigger Matrix
+
+| Code Change Type | Affected Docs | Update Action |
+|-----------------|---------------|---------------|
+| New/renamed/deleted Entity or UseCase | `docs/02-설계/MODULES.md` | Add/update/remove row in module table |
+| New/renamed/deleted View/Coordinator | `docs/02-설계/MODULES.md` | Add/update/remove component row |
+| New Feature module added | `docs/02-설계/MODULES.md`, `docs/02-설계/ARCHITECTURE.md` | Add module section, update tree |
+| Dependency graph change (Tuist) | `docs/02-설계/ARCHITECTURE.md` | Update dependency flow section |
+| New/changed API endpoint or prompt | `docs/03-구현/API.md` | Update endpoint/prompt section |
+| Fastlane lane added/changed | `docs/03-구현/FASTLANE.md` | Update lane table |
+| Build config / Tuist change | `docs/03-구현/SETUP.md` | Update setup instructions |
+| Phase completion or status change | `docs/01-전략/ROADMAP.md`, `docs/01-전략/WORKPLAN.md` | Update phase status |
+| Home screen layout change | `docs/01-전략/HOME_SCREEN_PLAN.md` | Update screen plan |
+| Doc added/removed in docs/ | `docs/INDEX.md`, root `README.md` | Update MOC and README doc table |
+
+#### Exclusions (do NOT trigger doc updates)
+
+- Pure formatting/whitespace/comment-only changes
+- SwiftLint/SwiftFormat auto-fixes
+- Test file changes (unless new public API revealed)
+- Internal refactoring with no public interface change
+
+#### Process
+
+1. After code edits, review the trigger matrix
+2. Update matching doc(s)
+3. Update `updated` field in YAML frontmatter to today's date
+4. Create a SEPARATE commit for doc updates
+
+#### Commit Format
+`📝 Docs: [모듈명] 코드 변경에 따른 문서 동기화`
+
 ### Documentation Management Rules
 
 1. **Source of truth**: The Obsidian vault (`docs/`) is the canonical source for all project documentation
