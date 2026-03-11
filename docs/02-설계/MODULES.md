@@ -21,83 +21,163 @@ status: active
 
 ## Feature 모듈
 
-### Dashboard
+> SimpleCare는 12개의 Feature 모듈로 구성됩니다.
+> 기존 Dashboard 모듈은 Home 모듈로 통합되었습니다.
 
-**역할**: 일일 영양/운동 요약 대시보드
+### Home
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| Entity | `DailySummary.swift` | 일일 요약 데이터 |
+**역할**: 메인 홈 화면 — 일일 요약, AI 인사이트, 빠른 기록, 주간 트렌드
+
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Entity | `HomeDailySummary.swift` | 일일 요약 데이터 (칼로리/영양소/운동) |
+| Entity | `HomeMealSummary.swift` | 식사 요약 데이터 |
+| Entity | `HomeExerciseSummary.swift` | 운동 요약 데이터 |
+| Entity | `HomeReport.swift` | 주간/월간 리포트 데이터 |
 | UseCase | `GetDailySummaryUseCase.swift` | 하루 요약 조회 |
-| UseCase | `GenerateDailyInsightUseCase.swift` | AI 코멘트 생성 |
-| UseCase | `CalculateRemainingNutritionUseCase.swift` | 남은 영양소 계산 |
-| ViewModel | `DashboardViewModel.swift` | 대시보드 상태 관리 |
-| View | `DashboardView.swift` | 대시보드 UI |
-| Coordinator | `DashboardCoordinator.swift` | 화면 네비게이션 |
-| DIContainer | `DashboardDIContainer.swift` | 의존성 조립 |
+| UseCase | `GenerateDailyInsightUseCase.swift` | AI 건강 인사이트 생성 |
+| UseCase | `GetReportUseCase.swift` | 주간/월간 리포트 조회 |
+| **Data** | | |
+| Repository | `HomeRepository.swift` | 홈 데이터 레포지토리 구현 |
+| Service | `HomeInsightService.swift` | AI 인사이트 서비스 어댑터 |
+| Service | `MockHomeInsightService.swift` | Mock 인사이트 서비스 |
+| **Presentation** | | |
+| Coordinator | `HomeCoordinator.swift` | 홈 화면 네비게이션 |
+| Reducer | `HomeFeature.swift` | TCA Reducer (State/Action/Effect) |
+| View | `HomeView.swift` | 메인 홈 화면 |
+| View | `ReportView.swift` | 리포트 화면 |
+| Component | `HomeTodayRecordsSection.swift` | 오늘의 기록 섹션 |
+| Component | `HomeNutritionSection.swift` | 영양소 프로그레스 바 |
+| Component | `HomeQuickActionButtons.swift` | 빠른 기록 버튼 (식사/운동/체중) |
+| Component | `HomeStreakBadge.swift` | 연속 기록일 배지 |
+| Component | `HomeWeeklyTrendView.swift` | 주간 트렌드 차트 |
+| **Aggregator** | | |
+| DIContainer | `HomeDIContainer.swift` | 의존성 조립 |
 
 **화면 구성**:
+- AI 건강 인사이트 (GPT-4o 기반)
 - 일일 칼로리 섭취/소모 현황
-- 탄수화물/단백질/지방 비율 차트
-- AI 한줄 코멘트
-- 최근 식사/운동 기록 요약
+- 탄수화물/단백질/지방 비율 프로그레스
+- 오늘의 식사/운동 기록 목록
+- 빠른 기록 버튼 (식사/운동/체중)
+- 연속 기록일 스트릭 배지
+- 주간 트렌드 차트
+
+> **Note**: 기존 Dashboard 모듈의 기능이 Home으로 통합되었습니다.
+
+---
+
+### Tab
+
+**역할**: 메인 탭 네비게이션 관리
+
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| Aggregator | `Tab.swift` | 모듈 진입점 |
+| Coordinator | `TabCoordinator.swift` | 탭 네비게이션 및 자식 Coordinator 관리 |
+| DIContainer | `TabDIContainer.swift` | 모든 Feature DIContainer 생성 |
+| View | `MainTabView.swift` | 메인 탭 뷰 (5개 탭) |
+
+**탭 구성**:
+```swift
+public enum AppTab: Hashable {
+    case home       // 홈
+    case meal       // 식단
+    case exercise   // 운동
+    case progress   // 체중
+    case calendar   // 캘린더
+}
+```
+
+**Sheet 화면**: Settings, Profile, MealDetail, ExerciseDetail
+
+---
+
+### Calendar
+
+**역할**: 월별 캘린더 및 일별 기록 요약
+
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| Domain | `CalendarDomain.swift` | 캘린더 도메인 정의 |
+| Data | `CalendarData.swift` | 캘린더 데이터 레이어 |
+| Coordinator | `CalendarCoordinator.swift` | 캘린더 네비게이션 |
+| View | `CalendarContentView.swift` | 캘린더 뷰 |
 
 ---
 
 ### Meal
 
-**역할**: 식단 기록 및 AI 영양 분석
+**역할**: AI 기반 식단 기록 및 영양 분석
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| Entity | `MealRecord.swift` | 식사 기록 |
-| Entity | `FoodItem.swift` | 음식 항목 |
-| Entity | `EstimatedFoodItem.swift` | AI 추정 음식 |
-| Entity | `MealType.swift` | 식사 유형 (아침/점심/저녁/간식) |
-| UseCase | `EstimateMealNutritionUseCase.swift` | 텍스트 → 영양 추정 |
-| UseCase | `AnalyzeMealImageUseCase.swift` | 이미지 → 음식 분석 |
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Entity | `MealRecord.swift` | 식사 기록 (MealType, FoodItem 포함) |
+| Entity | `FavoriteFood.swift` | 즐겨찾기 음식 |
+| UseCase | `EstimateMealNutritionUseCase.swift` | 텍스트 → 영양 추정 (AI) |
 | UseCase | `RecordMealUseCase.swift` | 식사 기록 저장 |
-| UseCase | `GetMealHistoryUseCase.swift` | 기록 조회 |
-| Repository | `MealRepositoryProtocol.swift` | 레포지토리 인터페이스 |
-| Repository | `MealRepository.swift` | 레포지토리 구현 |
-| ViewModel | `MealRecordViewModel.swift` | 식사 기록 상태 관리 |
+| UseCase | `GetMealHistoryUseCase.swift` | 기간별 기록 조회 |
+| UseCase | `FetchMealUseCase.swift` | 단일 식사 조회 |
+| UseCase | `UpdateMealUseCase.swift` | 식사 기록 수정 |
+| UseCase | `DeleteMealUseCase.swift` | 식사 기록 삭제 |
+| UseCase | `FavoriteFoodUseCases.swift` | 즐겨찾기 CRUD |
+| **Data** | | |
+| Repository | `MealRepository.swift` | 식사 레포지토리 구현 |
+| Repository | `FavoriteFoodDataRepository.swift` | 즐겨찾기 레포지토리 구현 |
+| Service | `AIService.swift` | AI 영양 추정 서비스 어댑터 |
+| Service | `MockAIService.swift` | Mock AI 서비스 |
+| **Presentation** | | |
+| Coordinator | `MealCoordinator.swift` | 식사 화면 네비게이션 |
+| Reducer | `MealFeature.swift` | 식사 기록 TCA Reducer |
+| Reducer | `MealListFeature.swift` | 식사 목록 TCA Reducer |
+| Reducer | `MealDetailFeature.swift` | 식사 상세 TCA Reducer |
 | View | `MealRecordView.swift` | 식사 기록 UI |
-| Coordinator | `MealCoordinator.swift` | 화면 네비게이션 |
+| View | `MealListView.swift` | 식사 목록 UI |
+| View | `MealDetailView.swift` | 식사 상세 UI (영양소, 편집/삭제) |
+| **Aggregator** | | |
 | DIContainer | `MealDIContainer.swift` | 의존성 조립 |
 
 **주요 플로우**:
 ```
-사용자 입력 (텍스트/사진)
-         │
-         ▼
-    AI 영양 추정
-         │
-         ▼
-   추정 결과 확인/수정
-         │
-         ▼
-      식사 기록 저장
+사용자 텍스트 입력
+       │
+       ▼
+  AI 영양 추정 (EstimateMealNutritionUseCase)
+       │
+       ▼
+ 추정 결과 확인/수정
+       │
+       ▼
+    식사 기록 저장 (RecordMealUseCase)
 ```
 
 ---
 
 ### Exercise
 
-**역할**: 운동 기록 및 칼로리 소모 계산
+**역할**: MET 기반 운동 기록 및 칼로리 소모 계산
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| Entity | `ExerciseRecord.swift` | 운동 기록 |
-| Entity | `ExerciseType.swift` | 운동 종류 |
-| Entity | `ExerciseCategory.swift` | 운동 카테고리 |
-| Entity | `ExerciseIntensity.swift` | 운동 강도 |
-| UseCase | `RecordExerciseUseCase.swift` | 운동 기록 저장 |
-| UseCase | `EstimateCalorieBurnUseCase.swift` | MET 기반 칼로리 계산 |
-| Repository | `ExerciseRepositoryProtocol.swift` | 레포지토리 인터페이스 |
-| Repository | `ExerciseRepository.swift` | 레포지토리 구현 |
-| ViewModel | `ExerciseRecordViewModel.swift` | 운동 기록 상태 관리 |
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Entity | `ExerciseRecord.swift` | 운동 기록 (운동 종류, 강도, 시간, 칼로리) |
+| Entity | `CustomExercise.swift` | 사용자 정의 운동 |
+| UseCase | `ExerciseUseCases.swift` | 운동 CRUD (기록/조회/수정/삭제) |
+| UseCase | `CustomExerciseUseCases.swift` | 커스텀 운동 CRUD |
+| **Data** | | |
+| Repository | `ExerciseRepository.swift` | 운동 레포지토리 구현 |
+| Repository | `CustomExerciseDataRepository.swift` | 커스텀 운동 레포지토리 구현 |
+| **Presentation** | | |
+| Coordinator | `ExerciseCoordinator.swift` | 운동 화면 네비게이션 |
+| Reducer | `ExerciseFeature.swift` | 운동 기록 TCA Reducer |
+| Reducer | `ExerciseListFeature.swift` | 운동 목록 TCA Reducer |
+| Reducer | `ExerciseDetailFeature.swift` | 운동 상세 TCA Reducer |
 | View | `ExerciseRecordView.swift` | 운동 기록 UI |
-| Coordinator | `ExerciseCoordinator.swift` | 화면 네비게이션 |
+| View | `ExerciseListView.swift` | 운동 목록 UI |
+| View | `ExerciseDetailView.swift` | 운동 상세 UI (편집/삭제) |
+| **Aggregator** | | |
 | DIContainer | `ExerciseDIContainer.swift` | 의존성 조립 |
 
 **MET (Metabolic Equivalent of Task) 계산**:
@@ -119,20 +199,18 @@ status: active
 
 **역할**: 체중 기록 및 목표 관리
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
 | Entity | `WeightRecord.swift` | 체중 기록 |
-| Entity | `WeightGoal.swift` | 목표 체중 |
-| UseCase | `RecordWeightUseCase.swift` | 체중 기록 저장 |
-| UseCase | `CalculateWeightTrendUseCase.swift` | 추세 계산 |
-| UseCase | `CalculateBMRUseCase.swift` | 기초대사량 계산 |
-| UseCase | `CalculateTDEEUseCase.swift` | 일일 소비 칼로리 |
-| UseCase | `GetWeightHistoryUseCase.swift` | 기록 조회 |
-| Repository | `WeightRepositoryProtocol.swift` | 레포지토리 인터페이스 |
-| Repository | `WeightRepository.swift` | 레포지토리 구현 |
-| ViewModel | `WeightRecordViewModel.swift` | 체중 기록 상태 관리 |
-| View | `WeightRecordView.swift` | 체중 기록 UI |
-| Coordinator | `WeightCoordinator.swift` | 화면 네비게이션 |
+| UseCase | `WeightUseCases.swift` | 체중 CRUD + BMR/TDEE/추세 계산 |
+| **Data** | | |
+| Repository | `WeightRepository.swift` | 체중 레포지토리 구현 |
+| **Presentation** | | |
+| Coordinator | `WeightCoordinator.swift` | 체중 화면 네비게이션 |
+| Reducer | `WeightFeature.swift` | 체중 기록 TCA Reducer |
+| View | `WeightView.swift` | 체중 기록/차트 UI |
+| **Aggregator** | | |
 | DIContainer | `WeightDIContainer.swift` | 의존성 조립 |
 
 **BMR 계산 (Mifflin-St Jeor)**:
@@ -144,11 +222,8 @@ status: active
 **TDEE 계산**:
 ```
 TDEE = BMR × 활동계수
-- 좌식: 1.2
-- 가벼운 활동: 1.375
-- 보통 활동: 1.55
-- 활발한 활동: 1.725
-- 매우 활발: 1.9
+- 좌식: 1.2  |  가벼운 활동: 1.375  |  보통 활동: 1.55
+- 활발한 활동: 1.725  |  매우 활발: 1.9
 ```
 
 ---
@@ -157,40 +232,47 @@ TDEE = BMR × 활동계수
 
 **역할**: 사용자 프로필 및 목표 설정
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| Entity | `UserProfile.swift` | 사용자 프로필 |
-| Entity | `Gender.swift` | 성별 |
-| Entity | `ActivityLevel.swift` | 활동 수준 |
-| Entity | `GoalType.swift` | 목표 유형 |
-| UseCase | `SaveUserProfileUseCase.swift` | 프로필 저장 |
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Entity | `UserProfile.swift` | 사용자 프로필 (이름, 나이, 성별, 키, 체중, 활동수준, 목표) |
 | UseCase | `GetUserProfileUseCase.swift` | 프로필 조회 |
-| UseCase | `UpdateGoalUseCase.swift` | 목표 업데이트 |
-| Repository | `UserProfileRepositoryProtocol.swift` | 레포지토리 인터페이스 |
-| Repository | `UserProfileRepository.swift` | 레포지토리 구현 |
-| ViewModel | `ProfileViewModel.swift` | 프로필 상태 관리 |
+| UseCase | `SaveUserProfileUseCase.swift` | 프로필 저장 |
+| UseCase | `UpdateUserProfileUseCase.swift` | 프로필 업데이트 |
+| **Data** | | |
+| Repository | `ProfileRepository.swift` | 프로필 레포지토리 구현 |
+| **Presentation** | | |
+| Coordinator | `ProfileCoordinator.swift` | 프로필 화면 네비게이션 |
+| Reducer | `ProfileFeature.swift` | 프로필 TCA Reducer |
 | View | `ProfileView.swift` | 프로필 UI |
-| Coordinator | `ProfileCoordinator.swift` | 화면 네비게이션 |
+| **Aggregator** | | |
 | DIContainer | `ProfileDIContainer.swift` | 의존성 조립 |
-
-**프로필 정보**:
-- 이름, 나이, 성별
-- 키, 체중
-- 활동 수준
-- 목표 (감량/증량/유지)
-- 목표 체중
 
 ---
 
 ### Onboarding
 
-**역할**: 앱 첫 실행 시 초기 설정
+**역할**: 앱 첫 실행 시 사용자 프로필 초기 설정
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| ViewModel | `OnboardingViewModel.swift` | 온보딩 상태 관리 |
-| View | `OnboardingView.swift` | 온보딩 UI |
-| Coordinator | `OnboardingCoordinator.swift` | 화면 네비게이션 |
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Entity | `OnboardingStep.swift` | 온보딩 단계 정의 |
+| **Data** | | |
+| - | `Source.swift` | 플레이스홀더 |
+| **Presentation** | | |
+| Coordinator | `OnboardingCoordinator.swift` | 온보딩 네비게이션 |
+| Reducer | `OnboardingFeature.swift` | 온보딩 TCA Reducer |
+| View | `OnboardingView.swift` | 메인 온보딩 뷰 |
+| Component | `OnboardingComponents.swift` | 공통 온보딩 UI 컴포넌트 |
+| Client | `SaveUserProfileClient.swift` | 프로필 저장 TCA Client |
+| Step View | `WelcomeStepView.swift` | 1단계: 환영 화면 |
+| Step View | `BasicInfoStepView.swift` | 2단계: 기본 정보 (이름, 성별, 생년월일) |
+| Step View | `BodyInfoStepView.swift` | 3단계: 신체 정보 (키, 체중) |
+| Step View | `ActivityLevelStepView.swift` | 4단계: 활동 수준 선택 |
+| Step View | `GoalSettingStepView.swift` | 5단계: 목표 설정 (감량/증량/유지) |
+| Step View | `SummaryStepView.swift` | 6단계: 설정 요약 및 완료 |
+| **Aggregator** | | |
 | DIContainer | `OnboardingDIContainer.swift` | 의존성 조립 |
 
 **온보딩 단계**:
@@ -199,45 +281,81 @@ TDEE = BMR × 활동계수
 3. 신체 정보 입력 (키, 체중)
 4. 활동 수준 선택
 5. 목표 설정 (감량/증량/유지)
-6. 완료
+6. 설정 요약 및 완료
+
+---
+
+### Splash
+
+**역할**: 앱 시작 시 스플래시 화면
+
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| Domain | `SplashDomain.swift` | 스플래시 도메인 정의 |
+| Data | `SplashData.swift` | 스플래시 데이터 레이어 |
+| Coordinator | `SplashCoordinator.swift` | 스플래시 네비게이션 |
+| Reducer | `SplashFeature.swift` | 스플래시 TCA Reducer |
+| View | `SplashView.swift` | 스플래시 UI |
+| Aggregator | `Splash.swift` | 모듈 진입점 |
+| DIContainer | `SplashDIContainer.swift` | 의존성 조립 |
 
 ---
 
 ### Base
 
-**역할**: 공통 컴포넌트 및 유틸리티
+**역할**: 공통 UI 컴포넌트, 프로토콜, 유틸리티
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| **Domain** | | |
+| Extension | `String+Localization.swift` | 다국어 문자열 확장 |
+| **Presentation** | | |
 | Protocol | `Coordinator.swift` | Coordinator 프로토콜 |
 | Protocol | `DIContainer.swift` | DIContainer 프로토콜 |
-| View | `LoadingView.swift` | 로딩 인디케이터 |
-| View | `ErrorView.swift` | 에러 표시 |
+| **Debug** | | |
+| View | `DebugFloatingButton.swift` | 디버그 플로팅 버튼 |
+| Modifier | `DebugOverlayModifier.swift` | 디버그 오버레이 |
+| View | `DebugSettingsView.swift` | 디버그 설정 화면 |
+| **Extensions** | | |
+| Extension | `Color+SimpleCare.swift` | 앱 커스텀 색상 |
+| Extension | `View+DismissKeyboard.swift` | 키보드 닫기 |
+| Extension | `View+GlassCard.swift` | 글래스모피즘 카드 스타일 |
+| **Localization** | | |
+| Manager | `LocalizationManager.swift` | 런타임 언어 변경 관리 |
+| **Theme** | | |
+| Manager | `ThemeManager.swift` | 테마 관리 (system/light/dark) |
+| **Notification** | | |
+| View | `NotificationEnableBanner.swift` | 알림 활성화 유도 배너 |
+| Manager | `NotificationManager.swift` | 로컬 알림 스케줄링 관리 |
+| **Data** | | |
+| Manager | `DataExportManager.swift` | JSON/CSV 데이터 내보내기 |
+
+---
+
+### Settings
+
+**역할**: 앱 설정 (현재 골격 상태)
+
+| 레이어 | 파일 | 설명 |
+|--------|------|------|
+| Domain | `Source.swift` | 플레이스홀더 |
+| Data | `Source.swift` | 플레이스홀더 |
+| Presentation | `Source.swift` | 플레이스홀더 |
+| Aggregator | `Source.swift` | 플레이스홀더 |
+
+> **Note**: 설정 관련 실제 로직은 Base 모듈에 분산 구현되어 있습니다.
+> ThemeManager, NotificationManager, LocalizationManager, DataExportManager 등이 설정 기능을 담당합니다.
+> SettingsCoordinator는 Tab 모듈의 TabCoordinator에서 sheet로 표시됩니다.
 
 ---
 
 ### Features (Aggregator)
 
-**역할**: Feature 모듈 통합 및 탭 관리
+**역할**: Feature 모듈 통합 — 개별 Feature를 하나의 타겟으로 묶는 우산 모듈
 
-| 컴포넌트 | 파일 | 설명 |
-|---------|------|------|
-| Enum | `Tab.swift` | 앱 탭 정의 |
-| View | `MainTabView.swift` | 메인 탭 뷰 |
-| View | `TabCoordinatorView.swift` | 탭 코디네이터 뷰 |
-| Coordinator | `TabCoordinator.swift` | 탭 네비게이션 |
-| DIContainer | `TabDIContainer.swift` | 탭 의존성 조립 |
-
-**탭 구성**:
-```swift
-public enum AppTab: Hashable {
-    case dashboard      // 대시보드
-    case meal           // 식단
-    case exercise       // 운동
-    case progress       // 진행 현황 (체중)
-    case settings       // 설정
-}
-```
+> Features 모듈은 별도의 소스 파일 없이 Tuist 의존성 그래프에서
+> 모든 Feature 모듈을 통합하는 역할을 합니다.
+> TabDIContainer, TabCoordinator 등은 현재 Tab 모듈에 위치합니다.
 
 ---
 
@@ -245,20 +363,27 @@ public enum AppTab: Hashable {
 
 ### StorageInfra
 
-**역할**: SwiftData 기반 로컬 데이터 저장
+**역할**: SwiftData 기반 로컬 데이터 영속화
 
 | 컴포넌트 | 파일 | 설명 |
 |---------|------|------|
-| Container | `StorageContainer.swift` | ModelContainer 싱글톤 |
-| Model | `MealRecordModel.swift` | 식사 기록 모델 |
-| Model | `FoodItemModel.swift` | 음식 항목 모델 |
-| Model | `ExerciseRecordModel.swift` | 운동 기록 모델 |
-| Model | `WeightRecordModel.swift` | 체중 기록 모델 |
-| Model | `UserProfileModel.swift` | 사용자 프로필 모델 |
-| Storage | `MealStorage.swift` | 식사 데이터 접근 |
-| Storage | `ExerciseStorage.swift` | 운동 데이터 접근 |
-| Storage | `WeightStorage.swift` | 체중 데이터 접근 |
-| Storage | `UserProfileStorage.swift` | 프로필 데이터 접근 |
+| Module | `StorageInfra.swift` | 모듈 진입점 |
+| Container | `StorageContainer.swift` | ModelContainer 싱글톤 관리 |
+| **Models** | | |
+| Model | `UserProfileModel.swift` | 사용자 프로필 SwiftData 모델 |
+| Model | `MealRecordModel.swift` | 식사 기록 SwiftData 모델 |
+| Model | `FoodItemModel.swift` | 음식 항목 SwiftData 모델 |
+| Model | `FavoriteFoodModel.swift` | 즐겨찾기 음식 SwiftData 모델 |
+| Model | `WeightRecordModel.swift` | 체중 기록 SwiftData 모델 |
+| Model | `ExerciseRecordModel.swift` | 운동 기록 SwiftData 모델 |
+| Model | `CustomExerciseModel.swift` | 커스텀 운동 SwiftData 모델 |
+| **Repositories** | | |
+| Repository | `UserProfileStorage.swift` | 프로필 데이터 접근 |
+| Repository | `MealRecordRepository.swift` | 식사 기록 데이터 접근 |
+| Repository | `FavoriteFoodRepository.swift` | 즐겨찾기 데이터 접근 |
+| Repository | `WeightRecordRepository.swift` | 체중 기록 데이터 접근 |
+| Repository | `ExerciseRecordRepository.swift` | 운동 기록 데이터 접근 |
+| Repository | `CustomExerciseRepository.swift` | 커스텀 운동 데이터 접근 |
 
 **SwiftData 모델 예시**:
 ```swift
@@ -281,17 +406,19 @@ public final class MealRecordModel {
 
 ### AIServiceInfra
 
-**역할**: OpenAI API 연동
+**역할**: OpenAI GPT-4o API 연동
 
 | 컴포넌트 | 파일 | 설명 |
 |---------|------|------|
-| Client | `OpenAIClient.swift` | API 클라이언트 |
-| Service | `NutritionEstimationService.swift` | 영양 추정 서비스 |
-| Service | `ImageAnalysisService.swift` | 이미지 분석 서비스 |
-| Prompt | `NutritionEstimationPrompt.swift` | 영양 추정 프롬프트 |
-| Prompt | `ImageAnalysisPrompt.swift` | 이미지 분석 프롬프트 |
-| DTO | `NutritionEstimationResponse.swift` | 응답 DTO |
-| Config | `OpenAIConfiguration.swift` | API 설정 |
+| Module | `AIServiceInfra.swift` | 모듈 진입점 |
+| **OpenAI** | | |
+| Client | `OpenAIClient.swift` | OpenAI REST API 클라이언트 |
+| Config | `OpenAIConfiguration.swift` | API 키/모델 설정 |
+| **Prompts** | | |
+| Prompt | `NutritionPrompts.swift` | 영양 추정 시스템/유저 프롬프트 |
+| **Services** | | |
+| Service | `NutritionEstimationService.swift` | 텍스트 기반 영양 추정 서비스 |
+| Service | `DailyInsightService.swift` | AI 일일 건강 인사이트 서비스 |
 
 **API Key 관리**:
 - `XCConfig/Debug.xcconfig`에 `OPENAI_API_KEY` 저장
@@ -301,53 +428,74 @@ public final class MealRecordModel {
 
 ### NetworkInfra
 
-**역할**: 네트워크 통신 추상화
+**역할**: 네트워크 통신 추상화 (최소 골격 상태)
 
 | 컴포넌트 | 파일 | 설명 |
 |---------|------|------|
-| Client | `NetworkClient.swift` | Moya 기반 클라이언트 |
-| Plugin | `LoggingPlugin.swift` | 로깅 플러그인 |
-| Error | `NetworkError.swift` | 네트워크 에러 |
+| Module | `Source.swift` | 플레이스홀더 |
+
+> **Note**: 현재 네트워크 통신은 AIServiceInfra에서 직접 처리합니다.
+> Moya/Alamofire 래퍼는 향후 확장 시 구현 예정입니다.
+
+---
+
+### HealthKitInfra
+
+**역할**: Apple HealthKit 연동
+
+| 컴포넌트 | 파일 | 설명 |
+|---------|------|------|
+| Manager | `HealthKitManager.swift` | HealthKit 권한 요청 및 데이터 읽기/쓰기 |
+| Type | `HealthKitDataType.swift` | HealthKit 데이터 타입 정의 (stepCount, activeEnergy, bodyMass) |
+| **Models** | | |
+| Model | `HealthKitWeightData.swift` | HealthKit 체중 데이터 |
+| Model | `HealthKitStepData.swift` | HealthKit 걸음수 데이터 |
+| Model | `HealthKitActivityData.swift` | HealthKit 활동 칼로리 데이터 |
 
 ---
 
 ## UseCase 정의
 
+### Home Feature
+
+| UseCase | 입력 | 출력 | 설명 |
+|---------|------|------|------|
+| `GetDailySummaryUseCase` | `Date` | `HomeDailySummary` | 일일 요약 조회 |
+| `GenerateDailyInsightUseCase` | `HomeDailySummary` | `String` | AI 건강 인사이트 생성 |
+| `GetReportUseCase` | `Date`, 기간 | `HomeReport` | 주간/월간 리포트 조회 |
+
 ### Meal Feature
 
 | UseCase | 입력 | 출력 | 설명 |
 |---------|------|------|------|
-| `EstimateMealNutritionUseCase` | `String` (텍스트) | `MealEstimationResult` | 텍스트로 영양 추정 |
-| `AnalyzeMealImageUseCase` | `Data` (이미지) | `MealEstimationResult` | 이미지로 음식 분석 |
+| `EstimateMealNutritionUseCase` | `String` (텍스트) | 영양 추정 결과 | 텍스트로 영양 추정 |
 | `RecordMealUseCase` | `MealRecord` | `Void` | 식사 기록 저장 |
 | `GetMealHistoryUseCase` | `Date`, `Date` | `[MealRecord]` | 기간별 기록 조회 |
-| `GetDailyMealsUseCase` | `Date` | `[MealRecord]` | 일별 기록 조회 |
+| `FetchMealUseCase` | `UUID` | `MealRecord` | 단일 식사 조회 |
+| `UpdateMealUseCase` | `MealRecord` | `Void` | 식사 기록 수정 |
+| `DeleteMealUseCase` | `UUID` | `Void` | 식사 기록 삭제 |
+| `FavoriteFoodUseCases` | 다양 | 다양 | 즐겨찾기 음식 CRUD |
 
 ### Exercise Feature
 
 | UseCase | 입력 | 출력 | 설명 |
 |---------|------|------|------|
-| `RecordExerciseUseCase` | `ExerciseRecord` | `Void` | 운동 기록 저장 |
-| `EstimateCalorieBurnUseCase` | 운동정보, 체중 | `Int` | 칼로리 소모 계산 |
-| `GetExerciseHistoryUseCase` | `Date`, `Date` | `[ExerciseRecord]` | 기간별 기록 조회 |
+| `ExerciseUseCases` | 다양 | 다양 | 운동 기록 CRUD + MET 칼로리 계산 |
+| `CustomExerciseUseCases` | 다양 | 다양 | 커스텀 운동 CRUD |
 
 ### Weight Feature
 
 | UseCase | 입력 | 출력 | 설명 |
 |---------|------|------|------|
-| `RecordWeightUseCase` | `WeightRecord` | `Void` | 체중 기록 저장 |
-| `GetWeightHistoryUseCase` | `Date`, `Date` | `[WeightRecord]` | 기간별 기록 조회 |
-| `CalculateWeightTrendUseCase` | `[WeightRecord]` | `WeightTrend` | 추세 계산 |
-| `CalculateBMRUseCase` | 프로필 정보 | `Double` | 기초대사량 계산 |
-| `CalculateTDEEUseCase` | BMR, 활동수준 | `Double` | 일일 소비량 계산 |
+| `WeightUseCases` | 다양 | 다양 | 체중 기록 CRUD + BMR/TDEE/추세 계산 |
 
-### Dashboard Feature
+### Profile Feature
 
 | UseCase | 입력 | 출력 | 설명 |
 |---------|------|------|------|
-| `GetDailySummaryUseCase` | `Date` | `DailySummary` | 일일 요약 조회 |
-| `GenerateDailyInsightUseCase` | `DailySummary` | `String` | AI 코멘트 생성 |
-| `CalculateRemainingNutritionUseCase` | 요약, 목표 | `RemainingNutrition` | 남은 영양소 계산 |
+| `GetUserProfileUseCase` | `UUID` | `UserProfile` | 프로필 조회 |
+| `SaveUserProfileUseCase` | `UserProfile` | `Void` | 프로필 저장 |
+| `UpdateUserProfileUseCase` | `UserProfile` | `Void` | 프로필 업데이트 |
 
 ---
 
@@ -359,7 +507,9 @@ public final class MealRecordModel {
 |--------------|-----------------|------------|
 | `MealRecord` | `MealRecordModel` | `toModel()` / `toDomain()` |
 | `FoodItem` | `FoodItemModel` | `toModel()` / `toDomain()` |
+| `FavoriteFood` | `FavoriteFoodModel` | `toModel()` / `toDomain()` |
 | `ExerciseRecord` | `ExerciseRecordModel` | `toModel()` / `toDomain()` |
+| `CustomExercise` | `CustomExerciseModel` | `toModel()` / `toDomain()` |
 | `WeightRecord` | `WeightRecordModel` | `toModel()` / `toDomain()` |
 | `UserProfile` | `UserProfileModel` | `toModel()` / `toDomain()` |
 
