@@ -214,14 +214,14 @@ stdin (JSON) → file_path 추출 → .swift 파일 여부 확인
 
 | 경로 패턴 | 모듈 | 관련 문서 |
 |-----------|------|----------|
-| `Projects/Feature/Meal/` | Meal | `MODULES.md (Meal)`, `API.md` |
-| `Projects/Feature/Home/` | Home | `MODULES.md (Home)`, `HOME_SCREEN_PLAN.md` |
-| `Projects/Feature/{기타}/` | 해당 Feature | `MODULES.md (해당 모듈)` |
-| `Projects/Infrastructure/AIServiceInfra/` | AIServiceInfra | `API.md`, `ARCHITECTURE.md` |
-| `Projects/Infrastructure/NetworkInfra/` | NetworkInfra | `API.md`, `ARCHITECTURE.md` |
-| `Projects/Infrastructure/StorageInfra/` | StorageInfra | `ARCHITECTURE.md`, `SETUP.md` |
-| `Projects/Infrastructure/{기타}/` | 해당 Infra | `ARCHITECTURE.md` |
-| `Projects/Application/` | Application | `ARCHITECTURE.md` |
+| `Projects/Feature/Meal/` | Meal | `docs/02-설계/modules/Meal.md`, `docs/03-구현/API.md` |
+| `Projects/Feature/Home/` | Home | `docs/02-설계/modules/Home.md`, `docs/01-전략/HOME_SCREEN_PLAN.md` |
+| `Projects/Feature/{기타}/` | 해당 Feature | `docs/02-설계/modules/${MODULE}.md` |
+| `Projects/Infrastructure/AIServiceInfra/` | AIServiceInfra | `docs/02-설계/modules/AIServiceInfra.md`, `docs/03-구현/API.md` |
+| `Projects/Infrastructure/NetworkInfra/` | NetworkInfra | `docs/02-설계/modules/NetworkInfra.md`, `docs/02-설계/ARCHITECTURE.md` |
+| `Projects/Infrastructure/StorageInfra/` | StorageInfra | `docs/02-설계/modules/StorageInfra.md`, `docs/03-구현/SETUP.md` |
+| `Projects/Infrastructure/{기타}/` | 해당 Infra | `docs/02-설계/modules/${MODULE}.md`, `docs/02-설계/ARCHITECTURE.md` |
+| `Projects/Application/` | Application | `docs/02-설계/ARCHITECTURE.md` |
 
 #### 무시 조건
 
