@@ -1,3 +1,14 @@
+---
+title: "AI 도구 활용 가이드"
+aliases: ["AI도구"]
+tags:
+  - 도구
+  - 도구/AI
+created: 2026-01-30
+updated: 2026-03-11
+status: active
+---
+
 # AI 도구 활용 가이드
 
 본 문서는 SimpleCare 프로젝트에서 활용하고 있는 AI 도구들과 그 활용 방법에 대해 설명합니다.

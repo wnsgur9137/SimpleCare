@@ -1,3 +1,14 @@
+---
+title: "개발 로드맵"
+aliases: ["로드맵"]
+tags:
+  - 전략
+  - 전략/로드맵
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 개발 로드맵
 
 ## 목차

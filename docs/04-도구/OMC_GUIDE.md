@@ -1,3 +1,14 @@
+---
+title: "oh-my-claudecode 가이드"
+aliases: ["OMC"]
+tags:
+  - 도구
+  - 도구/OMC
+created: 2026-02-09
+updated: 2026-03-11
+status: active
+---
+
 # oh-my-claudecode (OMC) 가이드
 
 Claude Code에 멀티 에이전트 오케스트레이션 기능을 추가하는 플러그인입니다.

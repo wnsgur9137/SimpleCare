@@ -1,3 +1,14 @@
+---
+title: "아키텍처 설계"
+aliases: ["아키텍처"]
+tags:
+  - 설계
+  - 설계/아키텍처
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 아키텍처 문서
 
 ## 목차

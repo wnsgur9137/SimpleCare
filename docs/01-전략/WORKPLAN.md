@@ -1,3 +1,14 @@
+---
+title: "작업 계획서"
+aliases: ["워크플랜"]
+tags:
+  - 전략
+  - 전략/계획
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26

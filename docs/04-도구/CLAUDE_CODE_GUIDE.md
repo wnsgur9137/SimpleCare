@@ -1,3 +1,14 @@
+---
+title: "Claude Code 설정 가이드"
+aliases: ["Claude Code"]
+tags:
+  - 도구
+  - 도구/Claude
+created: 2026-02-09
+updated: 2026-03-11
+status: active
+---
+
 # Claude Code 설정 가이드
 
 ## 개요

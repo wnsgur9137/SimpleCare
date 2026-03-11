@@ -1,3 +1,14 @@
+---
+title: "홈 화면 계획서"
+aliases: ["홈화면"]
+tags:
+  - 전략
+  - 전략/계획
+created: 2026-01-28
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 홈 화면 계획서
 
 > 작성일: 2026-01-26

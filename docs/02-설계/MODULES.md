@@ -1,3 +1,14 @@
+---
+title: "모듈 상세 정의"
+aliases: ["모듈"]
+tags:
+  - 설계
+  - 설계/모듈
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare 모듈 상세 문서
 
 ## 목차

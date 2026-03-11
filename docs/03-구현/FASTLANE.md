@@ -1,3 +1,14 @@
+---
+title: "Fastlane 가이드"
+aliases: ["Fastlane", "CI/CD"]
+tags:
+  - 구현
+  - 구현/빌드
+created: 2026-01-30
+updated: 2026-03-11
+status: active
+---
+
 # Fastlane 가이드
 
 본 문서는 SimpleCare 프로젝트의 Fastlane 설정 및 사용 방법에 대해 설명합니다.

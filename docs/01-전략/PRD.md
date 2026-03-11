@@ -1,3 +1,13 @@
+---
+title: "SimpleCare PRD"
+aliases: ["PRD", "요구사항"]
+tags:
+  - 전략
+created: 2026-01-26
+updated: 2026-03-11
+status: active
+---
+
 # SimpleCare PRD (Product Requirements Document)
 
 ## 1. 제품 개요
