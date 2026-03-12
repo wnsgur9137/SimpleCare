@@ -23,21 +23,24 @@ public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendab
     }
 
     public func getLatestWeight(userProfileId: UUID) async throws -> WeightRecord? {
-        // 로컬 DB 우선 조회
-        if let model = try await storage.fetchLatestWeight(userProfileId: userProfileId) {
-            return model.toEntity()
+        let localRecord = try await storage.fetchLatestWeight(userProfileId: userProfileId)?.toEntity()
+        let healthKitLatest = try? await healthKitManager?.fetchLatestWeight()
+
+        guard let hkData = healthKitLatest else {
+            return localRecord
         }
 
-        // 로컬에 없으면 HealthKit 폴백
-        if let hkData = try? await healthKitManager?.fetchLatestWeight() {
-            return WeightRecord(
-                userProfileId: userProfileId,
-                weightKg: hkData.weightKg,
-                date: hkData.date
-            )
+        let healthKitRecord = WeightRecord(
+            userProfileId: userProfileId,
+            weightKg: hkData.weightKg,
+            date: hkData.date
+        )
+
+        guard let local = localRecord else {
+            return healthKitRecord
         }
 
-        return nil
+        return local.date >= healthKitRecord.date ? local : healthKitRecord
     }
 
     public func getWeights(from startDate: Date, to endDate: Date, userProfileId: UUID) async throws -> [WeightRecord] {
