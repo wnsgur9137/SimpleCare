@@ -158,6 +158,28 @@ PR 생성 시 **GitHub MCP**를 사용합니다 (`gh` CLI가 아님). `.github/P
 - 문서 변경은 별도 커밋으로 분리
 - 예시: 독립적인 Gap 5건을 수정하는 경우, 1개가 아닌 5개의 개별 커밋으로 작성
 
+### 작업 관리 (Shrimp Task Manager + 문서)
+
+**세션 내 작업 관리**는 **Shrimp Task Manager MCP**를 사용합니다.
+Claude Code 내장 Task 도구(TaskCreate/TaskUpdate/TodoWrite)는 사용하지 않습니다.
+
+**세션 워크플로우** (Shrimp Task Manager):
+1. `plan_task` → 작업을 태스크로 분할
+2. `split_tasks` → 필요 시 하위 태스크 생성
+3. `execute_task` → 각 태스크 실행
+4. `verify_task` → 완료 검증
+5. `list_tasks` / `query_task` → 진행 상태 확인
+
+**영구적 작업 추적** (ROADMAP.md / WORKPLAN.md):
+- 작업 완료 후 `docs/01-전략/ROADMAP.md` 및/또는 `docs/01-전략/WORKPLAN.md`의 체크리스트/상태를 업데이트합니다
+- 이 문서들이 세션/머신 간 작업 추적의 **단일 진실 소스(source of truth)** 입니다
+- Shrimp Task Manager 데이터는 로컬 전용이며 머신 간 유지되지 않습니다
+
+**규칙**:
+- 모든 비자명(non-trivial) 작업은 세션 중 Shrimp Task Manager에서 추적합니다
+- 작업 완료 후 반드시 ROADMAP.md / WORKPLAN.md에 상태를 동기화합니다
+- 복잡한 작업은 계획 전에 `analyze_task`를 사용합니다
+
 ### GitHub MCP
 
 **모든 Git 관련 작업**(PR 생성/수정, 이슈 관리, 브랜치 작업 등)은 `gh` CLI 대신 **GitHub MCP**를 사용합니다.

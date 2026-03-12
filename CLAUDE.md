@@ -158,6 +158,28 @@ Commits must be split per logical unit of work. Do NOT bundle unrelated changes 
 - Documentation changes should be a separate commit
 - Example: If fixing 5 independent gaps, create 5 separate commits (not 1 combined commit)
 
+### Task Management (Shrimp Task Manager + Docs)
+
+Use **Shrimp Task Manager MCP** for **session-level task management** (planning, tracking, execution, verification).
+Do NOT use Claude Code built-in Task tools (TaskCreate/TaskUpdate/TodoWrite) — always use Shrimp Task Manager instead.
+
+**Session Workflow** (Shrimp Task Manager):
+1. `plan_task` → Break down work into tasks
+2. `split_tasks` → Create subtasks if needed
+3. `execute_task` → Execute each task
+4. `verify_task` → Verify completion
+5. `list_tasks` / `query_task` → Check progress
+
+**Permanent Work Tracking** (ROADMAP.md / WORKPLAN.md):
+- After completing a task, update the corresponding checklist/status in `docs/01-전략/ROADMAP.md` and/or `docs/01-전략/WORKPLAN.md`
+- These documents are the **source of truth** for cross-session/cross-machine work tracking
+- Shrimp Task Manager data is local and session-scoped — it does NOT persist across machines
+
+**Rules**:
+- Every non-trivial task must be tracked in Shrimp Task Manager during the session
+- After task completion, always sync status to ROADMAP.md / WORKPLAN.md
+- Use `analyze_task` for complex tasks before planning
+
 ### GitHub MCP
 
 Use GitHub MCP for **all Git-related operations** (PR creation/update, issue management, branch operations, etc.) instead of the `gh` CLI.
