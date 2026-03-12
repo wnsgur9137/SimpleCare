@@ -171,13 +171,13 @@ Do NOT use Claude Code built-in Task tools (TaskCreate/TaskUpdate/TodoWrite) —
 5. `list_tasks` / `query_task` → Check progress
 
 **Permanent Work Tracking** (ROADMAP.md / WORKPLAN.md):
-- After completing a task, update the corresponding checklist/status in `docs/01-전략/ROADMAP.md` and/or `docs/01-전략/WORKPLAN.md`
+- After completing a task, update the corresponding checklist/status in [`ROADMAP.md`](./docs/01-전략/ROADMAP.md) and/or [`WORKPLAN.md`](./docs/01-전략/WORKPLAN.md)
 - These documents are the **source of truth** for cross-session/cross-machine work tracking
 - Shrimp Task Manager data is local and session-scoped — it does NOT persist across machines
 
 **Rules**:
-- Every non-trivial task must be tracked in Shrimp Task Manager during the session
-- After task completion, always sync status to ROADMAP.md / WORKPLAN.md
+- Every non-trivial task (modifying 2+ files or taking 15+ minutes) must be tracked in Shrimp Task Manager during the session
+- After task completion, always sync status to [`ROADMAP.md`](./docs/01-전략/ROADMAP.md) / [`WORKPLAN.md`](./docs/01-전략/WORKPLAN.md)
 - Use `analyze_task` for complex tasks before planning
 
 ### GitHub MCP
