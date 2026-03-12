@@ -194,13 +194,19 @@ public struct WeightFeature {
 public struct WeightClient {
     public var recordWeight: @Sendable (WeightRecord) async throws -> Void
     public var getWeightTrend: @Sendable (UUID, Double, Int) async throws -> WeightTrend
+    public var syncWeightToHealthKit: @Sendable (Double, Date) async -> Void
+    public var isHealthKitAvailable: @Sendable () -> Bool
 
     public init(
         recordWeight: @escaping @Sendable (WeightRecord) async throws -> Void,
-        getWeightTrend: @escaping @Sendable (UUID, Double, Int) async throws -> WeightTrend
+        getWeightTrend: @escaping @Sendable (UUID, Double, Int) async throws -> WeightTrend,
+        syncWeightToHealthKit: @escaping @Sendable (Double, Date) async -> Void = { _, _ in },
+        isHealthKitAvailable: @escaping @Sendable () -> Bool = { false }
     ) {
         self.recordWeight = recordWeight
         self.getWeightTrend = getWeightTrend
+        self.syncWeightToHealthKit = syncWeightToHealthKit
+        self.isHealthKitAvailable = isHealthKitAvailable
     }
 }
 
@@ -214,7 +220,9 @@ extension WeightClient: DependencyKey {
                     targetWeight: targetWeight,
                     records: []
                 )
-            }
+            },
+            syncWeightToHealthKit: { _, _ in },
+            isHealthKitAvailable: { false }
         )
     }
 
@@ -230,7 +238,9 @@ extension WeightClient: DependencyKey {
                     monthlyChange: -2.0,
                     records: []
                 )
-            }
+            },
+            syncWeightToHealthKit: { _, _ in },
+            isHealthKitAvailable: { true }
         )
     }
 }

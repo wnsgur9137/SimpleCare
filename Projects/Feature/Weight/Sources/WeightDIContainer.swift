@@ -10,6 +10,7 @@ import BasePresentation
 import WeightDomain
 import WeightData
 import WeightPresentation
+import HealthKitInfra
 
 public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
     public struct Dependencies {
@@ -53,7 +54,9 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
     // MARK: - Repository
 
     private func makeWeightRepository() -> WeightRepositoryProtocol {
-        WeightRepository()
+        WeightRepository(
+            healthKitManager: HealthKitManager.isAvailable ? HealthKitManager.shared : nil
+        )
     }
 
     // MARK: - Use Cases
@@ -71,6 +74,7 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
     public var weightClient: WeightClient {
         let recordUseCase = makeRecordWeightUseCase()
         let trendUseCase = makeGetWeightTrendUseCase()
+        let healthKitManager = HealthKitManager.shared
 
         return WeightClient(
             recordWeight: { record in
@@ -82,6 +86,13 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
                     targetWeight: targetWeight,
                     limit: limit
                 )
+            },
+            syncWeightToHealthKit: { weightKg, date in
+                guard HealthKitManager.isAvailable else { return }
+                try? await healthKitManager.saveWeight(weightKg, date: date)
+            },
+            isHealthKitAvailable: {
+                HealthKitManager.isAvailable
             }
         )
     }
