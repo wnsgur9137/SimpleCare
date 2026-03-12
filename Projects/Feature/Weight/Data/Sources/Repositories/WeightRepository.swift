@@ -8,24 +8,59 @@
 import Foundation
 import WeightDomain
 import StorageInfra
+import HealthKitInfra
 
 public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendable {
     private let storage: WeightRecordRepository
+    private let healthKitManager: HealthKitManagerProtocol?
 
-    public init(storage: WeightRecordRepository = WeightRecordRepository()) {
+    public init(
+        storage: WeightRecordRepository = WeightRecordRepository(),
+        healthKitManager: HealthKitManagerProtocol? = nil
+    ) {
         self.storage = storage
+        self.healthKitManager = healthKitManager
     }
 
     public func getLatestWeight(userProfileId: UUID) async throws -> WeightRecord? {
-        guard let model = try await storage.fetchLatestWeight(userProfileId: userProfileId) else {
-            return nil
+        // 로컬 DB 우선 조회
+        if let model = try await storage.fetchLatestWeight(userProfileId: userProfileId) {
+            return model.toEntity()
         }
-        return model.toEntity()
+
+        // 로컬에 없으면 HealthKit 폴백
+        if let hkData = try? await healthKitManager?.fetchLatestWeight() {
+            return WeightRecord(
+                userProfileId: userProfileId,
+                weightKg: hkData.weightKg,
+                date: hkData.date
+            )
+        }
+
+        return nil
     }
 
     public func getWeights(from startDate: Date, to endDate: Date, userProfileId: UUID) async throws -> [WeightRecord] {
         let models = try await storage.fetchWeights(from: startDate, to: endDate, userProfileId: userProfileId)
-        return models.map { $0.toEntity() }
+        var records = models.map { $0.toEntity() }
+
+        // HealthKit 데이터 병합 (실패 시 무시)
+        if let hkRecords = try? await healthKitManager?.fetchWeightRecords(from: startDate, to: endDate) {
+            let localDates = Set(records.map { Calendar.current.startOfDay(for: $0.date) })
+            let newRecords = hkRecords
+                .filter { !localDates.contains(Calendar.current.startOfDay(for: $0.date)) }
+                .map { hkData in
+                    WeightRecord(
+                        userProfileId: userProfileId,
+                        weightKg: hkData.weightKg,
+                        date: hkData.date
+                    )
+                }
+            records.append(contentsOf: newRecords)
+            records.sort { $0.date < $1.date }
+        }
+
+        return records
     }
 
     public func getWeights(limit: Int, userProfileId: UUID) async throws -> [WeightRecord] {
@@ -36,6 +71,9 @@ public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendab
     public func saveWeight(_ weight: WeightRecord) async throws {
         let model = weight.toModel()
         try await storage.saveWeight(model)
+
+        // HealthKit에도 저장 (실패 시 무시)
+        try? await healthKitManager?.saveWeight(weight.weightKg, date: weight.date)
     }
 
     public func updateWeight(_ weight: WeightRecord) async throws {
