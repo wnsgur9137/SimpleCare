@@ -5,7 +5,7 @@ tags:
   - 설계
   - 설계/아키텍처
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -48,7 +48,7 @@ SimpleCare는 식단, 운동, 체중 관리를 위한 AI 기반 헬스케어 iOS
 | **상태 관리** | TCA (The Composable Architecture) | 단방향 데이터 흐름, Reducer 기반 |
 | **데이터 저장** | SwiftData | Apple 네이티브 ORM |
 | **차트** | Swift Charts | 네이티브 차트 라이브러리 |
-| **AI 서비스** | OpenAI API (GPT-4o) | 영양소 추정/이미지 분석 |
+| **AI 서비스** | Google Gemini API (Free Tier) | 영양소 추정/이미지 분석 |
 | **건강 데이터** | HealthKit | Apple Health 연동 |
 | **네트워크** | Moya + Alamofire | 네트워크 추상화 |
 | **비동기 처리** | Swift Concurrency | async/await |
@@ -82,7 +82,7 @@ SimpleCare/
 │   │
 │   ├── Infrastructure/           # 인프라 모듈
 │   │   ├── StorageInfra/         # SwiftData 저장소
-│   │   ├── AIServiceInfra/       # OpenAI API
+│   │   ├── AIServiceInfra/       # Google Gemini API
 │   │   ├── NetworkInfra/         # 네트워크 계층
 │   │   └── HealthKitInfra/       # HealthKit 연동
 │   │

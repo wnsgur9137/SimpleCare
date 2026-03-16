@@ -48,7 +48,7 @@ AI 기반 개인 건강 관리 iOS 앱
 | **Architecture** | Clean Architecture + TCA 1.22.0+ |
 | **Network** | Moya, Alamofire |
 | **UI Components** | Kingfisher, Lottie, IQKeyboardManager |
-| **AI** | OpenAI GPT-4o (REST API) |
+| **AI** | Google Gemini API (REST API, Free Tier) |
 | **Health** | Apple HealthKit |
 | **Build & CI/CD** | Tuist 4.x, Fastlane |
 | **Lint/Format** | SwiftLint, SwiftFormat |
@@ -59,7 +59,7 @@ AI 기반 개인 건강 관리 iOS 앱
 
 ### 핵심 기능
 
-- **AI 영양 분석**: 텍스트 입력으로 음식 영양소 자동 추정 (GPT-4o)
+- **AI 영양 분석**: 텍스트 입력으로 음식 영양소 자동 추정 (Gemini)
 - **운동 기록**: MET 기반 칼로리 소모량 계산
 - **체중 관리**: 목표 설정 및 추세 분석
 - **대시보드**: 일일 영양/운동 요약 시각화
@@ -170,7 +170,7 @@ Claude Code는 MCP(Model Context Protocol)를 통해 외부 서비스와 연동�
 |------|------|
 | **StorageInfra** | SwiftData 기반 로컬 저장소 |
 | **NetworkInfra** | Moya/Alamofire 기반 네트워크 레이어 |
-| **AIServiceInfra** | OpenAI GPT-4o API 연동 |
+| **AIServiceInfra** | Google Gemini API 연동 |
 | **HealthKitInfra** | Apple HealthKit 연동 |
 
 ### Feature 모듈별 의존성 그래프
@@ -254,7 +254,7 @@ MET 기반 운동 기록 및 칼로리 계산
 │                   Infrastructure                        │
 │  ┌───────────┐ ┌─────────────┐ ┌───────────┐ ┌───────┐│
 │  │StorageInfra│ │AIServiceInfra│ │NetworkInfra│ │HealthKit││
-│  │(SwiftData)│ │  (OpenAI)   │ │  (Moya)   │ │ Infra ││
+│  │(SwiftData)│ │  (Gemini)   │ │  (Moya)   │ │ Infra ││
 │  └───────────┘ └─────────────┘ └───────────┘ └───────┘│
 └─────────────────────────────────────────────────────────┘
 ```

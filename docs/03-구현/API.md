@@ -5,53 +5,120 @@ tags:
   - 구현
   - 구현/API
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
 # SimpleCare API 문서
 
 ## 목차
-1. [OpenAI API 연동](#openai-api-연동)
+1. [Google Gemini API 연동](#google-gemini-api-연동)
 2. [AI 프롬프트 설계](#ai-프롬프트-설계)
 3. [응답 스키마](#응답-스키마)
 4. [에러 처리](#에러-처리)
 
 ---
 
-## OpenAI API 연동
+## Google Gemini API 연동
 
 ### 개요
-SimpleCare는 OpenAI GPT-4o 모델을 사용하여 음식 영양소 추정 및 이미지 분석을 수행합니다.
+SimpleCare는 Google Gemini API (무료 티어)를 사용하여 음식 영양소 추정 및 이미지 분석을 수행합니다.
+
+### 무료 티어 한도
+| 항목 | 한도 |
+|------|------|
+| 요청 | 5~15 RPM (모델별 상이) |
+| 일일 요청 | 최대 1,000회 |
+| 토큰 | 분당 250,000 토큰 |
+| 비용 | 완전 무료, 신용카드 불필요 |
 
 ### 설정
 
 #### API Key 관리
 ```
-XCConfig/Debug.xcconfig:
-OPENAI_API_KEY = sk-xxx...
+XCConfig/DEV.xcconfig:
+GEMINI_API_KEY = your-gemini-api-key-here
 
-XCConfig/Release.xcconfig:
-OPENAI_API_KEY = $(OPENAI_API_KEY)
+XCConfig/PROD.xcconfig:
+GEMINI_API_KEY = $(GEMINI_API_KEY)
 ```
+
+#### API Key 발급
+1. [Google AI Studio](https://aistudio.google.com/)에 접속
+2. "Get API key" 클릭
+3. 새 API Key 생성 (무료, 신용카드 불필요)
 
 #### Info.plist 설정
 ```xml
-<key>OpenAIAPIKey</key>
-<string>$(OPENAI_API_KEY)</string>
+<key>GeminiAPIKey</key>
+<string>$(GEMINI_API_KEY)</string>
 ```
 
 #### 코드에서 로드
 ```swift
-let apiKey = Bundle.main.infoDictionary?["OpenAIAPIKey"] as? String
+let apiKey = Bundle.main.infoDictionary?["GeminiAPIKey"] as? String
 ```
 
 ### 엔드포인트
 
 | 기능 | 엔드포인트 | 모델 |
 |-----|-----------|------|
-| 텍스트 분석 | `/v1/chat/completions` | gpt-4o |
-| 이미지 분석 | `/v1/chat/completions` | gpt-4o |
+| 텍스트 분석 | `POST /v1beta/models/{model}:generateContent` | gemini-2.5-flash |
+| 이미지 분석 | `POST /v1beta/models/{model}:generateContent` | gemini-2.5-flash |
+| 일일 인사이트 | `POST /v1beta/models/{model}:generateContent` | gemini-2.5-flash-lite |
+
+**Base URL**: `https://generativelanguage.googleapis.com`
+**인증**: `?key={apiKey}` 쿼리 파라미터
+
+### 요청 형식
+
+```json
+{
+  "systemInstruction": {
+    "parts": [{"text": "시스템 프롬프트"}]
+  },
+  "contents": [
+    {
+      "role": "user",
+      "parts": [{"text": "사용자 메시지"}]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.3,
+    "maxOutputTokens": 1500,
+    "responseMimeType": "application/json"
+  }
+}
+```
+
+### 이미지 포함 요청 형식
+
+```json
+{
+  "systemInstruction": {
+    "parts": [{"text": "시스템 프롬프트"}]
+  },
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {"text": "사용자 메시지"},
+        {
+          "inlineData": {
+            "mimeType": "image/jpeg",
+            "data": "base64-encoded-image-data"
+          }
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.3,
+    "maxOutputTokens": 2000,
+    "responseMimeType": "application/json"
+  }
+}
+```
 
 ---
 
@@ -178,20 +245,6 @@ Respond in the following JSON format:
 }
 ```
 
-#### API 요청 형식
-```swift
-let messages: [[String: Any]] = [
-    ["role": "system", "content": systemPrompt],
-    ["role": "user", "content": [
-        ["type": "text", "text": userPrompt],
-        ["type": "image_url", "image_url": [
-            "url": "data:image/jpeg;base64,\(base64Image)",
-            "detail": "low"
-        ]]
-    ]]
-]
-```
-
 ---
 
 ### 3. AI 인사이트 생성
@@ -291,8 +344,8 @@ public enum AIServiceError: Error {
 |-----|------|------|
 | 200 | 성공 | 응답 파싱 |
 | 400 | 잘못된 요청 | 입력 검증 에러 표시 |
-| 401 | 인증 실패 | API Key 확인 요청 |
-| 429 | Rate Limit | 재시도 안내 |
+| 403 | 인증 실패 | API Key 확인 요청 |
+| 429 | Rate Limit | 재시도 안내 (무료 티어 한도 초과) |
 | 500 | 서버 에러 | 일시적 오류 안내 |
 
 ### 에러 메시지 (사용자용)
@@ -324,15 +377,23 @@ extension AIServiceError: LocalizedError {
 
 ## 비용 최적화
 
+### 모델 선택
+- 영양 추정: `gemini-2.5-flash` (빠르고 정확)
+- 일일 인사이트: `gemini-2.5-flash-lite` (경량, 더 빠른 응답)
+- 무료 티어만으로 충분 (일 1,000회 요청)
+
 ### 이미지 처리
 - 전송 전 이미지 리사이즈 (최대 512px)
 - JPEG 압축 (품질 0.7)
-- `detail: "low"` 옵션 사용
 
 ### 토큰 제한
 - System prompt: ~200 tokens
 - User prompt: ~100 tokens
 - Max response: 1000 tokens
+
+### JSON 응답 보장
+- `responseMimeType: "application/json"` 설정으로 구조화된 JSON 응답 보장
+- 기존 `extractJSON()` 파싱 로직과 함께 이중 안전장치
 
 ### 캐싱
 - 동일 입력에 대한 결과 캐싱 (24시간)
@@ -351,6 +412,11 @@ extension AIServiceError: LocalizedError {
 - HTTPS 통신만 사용
 - 이미지 데이터 로컬에만 저장
 - 개인정보 포함 금지
+
+### 무료 티어 데이터 정책
+- Google 무료 티어에서는 전송 데이터가 모델 개선에 사용될 수 있음
+- 민감한 개인 건강 데이터 전송 시 유의
+- 프롬프트에 개인 식별 정보 포함 금지
 
 ### 면책 조항
 모든 AI 응답에 다음 면책 문구 표시:

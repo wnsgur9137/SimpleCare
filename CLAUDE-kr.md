@@ -7,7 +7,7 @@
 ## 프로젝트 개요
 
 SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
-사용자가 식사, 운동, 체중을 기록하고 AI(GPT-4o)를 활용하여 건강한 생활 습관을 개발할 수 있도록 돕습니다.
+사용자가 식사, 운동, 체중을 기록하고 AI(Google Gemini)를 활용하여 건강한 생활 습관을 개발할 수 있도록 돕습니다.
 
 ## 현재 진행 상황
 
@@ -31,7 +31,7 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 - **영속화**: SwiftData
 - **빌드 시스템**: Tuist 4.x (모듈화)
 - **네트워크**: Moya + Alamofire
-- **AI**: OpenAI GPT-4o (REST API)
+- **AI**: Google Gemini API (REST API, Free Tier)
 - **CI/CD**: Fastlane
 - **Lint/Format**: SwiftLint + SwiftFormat
 
@@ -54,7 +54,7 @@ Projects/
 ├── Infrastructure/       # 인프라 모듈 (3개)
 │   ├── StorageInfra      # SwiftData 영속화 계층
 │   ├── NetworkInfra      # 네트워크 통신 (Moya/Alamofire)
-│   └── AIServiceInfra    # OpenAI API 통합
+│   └── AIServiceInfra    # Google Gemini API 통합
 ├── LibraryManager/       # 외부 라이브러리 래퍼 (4개)
 │   ├── NetworkLibraries  # Alamofire, Moya
 │   ├── UILibraries       # Kingfisher, Lottie, IQKeyboardManager

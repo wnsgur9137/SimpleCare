@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - MOC
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -45,7 +45,7 @@ status: active
 | 모듈 | 역할 |
 |------|------|
 | [StorageInfra](./modules/StorageInfra.md) | SwiftData 기반 로컬 데이터 영속화 |
-| [AIServiceInfra](./modules/AIServiceInfra.md) | OpenAI GPT-4o API 연동 |
+| [AIServiceInfra](./modules/AIServiceInfra.md) | Google Gemini API 연동 |
 | [NetworkInfra](./modules/NetworkInfra.md) | 네트워크 통신 추상화 (최소 골격 상태) |
 | [HealthKitInfra](./modules/HealthKitInfra.md) | Apple HealthKit 연동 |
 

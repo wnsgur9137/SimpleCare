@@ -7,7 +7,7 @@
 ## Project Overview
 
 SimpleCare is an AI-powered personal health management iOS app.
-Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to develop healthy lifestyle habits.
+Users can log meals, exercises, and weight while leveraging AI (Google Gemini) to develop healthy lifestyle habits.
 
 ## Current Progress
 
@@ -31,7 +31,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 - **Persistence**: SwiftData
 - **Build System**: Tuist 4.x (Modular)
 - **Network**: Moya + Alamofire
-- **AI**: OpenAI GPT-4o (REST API)
+- **AI**: Google Gemini API (REST API, Free Tier)
 - **CI/CD**: Fastlane
 - **Lint/Format**: SwiftLint + SwiftFormat
 
@@ -54,7 +54,7 @@ Projects/
 ├── Infrastructure/       # Infrastructure modules (3)
 │   ├── StorageInfra      # SwiftData persistence layer
 │   ├── NetworkInfra      # Network communication (Moya/Alamofire)
-│   └── AIServiceInfra    # OpenAI API integration
+│   └── AIServiceInfra    # Google Gemini API integration
 ├── LibraryManager/       # External library wrappers (4)
 │   ├── NetworkLibraries  # Alamofire, Moya
 │   ├── UILibraries       # Kingfisher, Lottie, IQKeyboardManager

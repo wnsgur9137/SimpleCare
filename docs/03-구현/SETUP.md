@@ -5,7 +5,7 @@ tags:
   - 구현
   - 구현/환경설정
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -102,17 +102,20 @@ open SimpleCare.xcworkspace
 
 ## API Key 설정
 
-### OpenAI API Key
+### Google Gemini API Key
 
-1. [OpenAI Platform](https://platform.openai.com/)에서 API Key 발급
+1. [Google AI Studio](https://aistudio.google.com/)에서 무료 API Key 발급
+   - Google 계정으로 로그인
+   - "Get API key" 클릭
+   - 신용카드 불필요
 
 2. XCConfig 파일 생성
 ```bash
 # Debug 설정
-echo 'OPENAI_API_KEY = sk-your-api-key-here' >> XCConfig/Debug.xcconfig
+echo 'GEMINI_API_KEY = your-gemini-api-key-here' >> XCConfig/Debug.xcconfig
 
 # Release 설정 (CI/CD용)
-echo 'OPENAI_API_KEY = $(OPENAI_API_KEY)' >> XCConfig/Release.xcconfig
+echo 'GEMINI_API_KEY = $(GEMINI_API_KEY)' >> XCConfig/Release.xcconfig
 ```
 
 3. `.gitignore` 확인
@@ -123,7 +126,7 @@ XCConfig/Debug.xcconfig
 
 ### 환경 변수로 설정 (CI/CD)
 ```bash
-export OPENAI_API_KEY=sk-your-api-key-here
+export GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 ---
@@ -244,13 +247,13 @@ MealData-Swift.h not found
 **확인**:
 ```swift
 // AppDelegate 또는 디버그 코드에서 확인
-print(Bundle.main.infoDictionary?["OpenAIAPIKey"] as? String ?? "Not found")
+print(Bundle.main.infoDictionary?["GeminiAPIKey"] as? String ?? "Not found")
 ```
 
 **해결**:
-- `XCConfig/Debug.xcconfig` 파일 확인
-- API Key 형식 확인 (sk- 로 시작)
-- OpenAI 계정 크레딧 확인
+- `XCConfig/DEV.xcconfig` 파일 확인
+- API Key가 비어있지 않은지 확인
+- [Google AI Studio](https://aistudio.google.com/)에서 키 상태 확인
 
 ### 5. SwiftData 마이그레이션 오류
 
@@ -359,4 +362,4 @@ tuist graph --targets Application --format png
 - [Tuist 공식 문서](https://docs.tuist.io)
 - [SwiftLint 규칙](https://realm.github.io/SwiftLint/rule-directory.html)
 - [SwiftFormat 옵션](https://github.com/nicklockwood/SwiftFormat)
-- [OpenAI API 문서](https://platform.openai.com/docs)
+- [Google Gemini API 문서](https://ai.google.dev/gemini-api/docs)
