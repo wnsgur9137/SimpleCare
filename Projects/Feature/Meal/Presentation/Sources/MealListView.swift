@@ -117,6 +117,13 @@ private struct DateSectionHeaderView: View {
     let date: Date
     let meals: [MealRecord]
 
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.setLocalizedDateFormatFromTemplate("MMMdEEEE")
+        return formatter
+    }()
+
     private var calendar: Calendar { Calendar.current }
 
     private var relativeDateLabel: String? {
@@ -129,29 +136,22 @@ private struct DateSectionHeaderView: View {
     }
 
     private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.setLocalizedDateFormatFromTemplate("MMMdEEEE")
-        return formatter.string(from: date)
+        Self.dateFormatter.string(from: date)
     }
 
-    private var dailyCalories: Int {
-        meals.reduce(0) { $0 + $1.totalCalories }
-    }
-
-    private var dailyProtein: Double {
-        meals.reduce(0) { $0 + $1.totalProtein }
-    }
-
-    private var dailyCarbs: Double {
-        meals.reduce(0) { $0 + $1.totalCarbs }
-    }
-
-    private var dailyFat: Double {
-        meals.reduce(0) { $0 + $1.totalFat }
+    private var dailyTotals: (calories: Int, protein: Double, carbs: Double, fat: Double) {
+        meals.reduce((calories: 0, protein: 0.0, carbs: 0.0, fat: 0.0)) { totals, meal in
+            (
+                calories: totals.calories + meal.totalCalories,
+                protein: totals.protein + meal.totalProtein,
+                carbs: totals.carbs + meal.totalCarbs,
+                fat: totals.fat + meal.totalFat
+            )
+        }
     }
 
     var body: some View {
+        let totals = dailyTotals
         VStack(alignment: .leading, spacing: 6) {
             // Date label
             HStack(spacing: 6) {
@@ -174,7 +174,7 @@ private struct DateSectionHeaderView: View {
                 Image(systemName: "flame.fill")
                     .font(.caption)
                     .foregroundStyle(.scCalories)
-                Text("\(dailyCalories) kcal")
+                Text("\(totals.calories) \("unit.kcal".localized)")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.scCalories)
@@ -182,9 +182,9 @@ private struct DateSectionHeaderView: View {
 
             // Macro summary
             HStack(spacing: 12) {
-                MacroDotView(label: "P", value: String(format: "%.0fg", dailyProtein), color: .scProtein)
-                MacroDotView(label: "C", value: String(format: "%.0fg", dailyCarbs), color: .scCarbs)
-                MacroDotView(label: "F", value: String(format: "%.0fg", dailyFat), color: .scFat)
+                MacroDotView(label: "macro.protein.short".localized, value: String(format: "%.0fg", totals.protein), color: .scProtein)
+                MacroDotView(label: "macro.carbs.short".localized, value: String(format: "%.0fg", totals.carbs), color: .scCarbs)
+                MacroDotView(label: "macro.fat.short".localized, value: String(format: "%.0fg", totals.fat), color: .scFat)
             }
         }
         .padding(.vertical, 4)
@@ -244,9 +244,9 @@ private struct MealRowView: View {
 
                 // Individual macro mini display
                 HStack(spacing: 8) {
-                    MacroDotView(label: "P", value: String(format: "%.0fg", meal.totalProtein), color: .scProtein)
-                    MacroDotView(label: "C", value: String(format: "%.0fg", meal.totalCarbs), color: .scCarbs)
-                    MacroDotView(label: "F", value: String(format: "%.0fg", meal.totalFat), color: .scFat)
+                    MacroDotView(label: "macro.protein.short".localized, value: String(format: "%.0fg", meal.totalProtein), color: .scProtein)
+                    MacroDotView(label: "macro.carbs.short".localized, value: String(format: "%.0fg", meal.totalCarbs), color: .scCarbs)
+                    MacroDotView(label: "macro.fat.short".localized, value: String(format: "%.0fg", meal.totalFat), color: .scFat)
                 }
             }
 
@@ -257,7 +257,7 @@ private struct MealRowView: View {
                 Text("\(meal.totalCalories)")
                     .font(.headline)
                     .foregroundStyle(.scCalories)
-                Text("kcal")
+                Text("unit.kcal".localized)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -59,3 +59,7 @@
 "meal.list.today" = "오늘";
 "meal.list.yesterday" = "어제";
 "meal.list.dailyTotal" = "일일 합계";
+"unit.kcal" = "kcal";
+"macro.protein.short" = "P";
+"macro.carbs.short" = "C";
+"macro.fat.short" = "F";
