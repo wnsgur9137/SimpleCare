@@ -24,6 +24,7 @@ public final class TabCoordinator: ObservableObject, Coordinator {
     // MARK: - Child Coordinators
 
     private var homeCoordinator: HomeCoordinator?
+    private var mealCoordinator: MealCoordinator?
 
     // MARK: - Published Properties
 
@@ -115,21 +116,24 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     public func makeMealList() -> some View {
-        let container = diContainer.makeMealDIContainer()
-        let coordinator = MealCoordinator(dependencies: container)
-        coordinator.onNavigateToDetail = { [weak self] meal in
-            // TODO: Navigate to detail view (Phase 5.10)
-            print("Navigate to meal detail: \(meal.id)")
-        }
-        coordinator.onNavigateToRecord = { [weak self] in
-            self?.showingMealRecord = true
-        }
-        coordinator.onSaveComplete = { [weak self] in
-            self?.showingMealRecord = false
+        if mealCoordinator == nil {
+            let container = diContainer.makeMealDIContainer()
+            let coordinator = MealCoordinator(dependencies: container)
+            coordinator.onNavigateToDetail = { [weak self] meal in
+                // TODO: Navigate to detail view (Phase 5.10)
+                print("Navigate to meal detail: \(meal.id)")
+            }
+            coordinator.onNavigateToRecord = { [weak self] in
+                self?.showingMealRecord = true
+            }
+            coordinator.onSaveComplete = { [weak self] in
+                self?.showingMealRecord = false
+            }
+            self.mealCoordinator = coordinator
         }
 
         return NavigationStack {
-            coordinator.makeListView()
+            mealCoordinator!.makeListView()
                 .sheet(isPresented: showingMealRecordBinding) {
                     self.makeMealRecordSheet()
                 }
