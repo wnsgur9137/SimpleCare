@@ -271,6 +271,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - MealClient: updateMeal, deleteMeal, fetchMeal 추가
 - ExerciseClient: updateExercise, deleteExercise, fetchExercise 추가
 - DIContainer 업데이트 (UseCase 연결)
+- MealListView 날짜별 UI/UX 개선: DateSectionHeaderView (상대 날짜 + 일일 칼로리/매크로 요약), MealRowView (식사 시간 + 개별 매크로 표시)
 
 ### Phase 6: 이미지/음성 기능 (최후순위)
 

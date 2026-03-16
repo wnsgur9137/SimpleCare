@@ -56,3 +56,10 @@
 "meal.list.deleteConfirm" = "이 식사 기록을 삭제하시겠습니까?";
 "meal.list.and" = "외";
 "meal.list.items" = "개";
+"meal.list.today" = "오늘";
+"meal.list.yesterday" = "어제";
+"meal.list.dailyTotal" = "일일 합계";
+"unit.kcal" = "kcal";
+"macro.protein.short" = "P";
+"macro.carbs.short" = "C";
+"macro.fat.short" = "F";

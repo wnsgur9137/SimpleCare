@@ -56,3 +56,10 @@
 "meal.list.deleteConfirm" = "Delete this meal record?";
 "meal.list.and" = "and";
 "meal.list.items" = "more";
+"meal.list.today" = "Today";
+"meal.list.yesterday" = "Yesterday";
+"meal.list.dailyTotal" = "Daily Total";
+"unit.kcal" = "kcal";
+"macro.protein.short" = "P";
+"macro.carbs.short" = "C";
+"macro.fat.short" = "F";

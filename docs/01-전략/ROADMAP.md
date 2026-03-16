@@ -237,6 +237,8 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [x] MealCoordinator 네비게이션 연결
 - [x] TabCoordinator 식사 탭 연동
 - [x] 로컬라이제이션 추가 (ko/en)
+- [x] 날짜별 섹션 헤더 UI/UX 개선 (상대 날짜, 일일 칼로리/매크로 요약)
+- [x] MealRowView 개선 (식사 시간 표시, 개별 매크로 표시)
 
 #### MealDetail 화면
 - [x] MealClient 확장 (delete, update, copy)
