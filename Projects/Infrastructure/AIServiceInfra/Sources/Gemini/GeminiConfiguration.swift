@@ -9,6 +9,8 @@ import Foundation
 
 /// Google Gemini API Configuration
 public struct GeminiConfiguration: Sendable {
+    private static let invalidAPIKeyPlaceholder = "123"
+
     /// API Key (Info.plist or environment variable)
     public let apiKey: String
 
@@ -24,7 +26,7 @@ public struct GeminiConfiguration: Sendable {
     public init(
         apiKey: String? = nil,
         model: GeminiModel = .flash,
-        baseURL: URL = URL(string: "https://generativelanguage.googleapis.com/v1beta")!,
+        baseURL: URL? = nil,
         timeoutInterval: TimeInterval = 60
     ) {
         // API Key load order: direct injection > Info.plist > environment variable
@@ -39,13 +41,20 @@ public struct GeminiConfiguration: Sendable {
         }
 
         self.model = model
-        self.baseURL = baseURL
+        if let baseURL {
+            self.baseURL = baseURL
+        } else {
+            guard let defaultURL = URL(string: "https://generativelanguage.googleapis.com/v1beta") else {
+                preconditionFailure("Default Gemini base URL is invalid.")
+            }
+            self.baseURL = defaultURL
+        }
         self.timeoutInterval = timeoutInterval
     }
 
     /// API Key validation
     public var isValid: Bool {
-        !apiKey.isEmpty && apiKey != "123"
+        !apiKey.isEmpty && apiKey != Self.invalidAPIKeyPlaceholder
     }
 }
 

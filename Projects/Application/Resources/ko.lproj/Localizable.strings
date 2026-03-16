@@ -405,3 +405,12 @@
 "calorieStatus.under" = "부족";
 "calorieStatus.onTrack" = "적정";
 "calorieStatus.over" = "초과";
+
+// MARK: - Gemini API Errors
+"gemini_error_invalid_api_key" = "유효하지 않은 Gemini API 키입니다";
+"gemini_error_invalid_response" = "서버로부터 잘못된 응답을 받았습니다";
+"gemini_error_rate_limited" = "요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.";
+"gemini_error_no_vision_support" = "선택된 모델은 이미지 분석을 지원하지 않습니다";
+"gemini_error_http" = "HTTP 오류: %d";
+"gemini_error_api" = "API 오류: %@";
+"gemini_error_no_content" = "응답에 내용이 없습니다";

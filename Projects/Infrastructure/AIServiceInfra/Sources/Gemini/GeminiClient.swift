@@ -93,8 +93,13 @@ public actor GeminiClient {
         }
 
         // Build URL: /v1beta/models/{model}:generateContent?key={apiKey}
-        let urlString = "\(configuration.baseURL)/models/\(model.rawValue):generateContent?key=\(configuration.apiKey)"
-        guard let url = URL(string: urlString) else {
+        var components = URLComponents(
+            url: configuration.baseURL.appending(path: "models/\(model.rawValue):generateContent"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = [URLQueryItem(name: "key", value: configuration.apiKey)]
+
+        guard let url = components?.url else {
             throw GeminiError.invalidResponse
         }
 
@@ -120,10 +125,17 @@ public actor GeminiClient {
         }
 
         guard (200...299).contains(httpResponse.statusCode) else {
-            if let errorResponse = try? JSONDecoder().decode(GeminiErrorResponse.self, from: data) {
+            do {
+                let errorResponse = try JSONDecoder().decode(GeminiErrorResponse.self, from: data)
                 throw GeminiError.apiError(errorResponse.error.message)
+            } catch is GeminiError {
+                throw GeminiError.apiError(
+                    (try? JSONDecoder().decode(GeminiErrorResponse.self, from: data))?.error.message
+                    ?? "Unknown error"
+                )
+            } catch {
+                throw GeminiError.httpError(httpResponse.statusCode)
             }
-            throw GeminiError.httpError(httpResponse.statusCode)
         }
 
         return try JSONDecoder().decode(GeminiResponse.self, from: data)
@@ -215,19 +227,19 @@ public enum GeminiError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
-            return "Invalid Gemini API key"
+            return NSLocalizedString("gemini_error_invalid_api_key", comment: "Invalid Gemini API key")
         case .invalidResponse:
-            return "Invalid response from server"
+            return NSLocalizedString("gemini_error_invalid_response", comment: "Invalid response from server")
         case .rateLimited:
-            return "Rate limit exceeded. Please try again later."
+            return NSLocalizedString("gemini_error_rate_limited", comment: "Rate limit exceeded. Please try again later.")
         case .modelDoesNotSupportVision:
-            return "Selected model does not support vision/image analysis"
+            return NSLocalizedString("gemini_error_no_vision_support", comment: "Selected model does not support vision/image analysis")
         case .httpError(let code):
-            return "HTTP error: \(code)"
+            return String(format: NSLocalizedString("gemini_error_http", comment: "HTTP error: %d"), code)
         case .apiError(let message):
-            return "API error: \(message)"
+            return String(format: NSLocalizedString("gemini_error_api", comment: "API error: %@"), message)
         case .noContent:
-            return "No content in response"
+            return NSLocalizedString("gemini_error_no_content", comment: "No content in response")
         }
     }
 }
