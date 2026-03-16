@@ -273,6 +273,72 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - DIContainer 업데이트 (UseCase 연결)
 - MealListView 날짜별 UI/UX 개선: DateSectionHeaderView (상대 날짜 + 일일 칼로리/매크로 요약), MealRowView (식사 시간 + 개별 매크로 표시)
 
+### Phase S: 안정성 및 보안 강화 🔴
+
+> 코드 품질 리뷰 (2026-03-16) 결과 기반. 67개 이슈 중 CRITICAL/HIGH 우선 수정.
+> Phase 6 이전 필수 완료.
+
+#### Sprint S.1: CRITICAL 버그 수정
+
+| 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
+|------|------|------|------------|------|
+| S.1.1 | StorageContainer fatalError → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ⬜ 미시작 |
+| S.1.2 | GeminiClient 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ⬜ 미시작 |
+| S.1.3 | extractJSON closed range 파싱 버그 수정 (NutritionEstimation + DailyInsight) | AIServiceInfra | 낮음 | ⬜ 미시작 |
+| S.1.4 | MealClient.liveValue 빈 스텁 → unimplemented() 적용 | Meal | 낮음 | ⬜ 미시작 |
+| S.1.5 | ExerciseClient.liveValue 빈 스텁 → unimplemented() 적용 | Exercise | 낮음 | ⬜ 미시작 |
+| S.1.6 | WeightClient.liveValue 빈 스텁 → unimplemented() 적용 | Weight | 낮음 | ⬜ 미시작 |
+
+#### Sprint S.2: HIGH 안정성 수정
+
+| 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
+|------|------|------|------------|------|
+| S.2.1 | ForEach id \.element.name → 중복 음식명 UI 버그 수정 | Meal | 낮음 | ⬜ 미시작 |
+| S.2.2 | MealContainerView delegate(.saveCompleted) 미연결 | Meal | 중간 | ⬜ 미시작 |
+| S.2.3 | MealDIContainer 매번 새 인스턴스 → 캐싱 적용 | Meal | 중간 | ⬜ 미시작 |
+| S.2.4 | ExerciseDIContainer 매번 새 repository 인스턴스 → 캐싱 | Exercise | 중간 | ⬜ 미시작 |
+| S.2.5 | WeightDIContainer 매번 새 인스턴스 → 캐싱 적용 | Weight | 중간 | ⬜ 미시작 |
+| S.2.6 | ExerciseContainerView onSaveComplete 미연결 | Exercise | 중간 | ⬜ 미시작 |
+| S.2.7 | WeightRepository update/delete 100개 fetch 제한 → fetchWeight(id:) | Weight | 중간 | ⬜ 미시작 |
+| S.2.8 | Weight getWeights(limit:) HealthKit 미병합 | Weight | 높음 | ⬜ 미시작 |
+| S.2.9 | ExerciseRecord updateModel date/weight 미업데이트 | Exercise | 낮음 | ⬜ 미시작 |
+| S.2.10 | ReportView dailyCalories[index] 범위 초과 크래시 방어 | Home | 낮음 | ⬜ 미시작 |
+| S.2.11 | HomeFeature selectWeekDay 요일 계산 off-by-one 수정 | Home | 중간 | ⬜ 미시작 |
+| S.2.12 | Report error가 Home viewState 덮어쓰기 → 별도 state 분리 | Home | 중간 | ⬜ 미시작 |
+
+#### Sprint S.3: HIGH 보안 수정
+
+| 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
+|------|------|------|------------|------|
+| S.3.1 | NSAllowsArbitraryLoads: true → ATS 활성화 | Project | 낮음 | ⬜ 미시작 |
+| S.3.2 | API 키 Keychain 저장 + SwiftData 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ⬜ 미시작 |
+| S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ⬜ 미시작 |
+| S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ⬜ 미시작 |
+
+#### Sprint S.4: MEDIUM 품질 개선 (선별 10건)
+
+| 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
+|------|------|------|------------|------|
+| S.4.1 | 한국어 하드코딩 → 로컬라이제이션 (displayName 전체) | StorageInfra/Home/Exercise | 중간 | ⬜ 미시작 |
+| S.4.2 | Alert .constant() binding → TCA AlertState 패턴 | Meal | 중간 | ⬜ 미시작 |
+| S.4.3 | DateFormatter 인라인 생성 → static let 캐싱 | Exercise/Meal | 낮음 | ⬜ 미시작 |
+| S.4.4 | WeightTrend progressToGoal 체중 증가 목표 미지원 | Weight | 중간 | ⬜ 미시작 |
+| S.4.5 | HomeView NotificationManager 사이드이펙트 → Reducer 이동 | Home | 중간 | ⬜ 미시작 |
+| S.4.6 | MockHomeInsightService → 실제 서비스 전환 확인 | Home | 낮음 | ⬜ 미시작 |
+| S.4.7 | @unchecked Sendable 정리 | Meal/Home/Exercise/Weight | 중간 | ⬜ 미시작 |
+| S.4.8 | NutritionEstimation.totalCalories 중복 필드 정리 | Meal | 낮음 | ⬜ 미시작 |
+| S.4.9 | OpenAI 데드코드 제거 | AIServiceInfra | 낮음 | ⬜ 미시작 |
+| S.4.10 | ExerciseListView/DetailView categoryColor 불일치 수정 | Exercise | 낮음 | ⬜ 미시작 |
+
+**완료 조건**:
+- Sprint S.1 (CRITICAL) 6건 전부 해결
+- Sprint S.2 (HIGH 안정성) 12건 전부 해결
+- Sprint S.3 (HIGH 보안) 4건 전부 해결
+- Sprint S.4 (MEDIUM) 선별 10건 해결
+- 빌드 성공 + 기존 기능 동작 확인
+
+---
+
 ### Phase 6: 이미지/음성 기능 (최후순위)
 
 > 이미지 및 음성 관련 기능은 최후순위로 배치
@@ -294,7 +360,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 |--------|--------|----------|----------|
 | Gemini 무료 티어 한도 초과 | 중간 | 낮음 | 캐싱, Rate limiting, 사용량 모니터링 |
 | Gemini API 응답 지연 | 중간 | 중간 | 로딩 UI, 5초 타임아웃, 재시도 로직 |
-| SwiftData 마이그레이션 | 중간 | 낮음 | 스키마 버전 관리, 마이그레이션 플랜 |
+| SwiftData 마이그레이션 | **높음** | **발견됨** | StorageContainer fatalError 확인 → Phase S.1.1에서 graceful fallback 수정 |
 | HealthKit 권한 거부 | 중간 | 중간 | 독립 기능 보장, 권한 재요청 UI |
 | TCA 의존성 복잡도 | 낮음 | 낮음 | DIContainer 패턴, 명확한 의존성 그래프 |
 
@@ -335,7 +401,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 6. ~~**Phase 5: 식사/운동 상세 페이지**~~ ✅ 완료
 7. ~~**Phase 4.4-4.5: 데이터 내보내기/삭제**~~ ✅ 완료
 8. ~~**Phase 1.3: 실제 Gemini API 연동**~~ ✅ 완료
-9. Phase 6: 이미지/음성 기능 (최후순위) ← 🟡 다음 작업
+9. **Phase S: 안정성 및 보안 강화** ← 🔴 다음 작업 (CRITICAL/HIGH 우선)
+10. Phase 6: 이미지/음성 기능 (최후순위)
 
 ---
 
@@ -365,6 +432,13 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [x] Phase 5 완료 (식사/운동 상세 페이지)
 - [x] Phase 4.4-4.5 완료 (데이터 내보내기/삭제) - PR #48
 - [x] Phase 5.8 완료 (캘린더 네비게이션) - PR #49
+
+### v1.4
+- [ ] Phase S 완료 (안정성 및 보안 강화)
+  - [ ] Sprint S.1: CRITICAL 버그 6건 수정
+  - [ ] Sprint S.2: HIGH 안정성 12건 수정
+  - [ ] Sprint S.3: HIGH 보안 4건 수정
+  - [ ] Sprint S.4: MEDIUM 품질 10건 개선
 
 ### v2.0 - PRD §7.4
 - [ ] Phase 6 완료 (이미지/음성 기능)
@@ -410,5 +484,5 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 
 ---
 
-*문서 버전: 3.3*
-*최종 수정일: 2026-03-03*
+*문서 버전: 3.4*
+*최종 수정일: 2026-03-16*

@@ -6,6 +6,7 @@ tags:
   - 전략/로드맵
 created: 2026-01-26
 updated: 2026-03-16
+review-date: 2026-03-16
 status: active
 ---
 
@@ -18,8 +19,9 @@ status: active
 4. [Phase 3: 확장 기능](#phase-3-확장-기능)
 5. [Phase 4: 연동 및 부가 기능](#phase-4-연동-및-부가-기능)
 6. [Phase 5: 식사/운동 상세 페이지](#phase-5-식사운동-상세-페이지-)
-7. [Phase 6: 이미지/음성 기능 (최후순위)](#phase-6-이미지음성-기능-최후순위)
-8. [구현 상태](#구현-상태)
+7. [Phase S: 안정성 및 보안 강화](#phase-s-안정성-및-보안-강화-)
+8. [Phase 6: 이미지/음성 기능 (최후순위)](#phase-6-이미지음성-기능-최후순위)
+9. [구현 상태](#구현-상태)
 
 ---
 
@@ -256,6 +258,68 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 ---
 
+## Phase S: 안정성 및 보안 강화 🔴
+
+> 코드 품질 리뷰 (2026-03-16)에서 발견된 67개 이슈 기반. CRITICAL/HIGH 우선 수정.
+
+### 목표
+코드 리뷰에서 발견된 CRITICAL/HIGH 이슈 수정 및 보안 강화
+
+### Sprint S.1: CRITICAL 버그 수정 (6건)
+
+즉시 수정 — 데이터 손실, 크래시, 보안 문제
+
+- [ ] StorageContainer 스키마 마이그레이션 graceful fallback (fatalError 제거)
+- [ ] GeminiClient 에러 핸들링 catch 로직 버그 수정
+- [ ] extractJSON 파싱 범위 버그 수정 (NutritionEstimation + DailyInsight)
+- [ ] MealClient.liveValue 빈 스텁 → unimplemented() 적용
+- [ ] ExerciseClient.liveValue 빈 스텁 → unimplemented() 적용
+- [ ] WeightClient.liveValue 빈 스텁 → unimplemented() 적용
+
+### Sprint S.2: HIGH 안정성 수정 (12건)
+
+기능/데이터 관련 안정성 이슈
+
+- [ ] ForEach id \.element.name → 중복 음식명 UI 버그 (EstimatedFoodItem Identifiable)
+- [ ] MealContainerView delegate(.saveCompleted) 미연결
+- [ ] MealDIContainer 매번 새 인스턴스 → 캐싱 적용
+- [ ] ExerciseDIContainer 매번 새 repository 인스턴스 → 캐싱 적용
+- [ ] WeightDIContainer 매번 새 인스턴스 → 캐싱 적용
+- [ ] ExerciseContainerView onSaveComplete 미연결
+- [ ] WeightRepository update/delete 100개 fetch 제한 → fetchWeight(id:) 추가
+- [ ] Weight getWeights(limit:) HealthKit 미병합
+- [ ] ExerciseRecord updateModel date/weight 미업데이트
+- [ ] ReportView dailyCalories[index] 범위 초과 크래시 방어
+- [ ] HomeFeature selectWeekDay 요일 계산 off-by-one 수정
+- [ ] Report error가 Home viewState 덮어쓰기 → 별도 state 분리
+
+### Sprint S.3: HIGH 보안 수정 (4건)
+
+- [ ] ATS 활성화 (NSAllowsArbitraryLoads: true 제거)
+- [ ] API 키 Keychain 저장 + SwiftData 파일 보호
+- [ ] AI 프롬프트 입력 길이 제한 + 응답 값 검증
+- [ ] 내보내기 임시 파일 보호 + 정리
+
+### Sprint S.4: MEDIUM 품질 개선 (10건 선별)
+
+- [ ] 한국어 하드코딩 → 로컬라이제이션 (displayName 등 전체)
+- [ ] Alert .constant() binding → TCA AlertState 패턴
+- [ ] DateFormatter 인라인 생성 → static let 캐싱
+- [ ] WeightTrend progressToGoal 체중 증가 목표 미지원
+- [ ] HomeView NotificationManager 사이드이펙트 → Reducer로 이동
+- [ ] MockHomeInsightService → 실제 서비스 전환 확인
+- [ ] @unchecked Sendable 정리 (Meal/Home/Exercise/Weight)
+- [ ] NutritionEstimation.totalCalories 중복 필드 정리
+- [ ] OpenAI 데드코드 제거
+- [ ] ExerciseListView/DetailView categoryColor 불일치 수정
+
+### Sprint S.5: LOW + 나머지 (추후)
+
+LOW 14건 + 나머지 MEDIUM 10건은 관련 Feature 작업 시 함께 처리.
+별도 Sprint로 추적하지 않고 "기술 부채" 섹션에 기록.
+
+---
+
 ## Phase 6: 이미지/음성 기능 (최후순위)
 
 ### 목표
@@ -309,8 +373,9 @@ Phase 2: ████████████████████ 100%
 Phase 3: ████████████████████ 100%
 Phase 4: ██████████████████░░  90%
 Phase 5: ████████████████████ 100% ✅
+Phase S: ░░░░░░░░░░░░░░░░░░░░   0% 🔴
 ---------------------------------
-Total:   ███████████████████░  95%
+Total:   ████████████████░░░░  82%
 ```
 
 ---
@@ -324,6 +389,7 @@ Total:   ███████████████████░  95%
 | **P1** | 핵심 기능 | Exercise, Weight, Profile ✅ |
 | **P2** | 부가 기능 | HealthKit, Notification, Widget |
 | **P3** | 상세 페이지 | 식사/운동 상세 보기, 편집/삭제 ✅ |
+| **P-S** | 안정성/보안 | CRITICAL/HIGH 버그 수정, 보안 강화 (Phase 6 이전 필수) 🔴 |
 | **P4** | 고도화 | AI 추천, 분석 |
 | **P5** | 최후순위 | 이미지/음성 기능 |
 
@@ -331,11 +397,44 @@ Total:   ███████████████████░  95%
 
 ## 기술 부채
 
-### 현재 이슈
+### 해결된 이슈
 1. ~~DIContainer가 Presentation 레이어에 위치~~ → **해결됨** (Feature 루트로 이동)
 2. ~~Coordinator가 DIContainer 직접 의존~~ → **해결됨** (Delegate 패턴 적용)
 3. Dashboard → Home 통합 완료
 4. Splash 화면 구현 완료 (SplashCoordinator)
+
+### 코드 리뷰 발견 이슈 (2026-03-16)
+
+> 전체 67건 (CRITICAL 6, HIGH 22, MEDIUM 25, LOW 14)
+> CRITICAL/HIGH는 Phase S에서 추적. 아래는 Phase S에 포함되지 않은 나머지 항목.
+
+#### MEDIUM (Phase S.4 미포함 10건)
+- ExerciseType MET 값 정확도 검증 필요
+- Weight 차트 데이터 포인트 0건 시 빈 차트 UX
+- Home 주간 트렌드 데이터 없음 시 placeholder 부재
+- MealRecord foodItems 빈 배열 허용 (유효성 검증 없음)
+- ExerciseRecord duration 음수 방어 없음
+- StorageContainer 동시 접근 시 thread safety
+- HealthKit 백그라운드 동기화 미구현
+- Settings 데이터 삭제 확인 다이얼로그 UX 개선
+- Coordinator 메모리 누수 가능성 (retain cycle 점검)
+- NetworkInfra 재시도 로직 미구현
+
+#### LOW (14건)
+- 매직 넘버 상수화 (padding, spacing 등)
+- 불필요한 import 정리
+- 접근성(Accessibility) 레이블 누락
+- 일부 View에서 하드코딩된 색상 → Asset Color 전환
+- 코드 주석 보강 (복잡한 비즈니스 로직)
+- SwiftLint 경고 해소 (미사용 변수 등)
+- 테스트 코드 작성 (Unit/Integration)
+- 에러 메시지 사용자 친화적 개선
+- 다크모드 일부 컴포넌트 대비 부족
+- 애니메이션 성능 최적화 (LazyVStack 등)
+- Tuist 미사용 타겟 정리
+- 빌드 시간 최적화 (모듈 의존성 정리)
+- 로깅/디버깅 인프라 구축
+- CI 파이프라인 테스트 자동화
 
 ### 리팩토링 계획
 - [ ] 미사용 모듈 정리 (Settings 골격 상태)
