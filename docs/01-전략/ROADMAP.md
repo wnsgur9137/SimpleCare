@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/로드맵
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-13
 status: active
 ---
 
@@ -200,7 +200,7 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [x] HealthKit 권한 요청
 - [x] 걸음수 읽기
 - [x] 활동 칼로리 읽기
-- [ ] 체중 데이터 동기화
+- [x] 체중 데이터 동기화
 
 #### Notification Feature
 - [x] 리마인더 알림 설정
@@ -212,8 +212,8 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [ ] 목표 달성률 위젯
 
 #### Settings 완성
-- [ ] 데이터 내보내기 (CSV/JSON)
-- [ ] 데이터 삭제
+- [x] 데이터 내보내기 (CSV/JSON)
+- [x] 데이터 삭제
 - [x] 알림 설정
 - [x] 테마 설정
 
@@ -224,7 +224,7 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 ---
 
-## Phase 5: 식사/운동 상세 페이지 🟡
+## Phase 5: 식사/운동 상세 페이지 ✅
 
 ### 목표
 기록된 식사/운동 데이터 상세 보기 및 편집 기능 구현
@@ -239,18 +239,18 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [x] 로컬라이제이션 추가 (ko/en)
 
 #### MealDetail 화면
-- [ ] MealClient 확장 (delete, update, copy)
-- [ ] MealDetailFeature TCA Reducer 구현
-- [ ] MealDetailView UI 구현
+- [x] MealClient 확장 (delete, update, copy)
+- [x] MealDetailFeature TCA Reducer 구현
+- [x] MealDetailView UI 구현
 
 #### ExerciseDetail 화면
-- [ ] ExerciseClient 확장 (delete, update, copy)
-- [ ] ExerciseDetailFeature TCA Reducer 구현
-- [ ] ExerciseDetailView UI 구현
+- [x] ExerciseClient 확장 (delete, update, copy)
+- [x] ExerciseDetailFeature TCA Reducer 구현
+- [x] ExerciseDetailView UI 구현
 
 #### 공통
-- [ ] 캘린더/홈에서 상세 페이지 네비게이션 연결
-- [ ] 공통 컴포넌트 추출 (DetailHeaderView, SummaryCard)
+- [x] 캘린더/홈에서 상세 페이지 네비게이션 연결
+- [x] 공통 컴포넌트 추출 (DetailHeaderView, SummaryCard)
 
 ---
 
@@ -296,7 +296,7 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 | **Home** | 완료 | 100% |
 | **Tab** | 완료 | 100% |
 | **Calendar** | 완료 | 100% |
-| **Settings** | 골격 | 20% |
+| **Settings** | 주요 기능 완료 | 80% |
 | **Splash** | 완료 | 100% |
 
 ### 전체 진행률
@@ -305,10 +305,10 @@ Phase L: ████████████████████ 100% ✅
 Phase 1: ████████████████████ 100%
 Phase 2: ████████████████████ 100%
 Phase 3: ████████████████████ 100%
-Phase 4: ████████████████░░░░  80%
+Phase 4: ██████████████████░░  90%
 Phase 5: ████████████████████ 100% ✅
 ---------------------------------
-Total:   ██████████████████░░  90%
+Total:   ███████████████████░  95%
 ```
 
 ---
@@ -321,7 +321,7 @@ Total:   ██████████████████░░  90%
 | **P0** | 필수 기능 | Dashboard, Meal, AI서비스 ✅ |
 | **P1** | 핵심 기능 | Exercise, Weight, Profile ✅ |
 | **P2** | 부가 기능 | HealthKit, Notification, Widget |
-| **P3** | 상세 페이지 | 식사/운동 상세 보기, 편집/삭제 🟡 |
+| **P3** | 상세 페이지 | 식사/운동 상세 보기, 편집/삭제 ✅ |
 | **P4** | 고도화 | AI 추천, 분석 |
 | **P5** | 최후순위 | 이미지/음성 기능 |
 
