@@ -56,3 +56,6 @@
 "meal.list.deleteConfirm" = "Delete this meal record?";
 "meal.list.and" = "and";
 "meal.list.items" = "more";
+"meal.list.today" = "Today";
+"meal.list.yesterday" = "Yesterday";
+"meal.list.dailyTotal" = "Daily Total";

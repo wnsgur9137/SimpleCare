@@ -72,7 +72,7 @@ public struct MealListView: View {
                             }
                     }
                 } header: {
-                    Text(group.date.formatted(date: .abbreviated, time: .omitted))
+                    DateSectionHeaderView(date: group.date, meals: group.meals)
                 }
             }
         }
@@ -111,6 +111,108 @@ public struct MealListView: View {
     }
 }
 
+// MARK: - DateSectionHeaderView
+
+private struct DateSectionHeaderView: View {
+    let date: Date
+    let meals: [MealRecord]
+
+    private var calendar: Calendar { Calendar.current }
+
+    private var relativeDateLabel: String? {
+        if calendar.isDateInToday(date) {
+            return "meal.list.today".localized
+        } else if calendar.isDateInYesterday(date) {
+            return "meal.list.yesterday".localized
+        }
+        return nil
+    }
+
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.setLocalizedDateFormatFromTemplate("MMMdEEEE")
+        return formatter.string(from: date)
+    }
+
+    private var dailyCalories: Int {
+        meals.reduce(0) { $0 + $1.totalCalories }
+    }
+
+    private var dailyProtein: Double {
+        meals.reduce(0) { $0 + $1.totalProtein }
+    }
+
+    private var dailyCarbs: Double {
+        meals.reduce(0) { $0 + $1.totalCarbs }
+    }
+
+    private var dailyFat: Double {
+        meals.reduce(0) { $0 + $1.totalFat }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            // Date label
+            HStack(spacing: 6) {
+                if let relative = relativeDateLabel {
+                    Text(relative)
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                    Text("·")
+                        .foregroundStyle(.secondary)
+                }
+                Text(formattedDate)
+                    .font(.subheadline)
+                    .foregroundStyle(relativeDateLabel != nil ? .secondary : .primary)
+                    .fontWeight(relativeDateLabel == nil ? .bold : .regular)
+            }
+
+            // Daily calories
+            HStack(spacing: 4) {
+                Image(systemName: "flame.fill")
+                    .font(.caption)
+                    .foregroundStyle(.scCalories)
+                Text("\(dailyCalories) kcal")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.scCalories)
+            }
+
+            // Macro summary
+            HStack(spacing: 12) {
+                MacroDotView(label: "P", value: String(format: "%.0fg", dailyProtein), color: .scProtein)
+                MacroDotView(label: "C", value: String(format: "%.0fg", dailyCarbs), color: .scCarbs)
+                MacroDotView(label: "F", value: String(format: "%.0fg", dailyFat), color: .scFat)
+            }
+        }
+        .padding(.vertical, 4)
+        .textCase(nil)
+    }
+}
+
+// MARK: - MacroDotView
+
+private struct MacroDotView: View {
+    let label: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Circle()
+                .fill(color)
+                .frame(width: 6, height: 6)
+            Text("\(label) \(value)")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+// MARK: - MealRowView
+
 private struct MealRowView: View {
     let meal: MealRecord
 
@@ -125,15 +227,27 @@ private struct MealRowView: View {
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 4) {
-                // Meal type name
-                Text(meal.mealType.displayName)
-                    .font(.headline)
+                // Meal type name + time
+                HStack(spacing: 6) {
+                    Text(meal.mealType.displayName)
+                        .font(.headline)
+                    Text(meal.date.formatted(date: .omitted, time: .shortened))
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
 
-                // Food items summary (first 2 items)
+                // Food items summary
                 Text(foodSummary)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
+
+                // Individual macro mini display
+                HStack(spacing: 8) {
+                    MacroDotView(label: "P", value: String(format: "%.0fg", meal.totalProtein), color: .scProtein)
+                    MacroDotView(label: "C", value: String(format: "%.0fg", meal.totalCarbs), color: .scCarbs)
+                    MacroDotView(label: "F", value: String(format: "%.0fg", meal.totalFat), color: .scFat)
+                }
             }
 
             Spacer()
