@@ -17,7 +17,7 @@ Users can log meals, exercises, and weight while leveraging AI (Google Gemini) t
 |-------|--------|-------------|
 | Phase L: Localization | ✅ Done | Korean (default), English support with runtime switching |
 | Phase 0: DIContainer-Client Wiring | ✅ Done | All Feature DIContainers connected to real UseCases |
-| Phase 1: AI Feature Activation | 🟡 In Progress | Text mock done (PR #29), image deferred to Phase 5 |
+| Phase 1: AI Feature Activation | ✅ Done | Gemini API live (text), image deferred to Phase 6 |
 | Phase 1.5: Known Gap Fixes | ✅ Done | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
 | Phase 2: Home UI & Visualization | ✅ Done | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
 | Phase 3: Extended Features | ✅ Done | PR [#28](https://github.com/wnsgur9137/SimpleCare/pull/28) |
