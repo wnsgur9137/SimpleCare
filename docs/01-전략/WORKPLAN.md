@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/계획
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -33,7 +33,7 @@ status: active
 | UI | SwiftUI | ✅ |
 | 아키텍처 | Clean Architecture + TCA | ✅ 리팩토링 완료 |
 | 상태 관리 | The Composable Architecture | ✅ |
-| AI | OpenAI GPT-4o | ✅ 인프라 구현됨 |
+| AI | Google Gemini API (Free Tier) | ✅ 인프라 구현됨 |
 | 데이터 저장 | SwiftData | ✅ |
 | 차트 | Swift Charts | ✅ |
 | 빌드 | Tuist | ✅ |
@@ -157,7 +157,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - 모든 사용자 표시 문자열이 Localizable.strings로 관리됨
 - 한국어/영어 전환 시 UI 전체 반영
 
-### Phase 1: AI 기능 활성화 🟡
+### ~~Phase 1: AI 기능 활성화~~ ✅ 완료
 
 > PR [#29](https://github.com/wnsgur9137/SimpleCare/pull/29) (텍스트 기반 Mock 모드)
 
@@ -165,10 +165,9 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 |------|------|--------|------|
 | 1.1 | Home AI 인사이트 표시 | Phase 0 ✅ | ✅ Mock 서비스 연결 |
 | 1.2 | Meal 텍스트 기반 영양 추정 | Phase 0 ✅ | ✅ Mock 서비스 연결 |
-| 1.3 | 실제 OpenAI API 연동 | 1.1~1.2 | 🔴 Mock → Real 전환 |
+| 1.3 | 실제 Gemini API 연동 | 1.1~1.2 | ✅ Mock → Real 전환 완료 |
 
-**현재 상태**: Mock 모드로 텍스트 기반 기능 활성화 완료
-**남은 작업**: 실제 API 전환 (이미지 분석은 Phase 5로 이동)
+**완료**: Google Gemini API (gemini-2.5-flash / gemini-2.5-flash-lite) 실제 연동 완료. 이미지 분석은 Phase 6로 이동.
 
 ### ~~Phase 1.5: 알려진 Gap 수정~~ ✅ 완료
 
@@ -292,8 +291,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 리스크 | 영향도 | 발생 확률 | 완화 방안 |
 |--------|--------|----------|----------|
-| OpenAI API 비용 증가 | 높음 | 중간 | GPT-4o-mini 사용, 응답 캐싱, Rate limiting |
-| Vision API 응답 지연 | 중간 | 높음 | 로딩 UI, 5초 타임아웃, 재시도 로직 |
+| Gemini 무료 티어 한도 초과 | 중간 | 낮음 | 캐싱, Rate limiting, 사용량 모니터링 |
+| Gemini API 응답 지연 | 중간 | 중간 | 로딩 UI, 5초 타임아웃, 재시도 로직 |
 | SwiftData 마이그레이션 | 중간 | 낮음 | 스키마 버전 관리, 마이그레이션 플랜 |
 | HealthKit 권한 거부 | 중간 | 중간 | 독립 기능 보장, 권한 재요청 UI |
 | TCA 의존성 복잡도 | 낮음 | 낮음 | DIContainer 패턴, 명확한 의존성 그래프 |
@@ -315,7 +314,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ## 7. 즉시 실행 권장 작업
 
-### 최고 ROI 작업: Phase 1.3 (실제 OpenAI API 연동)
+### 다음 작업
 
 **완료된 우선순위 작업**:
 - ~~**Phase L (다국어 지원)**~~: ✅ 완료
@@ -324,6 +323,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - ~~**Phase 4.3 (알림/리마인더 설정)**~~: ✅ 완료
 - ~~**Phase 4.4-4.5 (데이터 내보내기/삭제)**~~: ✅ 완료 (PR #48)
 - ~~**Phase 5.8 (캘린더 네비게이션)**~~: ✅ 완료 (PR #49)
+- ~~**Phase 1.3 (실제 Gemini API 연동)**~~: ✅ 완료
 
 **권장 순서**:
 1. ~~**Phase L: 다국어 지원**~~ ✅ 완료
@@ -333,12 +333,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 5. ~~**Phase 4.3: 알림/리마인더 설정**~~ ✅ 완료
 6. ~~**Phase 5: 식사/운동 상세 페이지**~~ ✅ 완료
 7. ~~**Phase 4.4-4.5: 데이터 내보내기/삭제**~~ ✅ 완료
-8. **Phase 1.3: 실제 OpenAI API 연동** ← 🟡 다음 작업
-9. Phase 6: 이미지/음성 기능 (최후순위)
-
-**Phase 1 완료 시 사용자 경험**:
-- Home에서 개인화된 AI 건강 코멘트 확인
-- 정확한 영양소 목표 대비 진행률 표시
+8. ~~**Phase 1.3: 실제 Gemini API 연동**~~ ✅ 완료
+9. Phase 6: 이미지/음성 기능 (최후순위) ← 🟡 다음 작업
 
 ---
 
@@ -351,7 +347,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### v1.1 - PRD §7.2
 - [x] Phase 1 텍스트 기반 AI 기능 (Mock 모드)
-- [ ] Phase 1 이미지 분석 + 실제 API 연동 (→ Phase 5로 이동)
+- [x] Phase 1.3 실제 Gemini API 연동 완료
+- [ ] Phase 6 이미지 분석 (최후순위)
 - [x] Phase 1.5 완료 (Gap 수정)
 - [x] Phase 2 완료 (홈 화면 개선)
 - [x] Phase L 완료 (다국어 지원)

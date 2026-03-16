@@ -59,14 +59,14 @@ public protocol DailyInsightServiceProtocol: Sendable {
 
 /// AI 기반 일일 인사이트 서비스
 public actor DailyInsightService: DailyInsightServiceProtocol {
-    private let client: OpenAIClient
+    private let client: GeminiClient
 
-    public init(client: OpenAIClient) {
+    public init(client: GeminiClient) {
         self.client = client
     }
 
-    public convenience init(configuration: OpenAIConfiguration = OpenAIConfiguration()) {
-        self.init(client: OpenAIClient(configuration: configuration))
+    public init(configuration: GeminiConfiguration = GeminiConfiguration()) {
+        self.client = GeminiClient(configuration: configuration)
     }
 
     /// 일일 식단 요약에서 인사이트 생성
@@ -87,17 +87,15 @@ public actor DailyInsightService: DailyInsightServiceProtocol {
             meals: summary.mealNames
         )
 
-        let systemMessage = ChatMessage(role: .system, text: systemPrompt)
-        let userMessage = ChatMessage(role: .user, text: userPrompt)
-
-        let response = try await client.chatCompletion(
-            messages: [systemMessage, userMessage],
-            model: .gpt4oMini, // 간단한 작업이므로 비용 효율적인 모델 사용
+        let response = try await client.generateContent(
+            systemPrompt: systemPrompt,
+            userMessage: userPrompt,
+            model: .flashLite,
             temperature: 0.7,
             maxTokens: 200
         )
 
-        guard let content = response.choices.first?.message.content else {
+        guard let content = response.text else {
             return .defaultInsight
         }
 

@@ -5,7 +5,7 @@ tags:
   - 구현
   - 구현/데이터
 created: 2026-03-11
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -38,7 +38,7 @@ Feature Data Repository
     ▼
 Infrastructure Layer
     ├── StorageInfra (SwiftData) ── 로컬 영속화
-    ├── AIServiceInfra (OpenAI) ── AI 분석
+    ├── AIServiceInfra (Gemini) ── AI 분석
     └── HealthKitInfra ── 건강 데이터
     │
     ▼
@@ -124,8 +124,8 @@ MealClient.estimateNutrition(text)
 EstimateMealNutritionUseCase.execute(text:)
     │
     ▼
-AIService → NutritionEstimationService → OpenAIClient
-    │ (GPT-4o API 호출)
+AIService → NutritionEstimationService → GeminiClient
+    │ (Gemini API 호출)
     ▼
 영양 추정 결과 반환 → State.estimatedFoods 업데이트
     │
@@ -168,7 +168,7 @@ GenerateDailyInsightUseCase.execute(summary:)
     │
     ▼
 HomeInsightService → DailyInsightService (AIServiceInfra)
-    │ (GPT-4o API 호출)
+    │ (Gemini API 호출)
     ▼
 AI 인사이트 텍스트 → State.insight 업데이트
 ```
@@ -265,7 +265,7 @@ StorageContainer (싱글톤)
 
 ## 외부 서비스 연동
 
-### OpenAI API 흐름
+### Google Gemini API 흐름
 
 ```
 Feature Layer (Meal/Home)
@@ -281,9 +281,9 @@ AIServiceInfra
     └── DailyInsightService ── 일일 인사이트
     │
     ▼
-OpenAIClient
-    │ (REST API: POST /v1/chat/completions)
-    │ (Model: gpt-4o)
+GeminiClient
+    │ (REST API: POST /v1beta/models/{model}:generateContent)
+    │ (Model: gemini-2.5-flash / gemini-2.5-flash-lite)
     │ (System Prompt: NutritionPrompts)
     ▼
 JSON 응답 파싱 → Domain Entity 변환
@@ -291,11 +291,11 @@ JSON 응답 파싱 → Domain Entity 변환
 
 **API Key 흐름**:
 ```
-XCConfig/Debug.xcconfig (OPENAI_API_KEY=sk-...)
+XCConfig/DEV.xcconfig (GEMINI_API_KEY=...)
     → Info.plist (Build Setting 참조)
     → Bundle.main.infoDictionary
-    → OpenAIConfiguration
-    → OpenAIClient
+    → GeminiConfiguration
+    → GeminiClient
 ```
 
 ### HealthKit 연동 흐름

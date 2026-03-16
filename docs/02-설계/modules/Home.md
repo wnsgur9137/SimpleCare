@@ -42,7 +42,7 @@ status: active
 | DIContainer | `HomeDIContainer.swift` | 의존성 조립 |
 
 **화면 구성**:
-- AI 건강 인사이트 (GPT-4o 기반)
+- AI 건강 인사이트 (Gemini 기반)
 - 일일 칼로리 섭취/소모 현황
 - 탄수화물/단백질/지방 비율 프로그레스
 - 오늘의 식사/운동 기록 목록

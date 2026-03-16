@@ -7,7 +7,7 @@
 ## 프로젝트 개요
 
 SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
-사용자가 식사, 운동, 체중을 기록하고 AI(GPT-4o)를 활용하여 건강한 생활 습관을 개발할 수 있도록 돕습니다.
+사용자가 식사, 운동, 체중을 기록하고 AI(Google Gemini)를 활용하여 건강한 생활 습관을 개발할 수 있도록 돕습니다.
 
 ## 현재 진행 상황
 
@@ -17,7 +17,7 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 |-------|------|------|
 | Phase L: 다국어 지원 | ✅ 완료 | 한국어(기본), 영어 지원 + 런타임 언어 변경 |
 | Phase 0: DIContainer-Client 연결 | ✅ 완료 | 모든 Feature DIContainer에 실제 UseCase 연결 |
-| Phase 1: AI 기능 활성화 | 🟡 진행 중 | 텍스트 Mock 완료 (PR #29), 이미지 Phase 5로 이동 |
+| Phase 1: AI 기능 활성화 | ✅ 완료 | Gemini API 실제 연동 (텍스트), 이미지 Phase 6로 이동 |
 | Phase 1.5: 알려진 Gap 수정 | ✅ 완료 | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
 | Phase 2: 홈 화면 개선 및 시각화 | ✅ 완료 | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
 | Phase 3: 확장 기능 | ✅ 완료 | PR [#28](https://github.com/wnsgur9137/SimpleCare/pull/28) |
@@ -31,7 +31,7 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 - **영속화**: SwiftData
 - **빌드 시스템**: Tuist 4.x (모듈화)
 - **네트워크**: Moya + Alamofire
-- **AI**: OpenAI GPT-4o (REST API)
+- **AI**: Google Gemini API (REST API, Free Tier)
 - **CI/CD**: Fastlane
 - **Lint/Format**: SwiftLint + SwiftFormat
 
@@ -54,7 +54,7 @@ Projects/
 ├── Infrastructure/       # 인프라 모듈 (3개)
 │   ├── StorageInfra      # SwiftData 영속화 계층
 │   ├── NetworkInfra      # 네트워크 통신 (Moya/Alamofire)
-│   └── AIServiceInfra    # OpenAI API 통합
+│   └── AIServiceInfra    # Google Gemini API 통합
 ├── LibraryManager/       # 외부 라이브러리 래퍼 (4개)
 │   ├── NetworkLibraries  # Alamofire, Moya
 │   ├── UILibraries       # Kingfisher, Lottie, IQKeyboardManager

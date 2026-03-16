@@ -405,3 +405,12 @@
 "calorieStatus.under" = "Under";
 "calorieStatus.onTrack" = "On Track";
 "calorieStatus.over" = "Over";
+
+// MARK: - Gemini API Errors
+"gemini_error_invalid_api_key" = "Invalid Gemini API key";
+"gemini_error_invalid_response" = "Invalid response from server";
+"gemini_error_rate_limited" = "Rate limit exceeded. Please try again later.";
+"gemini_error_no_vision_support" = "Selected model does not support vision/image analysis";
+"gemini_error_http" = "HTTP error: %d";
+"gemini_error_api" = "API error: %@";
+"gemini_error_no_content" = "No content in response";

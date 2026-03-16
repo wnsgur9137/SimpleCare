@@ -7,7 +7,7 @@
 ## Project Overview
 
 SimpleCare is an AI-powered personal health management iOS app.
-Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to develop healthy lifestyle habits.
+Users can log meals, exercises, and weight while leveraging AI (Google Gemini) to develop healthy lifestyle habits.
 
 ## Current Progress
 
@@ -17,7 +17,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 |-------|--------|-------------|
 | Phase L: Localization | ✅ Done | Korean (default), English support with runtime switching |
 | Phase 0: DIContainer-Client Wiring | ✅ Done | All Feature DIContainers connected to real UseCases |
-| Phase 1: AI Feature Activation | 🟡 In Progress | Text mock done (PR #29), image deferred to Phase 5 |
+| Phase 1: AI Feature Activation | ✅ Done | Gemini API live (text), image deferred to Phase 6 |
 | Phase 1.5: Known Gap Fixes | ✅ Done | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
 | Phase 2: Home UI & Visualization | ✅ Done | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
 | Phase 3: Extended Features | ✅ Done | PR [#28](https://github.com/wnsgur9137/SimpleCare/pull/28) |
@@ -31,7 +31,7 @@ Users can log meals, exercises, and weight while leveraging AI (GPT-4o) to devel
 - **Persistence**: SwiftData
 - **Build System**: Tuist 4.x (Modular)
 - **Network**: Moya + Alamofire
-- **AI**: OpenAI GPT-4o (REST API)
+- **AI**: Google Gemini API (REST API, Free Tier)
 - **CI/CD**: Fastlane
 - **Lint/Format**: SwiftLint + SwiftFormat
 
@@ -54,7 +54,7 @@ Projects/
 ├── Infrastructure/       # Infrastructure modules (3)
 │   ├── StorageInfra      # SwiftData persistence layer
 │   ├── NetworkInfra      # Network communication (Moya/Alamofire)
-│   └── AIServiceInfra    # OpenAI API integration
+│   └── AIServiceInfra    # Google Gemini API integration
 ├── LibraryManager/       # External library wrappers (4)
 │   ├── NetworkLibraries  # Alamofire, Moya
 │   ├── UILibraries       # Kingfisher, Lottie, IQKeyboardManager

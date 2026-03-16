@@ -40,7 +40,7 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
     }
 
     private func makeAIService() -> AIServiceProtocol {
-        MockAIService()
+        AIService()
     }
 
     private lazy var favoriteFoodRepository: FavoriteFoodDomainRepositoryProtocol = FavoriteFoodDataRepository()

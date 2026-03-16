@@ -4,7 +4,7 @@ aliases: ["PRD", "요구사항"]
 tags:
   - 전략
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-16
 status: active
 ---
 
@@ -40,7 +40,7 @@ status: active
 | **플랫폼** | iOS 18.0+ | SwiftUI, SwiftData 활용 |
 | **아키텍처** | Clean Architecture + TCA | Tuist 모듈화 |
 | **상태 관리** | The Composable Architecture (TCA) | 단방향 데이터 흐름, 테스트 용이 |
-| **AI 서비스** | OpenAI GPT-4o | 영양 추정, 음식 인식 |
+| **AI 서비스** | Google Gemini API (Free Tier) | 영양 추정, 음식 인식 |
 | **차트** | Swift Charts | Apple 네이티브 |
 | **데이터 저장** | SwiftData | 로컬 저장 |
 | **건강 데이터** | HealthKit | Apple Health 연동 |
@@ -116,10 +116,10 @@ status: active
 |-----|------|------|
 | 식사 타입 선택 | 아침/점심/저녁/간식 | ✅ |
 | 텍스트 입력 | 음식명 입력 | ✅ |
-| AI 영양 추정 | GPT-4o 기반 영양소 분석 | ✅ |
+| AI 영양 추정 | Gemini 기반 영양소 분석 | ✅ |
 | 영양소 수동 조정 | 슬라이더로 미세 조정 | ✅ |
 | 사진 입력 | 카메라/갤러리 | 🔄 |
-| AI 이미지 분석 | GPT-4o Vision | 🔄 |
+| AI 이미지 분석 | Gemini Vision | 🔄 |
 | 즐겨찾기 | 자주 먹는 음식 저장 | 📋 |
 | 최근 기록 | 최근 식사 빠른 추가 | 📋 |
 
@@ -182,7 +182,7 @@ WeightRecordStorage        // 체중 기록 CRUD
 ### 4.2 AIServiceInfra (구현 완료 ✅)
 ```swift
 // 구현된 서비스
-OpenAIClient               // API 클라이언트
+GeminiClient               // API 클라이언트
 NutritionEstimationService // 영양 추정 서비스
 
 // 구현 예정
@@ -235,7 +235,7 @@ WeightSyncService          // 체중 동기화
 - [x] Clean Architecture (Data/Domain/Presentation)
 - [x] Coordinator 패턴 (AppCoordinator → Splash/Onboarding/Tab)
 - [x] StorageInfra (SwiftData)
-- [x] AIServiceInfra (OpenAI GPT-4o)
+- [x] AIServiceInfra (Google Gemini API)
 - [x] Splash Feature
 - [x] Onboarding Feature
 - [x] Profile Feature
@@ -312,7 +312,7 @@ WeightSyncService          // 체중 동기화
 | 리스크 | 영향 | 완화 방안 |
 |--------|------|----------|
 | AI 영양 추정 부정확 | 사용자 신뢰 하락 | 면책 문구 표시, 수동 조정 기능 |
-| OpenAI API 비용 | 운영 비용 증가 | 캐싱, Rate limiting, 사용량 모니터링 |
+| Gemini API 무료 티어 한도 | 기능 제한 | 캐싱, Rate limiting, 사용량 모니터링 |
 | HealthKit 권한 거부 | 기능 제한 | 독립적 기능 동작 보장, 재요청 UI |
 | 경쟁 앱 | 시장 점유율 | 차별화된 UX, AI 기능 강화 |
 
@@ -331,7 +331,7 @@ WeightSyncService          // 체중 동기화
 ### 10.2 참고 자료
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - [SwiftData Documentation](https://developer.apple.com/documentation/swiftdata)
-- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
+- [Google Gemini API Reference](https://ai.google.dev/gemini-api/docs)
 - [HealthKit Documentation](https://developer.apple.com/documentation/healthkit)
 
 ---

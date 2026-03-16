@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/로드맵
 created: 2026-01-26
-updated: 2026-03-13
+updated: 2026-03-16
 status: active
 ---
 
@@ -102,7 +102,7 @@ status: active
 ### 작업 목록
 
 #### AIServiceInfra
-- [x] OpenAI API 클라이언트
+- [x] Google Gemini API 클라이언트
 - [x] NutritionEstimationService
 - [x] ImageAnalysisService
 - [x] API Key 관리 (XCConfig)
@@ -383,4 +383,4 @@ xcodebuild build -scheme Meal -destination 'platform=iOS Simulator,name=iPhone 1
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - [Swift Charts Documentation](https://developer.apple.com/documentation/charts)
 - [SwiftData Documentation](https://developer.apple.com/documentation/swiftdata)
-- [OpenAI API Documentation](https://platform.openai.com/docs)
+- [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)

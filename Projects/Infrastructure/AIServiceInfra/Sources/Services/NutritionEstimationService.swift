@@ -85,28 +85,27 @@ public protocol NutritionEstimationServiceProtocol: Sendable {
 
 /// AI 기반 영양 추정 서비스
 public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
-    private let client: OpenAIClient
+    private let client: GeminiClient
 
-    public init(client: OpenAIClient) {
+    public init(client: GeminiClient) {
         self.client = client
     }
 
-    public convenience init(configuration: OpenAIConfiguration = OpenAIConfiguration()) {
-        self.init(client: OpenAIClient(configuration: configuration))
+    public init(configuration: GeminiConfiguration = GeminiConfiguration()) {
+        self.client = GeminiClient(configuration: configuration)
     }
 
     /// 텍스트 설명으로 영양 정보 추정
     public func estimateNutrition(from text: String) async throws -> NutritionEstimationResult {
-        let systemMessage = ChatMessage(role: .system, text: NutritionPrompts.textNutritionSystemPrompt)
-        let userMessage = ChatMessage(role: .user, text: NutritionPrompts.textNutritionUserPrompt(foodDescription: text))
-
-        let response = try await client.chatCompletion(
-            messages: [systemMessage, userMessage],
+        let response = try await client.generateContent(
+            systemPrompt: NutritionPrompts.textNutritionSystemPrompt,
+            userMessage: NutritionPrompts.textNutritionUserPrompt(foodDescription: text),
+            model: .flash,
             temperature: 0.3,
             maxTokens: 1500
         )
 
-        guard let content = response.choices.first?.message.content else {
+        guard let content = response.text else {
             throw NutritionEstimationError.noResponse
         }
 
@@ -115,14 +114,16 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
 
     /// 이미지로 음식 분석 및 영양 정보 추정
     public func analyzeImage(_ imageData: Data) async throws -> NutritionEstimationResult {
-        let response = try await client.chatCompletionWithVision(
-            textPrompt: NutritionPrompts.imageAnalysisUserPrompt,
+        let response = try await client.generateContentWithVision(
+            systemPrompt: NutritionPrompts.imageAnalysisSystemPrompt,
+            userMessage: NutritionPrompts.imageAnalysisUserPrompt,
             imageData: imageData,
+            model: .flash,
             temperature: 0.3,
             maxTokens: 2000
         )
 
-        guard let content = response.choices.first?.message.content else {
+        guard let content = response.text else {
             throw NutritionEstimationError.noResponse
         }
 
