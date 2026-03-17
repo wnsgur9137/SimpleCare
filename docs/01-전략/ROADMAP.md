@@ -269,49 +269,49 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 즉시 수정 — 데이터 손실, 크래시, 보안 문제
 
-- [ ] StorageContainer 스키마 마이그레이션 graceful fallback (fatalError 제거)
-- [ ] GeminiClient 에러 핸들링 catch 로직 버그 수정
-- [ ] extractJSON 파싱 범위 버그 수정 (NutritionEstimation + DailyInsight)
-- [ ] MealClient.liveValue 빈 스텁 → unimplemented() 적용
-- [ ] ExerciseClient.liveValue 빈 스텁 → unimplemented() 적용
-- [ ] WeightClient.liveValue 빈 스텁 → unimplemented() 적용
+- [ ] `StorageContainer` 스키마 마이그레이션 graceful fallback (`fatalError` 제거)
+- [ ] `GeminiClient` 에러 핸들링 catch 로직 버그 수정
+- [ ] `extractJSON` 파싱 범위 버그 수정 (`NutritionEstimation` + `DailyInsight`)
+- [ ] `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용
+- [ ] `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용
+- [ ] `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용
 
 ### Sprint S.2: HIGH 안정성 수정 (12건)
 
 기능/데이터 관련 안정성 이슈
 
-- [ ] ForEach id \.element.name → 중복 음식명 UI 버그 (EstimatedFoodItem Identifiable)
-- [ ] MealContainerView delegate(.saveCompleted) 미연결
-- [ ] MealDIContainer 매번 새 인스턴스 → 캐싱 적용
-- [ ] ExerciseDIContainer 매번 새 repository 인스턴스 → 캐싱 적용
-- [ ] WeightDIContainer 매번 새 인스턴스 → 캐싱 적용
-- [ ] ExerciseContainerView onSaveComplete 미연결
-- [ ] WeightRepository update/delete 100개 fetch 제한 → fetchWeight(id:) 추가
-- [ ] Weight getWeights(limit:) HealthKit 미병합
-- [ ] ExerciseRecord updateModel date/weight 미업데이트
-- [ ] ReportView dailyCalories[index] 범위 초과 크래시 방어
-- [ ] HomeFeature selectWeekDay 요일 계산 off-by-one 수정
-- [ ] Report error가 Home viewState 덮어쓰기 → 별도 state 분리
+- [ ] `ForEach` id `\.element.name` → 중복 음식명 UI 버그 (`EstimatedFoodItem` `Identifiable`)
+- [ ] `MealContainerView` `delegate(.saveCompleted)` 미연결
+- [ ] `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용
+- [ ] `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 적용
+- [ ] `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용
+- [ ] `ExerciseContainerView` `onSaveComplete` 미연결
+- [ ] `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` 추가
+- [ ] Weight `getWeights(limit:)` HealthKit 미병합
+- [ ] `ExerciseRecord` `updateModel` date/weight 미업데이트
+- [ ] `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어
+- [ ] `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정
+- [ ] Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리
 
 ### Sprint S.3: HIGH 보안 수정 (4건)
 
-- [ ] ATS 활성화 (NSAllowsArbitraryLoads: true 제거)
-- [ ] API 키 Keychain 저장 + SwiftData 파일 보호
+- [ ] ATS 활성화 (`NSAllowsArbitraryLoads: true` 제거)
+- [ ] API 키 `Keychain` 저장 + `SwiftData` 파일 보호
 - [ ] AI 프롬프트 입력 길이 제한 + 응답 값 검증
 - [ ] 내보내기 임시 파일 보호 + 정리
 
 ### Sprint S.4: MEDIUM 품질 개선 (10건 선별)
 
-- [ ] 한국어 하드코딩 → 로컬라이제이션 (displayName 등 전체)
-- [ ] Alert .constant() binding → TCA AlertState 패턴
-- [ ] DateFormatter 인라인 생성 → static let 캐싱
-- [ ] WeightTrend progressToGoal 체중 증가 목표 미지원
-- [ ] HomeView NotificationManager 사이드이펙트 → Reducer로 이동
-- [ ] MockHomeInsightService → 실제 서비스 전환 확인
-- [ ] @unchecked Sendable 정리 (Meal/Home/Exercise/Weight)
-- [ ] NutritionEstimation.totalCalories 중복 필드 정리
+- [ ] 한국어 하드코딩 → 로컬라이제이션 (`displayName` 등 전체)
+- [ ] `Alert` `.constant()` binding → TCA `AlertState` 패턴
+- [ ] `DateFormatter` 인라인 생성 → `static let` 캐싱
+- [ ] `WeightTrend` `progressToGoal` 체중 증가 목표 미지원
+- [ ] `HomeView` `NotificationManager` 사이드이펙트 → Reducer로 이동
+- [ ] `MockHomeInsightService` → 실제 서비스 전환 확인
+- [ ] `@unchecked Sendable` 정리 (Meal/Home/Exercise/Weight)
+- [ ] `NutritionEstimation.totalCalories` 중복 필드 정리
 - [ ] OpenAI 데드코드 제거
-- [ ] ExerciseListView/DetailView categoryColor 불일치 수정
+- [ ] `ExerciseListView`/`DetailView` `categoryColor` 불일치 수정
 
 ### Sprint S.5: LOW + 나머지 (추후)
 

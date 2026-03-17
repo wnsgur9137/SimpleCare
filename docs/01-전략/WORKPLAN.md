@@ -282,36 +282,36 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.1.1 | StorageContainer fatalError → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ⬜ 미시작 |
-| S.1.2 | GeminiClient 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.3 | extractJSON closed range 파싱 버그 수정 (NutritionEstimation + DailyInsight) | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.4 | MealClient.liveValue 빈 스텁 → unimplemented() 적용 | Meal | 낮음 | ⬜ 미시작 |
-| S.1.5 | ExerciseClient.liveValue 빈 스텁 → unimplemented() 적용 | Exercise | 낮음 | ⬜ 미시작 |
-| S.1.6 | WeightClient.liveValue 빈 스텁 → unimplemented() 적용 | Weight | 낮음 | ⬜ 미시작 |
+| S.1.1 | `StorageContainer` `fatalError` → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ⬜ 미시작 |
+| S.1.2 | `GeminiClient` 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ⬜ 미시작 |
+| S.1.3 | `extractJSON` closed range 파싱 버그 수정 (`NutritionEstimation` + `DailyInsight`) | AIServiceInfra | 낮음 | ⬜ 미시작 |
+| S.1.4 | `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Meal | 낮음 | ⬜ 미시작 |
+| S.1.5 | `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Exercise | 낮음 | ⬜ 미시작 |
+| S.1.6 | `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Weight | 낮음 | ⬜ 미시작 |
 
 #### Sprint S.2: HIGH 안정성 수정
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.2.1 | ForEach id \.element.name → 중복 음식명 UI 버그 수정 | Meal | 낮음 | ⬜ 미시작 |
-| S.2.2 | MealContainerView delegate(.saveCompleted) 미연결 | Meal | 중간 | ⬜ 미시작 |
-| S.2.3 | MealDIContainer 매번 새 인스턴스 → 캐싱 적용 | Meal | 중간 | ⬜ 미시작 |
-| S.2.4 | ExerciseDIContainer 매번 새 repository 인스턴스 → 캐싱 | Exercise | 중간 | ⬜ 미시작 |
-| S.2.5 | WeightDIContainer 매번 새 인스턴스 → 캐싱 적용 | Weight | 중간 | ⬜ 미시작 |
-| S.2.6 | ExerciseContainerView onSaveComplete 미연결 | Exercise | 중간 | ⬜ 미시작 |
-| S.2.7 | WeightRepository update/delete 100개 fetch 제한 → fetchWeight(id:) | Weight | 중간 | ⬜ 미시작 |
-| S.2.8 | Weight getWeights(limit:) HealthKit 미병합 | Weight | 높음 | ⬜ 미시작 |
-| S.2.9 | ExerciseRecord updateModel date/weight 미업데이트 | Exercise | 낮음 | ⬜ 미시작 |
-| S.2.10 | ReportView dailyCalories[index] 범위 초과 크래시 방어 | Home | 낮음 | ⬜ 미시작 |
-| S.2.11 | HomeFeature selectWeekDay 요일 계산 off-by-one 수정 | Home | 중간 | ⬜ 미시작 |
-| S.2.12 | Report error가 Home viewState 덮어쓰기 → 별도 state 분리 | Home | 중간 | ⬜ 미시작 |
+| S.2.1 | `ForEach` id `\.element.name` → 중복 음식명 UI 버그 수정 | Meal | 낮음 | ⬜ 미시작 |
+| S.2.2 | `MealContainerView` `delegate(.saveCompleted)` 미연결 | Meal | 중간 | ⬜ 미시작 |
+| S.2.3 | `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Meal | 중간 | ⬜ 미시작 |
+| S.2.4 | `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 | Exercise | 중간 | ⬜ 미시작 |
+| S.2.5 | `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Weight | 중간 | ⬜ 미시작 |
+| S.2.6 | `ExerciseContainerView` `onSaveComplete` 미연결 | Exercise | 중간 | ⬜ 미시작 |
+| S.2.7 | `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` | Weight | 중간 | ⬜ 미시작 |
+| S.2.8 | Weight `getWeights(limit:)` HealthKit 미병합 | Weight | 높음 | ⬜ 미시작 |
+| S.2.9 | `ExerciseRecord` `updateModel` date/weight 미업데이트 | Exercise | 낮음 | ⬜ 미시작 |
+| S.2.10 | `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어 | Home | 낮음 | ⬜ 미시작 |
+| S.2.11 | `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정 | Home | 중간 | ⬜ 미시작 |
+| S.2.12 | Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리 | Home | 중간 | ⬜ 미시작 |
 
 #### Sprint S.3: HIGH 보안 수정
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.3.1 | NSAllowsArbitraryLoads: true → ATS 활성화 | Project | 낮음 | ⬜ 미시작 |
-| S.3.2 | API 키 Keychain 저장 + SwiftData 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ⬜ 미시작 |
+| S.3.1 | `NSAllowsArbitraryLoads: true` → ATS 활성화 | Project | 낮음 | ⬜ 미시작 |
+| S.3.2 | API 키 `Keychain` 저장 + `SwiftData` 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ⬜ 미시작 |
 | S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ⬜ 미시작 |
 | S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ⬜ 미시작 |
 
@@ -319,16 +319,16 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.4.1 | 한국어 하드코딩 → 로컬라이제이션 (displayName 전체) | StorageInfra/Home/Exercise | 중간 | ⬜ 미시작 |
-| S.4.2 | Alert .constant() binding → TCA AlertState 패턴 | Meal | 중간 | ⬜ 미시작 |
-| S.4.3 | DateFormatter 인라인 생성 → static let 캐싱 | Exercise/Meal | 낮음 | ⬜ 미시작 |
-| S.4.4 | WeightTrend progressToGoal 체중 증가 목표 미지원 | Weight | 중간 | ⬜ 미시작 |
-| S.4.5 | HomeView NotificationManager 사이드이펙트 → Reducer 이동 | Home | 중간 | ⬜ 미시작 |
-| S.4.6 | MockHomeInsightService → 실제 서비스 전환 확인 | Home | 낮음 | ⬜ 미시작 |
-| S.4.7 | @unchecked Sendable 정리 | Meal/Home/Exercise/Weight | 중간 | ⬜ 미시작 |
-| S.4.8 | NutritionEstimation.totalCalories 중복 필드 정리 | Meal | 낮음 | ⬜ 미시작 |
+| S.4.1 | 한국어 하드코딩 → 로컬라이제이션 (`displayName` 전체) | StorageInfra/Home/Exercise | 중간 | ⬜ 미시작 |
+| S.4.2 | `Alert` `.constant()` binding → TCA `AlertState` 패턴 | Meal | 중간 | ⬜ 미시작 |
+| S.4.3 | `DateFormatter` 인라인 생성 → `static let` 캐싱 | Exercise/Meal | 낮음 | ⬜ 미시작 |
+| S.4.4 | `WeightTrend` `progressToGoal` 체중 증가 목표 미지원 | Weight | 중간 | ⬜ 미시작 |
+| S.4.5 | `HomeView` `NotificationManager` 사이드이펙트 → Reducer 이동 | Home | 중간 | ⬜ 미시작 |
+| S.4.6 | `MockHomeInsightService` → 실제 서비스 전환 확인 | Home | 낮음 | ⬜ 미시작 |
+| S.4.7 | `@unchecked Sendable` 정리 | Meal/Home/Exercise/Weight | 중간 | ⬜ 미시작 |
+| S.4.8 | `NutritionEstimation.totalCalories` 중복 필드 정리 | Meal | 낮음 | ⬜ 미시작 |
 | S.4.9 | OpenAI 데드코드 제거 | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.4.10 | ExerciseListView/DetailView categoryColor 불일치 수정 | Exercise | 낮음 | ⬜ 미시작 |
+| S.4.10 | `ExerciseListView`/`DetailView` `categoryColor` 불일치 수정 | Exercise | 낮음 | ⬜ 미시작 |
 
 **완료 조건**:
 - Sprint S.1 (CRITICAL) 6건 전부 해결
