@@ -65,7 +65,7 @@ struct HomeQuickActionButton: View {
             .glassButton(cornerRadius: 12)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(label) 기록하기")
+        .accessibilityLabel("home.accessibility.quickAction".localized(with: label))
     }
 }
 

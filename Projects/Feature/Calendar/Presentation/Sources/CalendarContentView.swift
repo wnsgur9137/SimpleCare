@@ -394,16 +394,24 @@ public struct CalendarContentView: View {
 
     // MARK: - Helpers
 
-    private var monthYearString: String {
+    private static let monthYearFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 M월"
-        return formatter.string(from: currentMonth)
+        formatter.setLocalizedDateFormatFromTemplate("yyyyMMMM")
+        return formatter
+    }()
+
+    private static let dailySummaryFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("MMMdEEEE")
+        return formatter
+    }()
+
+    private var monthYearString: String {
+        Self.monthYearFormatter.string(from: currentMonth)
     }
 
     private var dailySummaryTitle: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일 (E)"
-        return formatter.string(from: selectedDate)
+        Self.dailySummaryFormatter.string(from: selectedDate)
     }
 
     private var canGoToNextMonth: Bool {

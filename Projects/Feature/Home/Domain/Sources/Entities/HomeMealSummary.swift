@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 /// 식사 타입
 public enum HomeMealType: String, Codable, CaseIterable, Sendable {
@@ -16,10 +17,10 @@ public enum HomeMealType: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .breakfast: return "아침"
-        case .lunch: return "점심"
-        case .dinner: return "저녁"
-        case .snack: return "간식"
+        case .breakfast: return "home.mealType.breakfast".localized
+        case .lunch: return "home.mealType.lunch".localized
+        case .dinner: return "home.mealType.dinner".localized
+        case .snack: return "home.mealType.snack".localized
         }
     }
 
