@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/계획
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-17
 status: active
 ---
 
@@ -282,12 +282,12 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.1.1 | `StorageContainer` `fatalError` → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ⬜ 미시작 |
-| S.1.2 | `GeminiClient` 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.3 | `extractJSON` closed range 파싱 버그 수정 (`NutritionEstimation` + `DailyInsight`) | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.4 | `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Meal | 낮음 | ⬜ 미시작 |
-| S.1.5 | `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Exercise | 낮음 | ⬜ 미시작 |
-| S.1.6 | `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Weight | 낮음 | ⬜ 미시작 |
+| S.1.1 | `StorageContainer` `fatalError` → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ✅ 완료 |
+| S.1.2 | `GeminiClient` 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ✅ 완료 |
+| S.1.3 | `extractJSON` closed range 파싱 버그 수정 (`NutritionEstimation` + `DailyInsight`) | AIServiceInfra | 낮음 | ✅ 완료 |
+| S.1.4 | `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Meal | 낮음 | ✅ 완료 |
+| S.1.5 | `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Exercise | 낮음 | ✅ 완료 |
+| S.1.6 | `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Weight | 낮음 | ✅ 완료 |
 
 #### Sprint S.2: HIGH 안정성 수정
 

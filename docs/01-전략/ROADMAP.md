@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/로드맵
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-17
 review-date: 2026-03-16
 status: active
 ---
@@ -269,12 +269,12 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 즉시 수정 — 데이터 손실, 크래시, 보안 문제
 
-- [ ] `StorageContainer` 스키마 마이그레이션 graceful fallback (`fatalError` 제거)
-- [ ] `GeminiClient` 에러 핸들링 catch 로직 버그 수정
-- [ ] `extractJSON` 파싱 범위 버그 수정 (`NutritionEstimation` + `DailyInsight`)
-- [ ] `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용
-- [ ] `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용
-- [ ] `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용
+- [x] `StorageContainer` 스키마 마이그레이션 graceful fallback (`fatalError` 제거)
+- [x] `GeminiClient` 에러 핸들링 catch 로직 버그 수정
+- [x] `extractJSON` 파싱 범위 버그 수정 (`NutritionEstimation` + `DailyInsight`)
+- [x] `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용
+- [x] `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용
+- [x] `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용
 
 ### Sprint S.2: HIGH 안정성 수정 (12건)
 
