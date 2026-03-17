@@ -81,11 +81,11 @@ public struct WeightTrend: Equatable, Sendable {
         currentWeight - targetWeight
     }
 
-    /// 목표 달성률 (시작 체중 기준)
+    /// 목표 달성률 (시작 체중 기준, 감량/증량 모두 지원)
     public func progressToGoal(from startWeight: Double) -> Double {
-        let totalToLose = startWeight - targetWeight
-        let currentlyLost = startWeight - currentWeight
-        guard totalToLose != 0 else { return 1.0 }
-        return currentlyLost / totalToLose
+        let totalChange = targetWeight - startWeight
+        let currentChange = currentWeight - startWeight
+        guard totalChange != 0 else { return 1.0 }
+        return min(max(currentChange / totalChange, 0.0), 1.0)
     }
 }
