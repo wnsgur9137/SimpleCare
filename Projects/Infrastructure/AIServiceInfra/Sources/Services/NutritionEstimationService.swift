@@ -162,7 +162,7 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
         // JSON 블록 찾기
         if let jsonStart = text.range(of: "{"),
            let jsonEnd = text.range(of: "}", options: .backwards) {
-            return String(text[jsonStart.lowerBound...jsonEnd.upperBound])
+            return String(text[jsonStart.lowerBound..<jsonEnd.upperBound])
         }
         return text
     }

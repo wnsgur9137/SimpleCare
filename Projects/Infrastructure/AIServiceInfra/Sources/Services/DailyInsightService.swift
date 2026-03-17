@@ -118,7 +118,7 @@ public actor DailyInsightService: DailyInsightServiceProtocol {
     private func extractJSON(from text: String) -> String {
         if let jsonStart = text.range(of: "{"),
            let jsonEnd = text.range(of: "}", options: .backwards) {
-            return String(text[jsonStart.lowerBound...jsonEnd.upperBound])
+            return String(text[jsonStart.lowerBound..<jsonEnd.upperBound])
         }
         return text
     }
