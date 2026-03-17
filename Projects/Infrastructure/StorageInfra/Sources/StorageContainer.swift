@@ -40,13 +40,31 @@ public final class StorageContainer {
         ])
     }
 
-    /// ModelConfiguration
+    /// ModelConfiguration (completeUnlessOpen 파일 보호 적용)
     public static var modelConfiguration: ModelConfiguration {
-        ModelConfiguration(
+        let config = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
             cloudKitDatabase: .none
         )
+
+        // SwiftData 스토어 파일에 파일 보호 적용
+        Self.applyFileProtection(to: config.url)
+
+        return config
+    }
+
+    /// 스토어 파일에 파일 보호 속성 적용
+    private static func applyFileProtection(to url: URL) {
+        let directoryURL = url.deletingLastPathComponent()
+        do {
+            try FileManager.default.setAttributes(
+                [.protectionKey: FileProtectionType.completeUnlessOpen],
+                ofItemAtPath: directoryURL.path
+            )
+        } catch {
+            logger.warning("파일 보호 속성 적용 실패: \(error.localizedDescription)")
+        }
     }
 
     private init() {

@@ -79,7 +79,11 @@ public struct SettingsView: View {
             }
         }
         .sheet(item: $exportFileURL) { url in
-            ShareSheet(activityItems: [url])
+            ShareSheet(activityItems: [url]) {
+                // 공유 완료/취소 후 임시 파일 정리
+                dataExportManager.cleanupExportFile(at: url)
+                exportFileURL = nil
+            }
         }
         .alert("settings.export.success".localized, isPresented: $showExportSuccess) {
             Button("common.ok".localized, role: .cancel) {}
@@ -415,9 +419,14 @@ struct ExportFormatSheet: View {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
+    var onComplete: (() -> Void)?
 
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        controller.completionWithItemsHandler = { _, _, _, _ in
+            onComplete?()
+        }
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}

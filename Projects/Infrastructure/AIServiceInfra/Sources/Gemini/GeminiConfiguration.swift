@@ -29,15 +29,11 @@ public struct GeminiConfiguration: Sendable {
         baseURL: URL? = nil,
         timeoutInterval: TimeInterval = 60
     ) {
-        // API Key load order: direct injection > Info.plist > environment variable
+        // API Key load order: direct injection > Keychain > Info.plist > environment variable
         if let key = apiKey, !key.isEmpty {
             self.apiKey = key
-        } else if let plistKey = Bundle.main.infoDictionary?["GEMINI_API_KEY"] as? String, !plistKey.isEmpty {
-            self.apiKey = plistKey
-        } else if let envKey = ProcessInfo.processInfo.environment["GEMINI_API_KEY"], !envKey.isEmpty {
-            self.apiKey = envKey
         } else {
-            self.apiKey = ""
+            self.apiKey = KeychainManager.loadGeminiAPIKey()
         }
 
         self.model = model
