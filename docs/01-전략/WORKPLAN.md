@@ -435,8 +435,8 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### v1.4
 - [ ] Phase S 완료 (안정성 및 보안 강화)
-  - [ ] Sprint S.1: CRITICAL 버그 6건 수정
-  - [ ] Sprint S.2: HIGH 안정성 12건 수정
+  - [x] Sprint S.1: CRITICAL 버그 6건 수정
+  - [x] Sprint S.2: HIGH 안정성 12건 수정
   - [ ] Sprint S.3: HIGH 보안 4건 수정
   - [ ] Sprint S.4: MEDIUM 품질 10건 개선
 
