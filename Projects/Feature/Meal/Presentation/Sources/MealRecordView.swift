@@ -66,7 +66,10 @@ public struct MealRecordView: View {
                     loadingOverlay
                 }
             }
-            .alert("common.error".localized, isPresented: .constant(store.viewState.isError)) {
+            .alert("common.error".localized, isPresented: Binding(
+                get: { store.viewState.isError },
+                set: { if !$0 { store.send(.dismissError) } }
+            )) {
                 Button("common.confirm".localized) { store.send(.dismissError) }
             } message: {
                 if case .error(let message) = store.viewState {
@@ -372,10 +375,14 @@ struct RecentMealRow: View {
     let meal: MealRecord
     let onSelect: () -> Void
 
-    private var dateText: String {
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "M/d"
-        return formatter.string(from: meal.date)
+        return formatter
+    }()
+
+    private var dateText: String {
+        Self.dateFormatter.string(from: meal.date)
     }
 
     var body: some View {
