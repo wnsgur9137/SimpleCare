@@ -280,18 +280,18 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 기능/데이터 관련 안정성 이슈
 
-- [ ] `ForEach` id `\.element.name` → 중복 음식명 UI 버그 (`EstimatedFoodItem` `Identifiable`)
-- [ ] `MealContainerView` `delegate(.saveCompleted)` 미연결
-- [ ] `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용
-- [ ] `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 적용
-- [ ] `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용
-- [ ] `ExerciseContainerView` `onSaveComplete` 미연결
-- [ ] `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` 추가
-- [ ] Weight `getWeights(limit:)` HealthKit 미병합
-- [ ] `ExerciseRecord` `updateModel` date/weight 미업데이트
-- [ ] `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어
-- [ ] `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정
-- [ ] Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리
+- [x] `ForEach` id `\.element.name` → 중복 음식명 UI 버그 (`EstimatedFoodItem` `Identifiable`)
+- [x] `MealContainerView` `delegate(.saveCompleted)` 미연결
+- [x] `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용
+- [x] `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 적용
+- [x] `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용
+- [x] `ExerciseContainerView` `onSaveComplete` 미연결
+- [x] `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` 추가
+- [x] Weight `getWeights(limit:)` HealthKit 미병합
+- [x] `ExerciseRecord` `updateModel` date/weight 미업데이트
+- [x] `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어
+- [x] `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정
+- [x] Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리
 
 ### Sprint S.3: HIGH 보안 수정 (4건)
 
