@@ -128,13 +128,10 @@ public actor GeminiClient {
             do {
                 let errorResponse = try JSONDecoder().decode(GeminiErrorResponse.self, from: data)
                 throw GeminiError.apiError(errorResponse.error.message)
-            } catch is GeminiError {
-                throw GeminiError.apiError(
-                    (try? JSONDecoder().decode(GeminiErrorResponse.self, from: data))?.error.message
-                    ?? "Unknown error"
-                )
-            } catch {
+            } catch is DecodingError {
                 throw GeminiError.httpError(httpResponse.statusCode)
+            } catch {
+                throw error
             }
         }
 
