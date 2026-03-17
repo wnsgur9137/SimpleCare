@@ -47,8 +47,8 @@
 "home.reportType.monthly" = "Monthly";
 
 // MARK: - Accessibility
-"home.accessibility.meal" = "%@ %d calories";
-"home.accessibility.exercise" = "%@ %d min, %d calories burned";
+"home.accessibility.meal" = "%@, %@, %d calories";
+"home.accessibility.exercise" = "%@, %@, %d calories burned";
 "home.accessibility.quickAction" = "Record %@";
 "home.accessibility.nutrition" = "%@ %d grams, goal %d grams";
 "home.accessibility.weekday.noRecord" = "%@, no records";

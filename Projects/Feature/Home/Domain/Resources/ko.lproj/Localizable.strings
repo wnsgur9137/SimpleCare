@@ -47,8 +47,8 @@
 "home.reportType.monthly" = "월간";
 
 // MARK: - Accessibility
-"home.accessibility.meal" = "%@ %d칼로리";
-"home.accessibility.exercise" = "%@ %d분, %d칼로리 소모";
+"home.accessibility.meal" = "%@, %@, %d칼로리";
+"home.accessibility.exercise" = "%@, %@, %d칼로리 소모";
 "home.accessibility.quickAction" = "%@ 기록하기";
 "home.accessibility.nutrition" = "%@ %d그램, 목표 %d그램";
 "home.accessibility.weekday.noRecord" = "%@요일, 기록 없음";
