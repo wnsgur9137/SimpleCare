@@ -54,11 +54,39 @@
 
 // MARK: - Tab Bar
 "tab.home" = "홈";
-"tab.meal" = "식사";
+"tab.meal" = "식단";
 "tab.exercise" = "운동";
 "tab.weight" = "체중";
+"tab.progress" = "진행";
 "tab.settings" = "설정";
 "tab.calendar" = "캘린더";
+
+// MARK: - Meal Types
+"mealType.breakfast" = "아침";
+"mealType.lunch" = "점심";
+"mealType.dinner" = "저녁";
+"mealType.snack" = "간식";
+
+// MARK: - Duration Format
+"duration.hours" = "%d시간";
+"duration.hoursMinutes" = "%d시간 %d분";
+"duration.minutes" = "%d분";
+
+// MARK: - Period
+"period.7days" = "7일";
+"period.30days" = "30일";
+"period.90days" = "90일";
+
+// MARK: - AI Errors
+"error.ai.noResponse" = "AI 응답을 받지 못했습니다";
+"error.ai.invalidFormat" = "잘못된 응답 형식입니다";
+"error.ai.parseFailed" = "응답 파싱 실패: %@";
+"error.ai.imageFailed" = "이미지 처리에 실패했습니다";
+
+// MARK: - Meal Data
+"meal.serving.unit" = "인분";
+"meal.imageNotSupported" = "이미지 분석은 아직 지원되지 않습니다.";
+"meal.usageCount" = "(%d회)";
 
 // MARK: - Notifications
 "notification.enablePermission" = "알림 권한 허용하기";

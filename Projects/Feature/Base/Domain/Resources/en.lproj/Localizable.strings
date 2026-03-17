@@ -57,8 +57,36 @@
 "tab.meal" = "Meal";
 "tab.exercise" = "Exercise";
 "tab.weight" = "Weight";
+"tab.progress" = "Progress";
 "tab.settings" = "Settings";
 "tab.calendar" = "Calendar";
+
+// MARK: - Meal Types
+"mealType.breakfast" = "Breakfast";
+"mealType.lunch" = "Lunch";
+"mealType.dinner" = "Dinner";
+"mealType.snack" = "Snack";
+
+// MARK: - Duration Format
+"duration.hours" = "%d hr";
+"duration.hoursMinutes" = "%d hr %d min";
+"duration.minutes" = "%d min";
+
+// MARK: - Period
+"period.7days" = "7 days";
+"period.30days" = "30 days";
+"period.90days" = "90 days";
+
+// MARK: - AI Errors
+"error.ai.noResponse" = "No response from AI";
+"error.ai.invalidFormat" = "Invalid response format";
+"error.ai.parseFailed" = "Response parsing failed: %@";
+"error.ai.imageFailed" = "Image processing failed";
+
+// MARK: - Meal Data
+"meal.serving.unit" = "serving";
+"meal.imageNotSupported" = "Image analysis is not yet supported.";
+"meal.usageCount" = "(%d times)";
 
 // MARK: - Notifications
 "notification.enablePermission" = "Enable Notifications";

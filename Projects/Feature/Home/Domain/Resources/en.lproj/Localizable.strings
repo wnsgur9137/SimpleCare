@@ -36,6 +36,24 @@
 "home.weekday.sat" = "Sat";
 "home.weekday.sun" = "Sun";
 
+// MARK: - Home Meal Types
+"home.mealType.breakfast" = "Breakfast";
+"home.mealType.lunch" = "Lunch";
+"home.mealType.dinner" = "Dinner";
+"home.mealType.snack" = "Snack";
+
+// MARK: - Report Type
+"home.reportType.weekly" = "Weekly";
+"home.reportType.monthly" = "Monthly";
+
+// MARK: - Accessibility
+"home.accessibility.meal" = "%@ %d calories";
+"home.accessibility.exercise" = "%@ %d min, %d calories burned";
+"home.accessibility.quickAction" = "Record %@";
+"home.accessibility.nutrition" = "%@ %d grams, goal %d grams";
+"home.accessibility.weekday.noRecord" = "%@, no records";
+"home.accessibility.weekday.status" = "%@, %@";
+
 // MARK: - Reports
 "report.title" = "Reports";
 "report.weekly" = "Weekly Report";
