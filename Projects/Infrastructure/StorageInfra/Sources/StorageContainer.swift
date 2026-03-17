@@ -40,11 +40,16 @@ public final class StorageContainer {
         ])
     }
 
+    /// 명시적 스토어 URL
+    private static var storeURL: URL {
+        URL.applicationSupportDirectory.appending(path: "SimpleCare.store")
+    }
+
     /// ModelConfiguration (completeUnlessOpen 파일 보호 적용)
     public static var modelConfiguration: ModelConfiguration {
         let config = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: false,
+            url: storeURL,
             cloudKitDatabase: .none
         )
 
@@ -112,26 +117,22 @@ public final class StorageContainer {
         }
     }
 
-    /// 손상된 기본 스토어 파일을 삭제하는 헬퍼
+    /// 손상된 스토어 파일을 명시적 URL 기반으로 삭제하는 헬퍼
     private static func deleteCorruptedStore() {
-        guard let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            logger.warning("Application Support 디렉토리를 찾을 수 없어 스토어 파일을 삭제하지 못했습니다.")
-            return
-        }
-
         let fileManager = FileManager.default
-        do {
-            let contents = try fileManager.contentsOfDirectory(at: appSupportURL, includingPropertiesForKeys: nil)
-            let storeFiles = contents.filter { url in
-                let name = url.lastPathComponent
-                return name.hasSuffix(".store") || name.hasSuffix(".store-shm") || name.hasSuffix(".store-wal")
+        let storePath = storeURL.path
+        let suffixes = ["", "-shm", "-wal"]
+
+        for suffix in suffixes {
+            let filePath = storePath + suffix
+            if fileManager.fileExists(atPath: filePath) {
+                do {
+                    try fileManager.removeItem(atPath: filePath)
+                    logger.warning("손상된 스토어 파일을 삭제하였습니다: \(URL(fileURLWithPath: filePath).lastPathComponent)")
+                } catch {
+                    logger.error("스토어 파일 '\(URL(fileURLWithPath: filePath).lastPathComponent)' 삭제 중 오류 발생: \(error.localizedDescription)")
+                }
             }
-            for fileURL in storeFiles {
-                try fileManager.removeItem(at: fileURL)
-                logger.warning("손상된 스토어 파일을 삭제하였습니다: \(fileURL.lastPathComponent)")
-            }
-        } catch {
-            logger.error("스토어 파일 삭제 중 오류 발생: \(error.localizedDescription)")
         }
     }
 

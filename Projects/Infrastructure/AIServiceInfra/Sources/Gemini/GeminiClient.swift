@@ -125,13 +125,10 @@ public actor GeminiClient {
         }
 
         guard (200...299).contains(httpResponse.statusCode) else {
-            do {
-                let errorResponse = try JSONDecoder().decode(GeminiErrorResponse.self, from: data)
+            if let errorResponse = try? JSONDecoder().decode(GeminiErrorResponse.self, from: data) {
                 throw GeminiError.apiError(errorResponse.error.message)
-            } catch is DecodingError {
+            } else {
                 throw GeminiError.httpError(httpResponse.statusCode)
-            } catch {
-                throw error
             }
         }
 
