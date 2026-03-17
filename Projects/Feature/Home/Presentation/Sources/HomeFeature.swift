@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import HomeDomain
+import BasePresentation
 
 @Reducer
 public struct HomeFeature {
@@ -208,6 +209,9 @@ public struct HomeFeature {
                         await homeClient.requestHealthKitAuth()
                         let isAuthorized = homeClient.checkHealthKitAuthStatus()
                         await send(.healthKitAuthStatusChanged(isAuthorized))
+                    },
+                    .run { _ in
+                        await NotificationManager.shared.requestAuthorization()
                     }
                 )
 
