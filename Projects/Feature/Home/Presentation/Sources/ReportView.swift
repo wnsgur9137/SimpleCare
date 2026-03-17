@@ -140,7 +140,7 @@ public struct ReportView: View {
             ]
 
             HStack(alignment: .bottom, spacing: 8) {
-                ForEach(0..<7, id: \.self) { index in
+                ForEach(0..<min(7, report.dailyCalories.count), id: \.self) { index in
                     VStack(spacing: 4) {
                         Text("\(report.dailyCalories[index])")
                             .font(.system(size: 9))
