@@ -213,7 +213,7 @@ public struct WeightClient {
 extension WeightClient: DependencyKey {
     public static var liveValue: WeightClient {
         WeightClient(
-            recordWeight: { _ in },
+            recordWeight: unimplemented("WeightClient.recordWeight"),
             getWeightTrend: { _, targetWeight, _ in
                 WeightTrend(
                     currentWeight: targetWeight,
@@ -221,8 +221,8 @@ extension WeightClient: DependencyKey {
                     records: []
                 )
             },
-            syncWeightToHealthKit: { _, _ in },
-            isHealthKitAvailable: { false }
+            syncWeightToHealthKit: unimplemented("WeightClient.syncWeightToHealthKit"),
+            isHealthKitAvailable: unimplemented("WeightClient.isHealthKitAvailable")
         )
     }
 

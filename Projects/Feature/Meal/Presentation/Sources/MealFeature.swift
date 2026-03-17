@@ -447,16 +447,16 @@ extension MealClient: DependencyKey {
             analyzeMealImage: { _ in
                 NutritionEstimation(foods: [], totalCalories: 0)
             },
-            recordMeal: { _ in },
-            updateMeal: { _ in },
-            deleteMeal: { _ in },
-            fetchMeal: { _ in nil },
-            fetchDailyMeals: { _, _ in [] },
-            fetchMealHistory: { _, _, _ in [] },
-            getFavorites: { _ in [] },
-            saveFavorite: { _ in },
-            deleteFavorite: { _ in },
-            incrementFavoriteUsage: { _ in }
+            recordMeal: unimplemented("MealClient.recordMeal"),
+            updateMeal: unimplemented("MealClient.updateMeal"),
+            deleteMeal: unimplemented("MealClient.deleteMeal"),
+            fetchMeal: unimplemented("MealClient.fetchMeal"),
+            fetchDailyMeals: unimplemented("MealClient.fetchDailyMeals"),
+            fetchMealHistory: unimplemented("MealClient.fetchMealHistory"),
+            getFavorites: unimplemented("MealClient.getFavorites"),
+            saveFavorite: unimplemented("MealClient.saveFavorite"),
+            deleteFavorite: unimplemented("MealClient.deleteFavorite"),
+            incrementFavoriteUsage: unimplemented("MealClient.incrementFavoriteUsage")
         )
     }
 
