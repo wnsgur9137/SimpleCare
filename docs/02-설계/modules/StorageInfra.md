@@ -44,6 +44,11 @@ status: active
 | `createInMemoryContainer() throws` | 테스트용 인메모리 컨테이너 생성 |
 | `Notification.Name.storageContainerFallbackActivated` | 폴백 전환 시 발송되는 알림 |
 
+**스토어 파일 관리**:
+- 명시적 스토어 URL: `~/Library/Application Support/SimpleCare.store`
+- 파일 보호: `completeUnlessOpen` (잠금 상태에서도 열린 파일 접근 허용)
+- 손상 복구 시 `SimpleCare.store`, `-shm`, `-wal` 파일만 삭제 (다른 데이터 영향 없음)
+
 **SwiftData 모델 예시**:
 ```swift
 @Model
