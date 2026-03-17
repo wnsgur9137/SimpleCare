@@ -113,6 +113,8 @@ extension ExerciseRecord {
         model.notes = notes
         model.customExerciseName = customExerciseName
         model.customMET = customMET
+        model.date = date
+        model.userWeightKg = userWeightKg
         model.updatedAt = Date()
     }
 }
