@@ -193,6 +193,7 @@ public struct HomeFeature {
     // MARK: - Dependencies
 
     @Dependency(\.homeClient) var homeClient
+    @Dependency(\.notificationClient) var notificationClient
 
     // MARK: - Reducer
 
@@ -210,8 +211,8 @@ public struct HomeFeature {
                         let isAuthorized = homeClient.checkHealthKitAuthStatus()
                         await send(.healthKitAuthStatusChanged(isAuthorized))
                     },
-                    .run { _ in
-                        await NotificationManager.shared.requestAuthorization()
+                    .run { [notificationClient] _ in
+                        await notificationClient.requestAuthorization()
                     }
                 )
 
@@ -607,5 +608,34 @@ extension DependencyValues {
     public var homeClient: HomeClient {
         get { self[HomeClient.self] }
         set { self[HomeClient.self] = newValue }
+    }
+
+    public var notificationClient: NotificationClient {
+        get { self[NotificationClient.self] }
+        set { self[NotificationClient.self] = newValue }
+    }
+}
+
+// MARK: - NotificationClient
+
+public struct NotificationClient {
+    public var requestAuthorization: @Sendable () async -> Void
+
+    public init(requestAuthorization: @escaping @Sendable () async -> Void) {
+        self.requestAuthorization = requestAuthorization
+    }
+}
+
+extension NotificationClient: DependencyKey {
+    public static var liveValue: NotificationClient {
+        NotificationClient {
+            await NotificationManager.shared.requestAuthorization()
+        }
+    }
+
+    public static var testValue: NotificationClient {
+        NotificationClient {
+            // no-op for tests
+        }
     }
 }

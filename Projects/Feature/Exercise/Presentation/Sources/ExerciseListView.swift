@@ -152,11 +152,11 @@ private struct ExerciseRowView: View {
 
     private var categoryColor: Color {
         switch exercise.exerciseType.category {
-        case .cardio: return .red
-        case .strength: return .blue
-        case .flexibility: return .purple
-        case .sports: return .green
-        case .other: return .gray
+        case .cardio: return .scError
+        case .strength: return .scSecondary
+        case .flexibility: return .scAccent
+        case .sports: return .scSuccess
+        case .other: return .scTextSecondary
         }
     }
 }
