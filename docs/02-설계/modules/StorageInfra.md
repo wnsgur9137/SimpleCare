@@ -17,7 +17,7 @@ status: active
 | 컴포넌트 | 파일 | 설명 |
 |---------|------|------|
 | Module | `StorageInfra.swift` | 모듈 진입점 |
-| Container | `StorageContainer.swift` | ModelContainer 싱글톤 관리 (3단계 복구: 정상→스토어 삭제 재시도→인메모리 폴백) |
+| Container | `StorageContainer.swift` | ModelContainer 싱글톤 관리 (3단계 복구: 정상→스토어 삭제 재시도→인메모리 폴백, `completeUnlessOpen` 파일 보호 적용) |
 | **Models** | | |
 | Model | `UserProfileModel.swift` | 사용자 프로필 SwiftData 모델 |
 | Model | `MealRecordModel.swift` | 식사 기록 SwiftData 모델 |

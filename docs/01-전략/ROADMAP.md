@@ -295,10 +295,10 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 ### Sprint S.3: HIGH 보안 수정 (4건)
 
-- [ ] ATS 활성화 (`NSAllowsArbitraryLoads: true` 제거)
-- [ ] API 키 `Keychain` 저장 + `SwiftData` 파일 보호
-- [ ] AI 프롬프트 입력 길이 제한 + 응답 값 검증
-- [ ] 내보내기 임시 파일 보호 + 정리
+- [x] ATS 활성화 (`NSAllowsArbitraryLoads: true` 제거)
+- [x] API 키 `Keychain` 저장 + `SwiftData` 파일 보호
+- [x] AI 프롬프트 입력 길이 제한 + 응답 값 검증
+- [x] 내보내기 임시 파일 보호 + 정리
 
 ### Sprint S.4: MEDIUM 품질 개선 (10건 선별)
 

@@ -310,10 +310,10 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.3.1 | `NSAllowsArbitraryLoads: true` → ATS 활성화 | Project | 낮음 | ⬜ 미시작 |
-| S.3.2 | API 키 `Keychain` 저장 + `SwiftData` 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ⬜ 미시작 |
-| S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ⬜ 미시작 |
-| S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ⬜ 미시작 |
+| S.3.1 | `NSAllowsArbitraryLoads: true` → ATS 활성화 | Project | 낮음 | ✅ 완료 |
+| S.3.2 | API 키 `Keychain` 저장 + `SwiftData` 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ✅ 완료 |
+| S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ✅ 완료 |
+| S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ✅ 완료 |
 
 #### Sprint S.4: MEDIUM 품질 개선 (선별 10건)
 
@@ -437,7 +437,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [ ] Phase S 완료 (안정성 및 보안 강화)
   - [x] Sprint S.1: CRITICAL 버그 6건 수정
   - [x] Sprint S.2: HIGH 안정성 12건 수정
-  - [ ] Sprint S.3: HIGH 보안 4건 수정
+  - [x] Sprint S.3: HIGH 보안 4건 수정
   - [ ] Sprint S.4: MEDIUM 품질 10건 개선
 
 ### v2.0 - PRD §7.4

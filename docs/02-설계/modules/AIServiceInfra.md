@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/infrastructure
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-17
 status: active
 ---
 
@@ -20,6 +20,7 @@ status: active
 | **Gemini** | | |
 | Client | `GeminiClient.swift` | Gemini REST API 클라이언트 |
 | Config | `GeminiConfiguration.swift` | API 키/모델 설정 |
+| Security | `KeychainManager.swift` | Keychain 기반 API 키 보안 저장 |
 | **OpenAI (레거시)** | | |
 | Client | `OpenAIClient.swift` | OpenAI REST API 클라이언트 (미사용, 보존) |
 | Config | `OpenAIConfiguration.swift` | API 키/모델 설정 (미사용, 보존) |
@@ -30,9 +31,16 @@ status: active
 | Service | `DailyInsightService.swift` | AI 일일 건강 인사이트 서비스 |
 
 **API Key 관리**:
-- `XCConfig/DEV.xcconfig`에 `GEMINI_API_KEY` 저장
-- `Bundle.main.infoDictionary`에서 로드
+- `XCConfig/DEV.xcconfig`에 `GEMINI_API_KEY` 저장 (빌드 시)
+- 런타임 로드 순서: Keychain → Info.plist → 환경변수
+- 첫 실행 시 Info.plist에서 Keychain으로 자동 마이그레이션
+- `KeychainManager`가 `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly` 보호 적용
 - [Google AI Studio](https://aistudio.google.com/)에서 무료 키 발급
+
+**입력/응답 보안**:
+- 프롬프트 입력 최대 500자 제한 + 제어 문자 제거
+- 일일 인사이트 음식 이름: 최대 20개, 개당 100자 제한
+- 응답 값 범위 검증: 칼로리 0~10,000, 매크로 0~1,000, confidence 0~1
 
 **모델 선택**:
 - 영양 추정: `gemini-2.5-flash` (빠르고 정확)
