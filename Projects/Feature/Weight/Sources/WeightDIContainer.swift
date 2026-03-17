@@ -53,27 +53,21 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
 
     // MARK: - Repository
 
-    private func makeWeightRepository() -> WeightRepositoryProtocol {
-        WeightRepository(
-            healthKitManager: HealthKitManager.isAvailable ? HealthKitManager.shared : nil
-        )
-    }
+    private lazy var weightRepository: WeightRepositoryProtocol = WeightRepository(
+        healthKitManager: HealthKitManager.isAvailable ? HealthKitManager.shared : nil
+    )
 
     // MARK: - Use Cases
 
-    private func makeRecordWeightUseCase() -> RecordWeightUseCaseProtocol {
-        RecordWeightUseCase(repository: makeWeightRepository())
-    }
+    private lazy var recordWeightUseCase: RecordWeightUseCaseProtocol = RecordWeightUseCase(repository: weightRepository)
 
-    private func makeGetWeightTrendUseCase() -> GetWeightTrendUseCaseProtocol {
-        GetWeightTrendUseCase(repository: makeWeightRepository())
-    }
+    private lazy var getWeightTrendUseCase: GetWeightTrendUseCaseProtocol = GetWeightTrendUseCase(repository: weightRepository)
 
     // MARK: - TCA Dependencies
 
-    public var weightClient: WeightClient {
-        let recordUseCase = makeRecordWeightUseCase()
-        let trendUseCase = makeGetWeightTrendUseCase()
+    public lazy var weightClient: WeightClient = {
+        let recordUseCase = self.recordWeightUseCase
+        let trendUseCase = self.getWeightTrendUseCase
         let healthKitManager = HealthKitManager.shared
 
         return WeightClient(
@@ -95,5 +89,5 @@ public final class WeightDIContainer: DIContainer, WeightCoordinatorDependency {
                 HealthKitManager.isAvailable
             }
         )
-    }
+    }()
 }

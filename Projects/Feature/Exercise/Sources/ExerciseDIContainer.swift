@@ -40,62 +40,42 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
 
     // MARK: - Repository
 
-    private func makeExerciseRepository() -> ExerciseRepositoryProtocol {
-        ExerciseRepository()
-    }
+    private lazy var exerciseRepository: ExerciseRepositoryProtocol = ExerciseRepository()
 
     private lazy var customExerciseRepository: CustomExerciseDomainRepositoryProtocol = CustomExerciseDataRepository()
 
     // MARK: - Use Cases
 
-    private func makeRecordExerciseUseCase() -> RecordExerciseUseCaseProtocol {
-        RecordExerciseUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var recordExerciseUseCase: RecordExerciseUseCaseProtocol = RecordExerciseUseCase(repository: exerciseRepository)
 
-    private func makeGetDailyExercisesUseCase() -> GetDailyExercisesUseCaseProtocol {
-        GetDailyExercisesUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var getDailyExercisesUseCase: GetDailyExercisesUseCaseProtocol = GetDailyExercisesUseCase(repository: exerciseRepository)
 
-    private func makeGetCustomExercisesUseCase() -> GetCustomExercisesUseCaseProtocol {
-        GetCustomExercisesUseCase(repository: customExerciseRepository)
-    }
+    private lazy var getCustomExercisesUseCase: GetCustomExercisesUseCaseProtocol = GetCustomExercisesUseCase(repository: customExerciseRepository)
 
-    private func makeSaveCustomExerciseUseCase() -> SaveCustomExerciseUseCaseProtocol {
-        SaveCustomExerciseUseCase(repository: customExerciseRepository)
-    }
+    private lazy var saveCustomExerciseUseCase: SaveCustomExerciseUseCaseProtocol = SaveCustomExerciseUseCase(repository: customExerciseRepository)
 
-    private func makeDeleteCustomExerciseUseCase() -> DeleteCustomExerciseUseCaseProtocol {
-        DeleteCustomExerciseUseCase(repository: customExerciseRepository)
-    }
+    private lazy var deleteCustomExerciseUseCase: DeleteCustomExerciseUseCaseProtocol = DeleteCustomExerciseUseCase(repository: customExerciseRepository)
 
-    private func makeUpdateExerciseUseCase() -> UpdateExerciseUseCaseProtocol {
-        UpdateExerciseUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var updateExerciseUseCase: UpdateExerciseUseCaseProtocol = UpdateExerciseUseCase(repository: exerciseRepository)
 
-    private func makeDeleteExerciseUseCase() -> DeleteExerciseUseCaseProtocol {
-        DeleteExerciseUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var deleteExerciseUseCase: DeleteExerciseUseCaseProtocol = DeleteExerciseUseCase(repository: exerciseRepository)
 
-    private func makeFetchExerciseUseCase() -> FetchExerciseUseCaseProtocol {
-        FetchExerciseUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var fetchExerciseUseCase: FetchExerciseUseCaseProtocol = FetchExerciseUseCase(repository: exerciseRepository)
 
-    private func makeGetExerciseHistoryUseCase() -> GetExerciseHistoryUseCaseProtocol {
-        GetExerciseHistoryUseCase(repository: makeExerciseRepository())
-    }
+    private lazy var getExerciseHistoryUseCase: GetExerciseHistoryUseCaseProtocol = GetExerciseHistoryUseCase(repository: exerciseRepository)
 
     // MARK: - TCA Dependencies
 
-    public var exerciseClient: ExerciseClient {
-        let recordUseCase = makeRecordExerciseUseCase()
-        let fetchDailyUseCase = makeGetDailyExercisesUseCase()
-        let getCustomUseCase = makeGetCustomExercisesUseCase()
-        let saveCustomUseCase = makeSaveCustomExerciseUseCase()
-        let deleteCustomUseCase = makeDeleteCustomExerciseUseCase()
-        let updateUseCase = makeUpdateExerciseUseCase()
-        let deleteUseCase = makeDeleteExerciseUseCase()
-        let fetchUseCase = makeFetchExerciseUseCase()
-        let historyUseCase = makeGetExerciseHistoryUseCase()
+    public lazy var exerciseClient: ExerciseClient = {
+        let recordUseCase = self.recordExerciseUseCase
+        let fetchDailyUseCase = self.getDailyExercisesUseCase
+        let getCustomUseCase = self.getCustomExercisesUseCase
+        let saveCustomUseCase = self.saveCustomExerciseUseCase
+        let deleteCustomUseCase = self.deleteCustomExerciseUseCase
+        let updateUseCase = self.updateExerciseUseCase
+        let deleteUseCase = self.deleteExerciseUseCase
+        let fetchUseCase = self.fetchExerciseUseCase
+        let historyUseCase = self.getExerciseHistoryUseCase
 
         return ExerciseClient(
             recordExercise: { record in
@@ -126,5 +106,5 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
                 try await deleteCustomUseCase.execute(exercise)
             }
         )
-    }
+    }()
 }
