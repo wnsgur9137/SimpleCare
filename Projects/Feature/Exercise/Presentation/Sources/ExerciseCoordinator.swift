@@ -108,9 +108,9 @@ private struct ExerciseContainerView: View {
     var body: some View {
         ExerciseRecordView(store: store)
             .onChange(of: store.isLoading) { oldValue, newValue in
-                // Delegate 액션 관찰을 위한 간접적 방식
-                // saveExerciseResponse(.success) 후 isLoading이 false가 되면
-                // 저장 완료로 간주
+                if oldValue == true && newValue == false && store.error == nil {
+                    onSaveComplete()
+                }
             }
     }
 }

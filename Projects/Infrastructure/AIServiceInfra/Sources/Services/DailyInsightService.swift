@@ -69,6 +69,11 @@ public actor DailyInsightService: DailyInsightServiceProtocol {
         self.client = GeminiClient(configuration: configuration)
     }
 
+    /// 음식 이름 최대 개수
+    private static let maxMealNames = 20
+    /// 개별 음식 이름 최대 길이
+    private static let maxMealNameLength = 100
+
     /// 일일 식단 요약에서 인사이트 생성
     public func generateInsight(from summary: DailySummaryInput) async throws -> DailyInsightResult {
         let systemPrompt = """
@@ -78,13 +83,17 @@ public actor DailyInsightService: DailyInsightServiceProtocol {
         코멘트는 20자 내외로 간결하게 작성하세요.
         """
 
+        // 입력 정제: 음식 이름 수/길이 제한
+        let sanitizedMealNames = Array(summary.mealNames.prefix(Self.maxMealNames))
+            .map { String($0.prefix(Self.maxMealNameLength)) }
+
         let userPrompt = NutritionPrompts.dailySummaryPrompt(
-            totalCalories: summary.totalCalories,
-            totalProtein: summary.totalProtein,
-            totalCarbs: summary.totalCarbs,
-            totalFat: summary.totalFat,
-            goalCalories: summary.goalCalories,
-            meals: summary.mealNames
+            totalCalories: max(0, min(summary.totalCalories, 50000)),
+            totalProtein: max(0, min(summary.totalProtein, 5000)),
+            totalCarbs: max(0, min(summary.totalCarbs, 5000)),
+            totalFat: max(0, min(summary.totalFat, 5000)),
+            goalCalories: max(0, min(summary.goalCalories, 50000)),
+            meals: sanitizedMealNames
         )
 
         let response = try await client.generateContent(
@@ -112,13 +121,17 @@ public actor DailyInsightService: DailyInsightServiceProtocol {
             return .defaultInsight
         }
 
-        return result
+        // 응답 값 길이 검증
+        return DailyInsightResult(
+            comment: String(result.comment.prefix(200)),
+            emoji: String(result.emoji.prefix(10))
+        )
     }
 
     private func extractJSON(from text: String) -> String {
         if let jsonStart = text.range(of: "{"),
            let jsonEnd = text.range(of: "}", options: .backwards) {
-            return String(text[jsonStart.lowerBound...jsonEnd.upperBound])
+            return String(text[jsonStart.lowerBound..<jsonEnd.upperBound])
         }
         return text
     }

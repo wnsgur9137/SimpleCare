@@ -142,7 +142,7 @@ public struct MealRecordView: View {
             }
 
             // 개별 음식
-            ForEach(Array(store.estimatedFoods.enumerated()), id: \.element.name) { index, food in
+            ForEach(Array(store.estimatedFoods.enumerated()), id: \.offset) { index, food in
                 EstimatedFoodRow(
                     food: food,
                     onRemove: { store.send(.removeFood(index)) },

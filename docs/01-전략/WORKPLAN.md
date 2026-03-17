@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/계획
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-17
 status: active
 ---
 
@@ -282,38 +282,38 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.1.1 | `StorageContainer` `fatalError` → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ⬜ 미시작 |
-| S.1.2 | `GeminiClient` 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.3 | `extractJSON` closed range 파싱 버그 수정 (`NutritionEstimation` + `DailyInsight`) | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.1.4 | `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Meal | 낮음 | ⬜ 미시작 |
-| S.1.5 | `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Exercise | 낮음 | ⬜ 미시작 |
-| S.1.6 | `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Weight | 낮음 | ⬜ 미시작 |
+| S.1.1 | `StorageContainer` `fatalError` → graceful fallback + 데이터 복구 | StorageInfra | 높음 | ✅ 완료 |
+| S.1.2 | `GeminiClient` 에러 핸들링 catch 블록 로직 수정 | AIServiceInfra | 낮음 | ✅ 완료 |
+| S.1.3 | `extractJSON` closed range 파싱 버그 수정 (`NutritionEstimation` + `DailyInsight`) | AIServiceInfra | 낮음 | ✅ 완료 |
+| S.1.4 | `MealClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Meal | 낮음 | ✅ 완료 |
+| S.1.5 | `ExerciseClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Exercise | 낮음 | ✅ 완료 |
+| S.1.6 | `WeightClient.liveValue` 빈 스텁 → `unimplemented()` 적용 | Weight | 낮음 | ✅ 완료 |
 
 #### Sprint S.2: HIGH 안정성 수정
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.2.1 | `ForEach` id `\.element.name` → 중복 음식명 UI 버그 수정 | Meal | 낮음 | ⬜ 미시작 |
-| S.2.2 | `MealContainerView` `delegate(.saveCompleted)` 미연결 | Meal | 중간 | ⬜ 미시작 |
-| S.2.3 | `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Meal | 중간 | ⬜ 미시작 |
-| S.2.4 | `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 | Exercise | 중간 | ⬜ 미시작 |
-| S.2.5 | `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Weight | 중간 | ⬜ 미시작 |
-| S.2.6 | `ExerciseContainerView` `onSaveComplete` 미연결 | Exercise | 중간 | ⬜ 미시작 |
-| S.2.7 | `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` | Weight | 중간 | ⬜ 미시작 |
-| S.2.8 | Weight `getWeights(limit:)` HealthKit 미병합 | Weight | 높음 | ⬜ 미시작 |
-| S.2.9 | `ExerciseRecord` `updateModel` date/weight 미업데이트 | Exercise | 낮음 | ⬜ 미시작 |
-| S.2.10 | `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어 | Home | 낮음 | ⬜ 미시작 |
-| S.2.11 | `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정 | Home | 중간 | ⬜ 미시작 |
-| S.2.12 | Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리 | Home | 중간 | ⬜ 미시작 |
+| S.2.1 | `ForEach` id `\.element.name` → 중복 음식명 UI 버그 수정 | Meal | 낮음 | ✅ 완료 |
+| S.2.2 | `MealContainerView` `delegate(.saveCompleted)` 미연결 | Meal | 중간 | ✅ 완료 |
+| S.2.3 | `MealDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Meal | 중간 | ✅ 완료 |
+| S.2.4 | `ExerciseDIContainer` 매번 새 repository 인스턴스 → 캐싱 | Exercise | 중간 | ✅ 완료 |
+| S.2.5 | `WeightDIContainer` 매번 새 인스턴스 → 캐싱 적용 | Weight | 중간 | ✅ 완료 |
+| S.2.6 | `ExerciseContainerView` `onSaveComplete` 미연결 | Exercise | 중간 | ✅ 완료 |
+| S.2.7 | `WeightRepository` update/delete 100개 fetch 제한 → `fetchWeight(id:)` | Weight | 중간 | ✅ 완료 |
+| S.2.8 | Weight `getWeights(limit:)` HealthKit 미병합 | Weight | 높음 | ✅ 완료 |
+| S.2.9 | `ExerciseRecord` `updateModel` date/weight 미업데이트 | Exercise | 낮음 | ✅ 완료 |
+| S.2.10 | `ReportView` `dailyCalories[index]` 범위 초과 크래시 방어 | Home | 낮음 | ✅ 완료 |
+| S.2.11 | `HomeFeature` `selectWeekDay` 요일 계산 off-by-one 수정 | Home | 중간 | ✅ 완료 |
+| S.2.12 | Report error가 Home `viewState` 덮어쓰기 → 별도 state 분리 | Home | 중간 | ✅ 완료 |
 
 #### Sprint S.3: HIGH 보안 수정
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.3.1 | `NSAllowsArbitraryLoads: true` → ATS 활성화 | Project | 낮음 | ⬜ 미시작 |
-| S.3.2 | API 키 `Keychain` 저장 + `SwiftData` 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ⬜ 미시작 |
-| S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ⬜ 미시작 |
-| S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ⬜ 미시작 |
+| S.3.1 | `NSAllowsArbitraryLoads: true` → ATS 활성화 | Project | 낮음 | ✅ 완료 |
+| S.3.2 | API 키 `Keychain` 저장 + `SwiftData` 파일 보호 | StorageInfra/AIServiceInfra | 높음 | ✅ 완료 |
+| S.3.3 | AI 프롬프트 입력 길이 제한 + 응답 값 검증 | Meal/AIServiceInfra | 중간 | ✅ 완료 |
+| S.3.4 | 내보내기 임시 파일 보호 + 정리 | Base | 낮음 | ✅ 완료 |
 
 #### Sprint S.4: MEDIUM 품질 개선 (선별 10건)
 
@@ -435,9 +435,9 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 ### v1.4
 - [ ] Phase S 완료 (안정성 및 보안 강화)
-  - [ ] Sprint S.1: CRITICAL 버그 6건 수정
-  - [ ] Sprint S.2: HIGH 안정성 12건 수정
-  - [ ] Sprint S.3: HIGH 보안 4건 수정
+  - [x] Sprint S.1: CRITICAL 버그 6건 수정
+  - [x] Sprint S.2: HIGH 안정성 12건 수정
+  - [x] Sprint S.3: HIGH 보안 4건 수정
   - [ ] Sprint S.4: MEDIUM 품질 10건 개선
 
 ### v2.0 - PRD §7.4

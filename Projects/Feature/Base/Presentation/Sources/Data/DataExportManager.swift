@@ -63,6 +63,9 @@ public final class DataExportManager: ObservableObject {
 
         defer { isExporting = false }
 
+        // 이전 내보내기 임시 파일 정리
+        cleanupExportFiles()
+
         let context = StorageContainer.shared.mainContext
 
         // Fetch all records
@@ -114,6 +117,27 @@ public final class DataExportManager: ObservableObject {
         return try context.fetch(descriptor)
     }
 
+    /// 이전 내보내기 임시 파일 정리
+    public func cleanupExportFiles() {
+        let tempDir = FileManager.default.temporaryDirectory
+        do {
+            let contents = try FileManager.default.contentsOfDirectory(
+                at: tempDir,
+                includingPropertiesForKeys: nil
+            )
+            for fileURL in contents where fileURL.lastPathComponent.hasPrefix("SimpleCare_Export_") {
+                try? FileManager.default.removeItem(at: fileURL)
+            }
+        } catch {
+            // 정리 실패는 무시 (다음 기회에 재시도)
+        }
+    }
+
+    /// 특정 내보내기 파일 삭제
+    public func cleanupExportFile(at url: URL) {
+        try? FileManager.default.removeItem(at: url)
+    }
+
     private func exportToJSON(data: ExportData) throws -> URL {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -125,6 +149,11 @@ public final class DataExportManager: ObservableObject {
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
         try jsonData.write(to: fileURL)
+        // 파일 보호 속성 적용
+        try? FileManager.default.setAttributes(
+            [.protectionKey: FileProtectionType.completeUnlessOpen],
+            ofItemAtPath: fileURL.path
+        )
         return fileURL
     }
 
@@ -171,6 +200,11 @@ public final class DataExportManager: ObservableObject {
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
         try csvContent.write(to: fileURL, atomically: true, encoding: .utf8)
+        // 파일 보호 속성 적용
+        try? FileManager.default.setAttributes(
+            [.protectionKey: FileProtectionType.completeUnlessOpen],
+            ofItemAtPath: fileURL.path
+        )
         return fileURL
     }
 

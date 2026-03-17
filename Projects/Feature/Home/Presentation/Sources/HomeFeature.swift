@@ -31,6 +31,7 @@ public struct HomeFeature {
         public var isLoadingReport: Bool = false
         public var isHealthKitAvailable: Bool = false
         public var isHealthKitAuthorized: Bool = false
+        public var reportError: String?
 
         public enum NavigationTarget: Equatable {
             case meal
@@ -267,7 +268,7 @@ public struct HomeFeature {
                 let calendar = Calendar(identifier: .gregorian)
                 let today = Date()
                 let currentWeekday = calendar.component(.weekday, from: today)
-                let targetWeekday = ((dayIndex + 2) % 7) == 0 ? 7 : ((dayIndex + 2) % 7) + 1
+                let targetWeekday = dayIndex == 6 ? 1 : dayIndex + 2
                 let diff = targetWeekday - currentWeekday
                 if let newDate = calendar.date(byAdding: .day, value: diff, to: today),
                    newDate <= today {
@@ -366,7 +367,7 @@ public struct HomeFeature {
 
             case .loadWeeklyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
-                state.viewState = .error(error.localizedDescription)
+                state.reportError = error.localizedDescription
                 return .none
 
             case .loadMonthlyReportResponse(.success(let report)):
@@ -376,7 +377,7 @@ public struct HomeFeature {
 
             case .loadMonthlyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
-                state.viewState = .error(error.localizedDescription)
+                state.reportError = error.localizedDescription
                 return .none
 
             case .delegate:

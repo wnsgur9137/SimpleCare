@@ -341,15 +341,15 @@ public struct ExerciseClient {
 extension ExerciseClient: DependencyKey {
     public static var liveValue: ExerciseClient {
         ExerciseClient(
-            recordExercise: { _ in },
-            updateExercise: { _ in },
-            deleteExercise: { _ in },
-            fetchExercise: { _ in nil },
-            fetchExercises: { _, _ in [] },
-            fetchExerciseHistory: { _, _, _ in [] },
-            getCustomExercises: { _ in [] },
-            saveCustomExercise: { _ in },
-            deleteCustomExercise: { _ in }
+            recordExercise: unimplemented("ExerciseClient.recordExercise"),
+            updateExercise: unimplemented("ExerciseClient.updateExercise"),
+            deleteExercise: unimplemented("ExerciseClient.deleteExercise"),
+            fetchExercise: unimplemented("ExerciseClient.fetchExercise"),
+            fetchExercises: unimplemented("ExerciseClient.fetchExercises"),
+            fetchExerciseHistory: unimplemented("ExerciseClient.fetchExerciseHistory"),
+            getCustomExercises: unimplemented("ExerciseClient.getCustomExercises"),
+            saveCustomExercise: unimplemented("ExerciseClient.saveCustomExercise"),
+            deleteCustomExercise: unimplemented("ExerciseClient.deleteCustomExercise")
         )
     }
 

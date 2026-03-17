@@ -99,6 +99,11 @@ private struct MealContainerView: View {
 
     var body: some View {
         MealRecordView(store: store)
+            .onChange(of: store.viewState) { _, newState in
+                if newState == .success {
+                    onSaveComplete()
+                }
+            }
     }
 }
 

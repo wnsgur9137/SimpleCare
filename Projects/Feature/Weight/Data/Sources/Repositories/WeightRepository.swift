@@ -68,7 +68,33 @@ public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendab
 
     public func getWeights(limit: Int, userProfileId: UUID) async throws -> [WeightRecord] {
         let models = try await storage.fetchWeights(limit: limit, userProfileId: userProfileId)
-        return models.map { $0.toEntity() }
+        var records = models.map { $0.toEntity() }
+
+        // HealthKit 데이터 병합 (실패 시 무시)
+        if let hkRecords = try? await healthKitManager?.fetchWeightRecords(
+            from: Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? .distantPast,
+            to: Date()
+        ) {
+            let localDates = Set(records.map { Calendar.current.startOfDay(for: $0.date) })
+            let newRecords = hkRecords
+                .filter { !localDates.contains(Calendar.current.startOfDay(for: $0.date)) }
+                .map { hkData in
+                    WeightRecord(
+                        userProfileId: userProfileId,
+                        weightKg: hkData.weightKg,
+                        date: hkData.date
+                    )
+                }
+            records.append(contentsOf: newRecords)
+            records.sort { $0.date > $1.date }
+        }
+
+        // limit 적용
+        if records.count > limit {
+            records = Array(records.prefix(limit))
+        }
+
+        return records
     }
 
     public func saveWeight(_ weight: WeightRecord) async throws {
@@ -80,8 +106,8 @@ public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendab
     }
 
     public func updateWeight(_ weight: WeightRecord) async throws {
-        // Fetch and update the existing model
-        let models = try await storage.fetchWeights(limit: 100, userProfileId: weight.userProfileId)
+        // Fetch all records (no limit) to ensure we find the target regardless of record count
+        let models = try await storage.fetchWeights(from: .distantPast, to: .distantFuture, userProfileId: weight.userProfileId)
         guard let existingModel = models.first(where: { $0.id == weight.id }) else {
             throw WeightRepositoryError.weightNotFound
         }
@@ -90,7 +116,7 @@ public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendab
     }
 
     public func deleteWeight(_ weight: WeightRecord) async throws {
-        let models = try await storage.fetchWeights(limit: 100, userProfileId: weight.userProfileId)
+        let models = try await storage.fetchWeights(from: .distantPast, to: .distantFuture, userProfileId: weight.userProfileId)
         guard let model = models.first(where: { $0.id == weight.id }) else { return }
         try await storage.deleteWeight(model)
     }

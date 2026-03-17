@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/infrastructure
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-17
 status: active
 ---
 
@@ -17,7 +17,7 @@ status: active
 | 컴포넌트 | 파일 | 설명 |
 |---------|------|------|
 | Module | `StorageInfra.swift` | 모듈 진입점 |
-| Container | `StorageContainer.swift` | ModelContainer 싱글톤 관리 |
+| Container | `StorageContainer.swift` | ModelContainer 싱글톤 관리 (3단계 복구: 정상→스토어 삭제 재시도→인메모리 폴백, `completeUnlessOpen` 파일 보호 적용) |
 | **Models** | | |
 | Model | `UserProfileModel.swift` | 사용자 프로필 SwiftData 모델 |
 | Model | `MealRecordModel.swift` | 식사 기록 SwiftData 모델 |
@@ -33,6 +33,21 @@ status: active
 | Repository | `WeightRecordRepository.swift` | 체중 기록 데이터 접근 |
 | Repository | `ExerciseRecordRepository.swift` | 운동 기록 데이터 접근 |
 | Repository | `CustomExerciseRepository.swift` | 커스텀 운동 데이터 접근 |
+
+**StorageContainer 주요 API**:
+
+| 프로퍼티/메서드 | 설명 |
+|---------------|------|
+| `shared` | 싱글톤 인스턴스 |
+| `container: ModelContainer` | SwiftData 컨테이너 |
+| `isUsingFallbackStorage: Bool` | 인메모리 폴백 모드 여부 (읽기 전용) |
+| `createInMemoryContainer() throws` | 테스트용 인메모리 컨테이너 생성 |
+| `Notification.Name.storageContainerFallbackActivated` | 폴백 전환 시 발송되는 알림 |
+
+**스토어 파일 관리**:
+- 명시적 스토어 URL: `~/Library/Application Support/SimpleCare.store`
+- 파일 보호: `completeUnlessOpen` (잠금 상태에서도 열린 파일 접근 허용)
+- 손상 복구 시 `SimpleCare.store`, `-shm`, `-wal` 파일만 삭제 (다른 데이터 영향 없음)
 
 **SwiftData 모델 예시**:
 ```swift

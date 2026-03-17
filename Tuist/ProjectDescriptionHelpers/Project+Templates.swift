@@ -26,7 +26,7 @@ public let defaultInfoPlist: [String: Plist.Value] = [
     "UIAppFonts": [],
     "AppConfigurations": [],
     "NSAppTransportSecurity": [
-        "NSAllowsArbitraryLoads": true
+        "NSAllowsArbitraryLoads": false
     ],
     "LSApplicationQueriesSchemes": [],
     "CFBundleURLTypes": [],
