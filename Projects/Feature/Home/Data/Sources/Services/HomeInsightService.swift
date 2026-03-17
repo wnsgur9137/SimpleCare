@@ -10,7 +10,7 @@ import HomeDomain
 import AIServiceInfra
 
 /// Home Insight Service 구현 - AIServiceInfra를 사용
-public final class HomeInsightService: HomeInsightServiceProtocol, @unchecked Sendable {
+public final class HomeInsightService: HomeInsightServiceProtocol, Sendable {
     private let insightService: DailyInsightService
 
     public init(insightService: DailyInsightService? = nil) {

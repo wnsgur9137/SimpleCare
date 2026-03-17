@@ -10,7 +10,7 @@ import ProfileDomain
 import StorageInfra
 
 /// Profile Repository 구현
-public final class ProfileRepository: UserProfileRepositoryProtocol, @unchecked Sendable {
+public final class ProfileRepository: UserProfileRepositoryProtocol, Sendable {
     private let storage: UserProfileStorage
 
     public init(storage: UserProfileStorage = UserProfileStorage()) {

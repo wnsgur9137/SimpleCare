@@ -10,7 +10,7 @@ import ExerciseDomain
 import StorageInfra
 
 /// 커스텀 운동 Data Repository - StorageInfra 어댑터
-public final class CustomExerciseDataRepository: CustomExerciseDomainRepositoryProtocol, @unchecked Sendable {
+public final class CustomExerciseDataRepository: CustomExerciseDomainRepositoryProtocol, Sendable {
     private let storage: CustomExerciseStorageRepository
 
     public init(storage: CustomExerciseStorageRepository = CustomExerciseStorageRepository()) {

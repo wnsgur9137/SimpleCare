@@ -10,7 +10,7 @@ import WeightDomain
 import StorageInfra
 import HealthKitInfra
 
-public final class WeightRepository: WeightRepositoryProtocol, @unchecked Sendable {
+public final class WeightRepository: WeightRepositoryProtocol, Sendable {
     private let storage: WeightRecordRepository
     private let healthKitManager: HealthKitManagerProtocol?
 

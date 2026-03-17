@@ -42,7 +42,7 @@ public protocol HealthKitManagerProtocol: Sendable {
 
 // MARK: - HealthKitManager
 
-public final class HealthKitManager: @unchecked Sendable, HealthKitManagerProtocol {
+public final class HealthKitManager: Sendable, HealthKitManagerProtocol {
     public static let shared = HealthKitManager()
 
     private let healthStore: HKHealthStore

@@ -10,7 +10,7 @@ import MealDomain
 import StorageInfra
 
 /// 즐겨찾기 음식 Data Repository - StorageInfra 어댑터
-public final class FavoriteFoodDataRepository: FavoriteFoodDomainRepositoryProtocol, @unchecked Sendable {
+public final class FavoriteFoodDataRepository: FavoriteFoodDomainRepositoryProtocol, Sendable {
     private let storage: FavoriteFoodRepository
 
     public init(storage: FavoriteFoodRepository = FavoriteFoodRepository()) {

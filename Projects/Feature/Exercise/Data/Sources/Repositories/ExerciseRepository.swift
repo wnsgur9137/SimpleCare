@@ -9,7 +9,7 @@ import Foundation
 import ExerciseDomain
 import StorageInfra
 
-public final class ExerciseRepository: ExerciseRepositoryProtocol, @unchecked Sendable {
+public final class ExerciseRepository: ExerciseRepositoryProtocol, Sendable {
     private let storage: ExerciseRecordRepository
 
     public init(storage: ExerciseRecordRepository = ExerciseRecordRepository()) {
