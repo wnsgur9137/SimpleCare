@@ -9,7 +9,7 @@ import Foundation
 import MealDomain
 
 /// Mock AI Service - API 호출 없이 샘플 데이터 반환
-public final class MockAIService: AIServiceProtocol, @unchecked Sendable {
+public final class MockAIService: AIServiceProtocol, Sendable {
 
     public init() {}
 

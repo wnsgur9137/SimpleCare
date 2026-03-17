@@ -11,7 +11,7 @@ import StorageInfra
 import HealthKitInfra
 
 /// Home Repository 구현 - StorageInfra에서 식사/운동 데이터를 집계
-public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeReportRepositoryProtocol, @unchecked Sendable {
+public final class HomeRepository: HomeDailySummaryRepositoryProtocol, HomeReportRepositoryProtocol, Sendable {
     private let maxStreakCheckDays = 30
     private let mealStorage: MealRecordRepository
     private let exerciseStorage: ExerciseRecordRepository

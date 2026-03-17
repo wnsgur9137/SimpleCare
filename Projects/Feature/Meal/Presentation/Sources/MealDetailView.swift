@@ -59,7 +59,10 @@ public struct MealDetailView: View {
                 loadingOverlay
             }
         }
-        .alert("common.error".localized, isPresented: .constant(store.viewState.isError)) {
+        .alert("common.error".localized, isPresented: Binding(
+            get: { store.viewState.isError },
+            set: { if !$0 { store.send(.dismissError) } }
+        )) {
             Button("common.confirm".localized) { store.send(.dismissError) }
         } message: {
             if case .error(let message) = store.viewState {

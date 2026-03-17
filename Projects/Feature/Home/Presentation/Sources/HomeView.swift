@@ -90,7 +90,6 @@ public struct HomeView: View {
             }
             .task {
                 store.send(.onAppear)
-                await NotificationManager.shared.requestAuthorization()
             }
             .overlay {
                 if store.viewState == .loading && store.dailySummary == nil {

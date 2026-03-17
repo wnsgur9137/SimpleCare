@@ -9,7 +9,7 @@ import Foundation
 import HomeDomain
 
 /// Mock Home Insight Service - API 호출 없이 컨텍스트 기반 인사이트 반환
-public final class MockHomeInsightService: HomeInsightServiceProtocol, @unchecked Sendable {
+public final class MockHomeInsightService: HomeInsightServiceProtocol, Sendable {
 
     public init() {}
 

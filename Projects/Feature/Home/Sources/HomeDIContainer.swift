@@ -34,7 +34,7 @@ public final class HomeDIContainer: DIContainer, HomeCoordinatorDependency {
         self.dependencies = dependencies
 
         let homeRepository = HomeRepository(healthKitManager: HealthKitManager.shared)
-        let insightService = MockHomeInsightService()
+        let insightService = HomeInsightService()
         let summaryUseCase = GetDailySummaryUseCase(repository: homeRepository)
         let insightUseCase = GenerateDailyInsightUseCase(insightService: insightService)
         let weeklyReportUseCase = GetWeeklyReportUseCase(repository: homeRepository)

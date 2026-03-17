@@ -275,19 +275,23 @@ public struct ExerciseDetailView: View {
 
     // MARK: - Helpers
 
-    private var formattedDate: String {
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd (E) HH:mm"
-        return formatter.string(from: store.exercise.date)
+        return formatter
+    }()
+
+    private var formattedDate: String {
+        Self.dateFormatter.string(from: store.exercise.date)
     }
 
     private var categoryColor: Color {
         switch store.exercise.exerciseType.category {
-        case .cardio: return .red
-        case .strength: return .orange
-        case .flexibility: return .green
-        case .sports: return .blue
-        case .other: return .purple
+        case .cardio: return .scError
+        case .strength: return .scSecondary
+        case .flexibility: return .scAccent
+        case .sports: return .scSuccess
+        case .other: return .scTextSecondary
         }
     }
 

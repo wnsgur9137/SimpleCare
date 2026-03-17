@@ -10,7 +10,7 @@ import MealDomain
 import AIServiceInfra
 
 /// AI 서비스 구현 - AIServiceInfra를 사용
-public final class AIService: AIServiceProtocol, @unchecked Sendable {
+public final class AIService: AIServiceProtocol, Sendable {
     private let nutritionService: NutritionEstimationService
 
     public init(nutritionService: NutritionEstimationService? = nil) {

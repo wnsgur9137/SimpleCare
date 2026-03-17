@@ -10,7 +10,7 @@ import MealDomain
 import StorageInfra
 
 /// Meal Repository 구현
-public final class MealRepository: MealRepositoryProtocol, @unchecked Sendable {
+public final class MealRepository: MealRepositoryProtocol, Sendable {
     private let storage: MealRecordRepository
 
     public init(storage: MealRecordRepository = MealRecordRepository()) {
