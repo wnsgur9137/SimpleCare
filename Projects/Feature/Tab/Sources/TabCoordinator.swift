@@ -120,8 +120,8 @@ public final class TabCoordinator: ObservableObject, Coordinator {
             let container = diContainer.makeMealDIContainer()
             let coordinator = MealCoordinator(dependencies: container)
             coordinator.onNavigateToDetail = { [weak self] meal in
-                // TODO: Navigate to detail view (Phase 5.10)
-                print("Navigate to meal detail: \(meal.id)")
+                self?.selectedMealId = meal.id
+                self?.showingMealDetail = true
             }
             coordinator.onNavigateToRecord = { [weak self] in
                 self?.showingMealRecord = true
@@ -162,29 +162,35 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     public func makeExerciseList() -> some View {
-        return NavigationStack {
-            VStack {
-                // TODO: Implement exercise list view
-                Text("exercise.recordTitle".localized)
-                    .font(.largeTitle)
-                    .foregroundStyle(.secondary)
-
-                Button {
-                    self.showingExerciseRecord = true
-                } label: {
-                    Label("exercise.addExercise".localized, systemImage: "plus.circle.fill")
-                        .font(.title2)
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .navigationTitle("tab.exercise".localized)
-            .sheet(isPresented: showingExerciseRecordBinding) { [weak self] in
-                if let self {
-                    let container = self.diContainer.makeExerciseDIContainer()
-                    ExerciseCoordinator(dependencies: container).start()
-                }
-            }
+        let container = diContainer.makeExerciseDIContainer()
+        let coordinator = ExerciseCoordinator(dependencies: container)
+        coordinator.onNavigateToDetail = { [weak self] exercise in
+            self?.selectedExerciseId = exercise.id
+            self?.showingExerciseDetail = true
         }
+        coordinator.onNavigateToRecord = { [weak self] in
+            self?.showingExerciseRecord = true
+        }
+        coordinator.onSaveComplete = { [weak self] in
+            self?.showingExerciseRecord = false
+        }
+
+        return NavigationStack {
+            coordinator.makeListView()
+                .sheet(isPresented: showingExerciseRecordBinding) {
+                    self.makeExerciseRecordSheet()
+                }
+        }
+    }
+
+    @MainActor
+    private func makeExerciseRecordSheet() -> some View {
+        let recordContainer = diContainer.makeExerciseDIContainer()
+        let recordCoordinator = ExerciseCoordinator(dependencies: recordContainer)
+        recordCoordinator.onSaveComplete = { [weak self] in
+            self?.showingExerciseRecord = false
+        }
+        return recordCoordinator.start()
     }
 
     // MARK: - Progress (Weight)
