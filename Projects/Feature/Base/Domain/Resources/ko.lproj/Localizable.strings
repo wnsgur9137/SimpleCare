@@ -106,3 +106,18 @@
 "notification.banner.title" = "알림을 켜보세요";
 "notification.banner.description" = "%@ 리마인더를 받아보세요";
 "notification.banner.enable" = "켜기";
+
+// MARK: - Accessibility
+"accessibility.home.profile" = "프로필";
+"accessibility.home.settings" = "설정";
+"accessibility.home.calorieProgress" = "%d / %d kcal 섭취, 목표 대비 %d%%";
+"accessibility.home.steps" = "걸음수 %d보";
+"accessibility.home.activeCalories" = "활동 칼로리 %d kcal";
+"accessibility.meal.addButton" = "식사 기록 추가";
+"accessibility.exercise.addButton" = "운동 기록 추가";
+"accessibility.weight.slider" = "체중 입력";
+"accessibility.weight.sliderHint" = "30에서 200 킬로그램 범위에서 조절";
+"accessibility.weight.chart" = "체중 추세 차트, %d개의 기록";
+"accessibility.profile.heightHint" = "100에서 250 센티미터 범위에서 조절";
+"accessibility.profile.weightHint" = "30에서 200 킬로그램 범위에서 조절";
+"accessibility.onboarding.progress" = "설정 진행률 %d%%";

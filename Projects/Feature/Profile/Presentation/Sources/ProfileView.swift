@@ -46,6 +46,9 @@ public struct ProfileView: View {
                         Text(String(format: "%.1f %@", store.heightCm, "unit.cm".localized))
                     }
                     Slider(value: $store.heightCm, in: 100...250, step: 0.5)
+                        .accessibilityLabel("profile.height".localized)
+                        .accessibilityValue(String(format: "%.1f %@", store.heightCm, "unit.cm".localized))
+                        .accessibilityHint("accessibility.profile.heightHint".localized)
 
                     HStack {
                         Text("profile.currentWeight".localized)
@@ -53,6 +56,9 @@ public struct ProfileView: View {
                         Text(String(format: "%.1f %@", store.currentWeightKg, "unit.kg".localized))
                     }
                     Slider(value: $store.currentWeightKg, in: 30...200, step: 0.1)
+                        .accessibilityLabel("profile.currentWeight".localized)
+                        .accessibilityValue(String(format: "%.1f %@", store.currentWeightKg, "unit.kg".localized))
+                        .accessibilityHint("accessibility.profile.weightHint".localized)
 
                     HStack {
                         Text("profile.targetWeight".localized)
@@ -60,6 +66,9 @@ public struct ProfileView: View {
                         Text(String(format: "%.1f %@", store.targetWeightKg, "unit.kg".localized))
                     }
                     Slider(value: $store.targetWeightKg, in: 30...200, step: 0.1)
+                        .accessibilityLabel("profile.targetWeight".localized)
+                        .accessibilityValue(String(format: "%.1f %@", store.targetWeightKg, "unit.kg".localized))
+                        .accessibilityHint("accessibility.profile.weightHint".localized)
                 }
 
                 // 활동 및 목표 섹션
