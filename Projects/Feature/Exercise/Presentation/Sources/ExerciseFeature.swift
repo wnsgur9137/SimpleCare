@@ -207,7 +207,7 @@ public struct ExerciseFeature {
 
             case .saveExerciseResponse(.failure(let error)):
                 state.isLoading = false
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             // MARK: - Custom Exercises
@@ -228,7 +228,7 @@ public struct ExerciseFeature {
                 return .none
 
             case .loadCustomExercisesResponse(.failure(let error)):
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .showAddCustomExercise:
@@ -264,7 +264,7 @@ public struct ExerciseFeature {
                 return .send(.loadCustomExercises)
 
             case .saveCustomExerciseResponse(.failure(let error)):
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .deleteCustomExercise(let exercise):
@@ -281,7 +281,7 @@ public struct ExerciseFeature {
                 return .send(.loadCustomExercises)
 
             case .deleteCustomExerciseResponse(.failure(let error)):
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .selectCustomExercise(let exercise):

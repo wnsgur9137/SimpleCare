@@ -175,7 +175,7 @@ public struct SettingsView: View {
             try await dataExportManager.deleteAllData(userProfileId: userProfileId)
             showDeleteSuccess = true
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = error.userMessage
         }
     }
 
@@ -410,7 +410,7 @@ struct ExportFormatSheet: View {
             )
             onExportComplete(url)
         } catch {
-            onError(error.localizedDescription)
+            onError(error.userMessage)
         }
     }
 }

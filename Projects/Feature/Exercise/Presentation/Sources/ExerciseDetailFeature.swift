@@ -153,7 +153,7 @@ public struct ExerciseDetailFeature {
                 return .none
 
             case .refreshExerciseResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .editButtonTapped:
@@ -200,7 +200,7 @@ public struct ExerciseDetailFeature {
                 return .send(.delegate(.exerciseUpdated(state.exercise)))
 
             case .saveChangesResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .deleteButtonTapped:
@@ -229,7 +229,7 @@ public struct ExerciseDetailFeature {
                 return .send(.delegate(.exerciseDeleted(state.exercise.id)))
 
             case .deleteResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .dismissError:

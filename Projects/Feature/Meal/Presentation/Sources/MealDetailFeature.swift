@@ -12,14 +12,14 @@ import MealDomain
 // MARK: - Equatable Error Wrapper
 
 public struct EquatableError: Error, Equatable {
-    public let description: String
+    public let userMessage: String
 
     public init(_ error: Error) {
-        self.description = error.localizedDescription
+        self.userMessage = error.userMessage
     }
 
     public static func == (lhs: EquatableError, rhs: EquatableError) -> Bool {
-        lhs.description == rhs.description
+        lhs.userMessage == rhs.userMessage
     }
 }
 
@@ -115,7 +115,7 @@ public struct MealDetailFeature {
                 return .none
 
             case .refreshMealResponse(.failure(let error)):
-                state.viewState = .error(error.description)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .editButtonTapped:
@@ -144,7 +144,7 @@ public struct MealDetailFeature {
                 return .send(.delegate(.mealUpdated(state.meal)))
 
             case .saveChangesResponse(.failure(let error)):
-                state.viewState = .error(error.description)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .deleteButtonTapped:
@@ -173,7 +173,7 @@ public struct MealDetailFeature {
                 return .send(.delegate(.mealDeleted(state.meal.id)))
 
             case .deleteResponse(.failure(let error)):
-                state.viewState = .error(error.description)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .dismissError:

@@ -171,7 +171,7 @@ private struct MealDetailByIdContainerView: View {
                 errorMessage = "meal.notFound".localized
             }
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = error.userMessage
         }
         isLoading = false
     }

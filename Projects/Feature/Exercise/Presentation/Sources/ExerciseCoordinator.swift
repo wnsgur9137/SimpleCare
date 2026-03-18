@@ -153,7 +153,7 @@ private struct ExerciseDetailByIdContainerView: View {
         do {
             exercise = try await exerciseClient.fetchExercise(exerciseId)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = error.userMessage
         }
         isLoading = false
     }

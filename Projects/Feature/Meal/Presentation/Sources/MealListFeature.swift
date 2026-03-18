@@ -141,7 +141,7 @@ public struct MealListFeature {
                 return .none
 
             case .loadMealsResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .mealTapped(let meal):
@@ -170,7 +170,7 @@ public struct MealListFeature {
                 return .none
 
             case .deleteMealResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .addMealButtonTapped:

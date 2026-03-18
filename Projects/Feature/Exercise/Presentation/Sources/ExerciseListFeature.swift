@@ -152,7 +152,7 @@ public struct ExerciseListFeature {
                 return .none
 
             case .loadExercisesResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .exerciseTapped(let exercise):
@@ -182,7 +182,7 @@ public struct ExerciseListFeature {
                 return .none
 
             case .deleteExerciseResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .addExerciseButtonTapped:
