@@ -14,3 +14,8 @@ public protocol Coordinator: ObservableObject {
     @ViewBuilder
     func start() -> Body
 }
+
+/// Coordinator that supports save-completion callback
+public protocol SaveCompletable: AnyObject {
+    var onSaveComplete: (() -> Void)? { get set }
+}

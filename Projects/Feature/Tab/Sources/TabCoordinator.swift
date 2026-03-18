@@ -142,12 +142,11 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     private func makeMealRecordSheet() -> some View {
-        let recordContainer = diContainer.makeMealDIContainer()
-        let recordCoordinator = MealCoordinator(dependencies: recordContainer)
-        recordCoordinator.onSaveComplete = { [weak self] in
-            self?.showingMealRecord = false
-        }
-        return recordCoordinator.start()
+        makeRecordSheet(
+            container: diContainer.makeMealDIContainer(),
+            coordinatorFactory: { MealCoordinator(dependencies: $0) },
+            onSaveComplete: { [weak self] in self?.showingMealRecord = false }
+        )
     }
 
     // MARK: - Exercise
@@ -171,9 +170,6 @@ public final class TabCoordinator: ObservableObject, Coordinator {
         coordinator.onNavigateToRecord = { [weak self] in
             self?.showingExerciseRecord = true
         }
-        coordinator.onSaveComplete = { [weak self] in
-            self?.showingExerciseRecord = false
-        }
 
         return NavigationStack {
             coordinator.makeListView()
@@ -185,12 +181,22 @@ public final class TabCoordinator: ObservableObject, Coordinator {
 
     @MainActor
     private func makeExerciseRecordSheet() -> some View {
-        let recordContainer = diContainer.makeExerciseDIContainer()
-        let recordCoordinator = ExerciseCoordinator(dependencies: recordContainer)
-        recordCoordinator.onSaveComplete = { [weak self] in
-            self?.showingExerciseRecord = false
-        }
-        return recordCoordinator.start()
+        makeRecordSheet(
+            container: diContainer.makeExerciseDIContainer(),
+            coordinatorFactory: { ExerciseCoordinator(dependencies: $0) },
+            onSaveComplete: { [weak self] in self?.showingExerciseRecord = false }
+        )
+    }
+
+    @MainActor
+    private func makeRecordSheet<C: Coordinator, D>(
+        container: D,
+        coordinatorFactory: (D) -> C,
+        onSaveComplete: @escaping () -> Void
+    ) -> C.Body where C: SaveCompletable {
+        let coordinator = coordinatorFactory(container)
+        coordinator.onSaveComplete = onSaveComplete
+        return coordinator.start()
     }
 
     // MARK: - Progress (Weight)

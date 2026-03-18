@@ -16,7 +16,7 @@ public protocol MealCoordinatorDependency {
 }
 
 /// Meal Coordinator
-public final class MealCoordinator: ObservableObject, Coordinator {
+public final class MealCoordinator: ObservableObject, Coordinator, SaveCompletable {
     private let dependencies: MealCoordinatorDependency
     public var onSaveComplete: (() -> Void)?
     public var onNavigateToDetail: ((MealRecord) -> Void)?
