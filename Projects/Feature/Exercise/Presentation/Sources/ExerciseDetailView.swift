@@ -253,7 +253,7 @@ public struct ExerciseDetailView: View {
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.scError.opacity(0.1))
+                    .fill(.scError.opacity(0.1))
             }
         }
         .foregroundStyle(.scError)
@@ -303,7 +303,7 @@ public struct ExerciseDetailView: View {
         switch intensity {
         case .light: return .scIntensityLight
         case .moderate: return .scIntensityModerate
-        case .vigorous: return .scError
+        case .vigorous: return .scIntensityVigorous
         }
     }
 }

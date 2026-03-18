@@ -86,7 +86,7 @@ public struct NotificationEnableBanner: View {
                 }
             }
             .padding()
-            .background(Color.scWarning.opacity(0.1), in: .rect(cornerRadius: 12))
+            .background(.scWarning.opacity(0.1), in: .rect(cornerRadius: 12))
             .transition(.move(edge: .top).combined(with: .opacity))
         }
     }
