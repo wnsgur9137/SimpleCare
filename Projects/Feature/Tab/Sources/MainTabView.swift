@@ -63,7 +63,8 @@ public struct MainTabView: View {
                 .tabBarMinimizeBehavior(.onScrollDown)
                 .sheet(isPresented: $coordinator.showSettings) {
                     NavigationStack {
-                        SettingsCoordinator(userProfileId: coordinator.diContainer.userProfileId).start()
+                        let container = coordinator.diContainer.makeSettingsDIContainer()
+                        SettingsCoordinator(dependencies: container).start()
                     }
                 }
                 .sheet(isPresented: $coordinator.showProfile) {

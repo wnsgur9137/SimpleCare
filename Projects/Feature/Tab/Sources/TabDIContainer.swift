@@ -64,6 +64,17 @@ public final class TabDIContainer: DIContainer {
         )
     }
 
+    // MARK: - Settings
+
+    @MainActor
+    public func makeSettingsDIContainer() -> SettingsDIContainer {
+        SettingsDIContainer(
+            dependencies: SettingsDIContainer.Dependencies(
+                userProfileId: cachedUserProfile?.id
+            )
+        )
+    }
+
     // MARK: - Profile
 
     public func makeProfileDIContainer() -> ProfileDIContainer {
