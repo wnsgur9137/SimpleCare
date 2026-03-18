@@ -113,6 +113,10 @@ public extension Color {
     /// Light: #FDD835, Dark: #FFF176
     static let scIntensityModerate = Color("SCIntensityModerate", bundle: .module)
 
+    /// 운동 고강도 색상 - 빨강
+    /// Light: #EF5350, Dark: #F46360
+    static let scIntensityVigorous = Color("SCIntensityVigorous", bundle: .module)
+
     // MARK: - Overlay Colors
 
     /// 로딩 오버레이 색상
@@ -190,6 +194,7 @@ public extension ShapeStyle where Self == Color {
 
     static var scIntensityLight: Color { .scIntensityLight }
     static var scIntensityModerate: Color { .scIntensityModerate }
+    static var scIntensityVigorous: Color { .scIntensityVigorous }
 
     // MARK: - Overlay
 

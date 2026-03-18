@@ -242,7 +242,7 @@ public struct MealDetailView: View {
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.scError.opacity(0.1))
+                    .fill(.scError.opacity(0.1))
             }
         }
         .foregroundStyle(.scError)

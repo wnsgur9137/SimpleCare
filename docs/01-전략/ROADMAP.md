@@ -443,6 +443,8 @@ Total:   ██████████████████░░  92%
 - [x] 접근성(Accessibility) 개선 — PR [#69](https://github.com/wnsgur9137/SimpleCare/pull/69) (VoiceOver 레이블/힌트 추가)
 - [x] 하드코딩 색상 → 시맨틱 색상 전환 — PR [#70](https://github.com/wnsgur9137/SimpleCare/pull/70) (다크모드 대응, 7개 시맨틱 색상 추가)
 - [x] print() → os.Logger 전환 — PR [#71](https://github.com/wnsgur9137/SimpleCare/pull/71) (NotificationManager 로깅 패턴 확립)
+- [ ] PR #70 리뷰 피드백 반영 — PR [#73](https://github.com/wnsgur9137/SimpleCare/pull/73) (Color. 접두사 제거, scIntensityVigorous 추가)
+- [ ] PR #71 리뷰 피드백 반영 — PR [#74](https://github.com/wnsgur9137/SimpleCare/pull/74) (error 전체 객체 로깅)
 
 ---
 
