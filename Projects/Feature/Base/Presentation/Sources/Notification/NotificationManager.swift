@@ -206,7 +206,7 @@ public final class NotificationManager: ObservableObject {
             isAuthorized = granted
             return granted
         } catch {
-            Self.logger.error("Notification authorization error: \(error.localizedDescription)")
+            Self.logger.error("Notification authorization error: \(error)")
             isAuthorized = false
             return false
         }
@@ -288,7 +288,7 @@ public final class NotificationManager: ObservableObject {
 
         notificationCenter.add(request) { error in
             if let error = error {
-                Self.logger.error("Failed to schedule notification for \(category.rawValue): \(error.localizedDescription)")
+                Self.logger.error("Failed to schedule notification for \(category.rawValue): \(error)")
             }
         }
     }
