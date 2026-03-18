@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/로드맵
 created: 2026-01-26
-updated: 2026-03-17
+updated: 2026-03-18
 review-date: 2026-03-16
 status: active
 ---
@@ -258,7 +258,7 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 
 ---
 
-## Phase S: 안정성 및 보안 강화 🔴
+## Phase S: 안정성 및 보안 강화 ✅
 
 > 코드 품질 리뷰 (2026-03-16)에서 발견된 67개 이슈 기반. CRITICAL/HIGH 우선 수정.
 
@@ -300,18 +300,18 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [x] AI 프롬프트 입력 길이 제한 + 응답 값 검증
 - [x] 내보내기 임시 파일 보호 + 정리
 
-### Sprint S.4: MEDIUM 품질 개선 (10건 선별)
+### Sprint S.4: MEDIUM 품질 개선 (10건 선별) ✅
 
-- [ ] 한국어 하드코딩 → 로컬라이제이션 (`displayName` 등 전체)
-- [ ] `Alert` `.constant()` binding → TCA `AlertState` 패턴
-- [ ] `DateFormatter` 인라인 생성 → `static let` 캐싱
-- [ ] `WeightTrend` `progressToGoal` 체중 증가 목표 미지원
-- [ ] `HomeView` `NotificationManager` 사이드이펙트 → Reducer로 이동
-- [ ] `MockHomeInsightService` → 실제 서비스 전환 확인
-- [ ] `@unchecked Sendable` 정리 (Meal/Home/Exercise/Weight)
-- [ ] `NutritionEstimation.totalCalories` 중복 필드 정리
-- [ ] OpenAI 데드코드 제거
-- [ ] `ExerciseListView`/`DetailView` `categoryColor` 불일치 수정
+- [x] 한국어 하드코딩 → 로컬라이제이션 (`displayName` 등 전체) — PR #65
+- [x] `Alert` `.constant()` binding → `Binding(get:set:)` 패턴 — PR #64
+- [x] `DateFormatter` 인라인 생성 → `static let` 캐싱 — PR #64
+- [x] `WeightTrend` `progressToGoal` 체중 증가 목표 지원 — PR #64
+- [x] `HomeView` `NotificationManager` 사이드이펙트 → Reducer로 이동 — PR #64
+- [x] `MockHomeInsightService` → 실제 서비스 전환 확인 — PR #64
+- [x] `@unchecked Sendable` 정리 (Meal/Home/Exercise/Weight) — PR #64
+- [x] `NutritionEstimation.totalCalories` 중복 필드 — 해당없음 (확인 완료)
+- [x] OpenAI 데드코드 제거 — PR #64
+- [x] `ExerciseListView`/`DetailView` `categoryColor` 통일 — PR #64
 
 ### Sprint S.5: LOW + 나머지 (추후)
 
@@ -373,9 +373,9 @@ Phase 2: ████████████████████ 100%
 Phase 3: ████████████████████ 100%
 Phase 4: ██████████████████░░  90%
 Phase 5: ████████████████████ 100% ✅
-Phase S: ░░░░░░░░░░░░░░░░░░░░   0% 🔴
+Phase S: ████████████████████ 100% ✅
 ---------------------------------
-Total:   ████████████████░░░░  82%
+Total:   ██████████████████░░  92%
 ```
 
 ---
@@ -389,7 +389,7 @@ Total:   ████████████████░░░░  82%
 | **P1** | 핵심 기능 | Exercise, Weight, Profile ✅ |
 | **P2** | 부가 기능 | HealthKit, Notification, Widget |
 | **P3** | 상세 페이지 | 식사/운동 상세 보기, 편집/삭제 ✅ |
-| **P-S** | 안정성/보안 | CRITICAL/HIGH 버그 수정, 보안 강화 (Phase 6 이전 필수) 🔴 |
+| **P-S** | 안정성/보안 | CRITICAL/HIGH 버그 수정, 보안 강화 (Phase 6 이전 필수) ✅ |
 | **P4** | 고도화 | AI 추천, 분석 |
 | **P5** | 최후순위 | 이미지/음성 기능 |
 

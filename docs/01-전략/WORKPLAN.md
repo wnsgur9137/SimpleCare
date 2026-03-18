@@ -5,14 +5,14 @@ tags:
   - 전략
   - 전략/계획
 created: 2026-01-26
-updated: 2026-03-17
+updated: 2026-03-18
 status: active
 ---
 
 # SimpleCare 작업 계획서
 
 > 작성일: 2026-01-26
-> 최종 수정일: 2026-03-11
+> 최종 수정일: 2026-03-18
 > 기반 문서: PRD.md, 코드베이스 분석
 
 ---
@@ -273,7 +273,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - DIContainer 업데이트 (UseCase 연결)
 - MealListView 날짜별 UI/UX 개선: DateSectionHeaderView (상대 날짜 + 일일 칼로리/매크로 요약), MealRowView (식사 시간 + 개별 매크로 표시)
 
-### Phase S: 안정성 및 보안 강화 🔴
+### Phase S: 안정성 및 보안 강화 ✅ 완료
 
 > 코드 품질 리뷰 (2026-03-16) 결과 기반. 67개 이슈 중 CRITICAL/HIGH 우선 수정.
 > Phase 6 이전 필수 완료.
@@ -319,23 +319,23 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 
 | 순서 | 작업 | 모듈 | 예상 복잡도 | 상태 |
 |------|------|------|------------|------|
-| S.4.1 | 한국어 하드코딩 → 로컬라이제이션 (`displayName` 전체) | StorageInfra/Home/Exercise | 중간 | ⬜ 미시작 |
-| S.4.2 | `Alert` `.constant()` binding → TCA `AlertState` 패턴 | Meal | 중간 | ⬜ 미시작 |
-| S.4.3 | `DateFormatter` 인라인 생성 → `static let` 캐싱 | Exercise/Meal | 낮음 | ⬜ 미시작 |
-| S.4.4 | `WeightTrend` `progressToGoal` 체중 증가 목표 미지원 | Weight | 중간 | ⬜ 미시작 |
-| S.4.5 | `HomeView` `NotificationManager` 사이드이펙트 → Reducer 이동 | Home | 중간 | ⬜ 미시작 |
-| S.4.6 | `MockHomeInsightService` → 실제 서비스 전환 확인 | Home | 낮음 | ⬜ 미시작 |
-| S.4.7 | `@unchecked Sendable` 정리 | Meal/Home/Exercise/Weight | 중간 | ⬜ 미시작 |
-| S.4.8 | `NutritionEstimation.totalCalories` 중복 필드 정리 | Meal | 낮음 | ⬜ 미시작 |
-| S.4.9 | OpenAI 데드코드 제거 | AIServiceInfra | 낮음 | ⬜ 미시작 |
-| S.4.10 | `ExerciseListView`/`DetailView` `categoryColor` 불일치 수정 | Exercise | 낮음 | ⬜ 미시작 |
+| S.4.1 | 한국어 하드코딩 → 로컬라이제이션 (`displayName` 전체) | StorageInfra/Home/Exercise | 중간 | ✅ PR #65 |
+| S.4.2 | `Alert` `.constant()` binding → `Binding(get:set:)` 패턴 | Meal | 중간 | ✅ PR #64 |
+| S.4.3 | `DateFormatter` 인라인 생성 → `static let` 캐싱 | Exercise/Meal | 낮음 | ✅ PR #64 |
+| S.4.4 | `WeightTrend` `progressToGoal` 체중 증가 목표 미지원 | Weight | 중간 | ✅ PR #64 |
+| S.4.5 | `HomeView` `NotificationManager` 사이드이펙트 → Reducer 이동 | Home | 중간 | ✅ PR #64 |
+| S.4.6 | `MockHomeInsightService` → 실제 서비스 전환 확인 | Home | 낮음 | ✅ PR #64 |
+| S.4.7 | `@unchecked Sendable` 정리 | Meal/Home/Exercise/Weight | 중간 | ✅ PR #64 |
+| S.4.8 | `NutritionEstimation.totalCalories` 중복 필드 정리 | Meal | 낮음 | ➖ 해당없음 |
+| S.4.9 | OpenAI 데드코드 제거 | AIServiceInfra | 낮음 | ✅ PR #64 |
+| S.4.10 | `ExerciseListView`/`DetailView` `categoryColor` 불일치 수정 | Exercise | 낮음 | ✅ PR #64 |
 
-**완료 조건**:
-- Sprint S.1 (CRITICAL) 6건 전부 해결
-- Sprint S.2 (HIGH 안정성) 12건 전부 해결
-- Sprint S.3 (HIGH 보안) 4건 전부 해결
-- Sprint S.4 (MEDIUM) 선별 10건 해결
-- 빌드 성공 + 기존 기능 동작 확인
+**완료 조건** ✅:
+- Sprint S.1 (CRITICAL) 6건 전부 해결 ✅
+- Sprint S.2 (HIGH 안정성) 12건 전부 해결 ✅
+- Sprint S.3 (HIGH 보안) 4건 전부 해결 ✅
+- Sprint S.4 (MEDIUM) 선별 10건 해결 ✅ (9건 수정, 1건 해당없음)
+- 빌드 성공 + 기존 기능 동작 확인 ✅
 
 ---
 
@@ -401,7 +401,7 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 6. ~~**Phase 5: 식사/운동 상세 페이지**~~ ✅ 완료
 7. ~~**Phase 4.4-4.5: 데이터 내보내기/삭제**~~ ✅ 완료
 8. ~~**Phase 1.3: 실제 Gemini API 연동**~~ ✅ 완료
-9. **Phase S: 안정성 및 보안 강화** ← 🔴 다음 작업 (CRITICAL/HIGH 우선)
+9. ~~**Phase S: 안정성 및 보안 강화**~~ ✅ 완료
 10. Phase 6: 이미지/음성 기능 (최후순위)
 
 ---
@@ -433,12 +433,12 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 - [x] Phase 4.4-4.5 완료 (데이터 내보내기/삭제) - PR #48
 - [x] Phase 5.8 완료 (캘린더 네비게이션) - PR #49
 
-### v1.4
-- [ ] Phase S 완료 (안정성 및 보안 강화)
+### v1.4 ✅
+- [x] Phase S 완료 (안정성 및 보안 강화)
   - [x] Sprint S.1: CRITICAL 버그 6건 수정
   - [x] Sprint S.2: HIGH 안정성 12건 수정
   - [x] Sprint S.3: HIGH 보안 4건 수정
-  - [ ] Sprint S.4: MEDIUM 품질 10건 개선
+  - [x] Sprint S.4: MEDIUM 품질 10건 개선 (9건 수정, 1건 해당없음)
 
 ### v2.0 - PRD §7.4
 - [ ] Phase 6 완료 (이미지/음성 기능)
@@ -485,4 +485,4 @@ Projects/Feature/Features/Sources/TabDIContainer.swift
 ---
 
 *문서 버전: 3.4*
-*최종 수정일: 2026-03-16*
+*최종 수정일: 2026-03-18*

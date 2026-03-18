@@ -21,8 +21,10 @@ SimpleCare는 AI 기반 개인 건강 관리 iOS 앱입니다.
 | Phase 1.5: 알려진 Gap 수정 | ✅ 완료 | PR [#26](https://github.com/wnsgur9137/SimpleCare/pull/26) |
 | Phase 2: 홈 화면 개선 및 시각화 | ✅ 완료 | PR [#27](https://github.com/wnsgur9137/SimpleCare/pull/27) |
 | Phase 3: 확장 기능 | ✅ 완료 | PR [#28](https://github.com/wnsgur9137/SimpleCare/pull/28) |
-| Phase 4: 연동 및 부가 기능 | 🟡 진행 중 | 테마/HealthKit 완료, 알림/내보내기 대기 |
-| Phase 5: 이미지/음성 기능 | 🔵 최후순위 | Meal 이미지 선택/분석 (후순위 배치) |
+| Phase 4: 연동 및 부가 기능 | ✅ 완료 | 테마/HealthKit/알림/내보내기 모두 완료 |
+| Phase 5: 상세 페이지 | ✅ 완료 | 식사/운동 상세, 목록 뷰, 캘린더 네비게이션 |
+| Phase S: 안정성 및 보안 강화 | ✅ 완료 | 32건 수정 (CRITICAL 6, HIGH 16, MEDIUM 10) |
+| Phase 6: 이미지/음성 기능 | 🔵 최후순위 | Meal 이미지 선택/분석 (후순위 배치) |
 
 ## 기술 스택
 
