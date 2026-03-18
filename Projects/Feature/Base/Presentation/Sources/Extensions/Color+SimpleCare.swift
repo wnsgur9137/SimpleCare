@@ -85,6 +85,40 @@ public extension Color {
     /// Light: #00D7FB, Dark: #33E0FF
     static let scExercise = Color("SCExercise", bundle: .module)
 
+    // MARK: - Meal Type Colors
+
+    /// 아침 식사 타입 색상 - 주황
+    /// Light: #FF9800, Dark: #FFB74D
+    static let scMealBreakfast = Color("SCMealBreakfast", bundle: .module)
+
+    /// 점심 식사 타입 색상 - 노랑
+    /// Light: #FDD835, Dark: #FFF176
+    static let scMealLunch = Color("SCMealLunch", bundle: .module)
+
+    /// 저녁 식사 타입 색상 - 보라
+    /// Light: #AB47BC, Dark: #CE93D8
+    static let scMealDinner = Color("SCMealDinner", bundle: .module)
+
+    /// 간식 타입 색상 - 초록
+    /// Light: #66BB6A, Dark: #81C784
+    static let scMealSnack = Color("SCMealSnack", bundle: .module)
+
+    // MARK: - Exercise Intensity Colors
+
+    /// 운동 저강도 색상 - 초록
+    /// Light: #4CAF50, Dark: #66BB6A
+    static let scIntensityLight = Color("SCIntensityLight", bundle: .module)
+
+    /// 운동 중강도 색상 - 노랑
+    /// Light: #FDD835, Dark: #FFF176
+    static let scIntensityModerate = Color("SCIntensityModerate", bundle: .module)
+
+    // MARK: - Overlay Colors
+
+    /// 로딩 오버레이 색상
+    /// Light: black 30%, Dark: black 40%
+    static let scOverlay = Color("SCOverlay", bundle: .module)
+
     // MARK: - BMI Helpers
 
     /// BMI 값에 따른 색상 반환
@@ -144,4 +178,20 @@ public extension ShapeStyle where Self == Color {
     // MARK: - Activity
 
     static var scExercise: Color { .scExercise }
+
+    // MARK: - Meal Type
+
+    static var scMealBreakfast: Color { .scMealBreakfast }
+    static var scMealLunch: Color { .scMealLunch }
+    static var scMealDinner: Color { .scMealDinner }
+    static var scMealSnack: Color { .scMealSnack }
+
+    // MARK: - Exercise Intensity
+
+    static var scIntensityLight: Color { .scIntensityLight }
+    static var scIntensityModerate: Color { .scIntensityModerate }
+
+    // MARK: - Overlay
+
+    static var scOverlay: Color { .scOverlay }
 }

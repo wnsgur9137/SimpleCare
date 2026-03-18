@@ -46,7 +46,7 @@ public struct ExerciseRecordView: View {
                     if let selected = store.selectedCustomExercise {
                         HStack {
                             Image(systemName: "star.fill")
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(.scWarning)
                             Text(selected.name)
                                 .fontWeight(.medium)
                             Spacer()

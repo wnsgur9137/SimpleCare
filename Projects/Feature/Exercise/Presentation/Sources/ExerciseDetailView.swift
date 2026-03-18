@@ -141,7 +141,7 @@ public struct ExerciseDetailView: View {
                         : "\(store.exercise.durationMinutes)",
                     unit: "exercise.minutes".localized,
                     icon: "clock.fill",
-                    color: .blue
+                    color: .scSecondary
                 )
 
                 ExerciseDetailCard(
@@ -173,7 +173,7 @@ public struct ExerciseDetailView: View {
                     value: String(format: "%.1f", store.exercise.effectiveBaseMET),
                     unit: "MET",
                     icon: "bolt.fill",
-                    color: .orange
+                    color: .scWarning
                 )
             }
         }
@@ -253,17 +253,17 @@ public struct ExerciseDetailView: View {
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.red.opacity(0.1))
+                    .fill(Color.scError.opacity(0.1))
             }
         }
-        .foregroundStyle(.red)
+        .foregroundStyle(.scError)
     }
 
     // MARK: - Loading Overlay
 
     private var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.scOverlay
                 .ignoresSafeArea()
 
             ProgressView()
@@ -301,9 +301,9 @@ public struct ExerciseDetailView: View {
     private var intensityColor: Color {
         let intensity = store.isEditing ? store.editingIntensity : store.exercise.intensity
         switch intensity {
-        case .light: return .green
-        case .moderate: return .yellow
-        case .vigorous: return .red
+        case .light: return .scIntensityLight
+        case .moderate: return .scIntensityModerate
+        case .vigorous: return .scError
         }
     }
 }

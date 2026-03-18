@@ -282,10 +282,10 @@ private struct MealRowView: View {
 
     private var mealTypeColor: Color {
         switch meal.mealType {
-        case .breakfast: return .orange
-        case .lunch: return .yellow
-        case .dinner: return .purple
-        case .snack: return .green
+        case .breakfast: return .scMealBreakfast
+        case .lunch: return .scMealLunch
+        case .dinner: return .scMealDinner
+        case .snack: return .scMealSnack
         }
     }
 }

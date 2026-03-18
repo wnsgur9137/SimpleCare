@@ -242,17 +242,17 @@ public struct MealDetailView: View {
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.red.opacity(0.1))
+                    .fill(Color.scError.opacity(0.1))
             }
         }
-        .foregroundStyle(.red)
+        .foregroundStyle(.scError)
     }
 
     // MARK: - Loading Overlay
 
     private var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.scOverlay
                 .ignoresSafeArea()
 
             ProgressView()
@@ -279,10 +279,10 @@ public struct MealDetailView: View {
 
     private var mealTypeColor: Color {
         switch store.meal.mealType {
-        case .breakfast: return .orange
-        case .lunch: return .yellow
-        case .dinner: return .purple
-        case .snack: return .green
+        case .breakfast: return .scMealBreakfast
+        case .lunch: return .scMealLunch
+        case .dinner: return .scMealDinner
+        case .snack: return .scMealSnack
         }
     }
 }

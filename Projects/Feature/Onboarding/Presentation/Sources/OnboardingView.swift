@@ -93,7 +93,7 @@ public struct OnboardingView: View {
         }
         .overlay {
             if store.isLoading {
-                Color.black.opacity(0.3)
+                Color.scOverlay
                     .ignoresSafeArea()
                 ProgressView()
                     .scaleEffect(1.5)

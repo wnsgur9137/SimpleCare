@@ -123,7 +123,7 @@ public struct SettingsView: View {
             } label: {
                 HStack {
                     Image(systemName: "square.and.arrow.up")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.scSecondary)
                         .frame(width: 24)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("settings.export.title".localized)
@@ -150,11 +150,11 @@ public struct SettingsView: View {
             } label: {
                 HStack {
                     Image(systemName: "trash")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.scError)
                         .frame(width: 24)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("settings.deleteAll.title".localized)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.scError)
                         Text("settings.deleteAll.description".localized)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -196,7 +196,7 @@ public struct SettingsView: View {
                         Spacer()
                         if themeManager.currentTheme == theme {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(.scSecondary)
                         }
                     }
                 }
@@ -220,7 +220,7 @@ public struct SettingsView: View {
                         Spacer()
                         if localizationManager.currentLanguage == language {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(.scSecondary)
                         }
                     }
                 }
@@ -250,7 +250,7 @@ public struct SettingsView: View {
         } label: {
             HStack {
                 Image(systemName: "bell.badge")
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.scWarning)
                     .frame(width: 24)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("notification.enablePermission".localized)
@@ -278,7 +278,7 @@ public struct SettingsView: View {
             label: {
                 HStack {
                     Image(systemName: "fork.knife")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(.scSuccess)
                         .frame(width: 24)
                     Text("notification.meal".localized)
                 }
@@ -324,7 +324,7 @@ public struct SettingsView: View {
         case .system:
             return .primary
         case .light:
-            return .orange
+            return .scWarning
         case .dark:
             return .indigo
         }
@@ -363,7 +363,7 @@ struct ExportFormatSheet: View {
                                 Spacer()
                                 if selectedFormat == format {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(.blue)
+                                        .foregroundStyle(.scSecondary)
                                 }
                             }
                         }
@@ -493,11 +493,11 @@ struct NotificationToggleRow: View {
     private var iconColor: Color {
         switch category {
         case .breakfast, .lunch, .dinner:
-            return .green
+            return .scSuccess
         case .exercise:
-            return .orange
+            return .scWarning
         case .weight:
-            return .blue
+            return .scSecondary
         }
     }
 }

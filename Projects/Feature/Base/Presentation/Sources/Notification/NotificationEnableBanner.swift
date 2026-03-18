@@ -50,7 +50,7 @@ public struct NotificationEnableBanner: View {
             HStack(spacing: 12) {
                 Image(systemName: "bell.badge")
                     .font(.title3)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.scWarning)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("notification.banner.title".localized)
@@ -72,7 +72,7 @@ public struct NotificationEnableBanner: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(.orange, in: .capsule)
+                        .background(.scWarning, in: .capsule)
                 }
 
                 Button {
@@ -86,7 +86,7 @@ public struct NotificationEnableBanner: View {
                 }
             }
             .padding()
-            .background(.orange.opacity(0.1), in: .rect(cornerRadius: 12))
+            .background(Color.scWarning.opacity(0.1), in: .rect(cornerRadius: 12))
             .transition(.move(edge: .top).combined(with: .opacity))
         }
     }

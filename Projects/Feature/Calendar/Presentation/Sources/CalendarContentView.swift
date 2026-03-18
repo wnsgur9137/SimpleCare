@@ -288,7 +288,7 @@ public struct CalendarContentView: View {
                         HStack(spacing: 12) {
                             Image(systemName: "figure.run")
                                 .font(.title3)
-                                .foregroundStyle(.green)
+                                .foregroundStyle(.scExercise)
                                 .frame(width: 32)
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -347,7 +347,7 @@ public struct CalendarContentView: View {
         VStack(spacing: 12) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
-                .foregroundStyle(.orange)
+                .foregroundStyle(.scWarning)
 
             Text("calendar.fetchError".localized)
                 .font(.subheadline)
