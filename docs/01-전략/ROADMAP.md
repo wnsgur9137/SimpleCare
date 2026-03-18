@@ -424,16 +424,16 @@ Total:   ██████████████████░░  92%
 - 매직 넘버 상수화 (padding, spacing 등)
 - 불필요한 import 정리
 - ~~접근성(Accessibility) 레이블 누락~~ → PR #69에서 해결
-- 일부 View에서 하드코딩된 색상 → Asset Color 전환
+- ~~일부 View에서 하드코딩된 색상 → Asset Color 전환~~ → PR #70에서 시맨틱 색상 전환 완료
 - 코드 주석 보강 (복잡한 비즈니스 로직)
 - SwiftLint 경고 해소 (미사용 변수 등)
 - ~~테스트 코드 작성 (Unit/Integration)~~ → PR #67에서 기초 테스트 추가 (추가 확장 필요)
 - ~~에러 메시지 사용자 친화적 개선~~ → PR #68에서 UserFacingError 프로토콜 도입
-- 다크모드 일부 컴포넌트 대비 부족
+- ~~다크모드 일부 컴포넌트 대비 부족~~ → PR #70에서 시맨틱 색상 도입으로 다크모드 대응 완료
 - 애니메이션 성능 최적화 (LazyVStack 등)
 - Tuist 미사용 타겟 정리
 - 빌드 시간 최적화 (모듈 의존성 정리)
-- 로깅/디버깅 인프라 구축
+- ~~로깅/디버깅 인프라 구축~~ → PR #71에서 os.Logger 전환 완료
 - CI 파이프라인 테스트 자동화
 
 ### 리팩토링 계획
@@ -441,6 +441,8 @@ Total:   ██████████████████░░  92%
 - [x] 테스트 코드 작성 — PR [#67](https://github.com/wnsgur9137/SimpleCare/pull/67) (Exercise/Home 단위 테스트)
 - [x] 에러 처리 고도화 — PR [#68](https://github.com/wnsgur9137/SimpleCare/pull/68) (UserFacingError 프로토콜, LocalizedError 타입 캐스팅)
 - [x] 접근성(Accessibility) 개선 — PR [#69](https://github.com/wnsgur9137/SimpleCare/pull/69) (VoiceOver 레이블/힌트 추가)
+- [ ] 하드코딩 색상 → 시맨틱 색상 전환 — PR #70 (다크모드 대응, 7개 시맨틱 색상 추가)
+- [ ] print() → os.Logger 전환 — PR #71 (NotificationManager 로깅 패턴 확립)
 
 ---
 

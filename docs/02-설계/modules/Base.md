@@ -45,7 +45,7 @@ status: active
 - **LocalizationManager**: system/한국어/영어 런타임 전환, 모듈별 Bundle 관리, 재시작 불필요
 - **NotificationManager**: 5개 카테고리별 알림 (아침/점심/저녁 식사, 운동, 체중), 시간 설정, `UNUserNotificationCenter` 연동
 - **DataExportManager**: JSON/CSV 내보내기 (CSV injection 방지), 전체 데이터 삭제
-- **Color+SimpleCare**: Primary(teal) / Secondary(blue) / Accent(purple), 영양소별 색상, BMI 색상 매핑
+- **Color+SimpleCare**: Primary(teal) / Secondary(blue) / Accent(purple), 영양소별 색상, BMI 색상 매핑, 식사 타입별 색상(Breakfast/Lunch/Dinner/Snack), 운동 강도 색상(Light/Moderate), 오버레이 색상
 - **View+GlassCard**: 글래스모피즘 카드/버튼/캡슐 스타일
 - **Debug**: 디바이스 정보, 캐시/UserDefaults 초기화, 강제 크래시 (DEBUG 전용)
 - **Error+UserMessage**: 5단계 에러 매핑 (UserFacingError → LocalizedError → System 타입 → NSError 도메인 → Fallback), 모든 인프라/리포지토리 에러가 `LocalizedError` 채택
