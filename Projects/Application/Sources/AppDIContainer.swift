@@ -18,7 +18,7 @@ final class AppDIContainer: DIContainer {
 
     let dependencies: Dependencies
 
-    init(dependencies: Dependencies = Dependencies()) { // TODO: - AppConfiguration 생성
+    init(dependencies: Dependencies = Dependencies()) {
         self.dependencies = dependencies
     }
 
