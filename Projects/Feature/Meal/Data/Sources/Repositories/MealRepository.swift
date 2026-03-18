@@ -55,7 +55,7 @@ public enum MealRepositoryError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .mealNotFound: return "식사 기록을 찾을 수 없습니다"
+        case .mealNotFound: return "error.mealNotFound".localized
         }
     }
 }
