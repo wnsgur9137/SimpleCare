@@ -441,8 +441,8 @@ Total:   ██████████████████░░  92%
 - [x] 테스트 코드 작성 — PR [#67](https://github.com/wnsgur9137/SimpleCare/pull/67) (Exercise/Home 단위 테스트)
 - [x] 에러 처리 고도화 — PR [#68](https://github.com/wnsgur9137/SimpleCare/pull/68) (UserFacingError 프로토콜, LocalizedError 타입 캐스팅)
 - [x] 접근성(Accessibility) 개선 — PR [#69](https://github.com/wnsgur9137/SimpleCare/pull/69) (VoiceOver 레이블/힌트 추가)
-- [ ] 하드코딩 색상 → 시맨틱 색상 전환 — PR #70 (다크모드 대응, 7개 시맨틱 색상 추가)
-- [ ] print() → os.Logger 전환 — PR #71 (NotificationManager 로깅 패턴 확립)
+- [x] 하드코딩 색상 → 시맨틱 색상 전환 — PR [#70](https://github.com/wnsgur9137/SimpleCare/pull/70) (다크모드 대응, 7개 시맨틱 색상 추가)
+- [x] print() → os.Logger 전환 — PR [#71](https://github.com/wnsgur9137/SimpleCare/pull/71) (NotificationManager 로깅 패턴 확립)
 
 ---
 
