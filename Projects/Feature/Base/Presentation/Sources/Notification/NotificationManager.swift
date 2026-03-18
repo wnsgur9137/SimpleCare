@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import UserNotifications
 import BaseDomain
 
@@ -163,6 +164,11 @@ public final class NotificationManager: ObservableObject {
 
     public static let shared = NotificationManager()
 
+    private static let logger = Logger(
+        subsystem: "com.junhyeok.SimpleCare",
+        category: "NotificationManager"
+    )
+
     // MARK: - Published Properties
 
     /// Current notification settings per category
@@ -200,7 +206,7 @@ public final class NotificationManager: ObservableObject {
             isAuthorized = granted
             return granted
         } catch {
-            print("Notification authorization error: \(error)")
+            Self.logger.error("Notification authorization error: \(error.localizedDescription)")
             isAuthorized = false
             return false
         }
@@ -282,7 +288,7 @@ public final class NotificationManager: ObservableObject {
 
         notificationCenter.add(request) { error in
             if let error = error {
-                print("Failed to schedule notification for \(category.rawValue): \(error)")
+                Self.logger.error("Failed to schedule notification for \(category.rawValue): \(error.localizedDescription)")
             }
         }
     }
