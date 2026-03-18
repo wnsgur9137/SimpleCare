@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/feature
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-18
 status: active
 ---
 
@@ -18,8 +18,9 @@ status: active
 |--------|------|------|
 | **Domain** | | |
 | Extension | `String+Localization.swift` | 다국어 문자열 확장 |
+| Extension | `Error+UserMessage.swift` | 사용자 친화적 에러 메시지 매핑 (`UserFacingError` 프로토콜 + `Error.userMessage`) |
 | **Presentation** | | |
-| Protocol | `Coordinator.swift` | Coordinator 프로토콜 |
+| Protocol | `Coordinator.swift` | Coordinator 프로토콜, `SaveCompletable` 프로토콜 |
 | Protocol | `DIContainer.swift` | DIContainer 프로토콜 |
 | **Debug** | | |
 | View | `DebugFloatingButton.swift` | 디버그 플로팅 버튼 |
@@ -47,3 +48,5 @@ status: active
 - **Color+SimpleCare**: Primary(teal) / Secondary(blue) / Accent(purple), 영양소별 색상, BMI 색상 매핑
 - **View+GlassCard**: 글래스모피즘 카드/버튼/캡슐 스타일
 - **Debug**: 디바이스 정보, 캐시/UserDefaults 초기화, 강제 크래시 (DEBUG 전용)
+- **Error+UserMessage**: 5단계 에러 매핑 (UserFacingError → LocalizedError → System 타입 → NSError 도메인 → Fallback), 모든 인프라/리포지토리 에러가 `LocalizedError` 채택
+- **SaveCompletable**: 저장 완료 콜백을 지원하는 Coordinator용 프로토콜, RecordSheet 제네릭 팩토리에서 활용

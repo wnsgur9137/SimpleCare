@@ -423,12 +423,12 @@ Total:   ██████████████████░░  92%
 #### LOW (14건)
 - 매직 넘버 상수화 (padding, spacing 등)
 - 불필요한 import 정리
-- 접근성(Accessibility) 레이블 누락
+- ~~접근성(Accessibility) 레이블 누락~~ → PR #69에서 해결
 - 일부 View에서 하드코딩된 색상 → Asset Color 전환
 - 코드 주석 보강 (복잡한 비즈니스 로직)
 - SwiftLint 경고 해소 (미사용 변수 등)
-- 테스트 코드 작성 (Unit/Integration)
-- 에러 메시지 사용자 친화적 개선
+- ~~테스트 코드 작성 (Unit/Integration)~~ → PR #67에서 기초 테스트 추가 (추가 확장 필요)
+- ~~에러 메시지 사용자 친화적 개선~~ → PR #68에서 UserFacingError 프로토콜 도입
 - 다크모드 일부 컴포넌트 대비 부족
 - 애니메이션 성능 최적화 (LazyVStack 등)
 - Tuist 미사용 타겟 정리
@@ -437,10 +437,10 @@ Total:   ██████████████████░░  92%
 - CI 파이프라인 테스트 자동화
 
 ### 리팩토링 계획
-- [ ] 미사용 모듈 정리 (Settings 골격 상태)
-- [ ] 테스트 코드 작성
-- [ ] 에러 처리 고도화
-- [ ] 접근성(Accessibility) 개선
+- [x] 미사용 모듈 정리 — PR [#66](https://github.com/wnsgur9137/SimpleCare/pull/66) (데드코드 제거, SaveCompletable 프로토콜 도입)
+- [x] 테스트 코드 작성 — PR [#67](https://github.com/wnsgur9137/SimpleCare/pull/67) (Exercise/Home 단위 테스트)
+- [x] 에러 처리 고도화 — PR [#68](https://github.com/wnsgur9137/SimpleCare/pull/68) (UserFacingError 프로토콜, LocalizedError 타입 캐스팅)
+- [x] 접근성(Accessibility) 개선 — PR [#69](https://github.com/wnsgur9137/SimpleCare/pull/69) (VoiceOver 레이블/힌트 추가)
 
 ---
 
