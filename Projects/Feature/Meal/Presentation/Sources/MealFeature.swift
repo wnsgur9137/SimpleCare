@@ -217,7 +217,7 @@ public struct MealFeature {
                 return .none
 
             case .estimateResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .removeFood(let index):
@@ -255,7 +255,7 @@ public struct MealFeature {
                 return .send(.delegate(.saveCompleted))
 
             case .saveMealResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .dismissError:
@@ -321,7 +321,7 @@ public struct MealFeature {
                 return .send(.loadFavorites)
 
             case .saveFavoriteResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .deleteFavorite(let favorite):
@@ -338,7 +338,7 @@ public struct MealFeature {
                 return .send(.loadFavorites)
 
             case .deleteFavoriteResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             // MARK: - Recent Meals

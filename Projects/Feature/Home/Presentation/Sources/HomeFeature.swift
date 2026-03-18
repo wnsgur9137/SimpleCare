@@ -379,7 +379,7 @@ public struct HomeFeature {
 
             case .loadWeeklyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
-                state.reportError = error.localizedDescription
+                state.reportError = error.userMessage
                 return .none
 
             case .loadMonthlyReportResponse(.success(let report)):
@@ -389,7 +389,7 @@ public struct HomeFeature {
 
             case .loadMonthlyReportResponse(.failure(let error)):
                 state.isLoadingReport = false
-                state.reportError = error.localizedDescription
+                state.reportError = error.userMessage
                 return .none
 
             case .delegate:
@@ -422,7 +422,7 @@ public struct HomeFeature {
                 )
 
             case .loadHomeResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .generateInsightResponse(.success(let insight)):

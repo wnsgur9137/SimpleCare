@@ -59,7 +59,7 @@ public enum ExerciseRepositoryError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .exerciseNotFound: return "운동 기록을 찾을 수 없습니다"
+        case .exerciseNotFound: return "error.exerciseNotFound".localized
         }
     }
 }

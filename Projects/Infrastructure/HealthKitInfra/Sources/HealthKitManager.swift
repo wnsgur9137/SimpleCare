@@ -18,11 +18,11 @@ public enum HealthKitError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notAvailable:
-            return "HealthKit is not available on this device."
+            return NSLocalizedString("error.healthKit.notAvailable", comment: "HealthKit not available")
         case .authorizationDenied:
-            return "HealthKit authorization was denied."
-        case .queryFailed(let error):
-            return "HealthKit query failed: \(error.localizedDescription)"
+            return NSLocalizedString("error.healthKit.denied", comment: "HealthKit authorization denied")
+        case .queryFailed:
+            return NSLocalizedString("error.healthKit.queryFailed", comment: "HealthKit query failed")
         }
     }
 }

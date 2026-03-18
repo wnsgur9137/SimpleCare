@@ -82,6 +82,19 @@
 "error.ai.invalidFormat" = "Invalid response format";
 "error.ai.parseFailed" = "Response parsing failed: %@";
 "error.ai.imageFailed" = "Image processing failed";
+"error.ai.invalidKey" = "AI service authentication failed";
+"error.ai.rateLimited" = "Too many requests. Please try again later";
+
+// MARK: - HealthKit Errors
+"error.healthKit.notAvailable" = "Health data is not available on this device";
+"error.healthKit.denied" = "Health data access was denied";
+"error.healthKit.queryFailed" = "Failed to load health data";
+
+// MARK: - Network Errors
+"error.network.timeout" = "Server response timed out";
+
+// MARK: - Storage Errors
+"error.storage.full" = "Not enough storage space";
 
 // MARK: - Meal Data
 "meal.serving.unit" = "serving";

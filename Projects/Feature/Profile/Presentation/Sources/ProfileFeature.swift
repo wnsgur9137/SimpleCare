@@ -193,7 +193,7 @@ public struct ProfileFeature {
                 return .none
 
             case .loadProfileResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .saveProfile:
@@ -221,7 +221,7 @@ public struct ProfileFeature {
                 return .none
 
             case .saveProfileResponse(.failure(let error)):
-                state.viewState = .error(error.localizedDescription)
+                state.viewState = .error(error.userMessage)
                 return .none
 
             case .updateCalculations:

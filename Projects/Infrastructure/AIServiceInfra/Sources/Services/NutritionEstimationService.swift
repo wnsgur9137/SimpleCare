@@ -243,13 +243,16 @@ public enum NutritionEstimationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .noResponse:
-            return "AI 응답을 받지 못했습니다"
+            return NSLocalizedString("error.ai.noResponse", comment: "No AI response")
         case .invalidResponse:
-            return "잘못된 응답 형식입니다"
+            return NSLocalizedString("error.ai.invalidFormat", comment: "Invalid response format")
         case .parsingFailed(let detail):
-            return "응답 파싱 실패: \(detail)"
+            return String(
+                format: NSLocalizedString("error.ai.parseFailed", comment: "Parse failed: %@"),
+                detail
+            )
         case .imageProcessingFailed:
-            return "이미지 처리에 실패했습니다"
+            return NSLocalizedString("error.ai.imageFailed", comment: "Image processing failed")
         }
     }
 }

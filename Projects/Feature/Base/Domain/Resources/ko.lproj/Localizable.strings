@@ -82,6 +82,19 @@
 "error.ai.invalidFormat" = "잘못된 응답 형식입니다";
 "error.ai.parseFailed" = "응답 파싱 실패: %@";
 "error.ai.imageFailed" = "이미지 처리에 실패했습니다";
+"error.ai.invalidKey" = "AI 서비스 인증에 실패했습니다";
+"error.ai.rateLimited" = "요청이 너무 많습니다. 잠시 후 다시 시도해주세요";
+
+// MARK: - HealthKit Errors
+"error.healthKit.notAvailable" = "이 기기에서 건강 데이터를 사용할 수 없습니다";
+"error.healthKit.denied" = "건강 데이터 접근 권한이 거부되었습니다";
+"error.healthKit.queryFailed" = "건강 데이터를 불러오는데 실패했습니다";
+
+// MARK: - Network Errors
+"error.network.timeout" = "서버 응답 시간이 초과되었습니다";
+
+// MARK: - Storage Errors
+"error.storage.full" = "저장 공간이 부족합니다";
 
 // MARK: - Meal Data
 "meal.serving.unit" = "인분";

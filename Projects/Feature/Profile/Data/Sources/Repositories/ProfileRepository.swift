@@ -49,7 +49,7 @@ public enum ProfileRepositoryError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .profileNotFound:
-            return "프로필을 찾을 수 없습니다"
+            return "error.profileNotFound".localized
         }
     }
 }

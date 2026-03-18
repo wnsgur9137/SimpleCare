@@ -148,7 +148,7 @@ public struct WeightFeature {
 
             case .loadTrendResponse(.failure(let error)):
                 state.isLoading = false
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .saveWeight:
@@ -180,7 +180,7 @@ public struct WeightFeature {
 
             case .saveWeightResponse(.failure(let error)):
                 state.isLoading = false
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .delegate:

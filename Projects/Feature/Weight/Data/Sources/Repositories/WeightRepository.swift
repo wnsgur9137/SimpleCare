@@ -127,7 +127,7 @@ public enum WeightRepositoryError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .weightNotFound: return "체중 기록을 찾을 수 없습니다"
+        case .weightNotFound: return "error.weightNotFound".localized
         }
     }
 }

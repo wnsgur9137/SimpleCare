@@ -221,7 +221,7 @@ public struct OnboardingFeature {
 
             case .saveProfileResponse(.failure(let error)):
                 state.isLoading = false
-                state.error = error.localizedDescription
+                state.error = error.userMessage
                 return .none
 
             case .updateCalculations:

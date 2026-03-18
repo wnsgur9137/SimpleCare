@@ -221,19 +221,19 @@ public enum GeminiError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
-            return NSLocalizedString("gemini_error_invalid_api_key", comment: "Invalid Gemini API key")
+            return NSLocalizedString("error.ai.invalidKey", comment: "Invalid API key")
         case .invalidResponse:
-            return NSLocalizedString("gemini_error_invalid_response", comment: "Invalid response from server")
+            return NSLocalizedString("error.ai.invalidFormat", comment: "Invalid response format")
         case .rateLimited:
-            return NSLocalizedString("gemini_error_rate_limited", comment: "Rate limit exceeded. Please try again later.")
+            return NSLocalizedString("error.ai.rateLimited", comment: "Rate limited")
         case .modelDoesNotSupportVision:
-            return NSLocalizedString("gemini_error_no_vision_support", comment: "Selected model does not support vision/image analysis")
-        case .httpError(let code):
-            return String(format: NSLocalizedString("gemini_error_http", comment: "HTTP error: %d"), code)
-        case .apiError(let message):
-            return String(format: NSLocalizedString("gemini_error_api", comment: "API error: %@"), message)
+            return NSLocalizedString("error.ai.imageFailed", comment: "Vision not supported")
+        case .httpError:
+            return NSLocalizedString("error.server", comment: "Server error")
+        case .apiError:
+            return NSLocalizedString("error.aiAnalysis", comment: "AI analysis failed")
         case .noContent:
-            return NSLocalizedString("gemini_error_no_content", comment: "No content in response")
+            return NSLocalizedString("error.ai.noResponse", comment: "No content")
         }
     }
 }
