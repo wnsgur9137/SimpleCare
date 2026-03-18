@@ -153,6 +153,8 @@ When creating a PR, use **GitHub MCP** (not `gh` CLI). Follow the template defin
 - **📋 변경사항**: List of changes for reviewers, with before/after screenshots if applicable
 - **🙏 참고사항**: Notes for reviewers and optional review deadline
 
+**PR Merge Policy**: NEVER merge PRs automatically. Only create the PR and share the URL. Merging must be done by the user after review.
+
 ### Commit Granularity
 
 Commits must be split per logical unit of work. Do NOT bundle unrelated changes into a single commit.
