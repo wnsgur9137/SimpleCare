@@ -362,7 +362,7 @@ private struct FoodItemDetailRow: View {
         }
         .padding(.vertical, 8)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(food.name), \(food.calories) \("unit.kcal".localized)")
+        .accessibilityLabel("\(food.name), \(food.calories) \("unit.kcal".localized), \("meal.protein".localized) \(Int(food.proteinGrams))\("unit.g".localized), \("meal.carbs".localized) \(Int(food.carbsGrams))\("unit.g".localized), \("meal.fat".localized) \(Int(food.fatGrams))\("unit.g".localized)")
     }
 }
 
