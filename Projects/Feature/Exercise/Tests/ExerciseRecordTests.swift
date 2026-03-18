@@ -12,45 +12,44 @@ final class ExerciseRecordTests: XCTestCase {
 
     // MARK: - Calculate Calories (MET-based)
 
-    func testCalculateCalories_running_moderate() {
+    func test_칼로리계산_달리기_중강도() {
         // Running baseMET = 8.0, moderate multiplier = 1.0
-        // 8.0 * 1.0 * 70 * (30/60) = 8 * 70 * 0.5 = 280
         let calories = ExerciseRecord.calculateCalories(
             exerciseType: .running,
             intensity: .moderate,
             durationMinutes: 30,
             weightKg: 70
         )
-        XCTAssertEqual(calories, 280)
+        let expected = Int(8.0 * 1.0 * 70.0 * (30.0 / 60.0))
+        XCTAssertEqual(calories, expected)
     }
 
-    func testCalculateCalories_walking_light() {
+    func test_칼로리계산_걷기_저강도() {
         // Walking baseMET = 3.5, light multiplier = 0.75
-        // 3.5 * 0.75 * 60 * (60/60) = 2.625 * 60 * 1 = 157.5 → 157
         let calories = ExerciseRecord.calculateCalories(
             exerciseType: .walking,
             intensity: .light,
             durationMinutes: 60,
             weightKg: 60
         )
-        XCTAssertEqual(calories, 157)
+        let expected = Int(3.5 * 0.75 * 60.0 * (60.0 / 60.0))
+        XCTAssertEqual(calories, expected)
     }
 
-    func testCalculateCalories_yoga_vigorous() {
+    func test_칼로리계산_요가_고강도() {
         // Yoga baseMET = 2.5, vigorous multiplier = 1.3
-        // 2.5 * 1.3 * 65 * (45/60) = 3.25 * 65 * 0.75 = 158.4375 → 158
         let calories = ExerciseRecord.calculateCalories(
             exerciseType: .yoga,
             intensity: .vigorous,
             durationMinutes: 45,
             weightKg: 65
         )
-        XCTAssertEqual(calories, 158)
+        let expected = Int(2.5 * 1.3 * 65.0 * (45.0 / 60.0))
+        XCTAssertEqual(calories, expected)
     }
 
-    func testCalculateCalories_customMET() {
+    func test_칼로리계산_커스텀MET() {
         // Custom MET = 6.0, moderate = 1.0
-        // 6.0 * 1.0 * 80 * (30/60) = 6 * 80 * 0.5 = 240
         let calories = ExerciseRecord.calculateCalories(
             exerciseType: .other,
             intensity: .moderate,
@@ -58,10 +57,11 @@ final class ExerciseRecordTests: XCTestCase {
             weightKg: 80,
             customMET: 6.0
         )
-        XCTAssertEqual(calories, 240)
+        let expected = Int(6.0 * 1.0 * 80.0 * (30.0 / 60.0))
+        XCTAssertEqual(calories, expected)
     }
 
-    func testCalculateCalories_zeroDuration() {
+    func test_칼로리계산_0분운동() {
         let calories = ExerciseRecord.calculateCalories(
             exerciseType: .running,
             intensity: .moderate,
@@ -73,23 +73,23 @@ final class ExerciseRecordTests: XCTestCase {
 
     // MARK: - Exercise Type Category
 
-    func testCategory_cardio() {
+    func test_카테고리_유산소() {
         XCTAssertEqual(ExerciseType.running.category, .cardio)
         XCTAssertEqual(ExerciseType.swimming.category, .cardio)
         XCTAssertEqual(ExerciseType.cycling.category, .cardio)
     }
 
-    func testCategory_strength() {
+    func test_카테고리_근력() {
         XCTAssertEqual(ExerciseType.weightLifting.category, .strength)
         XCTAssertEqual(ExerciseType.bodyweightExercise.category, .strength)
     }
 
-    func testCategory_flexibility() {
+    func test_카테고리_유연성() {
         XCTAssertEqual(ExerciseType.yoga.category, .flexibility)
         XCTAssertEqual(ExerciseType.stretching.category, .flexibility)
     }
 
-    func testCategory_sports() {
+    func test_카테고리_스포츠() {
         XCTAssertEqual(ExerciseType.basketball.category, .sports)
         XCTAssertEqual(ExerciseType.soccer.category, .sports)
         XCTAssertEqual(ExerciseType.tennis.category, .sports)
@@ -97,21 +97,21 @@ final class ExerciseRecordTests: XCTestCase {
 
     // MARK: - Adjusted MET
 
-    func testAdjustedMET_light() {
+    func test_조정MET_저강도() {
         XCTAssertEqual(ExerciseType.running.adjustedMET(for: .light), 8.0 * 0.75, accuracy: 0.01)
     }
 
-    func testAdjustedMET_moderate() {
+    func test_조정MET_중강도() {
         XCTAssertEqual(ExerciseType.running.adjustedMET(for: .moderate), 8.0, accuracy: 0.01)
     }
 
-    func testAdjustedMET_vigorous() {
+    func test_조정MET_고강도() {
         XCTAssertEqual(ExerciseType.running.adjustedMET(for: .vigorous), 8.0 * 1.3, accuracy: 0.01)
     }
 
     // MARK: - Effective Base MET
 
-    func testEffectiveBaseMET_standardType() {
+    func test_기본MET_표준운동타입() {
         let record = ExerciseRecord(
             userProfileId: UUID(),
             exerciseType: .running,
@@ -121,7 +121,7 @@ final class ExerciseRecordTests: XCTestCase {
         XCTAssertEqual(record.effectiveBaseMET, 8.0)
     }
 
-    func testEffectiveBaseMET_customType() {
+    func test_기본MET_커스텀타입() {
         let record = ExerciseRecord(
             userProfileId: UUID(),
             exerciseType: .other,
@@ -132,7 +132,7 @@ final class ExerciseRecordTests: XCTestCase {
         XCTAssertEqual(record.effectiveBaseMET, 5.5)
     }
 
-    func testEffectiveBaseMET_otherWithoutCustom() {
+    func test_기본MET_기타타입_커스텀없음() {
         let record = ExerciseRecord(
             userProfileId: UUID(),
             exerciseType: .other,
@@ -144,7 +144,7 @@ final class ExerciseRecordTests: XCTestCase {
 
     // MARK: - Auto Calorie Calculation in Init
 
-    func testInit_autoCalculatesCalories() {
+    func test_초기화시_자동칼로리계산() {
         let record = ExerciseRecord(
             userProfileId: UUID(),
             exerciseType: .running,
@@ -152,11 +152,11 @@ final class ExerciseRecordTests: XCTestCase {
             durationMinutes: 60,
             userWeightKg: 70
         )
-        // 8.0 * 1.0 * 70 * 1.0 = 560
-        XCTAssertEqual(record.caloriesBurned, 560)
+        let expected = Int(8.0 * 1.0 * 70.0 * (60.0 / 60.0))
+        XCTAssertEqual(record.caloriesBurned, expected)
     }
 
-    func testInit_providedCaloriesOverride() {
+    func test_초기화시_제공된칼로리_우선() {
         let record = ExerciseRecord(
             userProfileId: UUID(),
             exerciseType: .running,

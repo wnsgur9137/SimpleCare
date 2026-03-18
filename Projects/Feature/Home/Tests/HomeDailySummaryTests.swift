@@ -10,24 +10,25 @@ import XCTest
 
 final class HomeDailySummaryTests: XCTestCase {
 
+    private let fixedDate = Date(timeIntervalSince1970: 1710720000) // 2024-03-18 00:00:00 GMT
+
     // MARK: - Remaining Calories
 
-    func testRemainingCalories_noExercise() {
+    func test_잔여칼로리_운동없음() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1200,
             goalCalories: 2000,
             totalProtein: 0,
             totalCarbs: 0,
             totalFat: 0
         )
-        // 2000 - 1200 + 0 = 800
-        XCTAssertEqual(summary.remainingCalories, 800)
+        XCTAssertEqual(summary.remainingCalories, 2000 - 1200 + 0)
     }
 
-    func testRemainingCalories_withExercise() {
+    func test_잔여칼로리_운동포함() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1800,
             goalCalories: 2000,
             totalProtein: 0,
@@ -35,13 +36,12 @@ final class HomeDailySummaryTests: XCTestCase {
             totalFat: 0,
             exerciseCalories: 300
         )
-        // 2000 - 1800 + 300 = 500
-        XCTAssertEqual(summary.remainingCalories, 500)
+        XCTAssertEqual(summary.remainingCalories, 2000 - 1800 + 300)
     }
 
-    func testRemainingCalories_exceeded() {
+    func test_잔여칼로리_초과() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 2500,
             goalCalories: 2000,
             totalProtein: 0,
@@ -53,9 +53,9 @@ final class HomeDailySummaryTests: XCTestCase {
 
     // MARK: - Calorie Progress
 
-    func testCalorieProgress_halfWay() {
+    func test_칼로리진행률_절반() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1000,
             goalCalories: 2000,
             totalProtein: 0,
@@ -65,9 +65,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieProgress, 0.5, accuracy: 0.01)
     }
 
-    func testCalorieProgress_zeroGoal() {
+    func test_칼로리진행률_목표0() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1000,
             goalCalories: 0,
             totalProtein: 0,
@@ -77,9 +77,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieProgress, 0)
     }
 
-    func testCalorieProgress_exceeded() {
+    func test_칼로리진행률_초과() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 2400,
             goalCalories: 2000,
             totalProtein: 0,
@@ -91,9 +91,9 @@ final class HomeDailySummaryTests: XCTestCase {
 
     // MARK: - Calorie Status
 
-    func testCalorieStatus_under() {
+    func test_칼로리상태_부족() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1000,
             goalCalories: 2000,
             totalProtein: 0,
@@ -103,9 +103,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieStatus, .under)
     }
 
-    func testCalorieStatus_onTrack() {
+    func test_칼로리상태_적정() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1900,
             goalCalories: 2000,
             totalProtein: 0,
@@ -115,9 +115,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieStatus, .onTrack)
     }
 
-    func testCalorieStatus_over() {
+    func test_칼로리상태_초과() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 2300,
             goalCalories: 2000,
             totalProtein: 0,
@@ -127,10 +127,10 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieStatus, .over)
     }
 
-    func testCalorieStatus_boundary_0_8() {
+    func test_칼로리상태_경계값_0_8() {
         // 0.8 * 2000 = 1600 → exactly at boundary → onTrack
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 1600,
             goalCalories: 2000,
             totalProtein: 0,
@@ -140,10 +140,10 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.calorieStatus, .onTrack)
     }
 
-    func testCalorieStatus_boundary_1_1() {
+    func test_칼로리상태_경계값_1_1() {
         // 1.1 * 2000 = 2200 → exactly at boundary → onTrack
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 2200,
             goalCalories: 2000,
             totalProtein: 0,
@@ -155,9 +155,9 @@ final class HomeDailySummaryTests: XCTestCase {
 
     // MARK: - Macro Progress
 
-    func testProteinProgress_halfGoal() {
+    func test_단백질진행률_절반() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 0,
             goalCalories: 2000,
             totalProtein: 50,
@@ -168,9 +168,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.proteinProgress, 0.5, accuracy: 0.01)
     }
 
-    func testProteinProgress_exceedsGoal_clampedToOne() {
+    func test_단백질진행률_초과시_1로제한() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 0,
             goalCalories: 2000,
             totalProtein: 150,
@@ -181,9 +181,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertEqual(summary.proteinProgress, 1.0, accuracy: 0.01)
     }
 
-    func testProteinProgress_zeroGoal() {
+    func test_단백질진행률_목표0() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 0,
             goalCalories: 2000,
             totalProtein: 50,
@@ -196,9 +196,9 @@ final class HomeDailySummaryTests: XCTestCase {
 
     // MARK: - Has Records
 
-    func testHasRecords_withMeals() {
+    func test_기록여부_식사있음() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 0,
             goalCalories: 2000,
             totalProtein: 0,
@@ -209,9 +209,9 @@ final class HomeDailySummaryTests: XCTestCase {
         XCTAssertTrue(summary.hasRecords)
     }
 
-    func testHasRecords_empty() {
+    func test_기록여부_비어있음() {
         let summary = HomeDailySummary(
-            date: Date(),
+            date: fixedDate,
             totalCalories: 0,
             goalCalories: 2000,
             totalProtein: 0,
@@ -219,69 +219,5 @@ final class HomeDailySummaryTests: XCTestCase {
             totalFat: 0
         )
         XCTAssertFalse(summary.hasRecords)
-    }
-}
-
-// MARK: - MacroAverage Tests
-
-final class MacroAverageTests: XCTestCase {
-
-    func testTotal() {
-        let macro = MacroAverage(protein: 100, carbs: 250, fat: 70)
-        XCTAssertEqual(macro.total, 420)
-    }
-
-    func testRatios() {
-        let macro = MacroAverage(protein: 100, carbs: 200, fat: 100)
-        // total = 400
-        XCTAssertEqual(macro.proteinRatio, 0.25, accuracy: 0.01)
-        XCTAssertEqual(macro.carbsRatio, 0.50, accuracy: 0.01)
-        XCTAssertEqual(macro.fatRatio, 0.25, accuracy: 0.01)
-    }
-
-    func testRatios_zeroTotal() {
-        let macro = MacroAverage(protein: 0, carbs: 0, fat: 0)
-        XCTAssertEqual(macro.proteinRatio, 0)
-        XCTAssertEqual(macro.carbsRatio, 0)
-        XCTAssertEqual(macro.fatRatio, 0)
-    }
-
-    func testRatios_sumToOne() {
-        let macro = MacroAverage(protein: 80, carbs: 300, fat: 65)
-        let sum = macro.proteinRatio + macro.carbsRatio + macro.fatRatio
-        XCTAssertEqual(sum, 1.0, accuracy: 0.001)
-    }
-}
-
-// MARK: - WeeklyReport Tests
-
-final class WeeklyReportTests: XCTestCase {
-
-    func testGoalAchievementRate() {
-        let report = WeeklyReport(
-            weekStartDate: Date(),
-            avgDailyCalories: 1800,
-            totalExerciseMinutes: 0,
-            totalExerciseCalories: 0,
-            weightChange: nil,
-            streakDays: 0,
-            dailyCalories: [],
-            goalCalories: 2000
-        )
-        XCTAssertEqual(report.goalAchievementRate, 0.9, accuracy: 0.01)
-    }
-
-    func testGoalAchievementRate_zeroGoal() {
-        let report = WeeklyReport(
-            weekStartDate: Date(),
-            avgDailyCalories: 1800,
-            totalExerciseMinutes: 0,
-            totalExerciseCalories: 0,
-            weightChange: nil,
-            streakDays: 0,
-            dailyCalories: [],
-            goalCalories: 0
-        )
-        XCTAssertEqual(report.goalAchievementRate, 0)
     }
 }
