@@ -262,6 +262,8 @@ public struct ReportView: View {
                     .fontWeight(.bold)
             }
             .frame(width: 100, height: 100)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("accessibility.report.achievementRate".localized(with: Int(rate * 100)))
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -490,6 +492,8 @@ private struct ReportStatBox: View {
                 }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title), \(value) \(unit)")
     }
 }
 
@@ -503,6 +507,7 @@ private struct MacroLabel: View {
             Circle()
                 .fill(color)
                 .frame(width: 8, height: 8)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(name)
@@ -513,5 +518,6 @@ private struct MacroLabel: View {
                     .fontWeight(.medium)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }

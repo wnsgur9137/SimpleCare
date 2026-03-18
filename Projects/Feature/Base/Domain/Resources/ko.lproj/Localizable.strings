@@ -121,3 +121,4 @@
 "accessibility.profile.heightHint" = "100에서 250 센티미터 범위에서 조절";
 "accessibility.profile.weightHint" = "30에서 200 킬로그램 범위에서 조절";
 "accessibility.onboarding.progress" = "설정 진행률 %d%%";
+"accessibility.report.achievementRate" = "목표 달성률 %d%%";

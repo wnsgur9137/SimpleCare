@@ -121,3 +121,4 @@
 "accessibility.profile.heightHint" = "Adjustable from 100 to 250 centimeters";
 "accessibility.profile.weightHint" = "Adjustable from 30 to 200 kilograms";
 "accessibility.onboarding.progress" = "Setup progress %d%%";
+"accessibility.report.achievementRate" = "Goal achievement rate %d%%";
