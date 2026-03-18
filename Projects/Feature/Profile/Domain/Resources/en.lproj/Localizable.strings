@@ -15,17 +15,11 @@
 "profile.weight" = "Weight";
 "profile.activityLevel" = "Activity Level";
 "profile.activityLevel.sedentary" = "Sedentary (little to no exercise)";
-"profile.activityLevel.light" = "Lightly Active";
-"profile.activityLevel.moderate" = "Moderately Active";
-"profile.activityLevel.active" = "Active";
 "profile.activityLevel.veryActive" = "Very Active (6-7 days/week)";
 "profile.activityLevel.lightlyActive" = "Lightly Active (1-3 days/week)";
 "profile.activityLevel.moderatelyActive" = "Moderately Active (3-5 days/week)";
 "profile.activityLevel.extraActive" = "Extra Active (athlete level)";
 "profile.goal" = "Goal";
-"profile.goal.lose" = "Lose Weight";
-"profile.goal.maintain" = "Maintain Weight";
-"profile.goal.gain" = "Gain Weight";
 "profile.goal.weightLoss" = "Weight Loss";
 "profile.goal.weightGain" = "Weight Gain";
 "profile.goal.maintenance" = "Maintenance";
