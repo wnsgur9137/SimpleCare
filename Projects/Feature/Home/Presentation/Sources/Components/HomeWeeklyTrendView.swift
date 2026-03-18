@@ -87,9 +87,9 @@ struct HomeWeeklyTrendView: View {
     private func accessibilityText(for index: Int, status: HomeCalorieStatus?) -> String {
         let day = weekdays[index]
         guard let status = status else {
-            return "\(day)요일, 기록 없음"
+            return "home.accessibility.weekday.noRecord".localized(with: day)
         }
-        return "\(day)요일, \(status.displayName)"
+        return "home.accessibility.weekday.status".localized(with: day, status.displayName)
     }
 }
 

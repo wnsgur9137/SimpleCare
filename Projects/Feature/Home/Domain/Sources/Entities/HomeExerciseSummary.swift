@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 /// 운동 요약 정보
 public struct HomeExerciseSummary: Equatable, Identifiable, Sendable {
@@ -35,10 +36,10 @@ public struct HomeExerciseSummary: Equatable, Identifiable, Sendable {
             let hours = duration / 60
             let mins = duration % 60
             if mins == 0 {
-                return "\(hours)시간"
+                return "duration.hours".localized(with: hours)
             }
-            return "\(hours)시간 \(mins)분"
+            return "duration.hoursMinutes".localized(with: hours, mins)
         }
-        return "\(duration)분"
+        return "duration.minutes".localized(with: duration)
     }
 }

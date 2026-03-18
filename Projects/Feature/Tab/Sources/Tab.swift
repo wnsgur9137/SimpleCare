@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BaseDomain
 
 public enum AppTab: Hashable, CaseIterable {
     case home           // 홈 (메인)
@@ -17,11 +18,11 @@ public enum AppTab: Hashable, CaseIterable {
 
     public var title: String {
         switch self {
-        case .home: return "홈"
-        case .meal: return "식단"
-        case .exercise: return "운동"
-        case .progress: return "진행"
-        case .calendar: return "캘린더"
+        case .home: return "tab.home".localized
+        case .meal: return "tab.meal".localized
+        case .exercise: return "tab.exercise".localized
+        case .progress: return "tab.progress".localized
+        case .calendar: return "tab.calendar".localized
         }
     }
 

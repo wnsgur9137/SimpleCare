@@ -44,9 +44,16 @@ public struct HomeFeature {
             case profile
         }
 
-        public enum ReportType: String, Equatable, CaseIterable {
-            case weekly = "주간"
-            case monthly = "월간"
+        public enum ReportType: Equatable, CaseIterable {
+            case weekly
+            case monthly
+
+            public var displayName: String {
+                switch self {
+                case .weekly: return "home.reportType.weekly".localized
+                case .monthly: return "home.reportType.monthly".localized
+                }
+            }
         }
 
         public var isToday: Bool {

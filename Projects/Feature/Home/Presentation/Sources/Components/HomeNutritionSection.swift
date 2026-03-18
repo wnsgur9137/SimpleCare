@@ -91,6 +91,6 @@ struct HomeNutritionProgressRow: View {
             .frame(height: 8)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(label) \(Int(current))그램, 목표 \(Int(goal))그램")
+        .accessibilityLabel("home.accessibility.nutrition".localized(with: label, Int(current), Int(goal)))
     }
 }

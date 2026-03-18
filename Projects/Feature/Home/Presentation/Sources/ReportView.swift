@@ -419,7 +419,7 @@ public struct ReportView: View {
 
     private static let monthDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 M월"
+        formatter.setLocalizedDateFormatFromTemplate("yyyyMMMM")
         return formatter
     }()
 

@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import WeightDomain
+import BaseDomain
 
 @Reducer
 public struct WeightFeature {
@@ -35,9 +36,9 @@ public struct WeightFeature {
 
             public var displayName: String {
                 switch self {
-                case .week: return "7일"
-                case .month: return "30일"
-                case .threeMonths: return "90일"
+                case .week: return "period.7days".localized
+                case .month: return "period.30days".localized
+                case .threeMonths: return "period.90days".localized
                 }
             }
         }

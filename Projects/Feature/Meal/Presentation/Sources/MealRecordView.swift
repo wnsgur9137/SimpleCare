@@ -350,7 +350,7 @@ struct FavoriteFoodRow: View {
                         Text("P \(String(format: "%.0f", favorite.proteinPerServing))g")
                             .foregroundStyle(.scProtein)
                         if favorite.usageCount > 0 {
-                            Text("(\(favorite.usageCount)회)")
+                            Text("meal.usageCount".localized(with: favorite.usageCount))
                                 .foregroundStyle(.secondary)
                         }
                     }

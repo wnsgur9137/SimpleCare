@@ -100,7 +100,7 @@ struct HomeMealRecordRow: View {
         }
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(meal.mealType.displayName), \(meal.foodNamesText), \(meal.totalCalories)칼로리")
+        .accessibilityLabel("home.accessibility.meal".localized(with: meal.mealType.displayName, meal.foodNamesText, meal.totalCalories))
     }
 }
 
@@ -133,7 +133,7 @@ struct HomeExerciseRecordRow: View {
         }
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(exercise.exerciseName), \(exercise.durationText), \(exercise.caloriesBurned)칼로리 소모")
+        .accessibilityLabel("home.accessibility.exercise".localized(with: exercise.exerciseName, exercise.durationText, exercise.caloriesBurned))
     }
 }
 
