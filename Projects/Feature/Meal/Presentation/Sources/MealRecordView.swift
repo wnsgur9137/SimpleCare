@@ -168,7 +168,7 @@ public struct MealRecordView: View {
             } label: {
                 HStack {
                     Image(systemName: "star.fill")
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(.scWarning)
                     Text("meal.favorites".localized)
                         .font(.headline)
                     Spacer()
@@ -250,7 +250,7 @@ public struct MealRecordView: View {
 
     private var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.scOverlay
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
@@ -317,7 +317,7 @@ struct EstimatedFoodRow: View {
             if let onFavorite {
                 Button(action: onFavorite) {
                     Image(systemName: "star")
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(.scWarning)
                 }
             }
 
