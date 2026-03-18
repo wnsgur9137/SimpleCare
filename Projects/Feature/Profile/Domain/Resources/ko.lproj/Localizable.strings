@@ -15,17 +15,11 @@
 "profile.weight" = "체중";
 "profile.activityLevel" = "활동 수준";
 "profile.activityLevel.sedentary" = "거의 운동 안 함";
-"profile.activityLevel.light" = "가벼운 활동";
-"profile.activityLevel.moderate" = "보통 활동";
-"profile.activityLevel.active" = "활발한 활동";
 "profile.activityLevel.veryActive" = "매우 활발";
 "profile.activityLevel.lightlyActive" = "가벼운 활동 (주 1-3회)";
 "profile.activityLevel.moderatelyActive" = "보통 활동 (주 3-5회)";
 "profile.activityLevel.extraActive" = "매우 활발 (운동선수급)";
 "profile.goal" = "목표";
-"profile.goal.lose" = "체중 감량";
-"profile.goal.maintain" = "체중 유지";
-"profile.goal.gain" = "체중 증가";
 "profile.goal.weightLoss" = "체중 감량";
 "profile.goal.weightGain" = "체중 증가";
 "profile.goal.maintenance" = "체중 유지";

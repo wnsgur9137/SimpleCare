@@ -16,7 +16,7 @@ public protocol ExerciseCoordinatorDependency {
     var exerciseClient: ExerciseClient { get }
 }
 
-public final class ExerciseCoordinator: ObservableObject, Coordinator {
+public final class ExerciseCoordinator: ObservableObject, Coordinator, SaveCompletable {
     private let dependencies: ExerciseCoordinatorDependency
     public var onSaveComplete: (() -> Void)?
     public var onNavigateToDetail: ((ExerciseRecord) -> Void)?
