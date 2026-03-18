@@ -119,3 +119,19 @@
 "notification.banner.title" = "Enable notifications";
 "notification.banner.description" = "Get %@ reminders";
 "notification.banner.enable" = "Enable";
+
+// MARK: - Accessibility
+"accessibility.home.profile" = "Profile";
+"accessibility.home.settings" = "Settings";
+"accessibility.home.calorieProgress" = "%d of %d kcal consumed, %d%% of goal";
+"accessibility.home.steps" = "%d steps";
+"accessibility.home.activeCalories" = "Active calories %d kcal";
+"accessibility.meal.addButton" = "Add meal record";
+"accessibility.exercise.addButton" = "Add exercise record";
+"accessibility.weight.slider" = "Weight input";
+"accessibility.weight.sliderHint" = "Adjustable from 30 to 200 kilograms";
+"accessibility.weight.chart" = "Weight trend chart with %d records";
+"accessibility.profile.heightHint" = "Adjustable from 100 to 250 centimeters";
+"accessibility.profile.weightHint" = "Adjustable from 30 to 200 kilograms";
+"accessibility.onboarding.progress" = "Setup progress %d%%";
+"accessibility.report.achievementRate" = "Goal achievement rate %d%%";

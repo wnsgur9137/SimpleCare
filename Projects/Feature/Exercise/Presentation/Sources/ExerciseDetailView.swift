@@ -93,6 +93,7 @@ public struct ExerciseDetailView: View {
                 Image(systemName: store.exercise.exerciseType.category.icon)
                     .font(.title)
                     .foregroundStyle(categoryColor)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(store.exercise.displayName)
@@ -115,6 +116,8 @@ public struct ExerciseDetailView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(store.exercise.displayName), \(formattedDate), \(store.exercise.caloriesBurned) \("unit.kcal".localized)")
         }
         .padding()
         .background {
@@ -340,6 +343,8 @@ private struct ExerciseDetailCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(color.opacity(0.1))
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label), \(value) \(unit)")
     }
 }
 

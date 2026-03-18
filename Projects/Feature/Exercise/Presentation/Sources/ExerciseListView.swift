@@ -27,6 +27,7 @@ public struct ExerciseListView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel("accessibility.exercise.addButton".localized)
                 }
             }
             .onAppear {
@@ -119,6 +120,7 @@ private struct ExerciseRowView: View {
                 .frame(width: 40, height: 40)
                 .background(categoryColor.opacity(0.15))
                 .clipShape(Circle())
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
                 // Exercise name
@@ -148,6 +150,8 @@ private struct ExerciseRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(exercise.displayName), \(exercise.durationDisplayString), \(exercise.intensity.displayName), \(exercise.caloriesBurned) \("unit.kcal".localized)")
     }
 
     private var categoryColor: Color {

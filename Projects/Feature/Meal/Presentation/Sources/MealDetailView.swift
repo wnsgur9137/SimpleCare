@@ -97,6 +97,7 @@ public struct MealDetailView: View {
                 Image(systemName: store.meal.mealType.icon)
                     .font(.title)
                     .foregroundStyle(mealTypeColor)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(store.meal.mealType.displayName)
@@ -117,6 +118,8 @@ public struct MealDetailView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(store.meal.mealType.displayName), \(formattedDate), \(store.meal.totalCalories) \("unit.kcal".localized)")
 
             if store.isEditing {
                 mealTypePicker
@@ -313,6 +316,8 @@ private struct NutritionCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(color.opacity(0.1))
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label), \(value) \(unit)")
     }
 }
 
@@ -356,6 +361,8 @@ private struct FoodItemDetailRow: View {
             }
         }
         .padding(.vertical, 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(food.name), \(food.calories) \("unit.kcal".localized), \("meal.protein".localized) \(Int(food.proteinGrams))\("unit.g".localized), \("meal.carbs".localized) \(Int(food.carbsGrams))\("unit.g".localized), \("meal.fat".localized) \(Int(food.fatGrams))\("unit.g".localized)")
     }
 }
 

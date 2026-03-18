@@ -94,6 +94,9 @@ public struct WeightView: View {
             }
 
             Slider(value: $store.newWeightKg, in: 30...200, step: 0.1)
+                .accessibilityLabel("accessibility.weight.slider".localized)
+                .accessibilityValue(String(format: "%.1f %@", store.newWeightKg, "unit.kg".localized))
+                .accessibilityHint("accessibility.weight.sliderHint".localized)
 
             TextField("weight.memo".localized, text: $store.notes)
                 .textFieldStyle(.roundedBorder)
@@ -150,6 +153,7 @@ public struct WeightView: View {
             .chartYAxis {
                 AxisMarks(position: .leading)
             }
+            .accessibilityLabel("accessibility.weight.chart".localized(with: trend.records.count))
             .overlay {
                 if trend.records.isEmpty {
                     VStack(spacing: 8) {
@@ -249,6 +253,8 @@ struct StatBox: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title), \(value) \(unit)")
     }
 }
 

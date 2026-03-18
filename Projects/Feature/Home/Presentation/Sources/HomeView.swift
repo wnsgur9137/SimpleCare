@@ -77,11 +77,13 @@ public struct HomeView: View {
                         } label: {
                             Image(systemName: "person.circle")
                         }
+                        .accessibilityLabel("accessibility.home.profile".localized)
                         Button {
                             store.send(.settingsButtonTapped)
                         } label: {
                             Image(systemName: "gearshape")
                         }
+                        .accessibilityLabel("accessibility.home.settings".localized)
                     }
                 )
             }
@@ -166,6 +168,8 @@ public struct HomeView: View {
                 }
             }
             .frame(width: 160, height: 160)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("accessibility.home.calorieProgress".localized(with: summary.totalCalories, summary.goalCalories, Int(summary.calorieProgress * 100)))
             .overlay(alignment: .topTrailing) {
                 // 스트릭 배지
                 if summary.streakDays > 0 {
@@ -266,6 +270,8 @@ public struct HomeView: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 .glassEffect(.regular, in: .rect(cornerRadius: 12))
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("accessibility.home.steps".localized(with: summary.steps))
 
                 // 활동 칼로리 카드
                 HStack(spacing: 8) {
@@ -292,6 +298,8 @@ public struct HomeView: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 .glassEffect(.regular, in: .rect(cornerRadius: 12))
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("accessibility.home.activeCalories".localized(with: summary.activeCalories))
             }
         } else {
             // 건강 권한 미허용 안내

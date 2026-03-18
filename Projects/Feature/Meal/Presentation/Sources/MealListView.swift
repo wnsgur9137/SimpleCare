@@ -29,6 +29,7 @@ public struct MealListView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel("accessibility.meal.addButton".localized)
                 }
             }
             .onAppear {
@@ -204,10 +205,12 @@ private struct MacroDotView: View {
             Circle()
                 .fill(color)
                 .frame(width: 6, height: 6)
+                .accessibilityHidden(true)
             Text("\(label) \(value)")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -225,6 +228,7 @@ private struct MealRowView: View {
                 .frame(width: 40, height: 40)
                 .background(mealTypeColor.opacity(0.15))
                 .clipShape(Circle())
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
                 // Meal type name + time
@@ -263,6 +267,8 @@ private struct MealRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(meal.mealType.displayName), \(foodSummary), \(meal.totalCalories) \("unit.kcal".localized)")
     }
 
     private var foodSummary: String {

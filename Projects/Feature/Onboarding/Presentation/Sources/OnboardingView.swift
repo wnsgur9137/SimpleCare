@@ -34,6 +34,7 @@ public struct OnboardingView: View {
             .frame(height: 4)
             .padding(.horizontal)
             .animation(.easeInOut(duration: 0.3), value: store.currentStep)
+            .accessibilityLabel("accessibility.onboarding.progress".localized(with: Int(store.currentStep.progress * 100)))
 
             // Step content
             TabView(selection: $store.currentStep.sending(\.goToStep)) {
@@ -70,6 +71,7 @@ public struct OnboardingView: View {
                             .glassCard(cornerRadius: 12)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("common.back".localized)
                 }
 
                 Button {
