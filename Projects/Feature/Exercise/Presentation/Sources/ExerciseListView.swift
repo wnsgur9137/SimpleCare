@@ -151,7 +151,11 @@ private struct ExerciseRowView: View {
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(exercise.displayName), \(exercise.durationDisplayString), \(exercise.intensity.displayName), \(exercise.caloriesBurned) \("unit.kcal".localized)")
+        .accessibilityLabel(
+            "\(exercise.displayName), \(exercise.durationDisplayString), " +
+            "\(exercise.intensity.displayName), " +
+            "\(exercise.caloriesBurned) \("unit.kcal".localized)"
+        )
     }
 
     private var categoryColor: Color {

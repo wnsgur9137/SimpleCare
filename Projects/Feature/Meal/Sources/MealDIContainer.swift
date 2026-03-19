@@ -65,7 +65,8 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
 
     private lazy var deleteFavoriteFoodUseCase: DeleteFavoriteFoodUseCaseProtocol = DeleteFavoriteFoodUseCase(repository: favoriteFoodRepository)
 
-    private lazy var incrementFavoriteUsageUseCase: IncrementFavoriteUsageUseCaseProtocol = IncrementFavoriteUsageUseCase(repository: favoriteFoodRepository)
+    private lazy var incrementFavoriteUsageUseCase: IncrementFavoriteUsageUseCaseProtocol =
+        IncrementFavoriteUsageUseCase(repository: favoriteFoodRepository)
 
     // MARK: - TCA Dependencies
 

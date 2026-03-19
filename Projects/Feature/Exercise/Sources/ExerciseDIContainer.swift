@@ -54,7 +54,8 @@ public final class ExerciseDIContainer: DIContainer, ExerciseCoordinatorDependen
 
     private lazy var saveCustomExerciseUseCase: SaveCustomExerciseUseCaseProtocol = SaveCustomExerciseUseCase(repository: customExerciseRepository)
 
-    private lazy var deleteCustomExerciseUseCase: DeleteCustomExerciseUseCaseProtocol = DeleteCustomExerciseUseCase(repository: customExerciseRepository)
+    private lazy var deleteCustomExerciseUseCase: DeleteCustomExerciseUseCaseProtocol =
+        DeleteCustomExerciseUseCase(repository: customExerciseRepository)
 
     private lazy var updateExerciseUseCase: UpdateExerciseUseCaseProtocol = UpdateExerciseUseCase(repository: exerciseRepository)
 

@@ -140,9 +140,9 @@ private struct DateSectionHeaderView: View {
         Self.dateFormatter.string(from: date)
     }
 
-    private var dailyTotals: (calories: Int, protein: Double, carbs: Double, fat: Double) {
-        meals.reduce((calories: 0, protein: 0.0, carbs: 0.0, fat: 0.0)) { totals, meal in
-            (
+    private var dailyTotals: DailyNutritionTotals {
+        meals.reduce(DailyNutritionTotals()) { totals, meal in
+            DailyNutritionTotals(
                 calories: totals.calories + meal.totalCalories,
                 protein: totals.protein + meal.totalProtein,
                 carbs: totals.carbs + meal.totalCarbs,
@@ -191,6 +191,15 @@ private struct DateSectionHeaderView: View {
         .padding(.vertical, 4)
         .textCase(nil)
     }
+}
+
+// MARK: - Daily Nutrition Totals
+
+private struct DailyNutritionTotals {
+    var calories: Int = 0
+    var protein: Double = 0.0
+    var carbs: Double = 0.0
+    var fat: Double = 0.0
 }
 
 // MARK: - MacroDotView
