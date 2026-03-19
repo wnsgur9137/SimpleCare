@@ -7,6 +7,7 @@
 
 import Foundation
 import WeightDomain
+import BaseDomain
 import StorageInfra
 import HealthKitInfra
 
