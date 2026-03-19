@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import WeightDomain
-import StorageInfra
+import BaseDomain
 import HealthKitInfra
+import StorageInfra
+import WeightDomain
 
 public final class WeightRepository: WeightRepositoryProtocol, Sendable {
     private let storage: WeightRecordRepository
