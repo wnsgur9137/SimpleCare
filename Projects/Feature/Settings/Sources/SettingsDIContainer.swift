@@ -16,9 +16,24 @@ public final class SettingsDIContainer: DIContainer, SettingsCoordinatorDependen
 
     public struct Dependencies {
         public let userProfileId: UUID?
+        public let themeManager: ThemeManager
+        public let localizationManager: LocalizationManager
+        public let notificationManager: NotificationManager
+        public let dataExportManager: DataExportManager
 
-        public init(userProfileId: UUID? = nil) {
+        @MainActor
+        public init(
+            userProfileId: UUID? = nil,
+            themeManager: ThemeManager = .shared,
+            localizationManager: LocalizationManager = .shared,
+            notificationManager: NotificationManager = .shared,
+            dataExportManager: DataExportManager = .shared
+        ) {
             self.userProfileId = userProfileId
+            self.themeManager = themeManager
+            self.localizationManager = localizationManager
+            self.notificationManager = notificationManager
+            self.dataExportManager = dataExportManager
         }
     }
 
@@ -38,21 +53,21 @@ public final class SettingsDIContainer: DIContainer, SettingsCoordinatorDependen
 
     @MainActor
     public var themeManager: ThemeManager {
-        .shared
+        dependencies.themeManager
     }
 
     @MainActor
     public var localizationManager: LocalizationManager {
-        .shared
+        dependencies.localizationManager
     }
 
     @MainActor
     public var notificationManager: NotificationManager {
-        .shared
+        dependencies.notificationManager
     }
 
     @MainActor
     public var dataExportManager: DataExportManager {
-        .shared
+        dependencies.dataExportManager
     }
 }
