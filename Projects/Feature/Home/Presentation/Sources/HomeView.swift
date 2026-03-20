@@ -169,7 +169,12 @@ public struct HomeView: View {
             }
             .frame(width: 160, height: 160)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("accessibility.home.calorieProgress".localized(with: summary.totalCalories, summary.goalCalories, Int(summary.calorieProgress * 100)))
+            .accessibilityLabel(
+                "accessibility.home.calorieProgress".localized(
+                    with: summary.totalCalories, summary.goalCalories,
+                    Int(summary.calorieProgress * 100)
+                )
+            )
             .overlay(alignment: .topTrailing) {
                 // 스트릭 배지
                 if summary.streakDays > 0 {
