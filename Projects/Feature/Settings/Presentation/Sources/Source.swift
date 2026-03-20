@@ -9,28 +9,47 @@ import SwiftUI
 import UIKit
 import BasePresentation
 
+// MARK: - SettingsCoordinatorDependency
+
+/// Settings 모듈 Coordinator 의존성 프로토콜
+@MainActor
+public protocol SettingsCoordinatorDependency {
+    var userProfileId: UUID? { get }
+    var themeManager: ThemeManager { get }
+    var localizationManager: LocalizationManager { get }
+    var notificationManager: NotificationManager { get }
+    var dataExportManager: DataExportManager { get }
+}
+
 // MARK: - SettingsCoordinator
 
+@MainActor
 public final class SettingsCoordinator: ObservableObject, Coordinator {
-    private let userProfileId: UUID?
+    private let dependencies: SettingsCoordinatorDependency
 
-    public init(userProfileId: UUID? = nil) {
-        self.userProfileId = userProfileId
+    public init(dependencies: SettingsCoordinatorDependency) {
+        self.dependencies = dependencies
     }
 
     @ViewBuilder
     public func start() -> some View {
-        SettingsView(userProfileId: userProfileId)
+        SettingsView(
+            userProfileId: dependencies.userProfileId,
+            themeManager: dependencies.themeManager,
+            localizationManager: dependencies.localizationManager,
+            notificationManager: dependencies.notificationManager,
+            dataExportManager: dependencies.dataExportManager
+        )
     }
 }
 
 // MARK: - SettingsView
 
 public struct SettingsView: View {
-    @ObservedObject private var localizationManager = LocalizationManager.shared
-    @ObservedObject private var themeManager = ThemeManager.shared
-    @ObservedObject private var notificationManager = NotificationManager.shared
-    @ObservedObject private var dataExportManager = DataExportManager.shared
+    @ObservedObject private var localizationManager: LocalizationManager
+    @ObservedObject private var themeManager: ThemeManager
+    @ObservedObject private var notificationManager: NotificationManager
+    @ObservedObject private var dataExportManager: DataExportManager
     @State private var refreshID = UUID()
     @State private var mealRemindersExpanded = false
     @State private var showExportSheet = false
@@ -42,8 +61,18 @@ public struct SettingsView: View {
 
     private let userProfileId: UUID?
 
-    public init(userProfileId: UUID? = nil) {
+    public init(
+        userProfileId: UUID? = nil,
+        themeManager: ThemeManager,
+        localizationManager: LocalizationManager,
+        notificationManager: NotificationManager,
+        dataExportManager: DataExportManager
+    ) {
         self.userProfileId = userProfileId
+        self._themeManager = ObservedObject(wrappedValue: themeManager)
+        self._localizationManager = ObservedObject(wrappedValue: localizationManager)
+        self._notificationManager = ObservedObject(wrappedValue: notificationManager)
+        self._dataExportManager = ObservedObject(wrappedValue: dataExportManager)
     }
 
     public var body: some View {
@@ -66,6 +95,7 @@ public struct SettingsView: View {
             if let userProfileId = userProfileId {
                 ExportFormatSheet(
                     userProfileId: userProfileId,
+                    dataExportManager: dataExportManager,
                     onExportComplete: { url in
                         exportFileURL = url
                         showExportSheet = false
@@ -80,7 +110,6 @@ public struct SettingsView: View {
         }
         .sheet(item: $exportFileURL) { url in
             ShareSheet(activityItems: [url]) {
-                // 공유 완료/취소 후 임시 파일 정리
                 dataExportManager.cleanupExportFile(at: url)
                 exportFileURL = nil
             }
@@ -333,6 +362,68 @@ public struct SettingsView: View {
 
 // MARK: - NotificationToggleRow
 
+struct NotificationToggleRow: View {
+    let category: NotificationCategory
+    @ObservedObject var manager: NotificationManager
+
+    private var isEnabled: Binding<Bool> {
+        Binding(
+            get: { manager.setting(for: category).isEnabled },
+            set: { manager.updateSetting(for: category, isEnabled: $0) }
+        )
+    }
+
+    private var selectedTime: Binding<Date> {
+        Binding(
+            get: { manager.setting(for: category).timeDate },
+            set: { manager.updateTime(for: category, date: $0) }
+        )
+    }
+
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack {
+                if category.group.categories.count == 1 {
+                    Image(systemName: category.icon)
+                        .foregroundStyle(iconColor)
+                        .frame(width: 24)
+                }
+                Text(category.displayName)
+                Spacer()
+                Toggle("", isOn: isEnabled)
+                    .labelsHidden()
+            }
+
+            if isEnabled.wrappedValue {
+                HStack {
+                    Text("notification.time".localized)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    DatePicker(
+                        "",
+                        selection: selectedTime,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .labelsHidden()
+                }
+                .padding(.leading, category.group.categories.count == 1 ? 32 : 0)
+            }
+        }
+    }
+
+    private var iconColor: Color {
+        switch category {
+        case .breakfast, .lunch, .dinner:
+            return .scSuccess
+        case .exercise:
+            return .scWarning
+        case .weight:
+            return .scSecondary
+        }
+    }
+}
+
 // MARK: - Export Format Sheet
 
 struct ExportFormatSheet: View {
@@ -340,9 +431,21 @@ struct ExportFormatSheet: View {
     let onExportComplete: (URL) -> Void
     let onError: (String) -> Void
 
-    @ObservedObject private var dataExportManager = DataExportManager.shared
+    @ObservedObject private var dataExportManager: DataExportManager
     @Environment(\.dismiss) private var dismiss
     @State private var selectedFormat: ExportFormat = .json
+
+    init(
+        userProfileId: UUID,
+        dataExportManager: DataExportManager,
+        onExportComplete: @escaping (URL) -> Void,
+        onError: @escaping (String) -> Void
+    ) {
+        self.userProfileId = userProfileId
+        self._dataExportManager = ObservedObject(wrappedValue: dataExportManager)
+        self.onExportComplete = onExportComplete
+        self.onError = onError
+    }
 
     var body: some View {
         NavigationStack {
@@ -436,68 +539,4 @@ struct ShareSheet: UIViewControllerRepresentable {
 
 extension URL: @retroactive Identifiable {
     public var id: String { absoluteString }
-}
-
-// MARK: - NotificationToggleRow
-
-struct NotificationToggleRow: View {
-    let category: NotificationCategory
-    @ObservedObject var manager: NotificationManager
-
-    private var isEnabled: Binding<Bool> {
-        Binding(
-            get: { manager.setting(for: category).isEnabled },
-            set: { manager.updateSetting(for: category, isEnabled: $0) }
-        )
-    }
-
-    private var selectedTime: Binding<Date> {
-        Binding(
-            get: { manager.setting(for: category).timeDate },
-            set: { manager.updateTime(for: category, date: $0) }
-        )
-    }
-
-    var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                if category.group.categories.count == 1 {
-                    Image(systemName: category.icon)
-                        .foregroundStyle(iconColor)
-                        .frame(width: 24)
-                }
-                Text(category.displayName)
-                Spacer()
-                Toggle("", isOn: isEnabled)
-                    .labelsHidden()
-            }
-
-            if isEnabled.wrappedValue {
-                HStack {
-                    Text("notification.time".localized)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    DatePicker(
-                        "",
-                        selection: selectedTime,
-                        displayedComponents: .hourAndMinute
-                    )
-                    .labelsHidden()
-                }
-                .padding(.leading, category.group.categories.count == 1 ? 32 : 0)
-            }
-        }
-    }
-
-    private var iconColor: Color {
-        switch category {
-        case .breakfast, .lunch, .dinner:
-            return .scSuccess
-        case .exercise:
-            return .scWarning
-        case .weight:
-            return .scSecondary
-        }
-    }
 }
