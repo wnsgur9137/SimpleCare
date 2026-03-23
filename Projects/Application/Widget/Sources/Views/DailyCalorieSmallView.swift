@@ -82,7 +82,7 @@ struct DailyCalorieSmallView: View {
 
     private var remainingLabel: some View {
         HStack(spacing: 3) {
-            Text("남은:")
+            Text(WidgetStrings.remaining)
                 .font(.system(size: 10, weight: .medium, design: .rounded))
                 .foregroundStyle(.secondary)
 

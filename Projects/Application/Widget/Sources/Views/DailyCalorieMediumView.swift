@@ -95,19 +95,19 @@ struct DailyCalorieMediumView: View {
     private var rightSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             detailRow(
-                title: "운동 소모",
+                title: WidgetStrings.exerciseBurned,
                 value: "\(entry.exerciseCalories) kcal",
                 valueColor: .blue
             )
 
             detailRow(
-                title: "남은 칼로리",
+                title: WidgetStrings.remainingCalories,
                 value: "\(entry.remainingCalories) kcal",
                 valueColor: currentProgressColor
             )
 
             detailRow(
-                title: "진행률",
+                title: WidgetStrings.progressRate,
                 value: progressPercent,
                 valueColor: currentProgressColor
             )

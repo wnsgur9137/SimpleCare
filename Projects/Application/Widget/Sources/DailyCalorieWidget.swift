@@ -9,8 +9,8 @@ struct DailyCalorieWidget: Widget {
             DailyCalorieWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("일일 칼로리")
-        .description("오늘의 칼로리 섭취량과 목표를 확인합니다.")
+        .configurationDisplayName(WidgetStrings.dailyCalorieTitle)
+        .description(WidgetStrings.dailyCalorieDescription)
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

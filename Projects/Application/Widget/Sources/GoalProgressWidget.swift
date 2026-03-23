@@ -9,8 +9,8 @@ struct GoalProgressWidget: Widget {
             GoalProgressWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("목표 달성률")
-        .description("칼로리와 영양소 목표 달성률을 확인합니다.")
+        .configurationDisplayName(WidgetStrings.goalProgressTitle)
+        .description(WidgetStrings.goalProgressDescription)
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

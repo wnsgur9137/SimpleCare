@@ -1,0 +1,15 @@
+// Widget - DailyCalorie
+"widget.dailyCalorie.title" = "Daily Calories";
+"widget.dailyCalorie.description" = "Check today's calorie intake and goal.";
+"widget.remaining" = "Left:";
+"widget.exerciseBurned" = "Exercise";
+"widget.remainingCalories" = "Remaining";
+"widget.progressRate" = "Progress";
+
+// Widget - GoalProgress
+"widget.goalProgress.title" = "Goal Progress";
+"widget.goalProgress.description" = "Check calorie and nutrition goal progress.";
+"widget.achievementRate" = "Progress";
+
+// Widget - Common
+"widget.streakDays" = "%d day streak";

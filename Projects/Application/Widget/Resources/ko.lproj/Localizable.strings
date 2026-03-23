@@ -1,0 +1,15 @@
+// Widget - DailyCalorie
+"widget.dailyCalorie.title" = "일일 칼로리";
+"widget.dailyCalorie.description" = "오늘의 칼로리 섭취량과 목표를 확인합니다.";
+"widget.remaining" = "남은:";
+"widget.exerciseBurned" = "운동 소모";
+"widget.remainingCalories" = "남은 칼로리";
+"widget.progressRate" = "진행률";
+
+// Widget - GoalProgress
+"widget.goalProgress.title" = "목표 달성률";
+"widget.goalProgress.description" = "칼로리와 영양소 목표 달성률을 확인합니다.";
+"widget.achievementRate" = "달성률";
+
+// Widget - Common
+"widget.streakDays" = "%d일 연속";

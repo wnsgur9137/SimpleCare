@@ -75,7 +75,7 @@ struct GoalProgressMediumView: View {
                         .minimumScaleFactor(0.5)
                         .lineLimit(1)
 
-                    Text("달성률")
+                    Text(WidgetStrings.achievementRate)
                         .font(.system(size: 9, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                 }
@@ -163,7 +163,7 @@ struct GoalProgressMediumView: View {
             Text("\u{1F525}") // 🔥
                 .font(.system(size: 11))
 
-            Text("\(entry.streakDays)일 연속")
+            Text(WidgetStrings.streakDays(entry.streakDays))
                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                 .foregroundStyle(.orange)
                 .minimumScaleFactor(0.7)

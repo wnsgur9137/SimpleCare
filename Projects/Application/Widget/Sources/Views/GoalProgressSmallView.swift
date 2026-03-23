@@ -66,7 +66,7 @@ struct GoalProgressSmallView: View {
     }
 
     private var achievementLabel: some View {
-        Text("달성률")
+        Text(WidgetStrings.achievementRate)
             .font(.system(size: 12, weight: .medium, design: .rounded))
             .foregroundStyle(.secondary)
     }
@@ -76,7 +76,7 @@ struct GoalProgressSmallView: View {
             Text("\u{1F525}") // 🔥
                 .font(.system(size: 14))
 
-            Text("\(entry.streakDays)일 연속")
+            Text(WidgetStrings.streakDays(entry.streakDays))
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .foregroundStyle(.orange)
                 .minimumScaleFactor(0.7)
