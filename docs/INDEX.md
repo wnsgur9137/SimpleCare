@@ -4,7 +4,7 @@ aliases: ["MOC", "문서 목차"]
 tags:
   - MOC
 created: 2026-03-11
-updated: 2026-03-11
+updated: 2026-03-23
 status: active
 ---
 
@@ -45,6 +45,7 @@ status: active
 | ↳ [Base](./02-설계/modules/Base.md) | 공통 UI/유틸리티 모듈 |
 | ↳ [Settings](./02-설계/modules/Settings.md) | 설정 모듈 |
 | ↳ [Features](./02-설계/modules/Features.md) | Feature 통합 모듈 |
+| ↳ [Widget](./02-설계/modules/Widget.md) | WidgetKit 홈 화면 위젯 모듈 |
 | ↳ [StorageInfra](./02-설계/modules/StorageInfra.md) | SwiftData 영속화 모듈 |
 | ↳ [AIServiceInfra](./02-설계/modules/AIServiceInfra.md) | AI API 연동 모듈 |
 | ↳ [NetworkInfra](./02-설계/modules/NetworkInfra.md) | 네트워크 통신 모듈 |

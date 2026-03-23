@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - MOC
 created: 2026-01-26
-updated: 2026-03-18
+updated: 2026-03-23
 status: active
 ---
 
@@ -39,6 +39,7 @@ status: active
 | [Base](./modules/Base.md) | 공통 UI 컴포넌트, 프로토콜, 유틸리티 |
 | [Settings](./modules/Settings.md) | 앱 설정 (모듈 골격 + 실제 UI는 Tab/Base에서 구현) |
 | [Features](./modules/Features.md) | Feature 모듈 통합 우산 모듈 (Aggregator) |
+| [Widget](./modules/Widget.md) | WidgetKit 홈 화면 위젯 (일일 칼로리 요약, 목표 달성률) |
 
 ## Infrastructure 모듈
 
