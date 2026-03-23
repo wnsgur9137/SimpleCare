@@ -17,8 +17,8 @@ struct GoalProgressMediumView: View {
 
     // MARK: - Private Helpers
 
-    private var progressColor: Color {
-        goalProgressColor(entry.calorieProgress)
+    private var currentProgressColor: Color {
+        progressColor(for: entry.calorieProgress)
     }
 
     private var clampedCalorieProgress: Double {
@@ -61,7 +61,7 @@ struct GoalProgressMediumView: View {
                 Circle()
                     .trim(from: 0, to: clampedCalorieProgress)
                     .stroke(
-                        progressColor,
+                        currentProgressColor,
                         style: StrokeStyle(lineWidth: 9, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
@@ -71,7 +71,7 @@ struct GoalProgressMediumView: View {
                 VStack(spacing: 1) {
                     Text(progressPercent)
                         .font(.system(size: 18, weight: .heavy, design: .rounded))
-                        .foregroundStyle(progressColor)
+                        .foregroundStyle(currentProgressColor)
                         .minimumScaleFactor(0.5)
                         .lineLimit(1)
 
@@ -178,30 +178,6 @@ struct GoalProgressMediumView: View {
     }
 }
 
-// MARK: - Progress Color Helper
-
-private func goalProgressColor(_ progress: Double) -> Color {
-    if progress < 0.8 {
-        return .orange
-    } else if progress <= 1.1 {
-        return .green
-    } else {
-        return .red
-    }
-}
-
-// MARK: - View Extension
-
-private extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
 
 // MARK: - Preview
 

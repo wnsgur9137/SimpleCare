@@ -17,8 +17,8 @@ struct DailyCalorieMediumView: View {
 
     // MARK: - Private Helpers
 
-    private var progressColor: Color {
-        caloriProgressColor(entry.calorieProgress)
+    private var currentProgressColor: Color {
+        progressColor(for: entry.calorieProgress)
     }
 
     private var clampedProgress: Double {
@@ -60,7 +60,7 @@ struct DailyCalorieMediumView: View {
             Circle()
                 .trim(from: 0, to: clampedProgress)
                 .stroke(
-                    progressColor,
+                    currentProgressColor,
                     style: StrokeStyle(lineWidth: 10, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
@@ -103,13 +103,13 @@ struct DailyCalorieMediumView: View {
             detailRow(
                 title: "남은 칼로리",
                 value: "\(entry.remainingCalories) kcal",
-                valueColor: progressColor
+                valueColor: currentProgressColor
             )
 
             detailRow(
                 title: "진행률",
                 value: progressPercent,
-                valueColor: progressColor
+                valueColor: currentProgressColor
             )
         }
         .padding(.leading, 12)
@@ -130,30 +130,6 @@ struct DailyCalorieMediumView: View {
     }
 }
 
-// MARK: - Progress Color Helper
-
-private func caloriProgressColor(_ progress: Double) -> Color {
-    if progress < 0.8 {
-        return .orange
-    } else if progress <= 1.1 {
-        return .green
-    } else {
-        return .red
-    }
-}
-
-// MARK: - View Extension
-
-private extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
 
 // MARK: - Preview
 

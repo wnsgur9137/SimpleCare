@@ -21,8 +21,8 @@ struct GoalProgressSmallView: View {
         String(format: "%.0f", entry.calorieProgress * 100)
     }
 
-    private var progressColor: Color {
-        goalProgressColor(entry.calorieProgress)
+    private var currentProgressColor: Color {
+        progressColor(for: entry.calorieProgress)
     }
 
     // MARK: - Body
@@ -55,13 +55,13 @@ struct GoalProgressSmallView: View {
         HStack(alignment: .lastTextBaseline, spacing: 2) {
             Text(progressPercent)
                 .font(.system(size: 40, weight: .heavy, design: .rounded))
-                .foregroundStyle(progressColor)
+                .foregroundStyle(currentProgressColor)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
 
             Text("%")
                 .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(progressColor.opacity(0.8))
+                .foregroundStyle(currentProgressColor.opacity(0.8))
         }
     }
 
@@ -91,30 +91,6 @@ struct GoalProgressSmallView: View {
     }
 }
 
-// MARK: - Progress Color Helper
-
-private func goalProgressColor(_ progress: Double) -> Color {
-    if progress < 0.8 {
-        return .orange
-    } else if progress <= 1.1 {
-        return .green
-    } else {
-        return .red
-    }
-}
-
-// MARK: - View Extension
-
-private extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
 
 // MARK: - Preview
 

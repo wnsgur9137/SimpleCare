@@ -7,7 +7,7 @@ tags:
   - 설계/모듈/extension
 created: 2026-03-23
 updated: 2026-03-23
-status: planned
+status: done
 ---
 
 # Widget

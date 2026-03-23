@@ -17,8 +17,8 @@ struct DailyCalorieSmallView: View {
 
     // MARK: - Private Helpers
 
-    private var progressColor: Color {
-        caloriProgressColor(entry.calorieProgress)
+    private var currentProgressColor: Color {
+        progressColor(for: entry.calorieProgress)
     }
 
     private var clampedProgress: Double {
@@ -50,7 +50,7 @@ struct DailyCalorieSmallView: View {
             Circle()
                 .trim(from: 0, to: clampedProgress)
                 .stroke(
-                    progressColor,
+                    currentProgressColor,
                     style: StrokeStyle(lineWidth: 8, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
@@ -88,38 +88,13 @@ struct DailyCalorieSmallView: View {
 
             Text("\(entry.remainingCalories) kcal")
                 .font(.system(size: 10, weight: .semibold, design: .rounded))
-                .foregroundStyle(progressColor)
+                .foregroundStyle(currentProgressColor)
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
         }
     }
 }
 
-// MARK: - Progress Color Helper
-
-/// calorieProgress 값에 따라 색상 반환
-private func caloriProgressColor(_ progress: Double) -> Color {
-    if progress < 0.8 {
-        return .orange
-    } else if progress <= 1.1 {
-        return .green
-    } else {
-        return .red
-    }
-}
-
-// MARK: - View Extension
-
-private extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
 
 // MARK: - Preview
 
