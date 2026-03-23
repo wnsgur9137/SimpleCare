@@ -5,7 +5,7 @@ tags:
   - 설계
   - 설계/아키텍처
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-23
 status: active
 ---
 
@@ -64,6 +64,9 @@ SimpleCare/
 │   │   ├── Sources/
 │   │   │   ├── AppCoordinator.swift
 │   │   │   └── SimpleCareApp.swift
+│   │   ├── Widget/              # WidgetKit Extension
+│   │   │   ├── Sources/
+│   │   │   └── Resources/
 │   │   └── Resources/
 │   │
 │   ├── Feature/                  # 기능 모듈

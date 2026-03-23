@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import ExerciseDomain
+import WidgetKit
 
 @Reducer
 public struct ExerciseFeature {
@@ -203,6 +204,7 @@ public struct ExerciseFeature {
 
             case .saveExerciseResponse(.success):
                 state.isLoading = false
+                WidgetCenter.shared.reloadAllTimelines()
                 return .send(.delegate(.saveCompleted))
 
             case .saveExerciseResponse(.failure(let error)):

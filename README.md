@@ -81,12 +81,14 @@ AI 기반 개인 건강 관리 iOS 앱
 |-------|------|------|
 | Phase L: Localization | ✅ 완료 | 한국어(기본), 영어 런타임 전환 |
 | Phase 0: DIContainer | ✅ 완료 | 모든 Feature DIContainer 연결 |
-| Phase 1: AI Feature | 🟡 진행중 | 텍스트 분석 완료, 이미지 분석 연기 |
+| Phase 1: AI Feature | ✅ 완료 | Gemini API 텍스트 분석 (이미지는 Phase 6으로 연기) |
 | Phase 1.5: Known Gaps | ✅ 완료 | 알려진 갭 수정 |
 | Phase 2: Home UI | ✅ 완료 | 홈 화면 시각화 |
-| Phase 3: Extended Features | ✅ 완료 | 확장 기능 구현 |
-| Phase 4: Integration | 🟡 진행중 | 테마/HealthKit 완료, 알림/내보내기 진행중 |
-| Phase 5: Image/Voice | 🔵 예정 | 이미지 분석 기능 (연기됨) |
+| Phase 3: Extended Features | ✅ 완료 | 운동/체중 기능 구현 |
+| Phase 4: Integration | 🟡 진행중 | 테마/HealthKit/알림/내보내기 완료, 위젯/AI 고도화 진행 예정 |
+| Phase 5: Detail Pages | ✅ 완료 | 식사/운동 상세 페이지 및 목록 뷰 |
+| Phase S: Stability | ✅ 완료 | 32건 이슈 수정 (CRITICAL 6, HIGH 16, MEDIUM 10) |
+| Phase 6: Image/Voice | 🔵 예정 | 이미지 분석 기능 (연기됨) |
 
 > 자세한 진행 상황은 [ROADMAP.md](./docs/01-전략/ROADMAP.md)와 [WORKPLAN.md](./docs/01-전략/WORKPLAN.md)를 참고하세요.
 

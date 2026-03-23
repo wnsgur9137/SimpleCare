@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import MealDomain
+import WidgetKit
 
 @Reducer
 public struct MealFeature {
@@ -252,6 +253,7 @@ public struct MealFeature {
 
             case .saveMealResponse(.success):
                 state.viewState = .success
+                WidgetCenter.shared.reloadAllTimelines()
                 return .send(.delegate(.saveCompleted))
 
             case .saveMealResponse(.failure(let error)):
