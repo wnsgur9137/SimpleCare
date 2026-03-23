@@ -30,7 +30,8 @@ private let targets: [Target] = [
         scripts: scripts,
         dependencies: [
             .Project.Feature.Tab,
-            .Project.InjectionManager.InjectionManager
+            .Project.InjectionManager.InjectionManager,
+            .target(name: "\(TuistConstants.projectName)Widget")
         ],
         settings: .settings(
             base: [
@@ -66,6 +67,44 @@ private let targets: [Target] = [
                 isEnabled: true
             )
         ]
+    ),
+    .target(
+        name: "\(TuistConstants.projectName)Widget",
+        destinations: .iOS,
+        product: .appExtension,
+        productName: "\(TuistConstants.projectName)Widget",
+        bundleId: "\(TuistConstants.organizationName).Widget",
+        deploymentTargets: TuistConstants.deploymentTarget,
+        infoPlist: .extendingDefault(with: [
+            "NSExtension": .dictionary([
+                "NSExtensionPointIdentifier": .string("com.apple.widgetkit-extension")
+            ])
+        ]),
+        sources: ["Widget/Sources/**"],
+        resources: ["Widget/Resources/**"],
+        entitlements: "SimpleCareWidget.entitlements",
+        dependencies: [
+            .Project.Feature.Domain.BaseDomain
+        ],
+        settings: .settings(
+            base: [:],
+            configurations: [
+                .debug(
+                    name: .DEV,
+                    settings: [
+                        "PRODUCT_BUNDLE_IDENTIFIER": "\(TuistConstants.organizationName)-Dev.Widget"
+                    ],
+                    xcconfig: .xcconfig(.DEV)
+                ),
+                .release(
+                    name: .PROD,
+                    settings: [
+                        "PRODUCT_BUNDLE_IDENTIFIER": "\(TuistConstants.organizationName).Widget"
+                    ],
+                    xcconfig: .xcconfig(.PROD)
+                )
+            ]
+        )
     ),
     .target(
         name: "\(TuistConstants.projectName)Tests",

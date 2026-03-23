@@ -8,7 +8,9 @@
 import Foundation
 import ComposableArchitecture
 import HomeDomain
+import BaseDomain
 import BasePresentation
+import WidgetKit
 
 @Reducer
 public struct HomeFeature {
@@ -418,6 +420,25 @@ public struct HomeFeature {
                         } catch {
                             await send(.loadWeeklyStatusResponse(.failure(error)))
                         }
+                    },
+                    .run { _ in
+                        let widgetData = WidgetDailySummaryData(
+                            date: summary.date,
+                            totalCalories: summary.totalCalories,
+                            goalCalories: summary.goalCalories,
+                            remainingCalories: summary.remainingCalories,
+                            calorieProgress: summary.calorieProgress,
+                            exerciseCalories: summary.exerciseCalories,
+                            totalProtein: summary.totalProtein,
+                            totalCarbs: summary.totalCarbs,
+                            totalFat: summary.totalFat,
+                            proteinGoal: summary.proteinGoal,
+                            carbsGoal: summary.carbsGoal,
+                            fatGoal: summary.fatGoal,
+                            streakDays: summary.streakDays
+                        )
+                        WidgetDataStore.save(widgetData)
+                        WidgetCenter.shared.reloadAllTimelines()
                     }
                 )
 
