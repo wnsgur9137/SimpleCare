@@ -63,3 +63,27 @@
 "macro.protein.short" = "P";
 "macro.carbs.short" = "C";
 "macro.fat.short" = "F";
+
+// MARK: - Meal Enhancements
+"meal.sugar" = "당류";
+"meal.detailNutrients" = "세부 영양소";
+"meal.manualInput" = "직접 입력";
+"meal.manualInput.title" = "음식 직접 입력";
+"meal.manualInput.name" = "음식 이름";
+"meal.manualInput.calories" = "칼로리 (kcal)";
+"meal.manualInput.protein" = "단백질 (g)";
+"meal.manualInput.carbs" = "탄수화물 (g)";
+"meal.manualInput.fat" = "지방 (g)";
+"meal.quantity" = "수량";
+"meal.copyMeals" = "식사 복사";
+"meal.copyFromYesterday" = "어제 식사 복사";
+"meal.editFavorite" = "즐겨찾기 수정";
+"meal.editFavorite.title" = "즐겨찾기 편집";
+"meal.photoAnalyze" = "사진으로 분석";
+"meal.usageCount" = "%d회 사용";
+"meal.servingSize" = "서빙 사이즈";
+
+// MARK: - Water
+"meal.water.title" = "수분 섭취";
+"meal.water.goal" = "목표";
+"meal.water.add" = "추가";

@@ -63,3 +63,27 @@
 "macro.protein.short" = "P";
 "macro.carbs.short" = "C";
 "macro.fat.short" = "F";
+
+// MARK: - Meal Enhancements
+"meal.sugar" = "Sugar";
+"meal.detailNutrients" = "Detail Nutrients";
+"meal.manualInput" = "Manual Input";
+"meal.manualInput.title" = "Add Food Manually";
+"meal.manualInput.name" = "Food Name";
+"meal.manualInput.calories" = "Calories (kcal)";
+"meal.manualInput.protein" = "Protein (g)";
+"meal.manualInput.carbs" = "Carbs (g)";
+"meal.manualInput.fat" = "Fat (g)";
+"meal.quantity" = "Quantity";
+"meal.copyMeals" = "Copy Meals";
+"meal.copyFromYesterday" = "Copy Yesterday's Meals";
+"meal.editFavorite" = "Edit Favorite";
+"meal.editFavorite.title" = "Edit Favorite";
+"meal.photoAnalyze" = "Analyze by Photo";
+"meal.usageCount" = "Used %d times";
+"meal.servingSize" = "Serving Size";
+
+// MARK: - Water
+"meal.water.title" = "Water Intake";
+"meal.water.goal" = "Goal";
+"meal.water.add" = "Add";

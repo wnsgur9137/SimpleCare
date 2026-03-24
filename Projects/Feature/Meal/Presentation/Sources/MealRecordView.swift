@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 import ComposableArchitecture
 import MealDomain
 import BasePresentation
@@ -14,6 +15,7 @@ import BasePresentation
 public struct MealRecordView: View {
     @Bindable var store: StoreOf<MealFeature>
     @Environment(\.dismiss) private var dismiss
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     public init(store: StoreOf<MealFeature>) {
         self.store = store
@@ -32,6 +34,13 @@ public struct MealRecordView: View {
                     // 입력 방식 선택
                     inputSection
 
+                    // 수분 섭취
+                    WaterIntakeSection(
+                        dailyWaterMl: store.dailyWaterMl,
+                        waterGoalMl: store.waterGoalMl,
+                        onAdd: { amount in store.send(.addWaterIntake(amount)) }
+                    )
+
                     // 즐겨찾기
                     favoritesSection
 
@@ -41,6 +50,11 @@ public struct MealRecordView: View {
                     // 추정 결과
                     if !store.estimatedFoods.isEmpty {
                         estimatedFoodsSection
+                    }
+
+                    // 건강 팁
+                    if let healthTip = store.healthTip {
+                        healthTipSection(healthTip)
                     }
 
                     // 메모
@@ -76,9 +90,35 @@ public struct MealRecordView: View {
                     Text(message)
                 }
             }
+            .task {
+                store.send(.loadWaterIntakes)
+            }
             .onChange(of: store.viewState) { _, newState in
                 if newState == .success {
                     dismiss()
+                }
+            }
+            .sheet(isPresented: $store.showManualInput) {
+                ManualFoodInputSheet { name, calories, protein, carbs, fat in
+                    store.send(.addManualFood(name: name, calories: calories, protein: protein, carbs: carbs, fat: fat))
+                }
+            }
+            .sheet(isPresented: $store.showEditFavorite) {
+                if let favorite = store.editingFavorite {
+                    EditFavoriteSheet(favorite: favorite) { updated in
+                        store.send(.updateFavorite(updated))
+                    } onDismiss: {
+                        store.send(.dismissEditFavorite)
+                    }
+                }
+            }
+            .onChange(of: selectedPhotoItem) { _, newItem in
+                guard let newItem else { return }
+                Task {
+                    if let data = try? await newItem.loadTransferable(type: Data.self) {
+                        store.send(.imageSelected(data))
+                    }
+                    selectedPhotoItem = nil
                 }
             }
         }
@@ -120,6 +160,39 @@ public struct MealRecordView: View {
                 }
                 .disabled(store.foodDescription.isEmpty)
             }
+
+            // 추가 입력 버튼들
+            HStack(spacing: 12) {
+                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                    Label("meal.photoAnalyze".localized, systemImage: "camera.fill")
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                }
+
+                Button {
+                    store.send(.toggleManualInput)
+                } label: {
+                    Label("meal.manualInput".localized, systemImage: "square.and.pencil")
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                }
+
+                Button {
+                    let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+                    store.send(.copyMealsFromDate(yesterday))
+                } label: {
+                    Label("meal.copyFromYesterday".localized, systemImage: "doc.on.doc")
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                }
+            }
+            .buttonStyle(.plain)
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 12))
@@ -149,7 +222,10 @@ public struct MealRecordView: View {
                 EstimatedFoodRow(
                     food: food,
                     onRemove: { store.send(.removeFood(index)) },
-                    onFavorite: { store.send(.saveFoodAsFavorite(food)) }
+                    onFavorite: { store.send(.saveFoodAsFavorite(food)) },
+                    onQuantityChanged: { quantity in
+                        store.send(.adjustFoodQuantity(index: index, quantity: quantity))
+                    }
                 )
             }
 
@@ -157,6 +233,26 @@ public struct MealRecordView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    }
+
+    private func healthTipSection(_ tip: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "lightbulb.fill")
+                .foregroundStyle(.scWarning)
+                .font(.title3)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("meal.healthTip".localized)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Text(tip)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
@@ -190,7 +286,8 @@ public struct MealRecordView: View {
                         FavoriteFoodRow(
                             favorite: favorite,
                             onSelect: { store.send(.selectFavorite(favorite)) },
-                            onDelete: { store.send(.deleteFavorite(favorite)) }
+                            onDelete: { store.send(.deleteFavorite(favorite)) },
+                            onEdit: { store.send(.editFavorite(favorite)) }
                         )
                     }
                 }
@@ -293,37 +390,76 @@ struct EstimatedFoodRow: View {
     let food: EstimatedFoodItem
     let onRemove: () -> Void
     var onFavorite: (() -> Void)?
+    var onQuantityChanged: ((Double) -> Void)?
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(food.name)
-                    .font(.body)
-                    .fontWeight(.medium)
+        VStack(spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(food.name)
+                        .font(.body)
+                        .fontWeight(.medium)
 
-                Text("\(Int(food.servingSize))\(food.servingUnit) · \(food.calories)kcal")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+                    Text("\(Int(food.servingSize))\(food.servingUnit) \u{00B7} \(food.adjustedCalories)kcal")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
 
-            Spacer()
+                Spacer()
 
-            if food.confidence < 0.7 {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.scWarning)
-                    .font(.caption)
-            }
-
-            if let onFavorite {
-                Button(action: onFavorite) {
-                    Image(systemName: "star")
+                if food.confidence < 0.7 {
+                    Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.scWarning)
+                        .font(.caption)
+                }
+
+                if let onFavorite {
+                    Button(action: onFavorite) {
+                        Image(systemName: "star")
+                            .foregroundStyle(.scWarning)
+                    }
+                }
+
+                Button(action: onRemove) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
                 }
             }
 
-            Button(action: onRemove) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.secondary)
+            // Quantity stepper
+            if let onQuantityChanged {
+                HStack {
+                    Text("meal.quantity".localized)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+
+                    HStack(spacing: 12) {
+                        Button {
+                            let newQuantity = max(0.5, food.quantity - 0.5)
+                            onQuantityChanged(newQuantity)
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.scPrimary)
+                        }
+                        .disabled(food.quantity <= 0.5)
+
+                        Text(String(format: "%.1f", food.quantity))
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .frame(minWidth: 30)
+
+                        Button {
+                            let newQuantity = min(10.0, food.quantity + 0.5)
+                            onQuantityChanged(newQuantity)
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundStyle(.scPrimary)
+                        }
+                        .disabled(food.quantity >= 10.0)
+                    }
+                }
             }
         }
         .padding(.vertical, 8)
@@ -334,6 +470,7 @@ struct FavoriteFoodRow: View {
     let favorite: FavoriteFood
     let onSelect: () -> Void
     let onDelete: () -> Void
+    var onEdit: (() -> Void)?
 
     var body: some View {
         HStack {
@@ -360,6 +497,14 @@ struct FavoriteFoodRow: View {
             .buttonStyle(.plain)
 
             Spacer()
+
+            if let onEdit {
+                Button(action: onEdit) {
+                    Image(systemName: "pencil")
+                        .font(.caption)
+                        .foregroundStyle(.scPrimary)
+                }
+            }
 
             Button(action: onDelete) {
                 Image(systemName: "trash")
@@ -417,6 +562,144 @@ struct RecentMealRow: View {
         }
         .buttonStyle(.plain)
         .padding(.vertical, 6)
+    }
+}
+
+// MARK: - Manual Food Input Sheet
+
+struct ManualFoodInputSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var foodName: String = ""
+    @State private var caloriesText: String = ""
+    @State private var proteinText: String = ""
+    @State private var carbsText: String = ""
+    @State private var fatText: String = ""
+
+    let onSave: (String, Int, Double, Double, Double) -> Void
+
+    private var isValid: Bool {
+        !foodName.isEmpty && (Int(caloriesText) ?? 0) > 0
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("meal.manualInput.name".localized, text: $foodName)
+                }
+
+                Section {
+                    TextField("meal.manualInput.calories".localized, text: $caloriesText)
+                        .keyboardType(.numberPad)
+                    TextField("meal.manualInput.protein".localized, text: $proteinText)
+                        .keyboardType(.decimalPad)
+                    TextField("meal.manualInput.carbs".localized, text: $carbsText)
+                        .keyboardType(.decimalPad)
+                    TextField("meal.manualInput.fat".localized, text: $fatText)
+                        .keyboardType(.decimalPad)
+                }
+            }
+            .navigationTitle("meal.manualInput.title".localized)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("common.cancel".localized) { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("common.save".localized) {
+                        onSave(
+                            foodName,
+                            Int(caloriesText) ?? 0,
+                            Double(proteinText) ?? 0,
+                            Double(carbsText) ?? 0,
+                            Double(fatText) ?? 0
+                        )
+                        dismiss()
+                    }
+                    .disabled(!isValid)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Edit Favorite Sheet
+
+struct EditFavoriteSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var name: String
+    @State private var servingSizeText: String
+    @State private var caloriesText: String
+    @State private var proteinText: String
+    @State private var carbsText: String
+    @State private var fatText: String
+
+    let favorite: FavoriteFood
+    let onSave: (FavoriteFood) -> Void
+    let onDismiss: () -> Void
+
+    init(favorite: FavoriteFood, onSave: @escaping (FavoriteFood) -> Void, onDismiss: @escaping () -> Void) {
+        self.favorite = favorite
+        self.onSave = onSave
+        self.onDismiss = onDismiss
+        _name = State(initialValue: favorite.name)
+        _servingSizeText = State(initialValue: String(format: "%.0f", favorite.servingSize))
+        _caloriesText = State(initialValue: "\(favorite.caloriesPerServing)")
+        _proteinText = State(initialValue: String(format: "%.1f", favorite.proteinPerServing))
+        _carbsText = State(initialValue: String(format: "%.1f", favorite.carbsPerServing))
+        _fatText = State(initialValue: String(format: "%.1f", favorite.fatPerServing))
+    }
+
+    private var isValid: Bool {
+        !name.isEmpty && (Int(caloriesText) ?? 0) > 0
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("meal.manualInput.name".localized, text: $name)
+                    TextField("meal.servingSize".localized, text: $servingSizeText)
+                        .keyboardType(.decimalPad)
+                }
+
+                Section {
+                    TextField("meal.manualInput.calories".localized, text: $caloriesText)
+                        .keyboardType(.numberPad)
+                    TextField("meal.manualInput.protein".localized, text: $proteinText)
+                        .keyboardType(.decimalPad)
+                    TextField("meal.manualInput.carbs".localized, text: $carbsText)
+                        .keyboardType(.decimalPad)
+                    TextField("meal.manualInput.fat".localized, text: $fatText)
+                        .keyboardType(.decimalPad)
+                }
+            }
+            .navigationTitle("meal.editFavorite.title".localized)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("common.cancel".localized) {
+                        onDismiss()
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("common.save".localized) {
+                        let updated = favorite.updated(
+                            name: name,
+                            servingSize: Double(servingSizeText) ?? favorite.servingSize,
+                            caloriesPerServing: Int(caloriesText) ?? favorite.caloriesPerServing,
+                            proteinPerServing: Double(proteinText) ?? favorite.proteinPerServing,
+                            carbsPerServing: Double(carbsText) ?? favorite.carbsPerServing,
+                            fatPerServing: Double(fatText) ?? favorite.fatPerServing
+                        )
+                        onSave(updated)
+                        dismiss()
+                    }
+                    .disabled(!isValid)
+                }
+            }
+        }
     }
 }
 
