@@ -84,6 +84,18 @@ public final class UserProfileModel {
     /// 일일 지방 목표 (g)
     public var dailyFatGoal: Int?
 
+    /// 아침 칼로리 비율
+    public var breakfastCalorieRatio: Double
+
+    /// 점심 칼로리 비율
+    public var lunchCalorieRatio: Double
+
+    /// 저녁 칼로리 비율
+    public var dinnerCalorieRatio: Double
+
+    /// 간식 칼로리 비율
+    public var snackCalorieRatio: Double
+
     /// 온보딩 완료 여부
     public var isOnboardingCompleted: Bool
 
@@ -107,6 +119,10 @@ public final class UserProfileModel {
         dailyProteinGoal: Int? = nil,
         dailyCarbsGoal: Int? = nil,
         dailyFatGoal: Int? = nil,
+        breakfastCalorieRatio: Double = 0.25,
+        lunchCalorieRatio: Double = 0.35,
+        dinnerCalorieRatio: Double = 0.30,
+        snackCalorieRatio: Double = 0.10,
         isOnboardingCompleted: Bool = false,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
@@ -124,6 +140,10 @@ public final class UserProfileModel {
         self.dailyProteinGoal = dailyProteinGoal
         self.dailyCarbsGoal = dailyCarbsGoal
         self.dailyFatGoal = dailyFatGoal
+        self.breakfastCalorieRatio = breakfastCalorieRatio
+        self.lunchCalorieRatio = lunchCalorieRatio
+        self.dinnerCalorieRatio = dinnerCalorieRatio
+        self.snackCalorieRatio = snackCalorieRatio
         self.isOnboardingCompleted = isOnboardingCompleted
         self.createdAt = createdAt
         self.updatedAt = updatedAt

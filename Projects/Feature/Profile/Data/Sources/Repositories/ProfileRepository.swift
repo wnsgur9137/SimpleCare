@@ -72,6 +72,10 @@ extension UserProfileModel {
             dailyProteinGoal: dailyProteinGoal,
             dailyCarbsGoal: dailyCarbsGoal,
             dailyFatGoal: dailyFatGoal,
+            breakfastCalorieRatio: breakfastCalorieRatio,
+            lunchCalorieRatio: lunchCalorieRatio,
+            dinnerCalorieRatio: dinnerCalorieRatio,
+            snackCalorieRatio: snackCalorieRatio,
             isOnboardingCompleted: isOnboardingCompleted,
             createdAt: createdAt,
             updatedAt: updatedAt
@@ -95,6 +99,10 @@ extension UserProfile {
             dailyProteinGoal: dailyProteinGoal,
             dailyCarbsGoal: dailyCarbsGoal,
             dailyFatGoal: dailyFatGoal,
+            breakfastCalorieRatio: breakfastCalorieRatio,
+            lunchCalorieRatio: lunchCalorieRatio,
+            dinnerCalorieRatio: dinnerCalorieRatio,
+            snackCalorieRatio: snackCalorieRatio,
             isOnboardingCompleted: isOnboardingCompleted,
             createdAt: createdAt,
             updatedAt: updatedAt
@@ -114,6 +122,10 @@ extension UserProfile {
         model.dailyProteinGoal = dailyProteinGoal
         model.dailyCarbsGoal = dailyCarbsGoal
         model.dailyFatGoal = dailyFatGoal
+        model.breakfastCalorieRatio = breakfastCalorieRatio
+        model.lunchCalorieRatio = lunchCalorieRatio
+        model.dinnerCalorieRatio = dinnerCalorieRatio
+        model.snackCalorieRatio = snackCalorieRatio
         model.isOnboardingCompleted = isOnboardingCompleted
         model.updatedAt = Date()
     }
