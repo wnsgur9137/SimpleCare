@@ -6,13 +6,13 @@ tags:
   - 설계/모듈
   - 설계/모듈/feature
 created: 2026-01-26
-updated: 2026-03-18
+updated: 2026-03-24
 status: active
 ---
 
 # Base
 
-**역할**: 공통 UI 컴포넌트, 프로토콜, 유틸리티
+**역할**: 공통 UI 컴포넌트, 프로토콜, 유틸리티, Widget Extension과의 데이터 공유를 위한 DTO 제공
 
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
@@ -39,6 +39,10 @@ status: active
 | Manager | `NotificationManager.swift` | 로컬 알림 스케줄링 관리 |
 | **Data** | | |
 | Manager | `DataExportManager.swift` | JSON/CSV 데이터 내보내기 |
+| **Widget** | | |
+| Constants | `Widget/WidgetConstants.swift` | Widget 관련 중앙 상수 (App Group ID, UserDefaults 키) |
+| DTO | `Widget/WidgetDailySummaryData.swift` | Widget Extension과 메인 앱 간 공유 Codable DTO |
+| Store | `Widget/WidgetDataStore.swift` | App Group UserDefaults 읽기/쓰기 헬퍼 |
 
 **하위 시스템별 기능**:
 - **ThemeManager**: system/light/dark 전환, UserDefaults 영속화, 실시간 `ColorScheme` 반영

@@ -5,7 +5,7 @@ tags:
   - 구현
   - 구현/데이터
 created: 2026-03-11
-updated: 2026-03-16
+updated: 2026-03-24
 status: active
 ---
 
@@ -318,6 +318,45 @@ HealthKitManager (HealthKitInfra)
     ▼
 HKHealthStore (Apple HealthKit Framework)
 ```
+
+---
+
+## Widget 데이터 동기화
+
+### 개요
+
+Widget Extension은 별도 프로세스이므로 App Group UserDefaults를 통해 데이터를 공유합니다.
+
+### 동기화 흐름
+
+```
+[메인 앱]                              [Widget Extension]
+HomeFeature                            SimpleCareWidgetBundle
+    │                                       │
+    ├─ getDailySummary() 성공              ├─ TimelineProvider
+    │       │                               │       │
+    │       ▼                               │       ▼
+    │  WidgetDataStore.save()              │  WidgetDataStore.load()
+    │  WidgetCenter.reloadAllTimelines()   │       │
+    │                                       │       ▼
+    │                                       └── WidgetEntry → View 렌더링
+    │
+MealFeature / ExerciseFeature
+    │
+    ├─ 저장/삭제 성공
+    │       │
+    │       ▼
+    └─ WidgetCenter.reloadAllTimelines()
+```
+
+### 갱신 트리거
+
+| 트리거 | 위치 | 동작 |
+|--------|------|------|
+| 일일 요약 로드 성공 | `HomeFeature.swift` | `WidgetDataStore.save()` + `reloadAllTimelines()` |
+| 식사 저장 성공 | `MealFeature.swift` | `reloadAllTimelines()` |
+| 운동 저장 성공 | `ExerciseFeature.swift` | `reloadAllTimelines()` |
+| 주기적 갱신 | `WidgetDataProvider` | 30분 간격 또는 자정 |
 
 ---
 

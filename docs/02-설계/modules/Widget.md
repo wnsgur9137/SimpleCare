@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/extension
 created: 2026-03-23
-updated: 2026-03-23
+updated: 2026-03-24
 status: done
 ---
 
@@ -64,15 +64,21 @@ Projects/Application/
 │   │   ├── DailyCalorieWidget.swift       # 일일 칼로리 위젯 (TimelineProvider + Widget)
 │   │   ├── GoalProgressWidget.swift       # 목표 달성률 위젯 (TimelineProvider + Widget)
 │   │   ├── WidgetDataProvider.swift       # SharedDefaults 데이터 로드 헬퍼
+│   │   ├── WidgetStrings.swift            # Localization 키 관리
 │   │   ├── Models/
 │   │   │   └── WidgetData.swift           # TimelineEntry 정의
 │   │   └── Views/
 │   │       ├── DailyCalorieSmallView.swift
 │   │       ├── DailyCalorieMediumView.swift
 │   │       ├── GoalProgressSmallView.swift
-│   │       └── GoalProgressMediumView.swift
+│   │       ├── GoalProgressMediumView.swift
+│   │       └── WidgetHelpers.swift        # 프로그레스 색상 + View.if extension
 │   └── Resources/
-│       └── Assets.xcassets
+│       ├── Assets.xcassets
+│       ├── ko.lproj/
+│       │   └── Localizable.strings
+│       └── en.lproj/
+│           └── Localizable.strings
 ├── SimpleCare.entitlements                 # App Group 추가
 └── SimpleCareWidget.entitlements           # Widget용 App Group
 ```
@@ -94,6 +100,12 @@ Projects/Application/
 | Widget | `GoalProgressWidget.swift` | TimelineProvider + Widget 정의 |
 | View | `GoalProgressSmallView.swift` | Small 크기 — 달성률(%) + streak |
 | View | `GoalProgressMediumView.swift` | Medium 크기 — P/C/F 프로그레스 바 + streak |
+| **Localization** | | |
+| Strings | `WidgetStrings.swift` | 9개 Localization 키 + streakDays 포맷 함수 |
+| Resource | `ko.lproj/Localizable.strings` | 한국어 번역 |
+| Resource | `en.lproj/Localizable.strings` | 영어 번역 |
+| **공통** | | |
+| Helper | `WidgetHelpers.swift` | 프로그레스 색상 함수 + View.if() extension |
 
 ## 공유 데이터 모델
 
@@ -125,6 +137,14 @@ Projects/Application/
 | `save(_:)` | WidgetDailySummaryData를 JSON으로 인코딩하여 App Group UserDefaults에 저장 |
 | `load()` | App Group UserDefaults에서 WidgetDailySummaryData를 디코딩하여 반환 |
 | `sharedDefaults` | `UserDefaults(suiteName: "group.com.junhyeok.SimpleCare")` |
+
+### WidgetConstants
+
+| 메서드/상수 | 설명 |
+|------------|------|
+| `appGroupID` | App Group 식별자 (`group.com.junhyeok.SimpleCare`) |
+| `dailySummaryKey` | UserDefaults 키 |
+| `bundleIdSuffix` | Widget 번들 ID 접미사 |
 
 ## 의존성
 
@@ -202,6 +222,32 @@ SimpleCareWidget (.appExtension)
 │ 지방   80%  ██████████░░  🔥7일 │
 └────────────────────────────────┘
 ```
+
+## Localization
+
+Widget Extension은 별도 번들이므로 메인 앱의 Localizable.strings와 독립적으로 관리합니다.
+
+### 지원 언어
+
+| 언어 | 파일 |
+|------|------|
+| 한국어 (ko) | `Resources/ko.lproj/Localizable.strings` |
+| 영어 (en) | `Resources/en.lproj/Localizable.strings` |
+
+### WidgetStrings
+
+| 키 | 한국어 | 영어 |
+|----|--------|------|
+| `widget.dailyCalorie.title` | 일일 칼로리 | Daily Calories |
+| `widget.dailyCalorie.description` | 오늘의 칼로리 섭취량과 목표를 확인합니다. | Check today's calorie intake and goal. |
+| `widget.remaining` | 남은: | Left: |
+| `widget.exerciseBurned` | 운동 소모 | Exercise |
+| `widget.remainingCalories` | 남은 칼로리 | Remaining |
+| `widget.progressRate` | 진행률 | Progress |
+| `widget.goalProgress.title` | 목표 달성률 | Goal Progress |
+| `widget.goalProgress.description` | 칼로리와 영양소 목표 달성률을 확인합니다. | Check calorie and nutrition goal progress. |
+| `widget.achievementRate` | 달성률 | Progress |
+| `widget.streakDays` | %d일 연속 | %d day streak |
 
 ## 참고
 

@@ -5,7 +5,7 @@ tags:
   - 설계
   - 설계/아키텍처
 created: 2026-01-26
-updated: 2026-03-23
+updated: 2026-03-24
 status: active
 ---
 
@@ -142,6 +142,7 @@ Feature/{FeatureName}/
 | 모듈 | 역할 | 주요 컴포넌트 |
 |-----|------|-------------|
 | **Home** | 메인 홈 화면 (대시보드 통합) | AI 인사이트, 일일 요약, 주간 트렌드 |
+| **Widget Extension** | 홈 화면 위젯 | App Group UserDefaults를 통한 데이터 공유, WidgetKit Timeline |
 | **Tab** | 메인 탭 네비게이션 | 5개 탭 관리, Sheet 표시 |
 | **Meal** | 식단 기록 | AI 영양 추정, 즐겨찾기 |
 | **Exercise** | 운동 기록 | MET 기반 칼로리 계산, 커스텀 운동 |
@@ -318,6 +319,8 @@ extension MealClient: DependencyKey {
 
 ```
 Application
+    │
+    ├──▶ SimpleCareWidget ──▶ BaseDomain
     │
     ▼
 Tab ──────────────────────────────────────┐

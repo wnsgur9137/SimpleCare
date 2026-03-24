@@ -5,7 +5,7 @@ tags:
   - 구현
   - 구현/API
 created: 2026-01-26
-updated: 2026-03-16
+updated: 2026-03-24
 status: active
 ---
 
@@ -22,7 +22,7 @@ status: active
 ## Google Gemini API 연동
 
 ### 개요
-SimpleCare는 Google Gemini API (무료 티어)를 사용하여 음식 영양소 추정 및 이미지 분석을 수행합니다.
+SimpleCare는 Google Gemini API (무료 티어)를 사용하여 음식 영양소 추정 및 일일 인사이트 생성을 수행합니다. 이미지 분석 기능은 Phase 6으로 연기되었습니다.
 
 ### 무료 티어 한도
 | 항목 | 한도 |
@@ -206,7 +206,9 @@ Respond in the following JSON format:
 
 ---
 
-### 2. 이미지 분석
+### 2. 이미지 분석 (미구현 — Phase 6 예정)
+
+> ⚠️ 이 기능은 Phase 6으로 연기되었으며, 현재 미구현 상태입니다. 인프라(`generateContentWithVision`)는 준비되어 있습니다.
 
 #### System Prompt
 ```
