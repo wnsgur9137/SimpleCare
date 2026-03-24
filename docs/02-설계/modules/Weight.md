@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/feature
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-24
 status: active
 ---
 
@@ -17,8 +17,10 @@ status: active
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
 | **Domain** | | |
-| Entity | `WeightRecord.swift` | 체중 기록 |
-| UseCase | `WeightUseCases.swift` | 체중 CRUD + BMR/TDEE/추세 계산 |
+| Entity | `WeightRecord.swift` | 체중 기록 (id, date, weightKg, bodyFatPercentage?, skeletalMuscleMassKg?, note?) |
+| Entity | `WeightTrend.swift` (WeightRecord.swift 내 정의) | 체중 추세 (currentWeight, previousWeight?, targetWeight, weeklyChange?, monthlyChange?, records) — 계산: remainingToGoal, progressToGoal |
+| UseCase | `RecordWeightUseCase.swift` | 체중 기록 저장 |
+| UseCase | `GetWeightTrendUseCase.swift` | 체중 추세 조회 (WeightTrend 반환) |
 | **Data** | | |
 | Repository | `WeightRepository.swift` | 체중 레포지토리 구현 |
 | **Presentation** | | |

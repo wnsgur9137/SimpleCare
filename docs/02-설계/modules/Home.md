@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/feature
 created: 2026-01-26
-updated: 2026-03-11
+updated: 2026-03-24
 status: active
 ---
 
@@ -17,10 +17,17 @@ status: active
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
 | **Domain** | | |
-| Entity | `HomeDailySummary.swift` | 일일 요약 데이터 (칼로리/영양소/운동) |
+| Entity | `HomeDailySummary.swift` | 일일 요약 데이터 (칼로리/영양소/운동/HealthKit steps·activeCalories 포함) |
+| Entity | `HomeCalorieStatus` | 칼로리 상태 enum (under / onTrack / over) — `HomeDailySummary.swift` 내 정의 |
+| Entity | `HomeInsight` | AI 인사이트 (comment, emoji) — `HomeDailySummary.swift` 내 정의 |
+| Entity | `MacroGoals` | 영양소 목표 (proteinGoal, carbsGoal, fatGoal) — `HomeDailySummary.swift` 내 정의 |
 | Entity | `HomeMealSummary.swift` | 식사 요약 데이터 |
 | Entity | `HomeExerciseSummary.swift` | 운동 요약 데이터 |
 | Entity | `HomeReport.swift` | 주간/월간 리포트 데이터 |
+| Entity | `WeeklyReport` | 주간 리포트 (avgDailyCalories, dailyCalories[7], topExercises 등) — `HomeReport.swift` 내 정의 |
+| Entity | `MonthlyReport` | 월간 리포트 (weeklyCalorieTrend, macroAverage, recordedDays 등) — `HomeReport.swift` 내 정의 |
+| Entity | `ExerciseStat` | 운동 통계 (name, count) — `HomeReport.swift` 내 정의 |
+| Entity | `MacroAverage` | 영양소 평균 (protein, carbs, fat + ratio 계산) — `HomeReport.swift` 내 정의 |
 | UseCase | `GetDailySummaryUseCase.swift` | 하루 요약 조회 |
 | UseCase | `GenerateDailyInsightUseCase.swift` | AI 건강 인사이트 생성 |
 | UseCase | `GetReportUseCase.swift` | 주간/월간 리포트 조회 |

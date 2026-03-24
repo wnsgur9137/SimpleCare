@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - 설계/모듈/infrastructure
 created: 2026-01-26
-updated: 2026-03-17
+updated: 2026-03-24
 status: active
 ---
 
@@ -21,9 +21,6 @@ status: active
 | Client | `GeminiClient.swift` | Gemini REST API 클라이언트 |
 | Config | `GeminiConfiguration.swift` | API 키/모델 설정 |
 | Security | `KeychainManager.swift` | Keychain 기반 API 키 보안 저장 |
-| **OpenAI (레거시)** | | |
-| Client | `OpenAIClient.swift` | OpenAI REST API 클라이언트 (미사용, 보존) |
-| Config | `OpenAIConfiguration.swift` | API 키/모델 설정 (미사용, 보존) |
 | **Prompts** | | |
 | Prompt | `NutritionPrompts.swift` | 영양 추정 시스템/유저 프롬프트 |
 | **Services** | | |
