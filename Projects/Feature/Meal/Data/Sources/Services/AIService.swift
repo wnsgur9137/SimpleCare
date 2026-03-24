@@ -52,6 +52,9 @@ extension EstimatedFood {
             protein: protein,
             carbs: carbs,
             fat: fat,
+            fiber: fiber,
+            sodium: sodium,
+            sugar: sugar,
             confidence: confidence
         )
     }

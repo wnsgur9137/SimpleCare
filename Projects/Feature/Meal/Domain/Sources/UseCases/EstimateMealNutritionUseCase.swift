@@ -39,6 +39,10 @@ public struct EstimatedFoodItem: Equatable, Sendable {
     public let protein: Double
     public let carbs: Double
     public let fat: Double
+    public let fiber: Double?
+    public let sodium: Double?
+    public let sugar: Double?
+    public var quantity: Double
     public let confidence: Double
 
     public init(
@@ -49,6 +53,10 @@ public struct EstimatedFoodItem: Equatable, Sendable {
         protein: Double,
         carbs: Double,
         fat: Double,
+        fiber: Double? = nil,
+        sodium: Double? = nil,
+        sugar: Double? = nil,
+        quantity: Double = 1.0,
         confidence: Double
     ) {
         self.name = name
@@ -58,7 +66,27 @@ public struct EstimatedFoodItem: Equatable, Sendable {
         self.protein = protein
         self.carbs = carbs
         self.fat = fat
+        self.fiber = fiber
+        self.sodium = sodium
+        self.sugar = sugar
+        self.quantity = quantity
         self.confidence = confidence
+    }
+
+    public var adjustedCalories: Int {
+        Int(Double(calories) * quantity)
+    }
+
+    public var adjustedProtein: Double {
+        protein * quantity
+    }
+
+    public var adjustedCarbs: Double {
+        carbs * quantity
+    }
+
+    public var adjustedFat: Double {
+        fat * quantity
     }
 
     /// FoodItem으로 변환
@@ -67,11 +95,14 @@ public struct EstimatedFoodItem: Equatable, Sendable {
             name: name,
             servingSize: servingSize,
             servingUnit: servingUnit,
-            quantity: 1.0,
+            quantity: quantity,
             caloriesPerServing: calories,
             proteinPerServing: protein,
             carbsPerServing: carbs,
             fatPerServing: fat,
+            fiberPerServing: fiber,
+            sodiumPerServing: sodium,
+            sugarPerServing: sugar,
             nutritionSource: .aiEstimated,
             aiConfidence: confidence
         )
