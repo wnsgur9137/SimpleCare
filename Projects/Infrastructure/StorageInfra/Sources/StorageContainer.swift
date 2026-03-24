@@ -37,6 +37,7 @@ public final class StorageContainer {
             ExerciseRecordModel.self,
             FavoriteFoodModel.self,
             CustomExerciseModel.self,
+            WaterIntakeModel.self,
         ])
     }
 
