@@ -90,6 +90,17 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
     /// 입력 텍스트 최대 길이 (500자)
     private static let maxInputLength = 500
 
+    // MARK: - Cache
+
+    private struct CacheEntry {
+        let result: NutritionEstimationResult
+        let timestamp: Date
+    }
+
+    private var cache: [String: CacheEntry] = [:]
+    private static let cacheMaxSize = 50
+    private static let cacheExpiration: TimeInterval = 86400
+
     public init(client: GeminiClient) {
         self.client = client
     }
@@ -106,6 +117,13 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
             throw NutritionEstimationError.invalidResponse
         }
 
+        // Cache lookup
+        let cacheKey = sanitizedText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        if let entry = cache[cacheKey],
+           Date().timeIntervalSince(entry.timestamp) < Self.cacheExpiration {
+            return entry.result
+        }
+
         let response = try await client.generateContent(
             systemPrompt: NutritionPrompts.textNutritionSystemPrompt,
             userMessage: NutritionPrompts.textNutritionUserPrompt(foodDescription: sanitizedText),
@@ -118,7 +136,16 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
             throw NutritionEstimationError.noResponse
         }
 
-        return try parseNutritionResponse(content)
+        let result = try parseNutritionResponse(content)
+
+        // Store in cache; evict oldest entry if over max size
+        if cache.count >= Self.cacheMaxSize,
+           let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key {
+            cache.removeValue(forKey: oldestKey)
+        }
+        cache[cacheKey] = CacheEntry(result: result, timestamp: Date())
+
+        return result
     }
 
     /// 입력 텍스트 정제 (길이 제한 + 제어 문자 제거)
