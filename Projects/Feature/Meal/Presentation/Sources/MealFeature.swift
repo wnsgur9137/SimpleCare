@@ -131,6 +131,10 @@ public struct MealFeature {
             case saveCompleted
         }
 
+        // NOTE: 새 Action case 추가 시 반드시 아래 == 구현에도 해당 case를 추가해야 합니다.
+        // 누락 시 default에서 false를 반환하여 TCA의 Effect 중복 제거가 정상 동작하지 않습니다.
+        // TODO: 향후 Action을 도메인별 하위 enum으로 분리하여 복잡도 관리 검토
+        // (e.g., MealAction, FavoriteAction, WaterAction)
         // swiftlint:disable:next cyclomatic_complexity function_body_length
         public static func == (lhs: Action, rhs: Action) -> Bool {
             switch (lhs, rhs) {
@@ -594,19 +598,28 @@ public struct MealFeature {
 
 // MARK: - Dependencies
 
+// TODO: 향후 기능 확장 시 MealClient를 도메인별 하위 Client로 분리 검토
+// (e.g., NutritionClient, FavoriteClient, WaterClient)
 public struct MealClient {
+    // MARK: - AI Nutrition
     public var estimateNutrition: @Sendable (String) async throws -> NutritionEstimation
     public var analyzeMealImage: @Sendable (Data) async throws -> NutritionEstimation
+
+    // MARK: - Meal CRUD
     public var recordMeal: @Sendable (MealRecord) async throws -> Void
     public var updateMeal: @Sendable (MealRecord) async throws -> Void
     public var deleteMeal: @Sendable (MealRecord) async throws -> Void
     public var fetchMeal: @Sendable (UUID) async throws -> MealRecord?
     public var fetchDailyMeals: @Sendable (Date, UUID) async throws -> [MealRecord]
     public var fetchMealHistory: @Sendable (Date, Date, UUID) async throws -> [MealRecord]
+
+    // MARK: - Favorites
     public var getFavorites: @Sendable (UUID) async throws -> [FavoriteFood]
     public var saveFavorite: @Sendable (FavoriteFood) async throws -> Void
     public var deleteFavorite: @Sendable (FavoriteFood) async throws -> Void
     public var incrementFavoriteUsage: @Sendable (FavoriteFood) async throws -> Void
+
+    // MARK: - Water Intake
     public var getDailyWaterIntakes: @Sendable (Date, UUID) async throws -> [WaterIntake]
     public var recordWaterIntake: @Sendable (WaterIntake) async throws -> Void
 
