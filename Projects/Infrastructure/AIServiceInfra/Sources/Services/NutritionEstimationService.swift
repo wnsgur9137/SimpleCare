@@ -90,6 +90,17 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
     /// 입력 텍스트 최대 길이 (500자)
     private static let maxInputLength = 500
 
+    // MARK: - Cache
+
+    private struct CacheEntry {
+        let result: NutritionEstimationResult
+        let timestamp: Date
+    }
+
+    private var cache: [String: CacheEntry] = [:]
+    private static let cacheMaxSize = 50
+    private static let cacheExpiration: TimeInterval = 86400
+
     public init(client: GeminiClient) {
         self.client = client
     }
@@ -98,12 +109,26 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
         self.client = GeminiClient(configuration: configuration)
     }
 
+    /// 캐시 초기화
+    public func clearCache() {
+        cache.removeAll()
+    }
+
     /// 텍스트 설명으로 영양 정보 추정
     public func estimateNutrition(from text: String) async throws -> NutritionEstimationResult {
         // 입력 길이 제한
         let sanitizedText = Self.sanitizeInput(text)
         guard !sanitizedText.isEmpty else {
             throw NutritionEstimationError.invalidResponse
+        }
+
+        // Cache lookup
+        let cacheKey = sanitizedText.lowercased()
+        if let entry = cache[cacheKey],
+           Date().timeIntervalSince(entry.timestamp) < Self.cacheExpiration {
+            // LRU: 캐시 히트 시 타임스탬프 갱신
+            cache[cacheKey] = CacheEntry(result: entry.result, timestamp: Date())
+            return entry.result
         }
 
         let response = try await client.generateContent(
@@ -118,7 +143,23 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
             throw NutritionEstimationError.noResponse
         }
 
-        return try parseNutritionResponse(content)
+        let result = try parseNutritionResponse(content)
+
+        // Only cache successful responses (skip error responses)
+        if result.error == nil {
+            // 만료된 항목 일괄 정리
+            let now = Date()
+            cache = cache.filter { now.timeIntervalSince($0.value.timestamp) < Self.cacheExpiration }
+
+            // 캐시 크기 초과 시 가장 오래된 항목 제거 (LRU)
+            if cache.count >= Self.cacheMaxSize,
+               let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key {
+                cache.removeValue(forKey: oldestKey)
+            }
+            cache[cacheKey] = CacheEntry(result: result, timestamp: now)
+        }
+
+        return result
     }
 
     /// 입력 텍스트 정제 (길이 제한 + 제어 문자 제거)
