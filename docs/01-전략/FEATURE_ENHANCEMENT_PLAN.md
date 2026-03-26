@@ -347,3 +347,65 @@ Phase 3: Package D (AI 고도화) — 3개, 중간~높음 난이도
    - Home 순 칼로리: 섭취 - 소모 = 순 잔여 계산 정확성
    - AI 추천: Gemini API 호출 → 개인화 결과 표시
 4. 문서 업데이트 (ROADMAP.md, WORKPLAN.md, MODULES.md)
+
+---
+
+## 8. 코드 분석에서 발견된 추가 기회
+
+> 에이전트 분석 (2026-03-26) 결과, 기존 코드에서 미활용 인프라와 추가 개선점을 발견했습니다.
+
+### Exercise 모듈 추가 발견
+
+| # | 발견 사항 | 난이도 | 설명 |
+|---|----------|--------|------|
+| E-8 | `fetchExercises` (단일 날짜) 미사용 | — | DIContainer에 와이어링되었으나 Reducer에서 호출 안 함. 캘린더 연동 시 활용 가능 |
+| E-9 | CustomExercise `iconName` 미활용 | 낮음 | 엔티티에 SF Symbol 아이콘 필드 있으나 UI에서 선택 불가, RecordView에서 category.icon fallback |
+| E-10 | CustomExercise 수정 불가 | 중간 | 생성/삭제만 가능, `updateCustomExercise` UseCase 필요 |
+| E-11 | 운동 날짜 백데이팅 불가 | 낮음 | `ExerciseRecord.date`가 생성 시점 고정, DatePicker 추가로 해결 가능 |
+| E-12 | 미사용 로컬라이제이션 3개 | — | `exercise.intensity.low/medium/high` 키가 코드에서 미사용 (light/moderate/vigorous 사용) |
+| E-13 | 접근성 하드코딩 | 낮음 | ExerciseListView에서 `"kcal"` 하드코딩 → `"unit.kcal".localized` 필요 |
+
+### Weight 모듈 추가 발견
+
+| # | 발견 사항 | 난이도 | 설명 |
+|---|----------|--------|------|
+| W-8 | `bodyFatPercentage` State에 있으나 UI 없음 | 낮음 | WeightFeature.State에 필드 존재, WeightView에 입력 슬라이더 미구현 |
+| W-9 | `updateWeight`/`deleteWeight` Repository 구현 완료 | 중간 | Repository에 메서드 있으나 UseCase 미래핑, Client 미노출 |
+| W-10 | `weight.highest/lowest/average` 로컬라이제이션 미사용 | 낮음 | 키 정의되어 있으나 StatBox에서 미표시 |
+| W-11 | HealthKit 체중 읽기 미구현 | 중간 | `getWeights(limit:)` 메서드에서 HealthKit 병합 로직 미구현 (Phase S에서 "HealthKit 미병합" 수정되었으나 재확인 필요) |
+
+### Home 모듈 추가 발견
+
+| # | 발견 사항 | 난이도 | 설명 |
+|---|----------|--------|------|
+| H-5 | `reportError` 미표시 | 낮음 | State에 저장되나 UI에서 표시 안 함 |
+| H-6 | MonthlyReport에 `totalExerciseCalories` 누락 | 낮음 | WeeklyReport에는 있으나 Monthly에 없음 |
+| H-7 | 일부 리포트 로컬라이제이션 키 누락 | 낮음 | `report.days`, `report.times` 등 HomeDomain strings에 미정의 (BaseDomain 확인 필요) |
+
+### Profile 모듈 추가 발견
+
+| # | 발견 사항 | 난이도 | 설명 |
+|---|----------|--------|------|
+| P-6 | ProfileFeature에 delegate Action 없음 | 낮음 | 저장 후 네비게이션 (pop) 등의 제어 불가 |
+| P-7 | `dailyCalorieGoal` 수동 설정 UI 없음 | 낮음 | `effectiveDailyCalorieGoal`은 계산값만 사용, 직접 입력 불가 |
+| P-8 | MacroGoals 커스터마이징 UI 없음 | 중간 | `MacroGoals`가 `.default` (P100/C250/F70) 고정, 프로필에서 조정 불가 |
+
+---
+
+## 9. 우선순위 재평가 (코드 분석 반영)
+
+### 최우선 (기존 인프라 활용, UI만 추가)
+
+| 항목 | 이유 |
+|------|------|
+| W-8 체지방률 입력 UI | State 필드 있음, 슬라이더만 추가 |
+| W-10 최고/최저/평균 StatBox | 로컬라이제이션 키 있음, 계산만 추가 |
+| E-13 접근성 하드코딩 수정 | 1줄 수정 |
+| H-5 reportError UI 표시 | State 있음, Alert만 추가 |
+
+### 고가치 (기존 Repository 활용)
+
+| 항목 | 이유 |
+|------|------|
+| W-9 체중 기록 편집/삭제 | Repository 이미 구현, UseCase + Client + UI만 추가 |
+| P-7 칼로리 목표 수동 설정 | UserProfile에 `dailyCalorieGoal` 필드 있음, Stepper UI만 추가 |
