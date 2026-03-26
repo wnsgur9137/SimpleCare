@@ -138,12 +138,14 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
 
         let result = try parseNutritionResponse(content)
 
-        // Store in cache; evict oldest entry if over max size
-        if cache.count >= Self.cacheMaxSize,
-           let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key {
-            cache.removeValue(forKey: oldestKey)
+        // Only cache successful responses (skip error responses)
+        if result.error == nil {
+            if cache.count >= Self.cacheMaxSize,
+               let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key {
+                cache.removeValue(forKey: oldestKey)
+            }
+            cache[cacheKey] = CacheEntry(result: result, timestamp: Date())
         }
-        cache[cacheKey] = CacheEntry(result: result, timestamp: Date())
 
         return result
     }
