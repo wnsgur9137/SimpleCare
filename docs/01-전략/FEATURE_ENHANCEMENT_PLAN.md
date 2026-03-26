@@ -26,14 +26,16 @@ SimpleCare의 Exercise, Weight, Home, Profile 모듈을 경쟁 앱 수준으로 
 
 | 패키지 | 범위 | 기능 수 | 예상 난이도 |
 |--------|------|---------|------------|
-| A: Quick Wins | Exercise + Weight + Home | 6개 | 낮음 |
+| A: Quick Wins | Exercise + Weight + Home | 6개 | ✅ 완료 |
 | B: Exercise 고도화 | Exercise 모듈 | 3개 | 중간 |
 | C: Weight 고도화 | Weight 모듈 | 3개 | 중간 |
 | D: AI 고도화 | AIServiceInfra + Home | 3개 | 중간~높음 |
 
 ---
 
-## 2. Package A: Quick Wins (낮음 난이도, 6개)
+## 2. Package A: Quick Wins (낮음 난이도, 6개) ✅ 완료
+
+> PR #84 (Exercise), #85 (Weight), #86 (Home) — 2026-03-26 병합 완료
 
 ### A-1. Exercise 히스토리 기간 선택 (E-1)
 

@@ -113,6 +113,17 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 | 즐겨찾기 편집 | ✅ | EditFavoriteSheet + updateFavorite |
 | 수분 섭취 트래킹 | ✅ | WaterIntake 전체 Clean Architecture 스택 |
 
+### 3.7 Feature 고도화 Quick Wins ✅ (PR #84, #85, #86)
+
+| 기능 | 상태 | 설명 |
+|------|------|------|
+| Exercise 기간 선택 | ✅ | 7/30/90일 Segmented Picker (TrendPeriod) |
+| Exercise 주간 스트릭 | ✅ | 이번 주 X/5일 운동 원형 프로그레스 뱃지 |
+| Exercise 기간 합계 요약 | ✅ | 총 세션 / 소모 칼로리 / 운동 시간 헤더 |
+| Weight 체성분 입력 | ✅ | 체지방률 + 골격근량 슬라이더 (DisclosureGroup) |
+| Weight 목표 프로그레스 | ✅ | 시작→현재→목표 프로그레스 바 + 퍼센트 |
+| Home 순 칼로리 밸런스 | ✅ | 순 잔여 = 목표 - 섭취 + 운동소모 표시 |
+
 ### 3.3 Weight 추세 그래프 ✅
 
 | 컴포넌트 | 파일 | 상태 |
