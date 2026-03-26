@@ -24,6 +24,7 @@ status: active
 | [ROADMAP](./01-전략/ROADMAP.md) | 개발 로드맵 및 진행 상황 |
 | [WORKPLAN](./01-전략/WORKPLAN.md) | 작업 계획서 |
 | [HOME_SCREEN_PLAN](./01-전략/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
+| [FEATURE_ENHANCEMENT_PLAN](./01-전략/FEATURE_ENHANCEMENT_PLAN.md) | Feature 고도화 계획서 |
 
 ## 02-설계
 
