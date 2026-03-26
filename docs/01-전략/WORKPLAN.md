@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/계획
 created: 2026-01-26
-updated: 2026-03-18
+updated: 2026-03-26
 status: active
 ---
 
@@ -97,6 +97,21 @@ DIContainer → UseCase (구현됨) → Repository (구현됨) → Storage (구�
 | MealFeature | `MealFeature.swift` | ✅ estimateNutrition + analyzeMealImage + recordMeal |
 | AIService | `AIService.swift` | ✅ NutritionEstimationService 연동 |
 | MealDIContainer | `MealDIContainer.swift` | ✅ UseCase 3개 모두 Client 연결 |
+
+### 3.6 Meal 기능 고도화 ✅ (PR #81, #82, #83)
+
+| 기능 | 상태 | 설명 |
+|------|------|------|
+| healthTip 표시 | ✅ | AI 응답의 healthTip을 배너 UI로 표시 |
+| 세부 영양소 표시 | ✅ | fiber/sodium/sugar DisclosureGroup |
+| 이미지 피커 UI | ✅ | PhotosPicker → estimateFromImage |
+| 음식 수량 조절 | ✅ | ±0.5 Stepper, adjustedCalories 계산 |
+| AI 응답 캐싱 | ✅ | LRU 캐시 50개/24h, clearCache() |
+| 수동 직접 입력 | ✅ | ManualFoodInputSheet |
+| 전날/식사 복사 | ✅ | copyMealsFromDate Action |
+| 식사별 칼로리 목표 | ✅ | MealCalorieType enum + ratio 필드 |
+| 즐겨찾기 편집 | ✅ | EditFavoriteSheet + updateFavorite |
+| 수분 섭취 트래킹 | ✅ | WaterIntake 전체 Clean Architecture 스택 |
 
 ### 3.3 Weight 추세 그래프 ✅
 

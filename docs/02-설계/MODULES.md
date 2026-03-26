@@ -6,7 +6,7 @@ tags:
   - 설계/모듈
   - MOC
 created: 2026-01-26
-updated: 2026-03-23
+updated: 2026-03-26
 status: active
 ---
 
@@ -73,6 +73,9 @@ status: active
 | `UpdateMealUseCase` | `MealRecord` | `Void` | 식사 기록 수정 |
 | `DeleteMealUseCase` | `UUID` | `Void` | 식사 기록 삭제 |
 | `FavoriteFoodUseCases` | 다양 | 다양 | 즐겨찾기 음식 CRUD |
+| `AnalyzeMealImageUseCase` | `Data` | `NutritionEstimation` | 이미지 기반 영양 추정 |
+| `RecordWaterIntakeUseCase` | `WaterIntake` | `Void` | 수분 섭취 기록 |
+| `GetDailyWaterIntakeUseCase` | `Date`, `UUID` | `[WaterIntake]` | 일일 수분 섭취 조회 |
 
 ### Exercise Feature
 
@@ -110,6 +113,7 @@ status: active
 | `CustomExercise` | `CustomExerciseModel` | `toModel()` / `toDomain()` |
 | `WeightRecord` | `WeightRecordModel` | `toModel()` / `toDomain()` |
 | `UserProfile` | `UserProfileModel` | `toModel()` / `toDomain()` |
+| `WaterIntake` | `WaterIntakeModel` | `toModel()` / `toDomain()` |
 
 **매핑 예시**:
 ```swift

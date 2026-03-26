@@ -5,7 +5,7 @@ tags:
   - 전략
   - 전략/로드맵
 created: 2026-01-26
-updated: 2026-03-23
+updated: 2026-03-26
 review-date: 2026-03-16
 status: active
 ---
@@ -220,9 +220,24 @@ HealthKit 연동, 알림, 위젯 등 부가 기능 구현
 - [x] 테마 설정
 
 #### AI 고도화
+- [x] AI 응답 캐싱 (인메모리, LRU, 50개/24h) — PR #81
 - [ ] 개인화된 추천 기능
 - [ ] 식단 패턴 분석
 - [ ] 목표 달성 예측
+
+#### Meal 기능 고도화 — PR #83
+- [x] healthTip 표시 (AI 응답 배너)
+- [x] fiber/sodium/sugar 세부 영양소 표시
+- [x] 이미지 피커 UI (PhotosPicker)
+- [x] 음식 수량 조절 (±0.5 Stepper)
+- [x] 수동 직접 입력 모드
+- [x] 전날/식사 복사
+- [x] 즐겨찾기 편집 화면
+- [x] 수분 섭취 트래킹 (전체 Clean Architecture 스택)
+
+#### 식사별 칼로리 목표 — PR #82
+- [x] UserProfile에 breakfast/lunch/dinner/snack 칼로리 비율 추가
+- [x] MealCalorieType enum + mealCalorieGoal(for:) 계산 속성
 
 ---
 
@@ -328,9 +343,9 @@ LOW 14건 + 나머지 MEDIUM 10건은 관련 Feature 작업 시 함께 처리.
 ### 작업 목록
 
 #### Meal 이미지 기능
-- [ ] PhotosPicker UI 구현
-- [ ] 이미지 분석 결과 표시 UI
-- [ ] 이미지 기반 음식 인식
+- [x] PhotosPicker UI 구현 — PR #83
+- [x] 이미지 분석 결과 표시 UI — PR #83
+- [ ] 이미지 기반 음식 인식 (고도화)
 - [ ] 카메라 촬영 지원
 
 #### 음성 기능 (추후 검토)
@@ -358,7 +373,7 @@ LOW 14건 + 나머지 MEDIUM 10건은 관련 Feature 작업 시 함께 처리.
 | **NetworkInfra** | 기본 완료 | 80% |
 | **HealthKitInfra** | 완료 | 100% |
 | **Notification** | 완료 | 100% |
-| **Widget** | 미시작 | 0% |
+| **Widget** | 완료 | 100% |
 | **Home** | 완료 | 100% |
 | **Tab** | 완료 | 100% |
 | **Calendar** | 완료 | 100% |
