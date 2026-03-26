@@ -33,3 +33,11 @@
 "weight.toGoal" = "목표까지";
 "weight.weeklyChange" = "주간 변화";
 "weight.monthlyChange" = "월간 변화";
+
+// MARK: - Weight Enhancements
+"weight.bodyComposition" = "체성분 (선택)";
+"weight.bodyFat" = "체지방률 (%)";
+"weight.skeletalMuscle" = "골격근량 (kg)";
+"weight.goalProgress" = "목표 달성 현황";
+"weight.start" = "시작";
+"weight.progressPercent" = "목표의 %d%% 달성";

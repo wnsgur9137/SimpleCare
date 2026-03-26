@@ -33,3 +33,11 @@
 "weight.toGoal" = "To Goal";
 "weight.weeklyChange" = "Weekly Change";
 "weight.monthlyChange" = "Monthly Change";
+
+// MARK: - Weight Enhancements
+"weight.bodyComposition" = "Body Composition (optional)";
+"weight.bodyFat" = "Body Fat (%)";
+"weight.skeletalMuscle" = "Skeletal Muscle (kg)";
+"weight.goalProgress" = "Goal Progress";
+"weight.start" = "Start";
+"weight.progressPercent" = "%d%% of goal achieved";
