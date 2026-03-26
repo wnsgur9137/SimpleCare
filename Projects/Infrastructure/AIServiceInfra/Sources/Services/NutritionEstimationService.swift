@@ -109,6 +109,11 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
         self.client = GeminiClient(configuration: configuration)
     }
 
+    /// 캐시 초기화
+    public func clearCache() {
+        cache.removeAll()
+    }
+
     /// 텍스트 설명으로 영양 정보 추정
     public func estimateNutrition(from text: String) async throws -> NutritionEstimationResult {
         // 입력 길이 제한
@@ -118,9 +123,11 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
         }
 
         // Cache lookup
-        let cacheKey = sanitizedText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        let cacheKey = sanitizedText.lowercased()
         if let entry = cache[cacheKey],
            Date().timeIntervalSince(entry.timestamp) < Self.cacheExpiration {
+            // LRU: 캐시 히트 시 타임스탬프 갱신
+            cache[cacheKey] = CacheEntry(result: entry.result, timestamp: Date())
             return entry.result
         }
 
@@ -140,11 +147,16 @@ public actor NutritionEstimationService: NutritionEstimationServiceProtocol {
 
         // Only cache successful responses (skip error responses)
         if result.error == nil {
+            // 만료된 항목 일괄 정리
+            let now = Date()
+            cache = cache.filter { now.timeIntervalSince($0.value.timestamp) < Self.cacheExpiration }
+
+            // 캐시 크기 초과 시 가장 오래된 항목 제거 (LRU)
             if cache.count >= Self.cacheMaxSize,
                let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key {
                 cache.removeValue(forKey: oldestKey)
             }
-            cache[cacheKey] = CacheEntry(result: result, timestamp: Date())
+            cache[cacheKey] = CacheEntry(result: result, timestamp: now)
         }
 
         return result
