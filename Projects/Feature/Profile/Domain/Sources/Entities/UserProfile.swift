@@ -23,10 +23,18 @@ public struct UserProfile: Equatable, Sendable {
     public var dailyProteinGoal: Int?
     public var dailyCarbsGoal: Int?
     public var dailyFatGoal: Int?
-    public var breakfastCalorieRatio: Double
-    public var lunchCalorieRatio: Double
-    public var dinnerCalorieRatio: Double
-    public var snackCalorieRatio: Double
+    public var breakfastCalorieRatio: Double {
+        didSet { breakfastCalorieRatio = max(0, min(1, breakfastCalorieRatio)) }
+    }
+    public var lunchCalorieRatio: Double {
+        didSet { lunchCalorieRatio = max(0, min(1, lunchCalorieRatio)) }
+    }
+    public var dinnerCalorieRatio: Double {
+        didSet { dinnerCalorieRatio = max(0, min(1, dinnerCalorieRatio)) }
+    }
+    public var snackCalorieRatio: Double {
+        didSet { snackCalorieRatio = max(0, min(1, snackCalorieRatio)) }
+    }
     public var isOnboardingCompleted: Bool
     public var createdAt: Date
     public var updatedAt: Date
@@ -66,10 +74,14 @@ public struct UserProfile: Equatable, Sendable {
         self.dailyProteinGoal = dailyProteinGoal
         self.dailyCarbsGoal = dailyCarbsGoal
         self.dailyFatGoal = dailyFatGoal
-        self.breakfastCalorieRatio = breakfastCalorieRatio
-        self.lunchCalorieRatio = lunchCalorieRatio
-        self.dinnerCalorieRatio = dinnerCalorieRatio
-        self.snackCalorieRatio = snackCalorieRatio
+        self.breakfastCalorieRatio = max(0, min(1, breakfastCalorieRatio))
+        self.lunchCalorieRatio = max(0, min(1, lunchCalorieRatio))
+        self.dinnerCalorieRatio = max(0, min(1, dinnerCalorieRatio))
+        self.snackCalorieRatio = max(0, min(1, snackCalorieRatio))
+        assert(
+            abs(breakfastCalorieRatio + lunchCalorieRatio + dinnerCalorieRatio + snackCalorieRatio - 1.0) < 0.001,
+            "Sum of meal calorie ratios must be 1.0"
+        )
         self.isOnboardingCompleted = isOnboardingCompleted
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -109,14 +121,13 @@ public struct UserProfile: Equatable, Sendable {
     }
 
     /// Per-meal calorie goals based on ratios
-    public func mealCalorieGoal(for mealType: String) -> Int {
+    public func mealCalorieGoal(for mealType: MealCalorieType) -> Int {
         let total = Double(effectiveDailyCalorieGoal)
         switch mealType {
-        case "breakfast": return Int(total * breakfastCalorieRatio)
-        case "lunch": return Int(total * lunchCalorieRatio)
-        case "dinner": return Int(total * dinnerCalorieRatio)
-        case "snack": return Int(total * snackCalorieRatio)
-        default: return Int(total * 0.25)
+        case .breakfast: return Int(total * breakfastCalorieRatio)
+        case .lunch: return Int(total * lunchCalorieRatio)
+        case .dinner: return Int(total * dinnerCalorieRatio)
+        case .snack: return Int(total * snackCalorieRatio)
         }
     }
 
@@ -221,4 +232,12 @@ public enum GoalType: String, Codable, CaseIterable, Sendable {
         case .maintenance: return "equal.circle.fill"
         }
     }
+}
+
+/// 식사별 칼로리 목표 계산용 유형
+public enum MealCalorieType: String, CaseIterable, Sendable {
+    case breakfast
+    case lunch
+    case dinner
+    case snack
 }

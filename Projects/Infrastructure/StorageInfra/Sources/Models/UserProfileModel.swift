@@ -144,6 +144,10 @@ public final class UserProfileModel {
         self.lunchCalorieRatio = lunchCalorieRatio
         self.dinnerCalorieRatio = dinnerCalorieRatio
         self.snackCalorieRatio = snackCalorieRatio
+        assert(
+            abs(breakfastCalorieRatio + lunchCalorieRatio + dinnerCalorieRatio + snackCalorieRatio - 1.0) < 0.001,
+            "Sum of meal calorie ratios must be 1.0"
+        )
         self.isOnboardingCompleted = isOnboardingCompleted
         self.createdAt = createdAt
         self.updatedAt = updatedAt
