@@ -452,14 +452,15 @@ public struct MealFeature {
                 return .none
 
             case .addManualFood(let name, let calories, let protein, let carbs, let fat):
+                guard !name.isEmpty, calories > 0 else { return .none }
                 let food = EstimatedFoodItem(
                     name: name,
                     servingSize: 1,
-                    servingUnit: "serving",
+                    servingUnit: "meal.manualInput.serving".localized,
                     calories: calories,
-                    protein: protein,
-                    carbs: carbs,
-                    fat: fat,
+                    protein: max(0, protein),
+                    carbs: max(0, carbs),
+                    fat: max(0, fat),
                     confidence: 1.0
                 )
                 state.estimatedFoods.append(food)
@@ -564,6 +565,7 @@ public struct MealFeature {
                 return .none
 
             case .addWaterIntake(let amountMl):
+                guard amountMl > 0 else { return .none }
                 let intake = WaterIntake(userProfileId: state.userProfileId, amountMl: amountMl)
                 return .run { send in
                     do {

@@ -84,6 +84,9 @@
 "meal.servingSize" = "Serving Size";
 
 // MARK: - Water
+"meal.manualInput.serving" = "serving";
+
+// MARK: - Water
 "meal.water.title" = "Water Intake";
 "meal.water.goal" = "Goal";
 "meal.water.add" = "Add";

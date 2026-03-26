@@ -84,6 +84,9 @@
 "meal.servingSize" = "서빙 사이즈";
 
 // MARK: - Water
+"meal.manualInput.serving" = "인분";
+
+// MARK: - Water
 "meal.water.title" = "수분 섭취";
 "meal.water.goal" = "목표";
 "meal.water.add" = "추가";

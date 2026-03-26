@@ -115,8 +115,14 @@ public struct MealRecordView: View {
             .onChange(of: selectedPhotoItem) { _, newItem in
                 guard let newItem else { return }
                 Task {
-                    if let data = try? await newItem.loadTransferable(type: Data.self) {
-                        store.send(.imageSelected(data))
+                    do {
+                        if let data = try await newItem.loadTransferable(type: Data.self) {
+                            store.send(.imageSelected(data))
+                        } else {
+                            store.send(.dismissError)
+                        }
+                    } catch {
+                        store.send(.dismissError)
                     }
                     selectedPhotoItem = nil
                 }
