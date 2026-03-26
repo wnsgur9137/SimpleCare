@@ -89,3 +89,6 @@
 "calorieStatus.under" = "You can eat a bit more";
 "calorieStatus.over" = "You've exceeded a bit today";
 "calorieStatus.noData" = "Record your first meal today!";
+
+// MARK: - Home Enhancements
+"home.netRemaining" = "Net Remaining";

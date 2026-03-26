@@ -89,3 +89,6 @@
 "calorieStatus.under" = "조금 더 드셔도 괜찮아요";
 "calorieStatus.over" = "오늘은 조금 초과했네요";
 "calorieStatus.noData" = "오늘의 첫 식사를 기록해보세요!";
+
+// MARK: - Home Enhancements
+"home.netRemaining" = "순 잔여 칼로리";
