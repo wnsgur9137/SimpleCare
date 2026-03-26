@@ -216,7 +216,7 @@ public struct HomeView: View {
 
             // 순 잔여 칼로리
             if summary.exerciseCalories > 0 {
-                let netRemaining = summary.remainingCalories + summary.exerciseCalories
+                let netRemaining = summary.remainingCalories
                 HStack(spacing: 4) {
                     Image(systemName: "equal.circle.fill")
                         .font(.caption)

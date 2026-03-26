@@ -11,6 +11,10 @@ import ExerciseDomain
 
 @Reducer
 public struct ExerciseListFeature {
+    // MARK: - Constants
+
+    public static let weeklyExerciseGoal = 5
+
     // MARK: - State
 
     @ObservableState

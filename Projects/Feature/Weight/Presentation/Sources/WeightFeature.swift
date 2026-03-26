@@ -20,7 +20,9 @@ public struct WeightFeature {
         public var weightTrend: WeightTrend?
         public var newWeightKg: Double
         public var bodyFatPercentage: Double?
+        /// 골격근량 (kg), 선택 입력
         public var skeletalMuscleMass: Double?
+        /// 목표 달성률 계산용 시작 체중 (가장 오래된 기록에서 자동 설정)
         public var startWeight: Double?
         public var notes: String = ""
         public var error: String?

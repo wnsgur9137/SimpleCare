@@ -271,6 +271,10 @@ public struct WeightView: View {
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
+    /// 목표 달성 프로그레스 섹션 — 시작/현재/목표 체중과 달성률을 표시
+    /// - Parameters:
+    ///   - trend: 현재 체중 트렌드 데이터
+    ///   - startWeight: 기록 시작 시점의 체중 (가장 오래된 기록)
     private func goalProgressSection(trend: WeightTrend, startWeight: Double) -> some View {
         let progress = trend.progressToGoal(from: startWeight)
 

@@ -80,7 +80,7 @@ public struct ExerciseListView: View {
                 Circle()
                     .stroke(.secondary.opacity(0.2), lineWidth: 4)
                 Circle()
-                    .trim(from: 0, to: min(Double(store.weeklyExerciseDays) / 5.0, 1.0))
+                    .trim(from: 0, to: min(Double(store.weeklyExerciseDays) / Double(ExerciseListFeature.weeklyExerciseGoal), 1.0))
                     .stroke(.scPrimary, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 Text("\(store.weeklyExerciseDays)")
@@ -93,7 +93,7 @@ public struct ExerciseListView: View {
                 Text("exercise.weekly.progress".localized)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                Text(String(format: "exercise.weekly.goal".localized, store.weeklyExerciseDays, 5))
+                Text(String(format: "exercise.weekly.goal".localized, store.weeklyExerciseDays, ExerciseListFeature.weeklyExerciseGoal))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -144,13 +144,15 @@ public struct ExerciseListView: View {
         .frame(maxWidth: .infinity)
     }
 
+    private static let durationFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        return formatter
+    }()
+
     private func formatDuration(_ minutes: Int) -> String {
-        let hours = minutes / 60
-        let mins = minutes % 60
-        if hours > 0 {
-            return "\(hours)h \(mins)m"
-        }
-        return "\(mins)m"
+        Self.durationFormatter.string(from: TimeInterval(minutes * 60)) ?? ""
     }
 
     private var exerciseListView: some View {
