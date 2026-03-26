@@ -78,3 +78,14 @@
 // MARK: - Exercise List
 "exercise.list.empty" = "No exercises recorded";
 "exercise.list.emptyDescription" = "Record your exercises to track calories burned";
+
+// MARK: - Exercise Enhancements
+"exercise.period.week" = "1 Week";
+"exercise.period.month" = "1 Month";
+"exercise.period.quarter" = "3 Months";
+"exercise.weekly.progress" = "This Week";
+"exercise.weekly.goal" = "%d/%d days";
+"exercise.summary.sessions" = "Sessions";
+"exercise.summary.sessionsUnit" = "";
+"exercise.summary.calories" = "Calories";
+"exercise.summary.duration" = "Duration";

@@ -46,9 +46,111 @@ public struct ExerciseListView: View {
             if store.exercises.isEmpty {
                 emptyStateView
             } else {
-                exerciseListView
+                VStack(spacing: 0) {
+                    VStack(spacing: 12) {
+                        periodPicker
+                        weeklyStreakBadge
+                        summaryHeader
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+
+                    exerciseListView
+                }
             }
         }
+    }
+
+    private var periodPicker: some View {
+        Picker("", selection: Binding(
+            get: { store.selectedPeriod },
+            set: { store.send(.selectPeriod($0)) }
+        )) {
+            ForEach(ExerciseListFeature.State.TrendPeriod.allCases, id: \.self) { period in
+                Text(period.displayName).tag(period)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    private var weeklyStreakBadge: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .stroke(.secondary.opacity(0.2), lineWidth: 4)
+                Circle()
+                    .trim(from: 0, to: min(Double(store.weeklyExerciseDays) / 5.0, 1.0))
+                    .stroke(.scPrimary, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                Text("\(store.weeklyExerciseDays)")
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            .frame(width: 44, height: 44)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("exercise.weekly.progress".localized)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                Text(String(format: "exercise.weekly.goal".localized, store.weeklyExerciseDays, 5))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding()
+        .background { RoundedRectangle(cornerRadius: 12).fill(.regularMaterial) }
+    }
+
+    private var summaryHeader: some View {
+        HStack(spacing: 0) {
+            summaryItem(
+                title: "exercise.summary.sessions".localized,
+                value: "\(store.totalSessions)",
+                unit: "exercise.summary.sessionsUnit".localized
+            )
+            Divider().frame(height: 30)
+            summaryItem(
+                title: "exercise.summary.calories".localized,
+                value: "\(store.totalCalories)",
+                unit: "unit.kcal".localized
+            )
+            Divider().frame(height: 30)
+            summaryItem(
+                title: "exercise.summary.duration".localized,
+                value: formatDuration(store.totalMinutes),
+                unit: ""
+            )
+        }
+        .padding(.vertical, 12)
+        .background { RoundedRectangle(cornerRadius: 12).fill(.regularMaterial) }
+    }
+
+    private func summaryItem(title: String, value: String, unit: String) -> some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.headline)
+                .foregroundStyle(.scExercise)
+            if !unit.isEmpty {
+                Text(unit)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func formatDuration(_ minutes: Int) -> String {
+        let hours = minutes / 60
+        let mins = minutes % 60
+        if hours > 0 {
+            return "\(hours)h \(mins)m"
+        }
+        return "\(mins)m"
     }
 
     private var exerciseListView: some View {
