@@ -20,6 +20,8 @@ public struct WeightFeature {
         public var weightTrend: WeightTrend?
         public var newWeightKg: Double
         public var bodyFatPercentage: Double?
+        public var skeletalMuscleMass: Double?
+        public var startWeight: Double?
         public var notes: String = ""
         public var error: String?
         public var selectedPeriod: TrendPeriod = .month
@@ -144,6 +146,9 @@ public struct WeightFeature {
             case .loadTrendResponse(.success(let trend)):
                 state.isLoading = false
                 state.weightTrend = trend
+                if state.startWeight == nil, let oldest = trend.records.last {
+                    state.startWeight = oldest.weightKg
+                }
                 return .none
 
             case .loadTrendResponse(.failure(let error)):
@@ -159,6 +164,7 @@ public struct WeightFeature {
                     userProfileId: state.userProfileId,
                     weightKg: state.newWeightKg,
                     bodyFatPercentage: state.bodyFatPercentage,
+                    skeletalMuscleMassKg: state.skeletalMuscleMass,
                     notes: state.notes.isEmpty ? nil : state.notes
                 )
 

@@ -33,6 +33,11 @@ public struct WeightView: View {
                     // Empty State 배너
                     emptyStateBanner
 
+                    // 목표 달성 프로그레스
+                    if let trend = store.weightTrend, let startWeight = store.startWeight, !trend.records.isEmpty {
+                        goalProgressSection(trend: trend, startWeight: startWeight)
+                    }
+
                     // 추세 차트 (항상 표시)
                     if let trend = store.weightTrend {
                         trendChartSection(trend: trend)
@@ -97,6 +102,48 @@ public struct WeightView: View {
                 .accessibilityLabel("accessibility.weight.slider".localized)
                 .accessibilityValue(String(format: "%.1f %@", store.newWeightKg, "unit.kg".localized))
                 .accessibilityHint("accessibility.weight.sliderHint".localized)
+
+            // 체성분 입력 (선택)
+            DisclosureGroup("weight.bodyComposition".localized) {
+                VStack(spacing: 12) {
+                    HStack {
+                        Text("weight.bodyFat".localized)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(store.bodyFatPercentage.map { String(format: "%.1f%%", $0) } ?? "--")
+                            .font(.subheadline)
+                            .frame(width: 55)
+                    }
+                    Slider(
+                        value: Binding(
+                            get: { store.bodyFatPercentage ?? 20.0 },
+                            set: { store.bodyFatPercentage = $0 }
+                        ),
+                        in: 3...60,
+                        step: 0.1
+                    )
+
+                    HStack {
+                        Text("weight.skeletalMuscle".localized)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(store.skeletalMuscleMass.map { String(format: "%.1f kg", $0) } ?? "--")
+                            .font(.subheadline)
+                            .frame(width: 60)
+                    }
+                    Slider(
+                        value: Binding(
+                            get: { store.skeletalMuscleMass ?? 30.0 },
+                            set: { store.skeletalMuscleMass = $0 }
+                        ),
+                        in: 10...60,
+                        step: 0.1
+                    )
+                }
+            }
+            .font(.subheadline)
 
             TextField("weight.memo".localized, text: $store.notes)
                 .textFieldStyle(.roundedBorder)
@@ -219,6 +266,54 @@ public struct WeightView: View {
                     )
                 }
             }
+        }
+        .padding()
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    }
+
+    private func goalProgressSection(trend: WeightTrend, startWeight: Double) -> some View {
+        let progress = trend.progressToGoal(from: startWeight)
+
+        return VStack(alignment: .leading, spacing: 12) {
+            Text("weight.goalProgress".localized)
+                .font(.headline)
+
+            ProgressView(value: progress)
+                .tint(progress >= 1.0 ? .scSuccess : .scPrimary)
+
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("weight.start".localized)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(String(format: "%.1f kg", startWeight))
+                        .font(.caption)
+                        .fontWeight(.medium)
+                }
+                Spacer()
+                VStack {
+                    Text("weight.current".localized)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(String(format: "%.1f kg", trend.currentWeight))
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.scPrimary)
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text("weight.goal".localized)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(String(format: "%.1f kg", trend.targetWeight))
+                        .font(.caption)
+                        .fontWeight(.medium)
+                }
+            }
+
+            Text(String(format: "weight.progressPercent".localized, Int(progress * 100)))
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
         .padding()
         .glassEffect(.regular, in: .rect(cornerRadius: 16))
