@@ -78,3 +78,14 @@
 // MARK: - Exercise List
 "exercise.list.empty" = "기록된 운동이 없습니다";
 "exercise.list.emptyDescription" = "운동을 기록하고 소모 칼로리를 관리해보세요";
+
+// MARK: - Exercise Enhancements
+"exercise.period.week" = "1주";
+"exercise.period.month" = "1개월";
+"exercise.period.quarter" = "3개월";
+"exercise.weekly.progress" = "이번 주 운동";
+"exercise.weekly.goal" = "%d/%d일 달성";
+"exercise.summary.sessions" = "총 운동";
+"exercise.summary.sessionsUnit" = "회";
+"exercise.summary.calories" = "소모 칼로리";
+"exercise.summary.duration" = "운동 시간";
