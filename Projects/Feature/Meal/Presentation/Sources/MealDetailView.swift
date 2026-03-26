@@ -326,41 +326,71 @@ private struct NutritionCard: View {
 private struct FoodItemDetailRow: View {
     let food: FoodItem
 
+    @State private var isDetailExpanded = false
+
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(food.name)
-                    .font(.body)
-                    .fontWeight(.medium)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(food.name)
+                        .font(.body)
+                        .fontWeight(.medium)
 
-                HStack(spacing: 8) {
-                    Text("\(Int(food.servingSize))\(food.servingUnit)")
-                    if food.quantity > 1 {
-                        Text("× \(Int(food.quantity))")
+                    HStack(spacing: 8) {
+                        Text("\(Int(food.servingSize))\(food.servingUnit)")
+                        if food.quantity > 1 {
+                            Text("× \(Int(food.quantity))")
+                        }
                     }
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-                Text("\(food.calories)")
-                    .font(.headline)
-                    .foregroundStyle(.scCalories)
-                + Text(" kcal")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                }
 
-                HStack(spacing: 8) {
-                    NutrientLabel(label: "P", value: food.proteinGrams, color: .scProtein)
-                    NutrientLabel(label: "C", value: food.carbsGrams, color: .scCarbs)
-                    NutrientLabel(label: "F", value: food.fatGrams, color: .scFat)
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(food.calories)")
+                        .font(.headline)
+                        .foregroundStyle(.scCalories)
+                    + Text(" kcal")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    HStack(spacing: 8) {
+                        NutrientLabel(label: "P", value: food.proteinGrams, color: .scProtein)
+                        NutrientLabel(label: "C", value: food.carbsGrams, color: .scCarbs)
+                        NutrientLabel(label: "F", value: food.fatGrams, color: .scFat)
+                    }
                 }
             }
+            .padding(.vertical, 8)
+
+            if food.fiberPerServing != nil || food.sodiumPerServing != nil || food.sugarPerServing != nil {
+                DisclosureGroup(
+                    isExpanded: $isDetailExpanded,
+                    content: {
+                        HStack(spacing: 8) {
+                            if let fiber = food.fiberPerServing {
+                                NutrientLabel(label: "meal.fiber".localized, value: fiber, color: .scProtein)
+                            }
+                            if let sodium = food.sodiumPerServing {
+                                NutrientLabel(label: "meal.sodium".localized, value: sodium, color: .scFat)
+                            }
+                            if let sugar = food.sugarPerServing {
+                                NutrientLabel(label: "meal.sugar".localized, value: sugar, color: .scCarbs)
+                            }
+                        }
+                        .padding(.top, 4)
+                    },
+                    label: {
+                        Text("meal.detailNutrients".localized)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                )
+                .padding(.bottom, 8)
+            }
         }
-        .padding(.vertical, 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
             [

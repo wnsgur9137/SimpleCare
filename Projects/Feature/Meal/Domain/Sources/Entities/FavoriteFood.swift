@@ -64,6 +64,31 @@ public struct FavoriteFood: Identifiable, Equatable, Sendable {
         )
     }
 
+    /// 수정된 값으로 새 FavoriteFood 생성
+    public func updated(
+        name: String,
+        servingSize: Double,
+        caloriesPerServing: Int,
+        proteinPerServing: Double,
+        carbsPerServing: Double,
+        fatPerServing: Double
+    ) -> FavoriteFood {
+        FavoriteFood(
+            id: id,
+            userProfileId: userProfileId,
+            name: name,
+            brand: brand,
+            servingSize: servingSize,
+            servingUnit: servingUnit,
+            caloriesPerServing: caloriesPerServing,
+            proteinPerServing: proteinPerServing,
+            carbsPerServing: carbsPerServing,
+            fatPerServing: fatPerServing,
+            usageCount: usageCount,
+            lastUsedAt: lastUsedAt
+        )
+    }
+
     /// EstimatedFoodItem에서 FavoriteFood 생성
     public static func from(_ food: EstimatedFoodItem, userProfileId: UUID) -> FavoriteFood {
         FavoriteFood(

@@ -68,6 +68,14 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
     private lazy var incrementFavoriteUsageUseCase: IncrementFavoriteUsageUseCaseProtocol =
         IncrementFavoriteUsageUseCase(repository: favoriteFoodRepository)
 
+    private lazy var waterIntakeRepository: WaterIntakeRepositoryProtocol = WaterIntakeDataRepository()
+
+    private lazy var recordWaterIntakeUseCase: RecordWaterIntakeUseCaseProtocol =
+        RecordWaterIntakeUseCase(repository: waterIntakeRepository)
+
+    private lazy var getDailyWaterIntakeUseCase: GetDailyWaterIntakeUseCaseProtocol =
+        GetDailyWaterIntakeUseCase(repository: waterIntakeRepository)
+
     // MARK: - TCA Dependencies
 
     public lazy var mealClient: MealClient = {
@@ -83,6 +91,8 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
         let saveFavoriteUseCase = self.saveFavoriteFoodUseCase
         let deleteFavoriteUseCase = self.deleteFavoriteFoodUseCase
         let incrementUsageUseCase = self.incrementFavoriteUsageUseCase
+        let recordWaterUseCase = self.recordWaterIntakeUseCase
+        let getWaterUseCase = self.getDailyWaterIntakeUseCase
 
         return MealClient(
             estimateNutrition: { text in
@@ -120,6 +130,12 @@ public final class MealDIContainer: DIContainer, MealCoordinatorDependency {
             },
             incrementFavoriteUsage: { food in
                 try await incrementUsageUseCase.execute(food)
+            },
+            getDailyWaterIntakes: { date, userProfileId in
+                try await getWaterUseCase.execute(date: date, userProfileId: userProfileId)
+            },
+            recordWaterIntake: { intake in
+                try await recordWaterUseCase.execute(intake)
             }
         )
     }()
