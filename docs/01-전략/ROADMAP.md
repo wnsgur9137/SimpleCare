@@ -170,6 +170,11 @@ status: active
   - [x] ExerciseCoordinator
   - [x] ExerciseDIContainer
 
+#### Exercise 고도화 — PR #84
+- [x] 히스토리 기간 선택 (7/30/90일 Segmented Picker)
+- [x] 주간 운동 스트릭 뱃지 (X/5일 프로그레스 링)
+- [x] 기간 합계 요약 헤더 (세션/칼로리/시간)
+
 #### Weight Feature
 - [x] Domain Layer
   - [x] WeightRecord Entity
@@ -188,6 +193,13 @@ status: active
   - [x] 체중 추세 차트 (Swift Charts)
   - [x] WeightCoordinator
   - [x] WeightDIContainer
+
+#### Weight 고도화 — PR #85
+- [x] 체성분 입력 (체지방률 + 골격근량 슬라이더)
+- [x] 목표 달성 프로그레스 바 (시작→현재→목표)
+
+#### Home 고도화 — PR #86
+- [x] 순 잔여 칼로리 밸런스 표시 (목표 - 섭취 + 운동소모)
 
 ---
 
