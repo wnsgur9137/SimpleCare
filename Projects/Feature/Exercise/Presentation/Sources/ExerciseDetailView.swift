@@ -96,7 +96,7 @@ public struct ExerciseDetailView: View {
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(store.exercise.displayName)
+                    Text(store.isEditing ? store.editingExerciseType.displayName : store.exercise.displayName)
                         .font(.title2)
                         .fontWeight(.bold)
 
@@ -188,6 +188,35 @@ public struct ExerciseDetailView: View {
 
     private var editingControls: some View {
         VStack(spacing: 16) {
+            // 카테고리 선택
+            VStack(alignment: .leading, spacing: 8) {
+                Text("exercise.category".localized)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Picker("exercise.category".localized, selection: $store.editingCategory) {
+                    ForEach(ExerciseCategory.allCases, id: \.self) { cat in
+                        Label(cat.displayName, systemImage: cat.icon).tag(cat)
+                    }
+                }
+            }
+
+            // 유형 선택 (선택된 카테고리 기준 필터)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("exercise.type".localized)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Picker("exercise.type".localized, selection: $store.editingExerciseType) {
+                    ForEach(
+                        ExerciseType.allCases.filter { $0.category == store.editingCategory },
+                        id: \.self
+                    ) { type in
+                        Text(type.displayName).tag(type)
+                    }
+                }
+            }
+
             VStack(alignment: .leading, spacing: 8) {
                 Text("exercise.duration".localized)
                     .font(.subheadline)

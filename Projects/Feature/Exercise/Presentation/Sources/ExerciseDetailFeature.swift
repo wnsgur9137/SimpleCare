@@ -21,6 +21,8 @@ public struct ExerciseDetailFeature {
         public var showDeleteConfirmation: Bool = false
 
         // Editing state
+        public var editingCategory: ExerciseCategory
+        public var editingExerciseType: ExerciseType
         public var editingIntensity: ExerciseIntensity
         public var editingDurationMinutes: Int
         public var editingNotes: String
@@ -40,6 +42,8 @@ public struct ExerciseDetailFeature {
 
         public init(exercise: ExerciseRecord) {
             self.exercise = exercise
+            self.editingCategory = exercise.exerciseType.category
+            self.editingExerciseType = exercise.exerciseType
             self.editingIntensity = exercise.intensity
             self.editingDurationMinutes = exercise.durationMinutes
             self.editingNotes = exercise.notes ?? ""
@@ -121,6 +125,15 @@ public struct ExerciseDetailFeature {
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
+            .onChange(of: \.editingCategory) { _, newCategory in
+                Reduce { state, _ in
+                    // 카테고리 변경 시 해당 카테고리의 첫 번째 유형으로 자동 선택
+                    if let firstType = ExerciseType.allCases.first(where: { $0.category == newCategory }) {
+                        state.editingExerciseType = firstType
+                    }
+                    return .none
+                }
+            }
 
         Reduce { state, action in
             switch action {
@@ -145,6 +158,8 @@ public struct ExerciseDetailFeature {
             case .refreshExerciseResponse(.success(let exercise)):
                 if let exercise {
                     state.exercise = exercise
+                    state.editingCategory = exercise.exerciseType.category
+                    state.editingExerciseType = exercise.exerciseType
                     state.editingIntensity = exercise.intensity
                     state.editingDurationMinutes = exercise.durationMinutes
                     state.editingNotes = exercise.notes ?? ""
@@ -158,6 +173,8 @@ public struct ExerciseDetailFeature {
 
             case .editButtonTapped:
                 state.isEditing = true
+                state.editingCategory = state.exercise.exerciseType.category
+                state.editingExerciseType = state.exercise.exerciseType
                 state.editingIntensity = state.exercise.intensity
                 state.editingDurationMinutes = state.exercise.durationMinutes
                 state.editingNotes = state.exercise.notes ?? ""
@@ -165,6 +182,8 @@ public struct ExerciseDetailFeature {
 
             case .cancelEdit:
                 state.isEditing = false
+                state.editingCategory = state.exercise.exerciseType.category
+                state.editingExerciseType = state.exercise.exerciseType
                 state.editingIntensity = state.exercise.intensity
                 state.editingDurationMinutes = state.exercise.durationMinutes
                 state.editingNotes = state.exercise.notes ?? ""
@@ -173,11 +192,13 @@ public struct ExerciseDetailFeature {
             case .saveChanges:
                 state.viewState = .loading
                 var updatedExercise = state.exercise
+                updatedExercise.exerciseType = state.editingExerciseType
                 updatedExercise.intensity = state.editingIntensity
                 updatedExercise.durationMinutes = state.editingDurationMinutes
                 updatedExercise.notes = state.editingNotes.isEmpty ? nil : state.editingNotes
+                // 유형 변경 시 baseMET가 바뀌므로 칼로리 재계산
                 updatedExercise.caloriesBurned = ExerciseRecord.calculateCalories(
-                    exerciseType: updatedExercise.exerciseType,
+                    exerciseType: state.editingExerciseType,
                     intensity: state.editingIntensity,
                     durationMinutes: state.editingDurationMinutes,
                     weightKg: updatedExercise.userWeightKg,
