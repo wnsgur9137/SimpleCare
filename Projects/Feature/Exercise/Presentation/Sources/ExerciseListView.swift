@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 import ComposableArchitecture
 import ExerciseDomain
 import BasePresentation
@@ -51,6 +52,7 @@ public struct ExerciseListView: View {
                         periodPicker
                         weeklyStreakBadge
                         summaryHeader
+                        calorieChartSection
                     }
                     .padding(.horizontal)
                     .padding(.top, 8)
@@ -153,6 +155,27 @@ public struct ExerciseListView: View {
 
     private func formatDuration(_ minutes: Int) -> String {
         Self.durationFormatter.string(from: TimeInterval(minutes * 60)) ?? ""
+    }
+
+    private var calorieChartSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("exercise.chart.title".localized)
+                .font(.headline)
+
+            Chart {
+                ForEach(store.dailyCalorieData, id: \.date) { data in
+                    BarMark(
+                        x: .value("common.date".localized, data.date, unit: .day),
+                        y: .value("exercise.summary.calories".localized, data.calories)
+                    )
+                    .foregroundStyle(.scExercise)
+                }
+            }
+            .frame(height: 180)
+            .chartYAxis { AxisMarks(position: .leading) }
+        }
+        .padding()
+        .background { RoundedRectangle(cornerRadius: 12).fill(.regularMaterial) }
     }
 
     private var exerciseListView: some View {
