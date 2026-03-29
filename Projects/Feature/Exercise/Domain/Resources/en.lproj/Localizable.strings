@@ -89,3 +89,6 @@
 "exercise.summary.sessionsUnit" = "";
 "exercise.summary.calories" = "Calories";
 "exercise.summary.duration" = "Duration";
+
+// MARK: - Exercise Enhancements (Package B)
+"exercise.chart.title" = "Calorie Burn Trend";

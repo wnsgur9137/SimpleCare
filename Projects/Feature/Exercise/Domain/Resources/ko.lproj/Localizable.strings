@@ -89,3 +89,6 @@
 "exercise.summary.sessionsUnit" = "회";
 "exercise.summary.calories" = "소모 칼로리";
 "exercise.summary.duration" = "운동 시간";
+
+// MARK: - Exercise Enhancements (Package B)
+"exercise.chart.title" = "소모 칼로리 추이";

@@ -52,6 +52,16 @@ public struct ExerciseListFeature {
             ).count
         }
 
+        // MARK: - Computed: Daily Calorie Data (for chart)
+        public var dailyCalorieData: [(date: Date, calories: Int)] {
+            let calendar = Calendar.current
+            let grouped = Dictionary(grouping: exercises) { exercise in
+                calendar.startOfDay(for: exercise.date)
+            }
+            return grouped.map { (date: $0.key, calories: $0.value.reduce(0) { $0 + $1.caloriesBurned }) }
+                .sorted { $0.date < $1.date }
+        }
+
         // MARK: - Computed: Summary
         public var totalSessions: Int { exercises.count }
         public var totalCalories: Int { exercises.reduce(0) { $0 + $1.caloriesBurned } }
