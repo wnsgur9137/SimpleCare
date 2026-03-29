@@ -92,3 +92,4 @@
 
 // MARK: - Exercise Enhancements (Package B)
 "exercise.recent" = "최근 운동";
+"exercise.chart.title" = "소모 칼로리 추이";
