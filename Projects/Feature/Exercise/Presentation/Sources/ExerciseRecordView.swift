@@ -28,6 +28,33 @@ public struct ExerciseRecordView: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
 
+                // 최근 운동 바로가기
+                if !store.recentExercises.isEmpty {
+                    Section("exercise.recent".localized) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(store.recentExercises.prefix(5)) { exercise in
+                                    Button {
+                                        store.send(.selectRecentExercise(exercise))
+                                    } label: {
+                                        VStack(spacing: 4) {
+                                            Image(systemName: exercise.exerciseType.category.icon)
+                                                .font(.title3)
+                                            Text(exercise.displayName)
+                                                .font(.caption2)
+                                                .lineLimit(1)
+                                        }
+                                        .frame(width: 64)
+                                        .padding(.vertical, 8)
+                                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // 운동 종류 선택
                 Section("exercise.type".localized) {
                     Picker("exercise.category".localized, selection: $store.selectedCategory.sending(\.selectCategory)) {

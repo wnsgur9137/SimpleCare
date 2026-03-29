@@ -91,4 +91,5 @@
 "exercise.summary.duration" = "Duration";
 
 // MARK: - Exercise Enhancements (Package B)
+"exercise.recent" = "Recent Exercises";
 "exercise.chart.title" = "Calorie Burn Trend";

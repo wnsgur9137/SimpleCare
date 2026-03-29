@@ -28,6 +28,9 @@ public struct ExerciseFeature {
         public var userProfileId: UUID
         public var userWeightKg: Double
 
+        // Recent exercises
+        public var recentExercises: [ExerciseRecord] = []
+
         // Custom exercise
         public var customExercises: [CustomExercise] = []
         public var customExerciseName: String = ""
@@ -73,12 +76,17 @@ public struct ExerciseFeature {
         case deleteCustomExerciseResponse(Result<Void, Error>)
         case selectCustomExercise(CustomExercise)
         case clearCustomSelection
+        // Recent exercises
+        case loadRecentExercises
+        case loadRecentExercisesResponse(Result<[ExerciseRecord], Error>)
+        case selectRecentExercise(ExerciseRecord)
         case delegate(Delegate)
 
         public enum Delegate: Equatable {
             case saveCompleted
         }
 
+        // swiftlint:disable:next cyclomatic_complexity function_body_length
         public static func == (lhs: Action, rhs: Action) -> Bool {
             switch (lhs, rhs) {
             case (.binding(let l), .binding(let r)):
@@ -119,6 +127,14 @@ public struct ExerciseFeature {
                 return l == r
             case (.clearCustomSelection, .clearCustomSelection):
                 return true
+            case (.loadRecentExercises, .loadRecentExercises):
+                return true
+            case (.loadRecentExercisesResponse(.success(let l)), .loadRecentExercisesResponse(.success(let r))):
+                return l == r
+            case (.loadRecentExercisesResponse(.failure), .loadRecentExercisesResponse(.failure)):
+                return true
+            case (.selectRecentExercise(let l), .selectRecentExercise(let r)):
+                return l == r
             case (.delegate(let l), .delegate(let r)):
                 return l == r
             default:
@@ -163,7 +179,10 @@ public struct ExerciseFeature {
                 return .none
 
             case .onAppear:
-                return .send(.loadCustomExercises)
+                return .merge(
+                    .send(.loadCustomExercises),
+                    .send(.loadRecentExercises)
+                )
 
             case let .selectCategory(category):
                 state.selectedCategory = category
@@ -293,6 +312,48 @@ public struct ExerciseFeature {
                 return .none
 
             case .clearCustomSelection:
+                state.selectedCustomExercise = nil
+                state.updateCalorieEstimate()
+                return .none
+
+            // MARK: - Recent Exercises
+
+            case .loadRecentExercises:
+                let userProfileId = state.userProfileId
+                let endDate = Date()
+                let startDate = Calendar.current.date(byAdding: .day, value: -7, to: endDate) ?? endDate
+                return .run { send in
+                    do {
+                        let exercises = try await exerciseClient.fetchExerciseHistory(
+                            startDate, endDate, userProfileId
+                        )
+                        await send(.loadRecentExercisesResponse(.success(exercises)))
+                    } catch {
+                        await send(.loadRecentExercisesResponse(.failure(error)))
+                    }
+                }
+
+            case .loadRecentExercisesResponse(.success(let exercises)):
+                // 중복 유형 제거 후 최대 5개
+                var seenTypes = Set<ExerciseType>()
+                var unique: [ExerciseRecord] = []
+                for exercise in exercises.sorted(by: { $0.date > $1.date }) {
+                    if seenTypes.insert(exercise.exerciseType).inserted {
+                        unique.append(exercise)
+                    }
+                    if unique.count >= 5 { break }
+                }
+                state.recentExercises = unique
+                return .none
+
+            case .loadRecentExercisesResponse(.failure):
+                // 최근 운동 로드 실패는 무시 (핵심 기능 아님)
+                return .none
+
+            case .selectRecentExercise(let exercise):
+                state.selectedCategory = exercise.exerciseType.category
+                state.exerciseType = exercise.exerciseType
+                state.intensity = exercise.intensity
                 state.selectedCustomExercise = nil
                 state.updateCalorieEstimate()
                 return .none
