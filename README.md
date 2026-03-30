@@ -359,6 +359,8 @@ fastlane ios beta                 # TestFlight 배포
 | [ROADMAP.md](./docs/01-전략/ROADMAP.md) | 전략 | 개발 로드맵 및 진행 상황 |
 | [WORKPLAN.md](./docs/01-전략/WORKPLAN.md) | 전략 | 작업 계획서 |
 | [HOME_SCREEN_PLAN.md](./docs/01-전략/HOME_SCREEN_PLAN.md) | 전략 | 홈 화면 계획서 |
+| [FEATURE_ENHANCEMENT_PLAN.md](./docs/01-전략/FEATURE_ENHANCEMENT_PLAN.md) | 전략 | Feature 고도화 계획서 |
+| [WIDGET_ENHANCEMENT_PLAN.md](./docs/01-전략/WIDGET_ENHANCEMENT_PLAN.md) | 전략 | Widget 고도화 계획서 |
 | [ARCHITECTURE.md](./docs/02-설계/ARCHITECTURE.md) | 설계 | 프로젝트 아키텍처 설계 |
 | [MODULES.md](./docs/02-설계/MODULES.md) | 설계 | 모듈 상세 정의 |
 | [SETUP.md](./docs/03-구현/SETUP.md) | 구현 | 개발 환경 설정 가이드 |
