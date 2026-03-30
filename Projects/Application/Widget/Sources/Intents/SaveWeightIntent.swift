@@ -1,4 +1,5 @@
 import AppIntents
+import BaseDomain
 import WidgetKit
 
 struct SaveWeightIntent: AppIntent {
@@ -6,10 +7,10 @@ struct SaveWeightIntent: AppIntent {
     static var description: IntentDescription = "조절된 체중을 저장합니다."
 
     func perform() async throws -> some IntentResult {
-        let defaults = UserDefaults(suiteName: "group.com.junhyeok.SimpleCare")
-
-        // Mark as confirmed (app will pick up on next launch)
-        defaults?.set(true, forKey: "widget.weight.pendingConfirmed")
+        // Re-save the pending weight to mark it as confirmed for the app to consume via consumePendingWeight()
+        if let pendingWeight = WidgetDataStore.loadPendingWeight() {
+            WidgetDataStore.savePendingWeight(pendingWeight)
+        }
 
         WidgetCenter.shared.reloadTimelines(ofKind: "WeightQuickInputWidget")
         return .result()

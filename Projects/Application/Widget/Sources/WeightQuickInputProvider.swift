@@ -1,5 +1,6 @@
-import WidgetKit
+import BaseDomain
 import Foundation
+import WidgetKit
 
 struct WeightQuickInputEntry: TimelineEntry {
     let date: Date
@@ -33,20 +34,12 @@ struct WeightQuickInputProvider: TimelineProvider {
     }
 
     private func loadEntry() -> WeightQuickInputEntry {
-        let defaults = UserDefaults(suiteName: "group.com.junhyeok.SimpleCare")
-        let hasPending = defaults?.bool(forKey: "widget.weight.pendingSaved") ?? false
-        let pendingWeight = defaults?.double(forKey: "widget.weight.pending") ?? 0
+        let hasPending = WidgetDataStore.loadPendingWeight() != nil
+        let pendingWeight = WidgetDataStore.loadPendingWeight() ?? 0
 
-        // Load current weight from daily summary
-        var currentWeight: Double? = nil
-        var targetWeight: Double? = nil
-        if let data = defaults?.data(forKey: "widget.dailySummary") {
-            struct MinSummary: Codable { let currentWeight: Double?; let targetWeight: Double? }
-            if let summary = try? JSONDecoder().decode(MinSummary.self, from: data) {
-                currentWeight = summary.currentWeight
-                targetWeight = summary.targetWeight
-            }
-        }
+        let summary = WidgetDataStore.load()
+        let currentWeight = summary?.currentWeight
+        let targetWeight = summary?.targetWeight
 
         let displayWeight = hasPending ? pendingWeight : (currentWeight ?? 70.0)
 
