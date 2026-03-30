@@ -10,11 +10,13 @@ struct SimpleCareWidgetBundle: WidgetBundle {
         ExerciseWidget()
         WeightTrendWidget()
         WaterIntakeWidget()
+        WeightQuickInputWidget()
 
         // Lock Screen Widgets
         LockScreenWidget()
 
         // Live Activity
         MealRecordingLiveActivity()
+        ExerciseRecordingLiveActivity()
     }
 }
