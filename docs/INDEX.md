@@ -4,7 +4,7 @@ aliases: ["MOC", "문서 목차"]
 tags:
   - MOC
 created: 2026-03-11
-updated: 2026-03-23
+updated: 2026-03-30
 status: active
 ---
 
@@ -25,6 +25,7 @@ status: active
 | [WORKPLAN](./01-전략/WORKPLAN.md) | 작업 계획서 |
 | [HOME_SCREEN_PLAN](./01-전략/HOME_SCREEN_PLAN.md) | 홈 화면 계획서 |
 | [FEATURE_ENHANCEMENT_PLAN](./01-전략/FEATURE_ENHANCEMENT_PLAN.md) | Feature 고도화 계획서 |
+| [WIDGET_ENHANCEMENT_PLAN](./01-전략/WIDGET_ENHANCEMENT_PLAN.md) | Widget 고도화 계획서 |
 
 ## 02-설계
 
