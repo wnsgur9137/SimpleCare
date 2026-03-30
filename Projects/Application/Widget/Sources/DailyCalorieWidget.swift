@@ -11,7 +11,7 @@ struct DailyCalorieWidget: Widget {
         }
         .configurationDisplayName(WidgetStrings.dailyCalorieTitle)
         .description(WidgetStrings.dailyCalorieDescription)
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 
@@ -25,6 +25,8 @@ struct DailyCalorieWidgetEntryView: View {
             DailyCalorieSmallView(entry: entry)
         case .systemMedium:
             DailyCalorieMediumView(entry: entry)
+        case .systemLarge:
+            DailyCalorieLargeView(entry: entry)
         default:
             DailyCalorieSmallView(entry: entry)
         }
