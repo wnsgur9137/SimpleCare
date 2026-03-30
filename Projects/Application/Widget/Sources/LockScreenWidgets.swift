@@ -8,8 +8,8 @@ struct LockScreenWidget: Widget {
         StaticConfiguration(kind: kind, provider: WidgetDataProvider()) { entry in
             LockScreenWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("잠금 화면")
-        .description("잠금 화면에서 건강 요약을 확인합니다.")
+        .configurationDisplayName(WidgetStrings.lockScreenTitle)
+        .description(WidgetStrings.lockScreenDescription)
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }

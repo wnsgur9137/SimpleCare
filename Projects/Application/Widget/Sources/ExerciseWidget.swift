@@ -9,8 +9,8 @@ struct ExerciseWidget: Widget {
             ExerciseWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("운동 요약")
-        .description("오늘의 운동 세션과 칼로리 소모를 확인합니다.")
+        .configurationDisplayName(WidgetStrings.exerciseTitle)
+        .description(WidgetStrings.exerciseDescription)
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

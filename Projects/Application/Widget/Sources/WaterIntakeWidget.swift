@@ -9,8 +9,8 @@ struct WaterIntakeWidget: Widget {
             WaterIntakeWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("수분 섭취")
-        .description("오늘의 수분 섭취량을 확인합니다.")
+        .configurationDisplayName(WidgetStrings.waterTitle)
+        .description(WidgetStrings.waterDescription)
         .supportedFamilies([.systemSmall])
     }
 }
@@ -19,6 +19,10 @@ struct WaterIntakeWidgetEntryView: View {
     let entry: WidgetEntry
 
     var body: some View {
-        WaterIntakeSmallView(entry: entry)
+        if #available(iOS 17.0, *) {
+            WaterIntakeInteractiveView(entry: entry)
+        } else {
+            WaterIntakeSmallView(entry: entry)
+        }
     }
 }

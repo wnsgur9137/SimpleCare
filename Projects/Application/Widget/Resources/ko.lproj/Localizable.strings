@@ -35,6 +35,10 @@
 "widget.water.cups" = "잔";
 "widget.water.addOne" = "+ 1잔";
 
+// Widget - WeightQuickInput (W-D2)
+"widget.weightQuickInput.title" = "체중 기록";
+"widget.weightQuickInput.description" = "위젯에서 빠르게 체중을 기록합니다.";
+
 // Widget - LockScreen (W-B2)
 "widget.lockScreen.title" = "잠금 화면";
 "widget.lockScreen.description" = "잠금 화면에서 건강 요약을 확인합니다.";

@@ -32,7 +32,7 @@ struct DailyCalorieLargeView: View {
     private var dateString: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "M월 d일 EEEE"
-        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.locale = .current
         return formatter.string(from: entry.date)
     }
 

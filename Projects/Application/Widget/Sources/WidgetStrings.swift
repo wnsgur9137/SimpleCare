@@ -42,6 +42,10 @@ enum WidgetStrings {
     static let cups = String(localized: "widget.water.cups")
     static let addOneCup = String(localized: "widget.water.addOne")
 
+    // MARK: - WeightQuickInputWidget (W-D2)
+    static let weightQuickInputTitle = String(localized: "widget.weightQuickInput.title")
+    static let weightQuickInputDescription = String(localized: "widget.weightQuickInput.description")
+
     // MARK: - LockScreenWidget (W-B2)
     static let lockScreenTitle = String(localized: "widget.lockScreen.title")
     static let lockScreenDescription = String(localized: "widget.lockScreen.description")

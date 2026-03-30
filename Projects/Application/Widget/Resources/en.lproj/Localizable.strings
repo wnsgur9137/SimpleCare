@@ -35,6 +35,10 @@
 "widget.water.cups" = "cups";
 "widget.water.addOne" = "+ 1 cup";
 
+// Widget - WeightQuickInput (W-D2)
+"widget.weightQuickInput.title" = "Quick Weight";
+"widget.weightQuickInput.description" = "Quickly record weight from widget.";
+
 // Widget - LockScreen (W-B2)
 "widget.lockScreen.title" = "Lock Screen";
 "widget.lockScreen.description" = "Check health summary on lock screen.";

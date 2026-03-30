@@ -9,8 +9,8 @@ struct WeightQuickInputWidget: Widget {
             WeightQuickInputMediumView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("체중 기록")
-        .description("위젯에서 빠르게 체중을 기록합니다.")
+        .configurationDisplayName(WidgetStrings.weightQuickInputTitle)
+        .description(WidgetStrings.weightQuickInputDescription)
         .supportedFamilies([.systemMedium])
     }
 }

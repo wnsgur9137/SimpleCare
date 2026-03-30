@@ -9,8 +9,8 @@ struct WeightTrendWidget: Widget {
             WeightTrendWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("체중 트렌드")
-        .description("최근 체중 변화와 목표를 확인합니다.")
+        .configurationDisplayName(WidgetStrings.weightTitle)
+        .description(WidgetStrings.weightDescription)
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
