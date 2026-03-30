@@ -36,6 +36,9 @@ struct WidgetDataProvider: TimelineProvider {
             return .empty
         }
 
+        let pendingWaterCups = WidgetDataStore.sharedDefaults?.integer(forKey: WidgetConstants.waterPendingCupsKey) ?? 0
+        let totalWaterCups = data.waterIntakeCups + pendingWaterCups
+
         return WidgetEntry(
             date: data.date,
             totalCalories: data.totalCalories,
@@ -50,7 +53,20 @@ struct WidgetDataProvider: TimelineProvider {
             carbsGoal: data.carbsGoal,
             fatGoal: data.fatGoal,
             streakDays: data.streakDays,
-            isPlaceholder: false
+            isPlaceholder: false,
+            exerciseSessions: data.exerciseSessions,
+            exerciseDuration: data.exerciseDuration,
+            weeklyExerciseDays: data.weeklyExerciseDays,
+            weeklyExerciseGoal: data.weeklyExerciseGoal,
+            recentExercises: data.recentExercises.map { ($0.name, $0.calories) },
+            currentWeight: data.currentWeight,
+            targetWeight: data.targetWeight,
+            weightChange7d: data.weightChange7d,
+            bmi: data.bmi,
+            recentWeights: data.recentWeights.map { ($0.date, $0.weight) },
+            waterIntakeCups: totalWaterCups,
+            waterGoalCups: data.waterGoalCups,
+            waterIntakeML: data.waterIntakeML
         )
     }
 }

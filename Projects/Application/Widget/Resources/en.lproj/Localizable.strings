@@ -11,5 +11,42 @@
 "widget.goalProgress.description" = "Check calorie and nutrition goal progress.";
 "widget.achievementRate" = "Progress";
 
+// Widget - Exercise (W-A1)
+"widget.exercise.title" = "Exercise Summary";
+"widget.exercise.description" = "Check today's exercise sessions and calories burned.";
+"widget.exercise.today" = "Today's Exercise";
+"widget.exercise.sessions" = "Sessions";
+"widget.exercise.duration" = "Duration";
+"widget.exercise.caloriesBurned" = "Burned";
+"widget.exercise.recent" = "Recent";
+"widget.exercise.weeklyProgress" = "%d/%d days";
+
+// Widget - Weight (W-A2)
+"widget.weight.title" = "Weight Trend";
+"widget.weight.description" = "Check recent weight changes and goal.";
+"widget.weight.current" = "Current";
+"widget.weight.target" = "Target";
+"widget.weight.change" = "Change";
+"widget.weight.toGoal" = "To goal";
+
+// Widget - Water (W-A3)
+"widget.water.title" = "Water Intake";
+"widget.water.description" = "Check today's water intake.";
+"widget.water.cups" = "cups";
+"widget.water.addOne" = "+ 1 cup";
+
+// Widget - WeightQuickInput (W-D2)
+"widget.weightQuickInput.title" = "Quick Weight";
+"widget.weightQuickInput.description" = "Quickly record weight from widget.";
+
+// Widget - LockScreen (W-B2)
+"widget.lockScreen.title" = "Lock Screen";
+"widget.lockScreen.description" = "Check health summary on lock screen.";
+
+// Widget - Live Activity (W-C1, W-C2)
+"widget.liveActivity.mealRecording" = "Recording";
+"widget.liveActivity.exerciseRecording" = "Exercising";
+"widget.liveActivity.foodCount" = "%d foods";
+
 // Widget - Common
 "widget.streakDays" = "%d day streak";

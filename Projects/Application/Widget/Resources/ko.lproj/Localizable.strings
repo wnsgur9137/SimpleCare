@@ -11,5 +11,42 @@
 "widget.goalProgress.description" = "칼로리와 영양소 목표 달성률을 확인합니다.";
 "widget.achievementRate" = "달성률";
 
+// Widget - Exercise (W-A1)
+"widget.exercise.title" = "운동 요약";
+"widget.exercise.description" = "오늘의 운동 세션과 칼로리 소모를 확인합니다.";
+"widget.exercise.today" = "오늘의 운동";
+"widget.exercise.sessions" = "세션";
+"widget.exercise.duration" = "운동 시간";
+"widget.exercise.caloriesBurned" = "소모 칼로리";
+"widget.exercise.recent" = "최근 운동";
+"widget.exercise.weeklyProgress" = "%d/%d일 달성";
+
+// Widget - Weight (W-A2)
+"widget.weight.title" = "체중 트렌드";
+"widget.weight.description" = "최근 체중 변화와 목표를 확인합니다.";
+"widget.weight.current" = "현재";
+"widget.weight.target" = "목표";
+"widget.weight.change" = "변화";
+"widget.weight.toGoal" = "목표까지";
+
+// Widget - Water (W-A3)
+"widget.water.title" = "수분 섭취";
+"widget.water.description" = "오늘의 수분 섭취량을 확인합니다.";
+"widget.water.cups" = "잔";
+"widget.water.addOne" = "+ 1잔";
+
+// Widget - WeightQuickInput (W-D2)
+"widget.weightQuickInput.title" = "체중 기록";
+"widget.weightQuickInput.description" = "위젯에서 빠르게 체중을 기록합니다.";
+
+// Widget - LockScreen (W-B2)
+"widget.lockScreen.title" = "잠금 화면";
+"widget.lockScreen.description" = "잠금 화면에서 건강 요약을 확인합니다.";
+
+// Widget - Live Activity (W-C1, W-C2)
+"widget.liveActivity.mealRecording" = "기록 중";
+"widget.liveActivity.exerciseRecording" = "운동 중";
+"widget.liveActivity.foodCount" = "%d개 음식";
+
 // Widget - Common
 "widget.streakDays" = "%d일 연속";
