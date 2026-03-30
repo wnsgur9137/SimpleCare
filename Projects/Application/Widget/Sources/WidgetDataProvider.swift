@@ -50,7 +50,20 @@ struct WidgetDataProvider: TimelineProvider {
             carbsGoal: data.carbsGoal,
             fatGoal: data.fatGoal,
             streakDays: data.streakDays,
-            isPlaceholder: false
+            isPlaceholder: false,
+            exerciseSessions: data.exerciseSessions,
+            exerciseDuration: data.exerciseDuration,
+            weeklyExerciseDays: data.weeklyExerciseDays,
+            weeklyExerciseGoal: data.weeklyExerciseGoal,
+            recentExercises: data.recentExercises.map { ($0.name, $0.calories) },
+            currentWeight: data.currentWeight,
+            targetWeight: data.targetWeight,
+            weightChange7d: data.weightChange7d,
+            bmi: data.bmi,
+            recentWeights: data.recentWeights.map { ($0.date, $0.weight) },
+            waterIntakeCups: data.waterIntakeCups,
+            waterGoalCups: data.waterGoalCups,
+            waterIntakeML: data.waterIntakeML
         )
     }
 }
