@@ -9,7 +9,7 @@ struct LockScreenCircularView: View {
             Text("kcal")
                 .font(.system(size: 8))
         } currentValueLabel: {
-            Text("\(Int(entry.calorieProgress * 100))")
+            Text("\(min(Int(entry.calorieProgress * 100), 100))")
                 .font(.system(size: 16, weight: .bold, design: .rounded))
         }
         .gaugeStyle(.accessoryCircular)

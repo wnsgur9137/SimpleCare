@@ -34,8 +34,9 @@ struct ExerciseRecordingLiveActivity: Widget {
                     }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    ProgressView(value: Double(context.state.elapsedSeconds), total: Double(max(context.state.elapsedSeconds + 1, 1)))
-                        .tint(.green)
+                    Text("\(context.state.estimatedCalories) kcal 소모")
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(.secondary)
                 }
             } compactLeading: {
                 Text("🏃")

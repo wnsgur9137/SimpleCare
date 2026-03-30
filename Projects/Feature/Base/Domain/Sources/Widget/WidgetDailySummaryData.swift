@@ -2,6 +2,38 @@ import Foundation
 
 /// Widget Extension과 메인 앱 간 공유 데이터 모델
 public struct WidgetDailySummaryData: Codable, Sendable {
+    // MARK: - CodingKeys
+
+    private enum CodingKeys: String, CodingKey {
+        case date
+        case totalCalories
+        case goalCalories
+        case remainingCalories
+        case calorieProgress
+        case exerciseCalories
+        case totalProtein
+        case totalCarbs
+        case totalFat
+        case proteinGoal
+        case carbsGoal
+        case fatGoal
+        case streakDays
+        case lastUpdated
+        case exerciseSessions
+        case exerciseDuration
+        case weeklyExerciseDays
+        case weeklyExerciseGoal
+        case recentExercises
+        case currentWeight
+        case targetWeight
+        case weightChange7d
+        case bmi
+        case recentWeights
+        case waterIntakeCups
+        case waterGoalCups
+        case waterIntakeML
+    }
+
     // MARK: - Calorie
     public let date: Date
     public let totalCalories: Int
@@ -97,6 +129,38 @@ public struct WidgetDailySummaryData: Codable, Sendable {
         self.waterIntakeCups = waterIntakeCups
         self.waterGoalCups = waterGoalCups
         self.waterIntakeML = waterIntakeML
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        date = try container.decode(Date.self, forKey: .date)
+        totalCalories = try container.decode(Int.self, forKey: .totalCalories)
+        goalCalories = try container.decode(Int.self, forKey: .goalCalories)
+        remainingCalories = try container.decode(Int.self, forKey: .remainingCalories)
+        calorieProgress = try container.decode(Double.self, forKey: .calorieProgress)
+        exerciseCalories = try container.decode(Int.self, forKey: .exerciseCalories)
+        totalProtein = try container.decode(Double.self, forKey: .totalProtein)
+        totalCarbs = try container.decode(Double.self, forKey: .totalCarbs)
+        totalFat = try container.decode(Double.self, forKey: .totalFat)
+        proteinGoal = try container.decode(Double.self, forKey: .proteinGoal)
+        carbsGoal = try container.decode(Double.self, forKey: .carbsGoal)
+        fatGoal = try container.decode(Double.self, forKey: .fatGoal)
+        streakDays = try container.decode(Int.self, forKey: .streakDays)
+        lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
+        // New fields with defaults for backward compatibility
+        exerciseSessions = try container.decodeIfPresent(Int.self, forKey: .exerciseSessions) ?? 0
+        exerciseDuration = try container.decodeIfPresent(Int.self, forKey: .exerciseDuration) ?? 0
+        weeklyExerciseDays = try container.decodeIfPresent(Int.self, forKey: .weeklyExerciseDays) ?? 0
+        weeklyExerciseGoal = try container.decodeIfPresent(Int.self, forKey: .weeklyExerciseGoal) ?? 5
+        recentExercises = try container.decodeIfPresent([WidgetExerciseItem].self, forKey: .recentExercises) ?? []
+        currentWeight = try container.decodeIfPresent(Double.self, forKey: .currentWeight)
+        targetWeight = try container.decodeIfPresent(Double.self, forKey: .targetWeight)
+        weightChange7d = try container.decodeIfPresent(Double.self, forKey: .weightChange7d)
+        bmi = try container.decodeIfPresent(Double.self, forKey: .bmi)
+        recentWeights = try container.decodeIfPresent([WidgetWeightPoint].self, forKey: .recentWeights) ?? []
+        waterIntakeCups = try container.decodeIfPresent(Int.self, forKey: .waterIntakeCups) ?? 0
+        waterGoalCups = try container.decodeIfPresent(Int.self, forKey: .waterGoalCups) ?? 8
+        waterIntakeML = try container.decodeIfPresent(Int.self, forKey: .waterIntakeML) ?? 0
     }
 }
 
