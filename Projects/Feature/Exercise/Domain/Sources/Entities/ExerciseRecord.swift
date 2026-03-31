@@ -205,8 +205,8 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         self.userProfileId = userProfileId
         self.exerciseType = exerciseType
         self.intensity = intensity
-        self.durationMinutes = durationMinutes
-        self.userWeightKg = userWeightKg
+        self.durationMinutes = max(1, durationMinutes)
+        self.userWeightKg = max(0, userWeightKg)
         self.date = date
         self.notes = notes
         self.customExerciseName = customExerciseName
@@ -235,6 +235,7 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         weightKg: Double,
         customMET: Double? = nil
     ) -> Int {
+        guard durationMinutes > 0, weightKg > 0 else { return 0 }
         let baseMET = customMET ?? exerciseType.baseMET
         let intensityMultiplier: Double
         switch intensity {
