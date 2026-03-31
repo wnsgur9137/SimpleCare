@@ -83,7 +83,7 @@ struct WeightTrendSmallView: View {
                         x: .value("날짜", point.date),
                         y: .value("체중", point.weight)
                     )
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.widgetSecondary)
                     .interpolationMethod(.catmullRom)
 
                     AreaMark(
@@ -92,7 +92,7 @@ struct WeightTrendSmallView: View {
                     )
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Color.blue.opacity(0.25), Color.blue.opacity(0.0)],
+                            colors: [Color.widgetSecondary.opacity(0.25), Color.widgetSecondary.opacity(0.0)],
                             startPoint: .top,
                             endPoint: .bottom
                         )

@@ -71,7 +71,7 @@ struct WeightQuickInputMediumView: View {
                     .frame(height: 32)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(entry.isPendingSave ? Color.green : Color(.systemFill))
+                            .fill(entry.isPendingSave ? Color.widgetSuccess : Color(.systemFill))
                     )
             }
             .buttonStyle(.plain)

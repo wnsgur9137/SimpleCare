@@ -173,7 +173,7 @@ struct GoalProgressMediumView: View {
         .padding(.vertical, 4)
         .background(
             Capsule()
-                .fill(Color.orange.opacity(0.12))
+                .fill(Color.widgetWarning.opacity(0.12))
         )
     }
 }
