@@ -23,11 +23,19 @@ public struct GeminiConfiguration: Sendable {
     /// Request timeout (seconds)
     public let timeoutInterval: TimeInterval
 
+    /// Maximum number of retry attempts for transient errors (429, 5xx)
+    public let maxRetries: Int
+
+    /// Base delay between retries in seconds (doubles with each attempt)
+    public let retryBaseDelay: TimeInterval
+
     public init(
         apiKey: String? = nil,
         model: GeminiModel = .flash,
         baseURL: URL? = nil,
-        timeoutInterval: TimeInterval = 60
+        timeoutInterval: TimeInterval = 60,
+        maxRetries: Int = 3,
+        retryBaseDelay: TimeInterval = 1.0
     ) {
         // API Key load order: direct injection > Keychain > Info.plist > environment variable
         if let key = apiKey, !key.isEmpty {
@@ -46,6 +54,8 @@ public struct GeminiConfiguration: Sendable {
             self.baseURL = defaultURL
         }
         self.timeoutInterval = timeoutInterval
+        self.maxRetries = max(0, maxRetries)
+        self.retryBaseDelay = retryBaseDelay
     }
 
     /// API Key validation
