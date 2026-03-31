@@ -54,6 +54,7 @@ public struct SettingsView: View {
     @State private var mealRemindersExpanded = false
     @State private var showExportSheet = false
     @State private var showDeleteConfirmation = false
+    @State private var showDeleteFinalConfirmation = false
     @State private var exportFileURL: URL?
     @State private var showExportSuccess = false
     @State private var showDeleteSuccess = false
@@ -120,12 +121,20 @@ public struct SettingsView: View {
         .alert("settings.deleteAll.title".localized, isPresented: $showDeleteConfirmation) {
             Button("common.cancel".localized, role: .cancel) {}
             Button("common.delete".localized, role: .destructive) {
+                showDeleteFinalConfirmation = true
+            }
+        } message: {
+            Text("settings.deleteAll.warning".localized)
+        }
+        .alert("settings.deleteAll.finalConfirm".localized, isPresented: $showDeleteFinalConfirmation) {
+            Button("common.cancel".localized, role: .cancel) {}
+            Button("settings.deleteAll.confirmButton".localized, role: .destructive) {
                 Task {
                     await deleteAllData()
                 }
             }
         } message: {
-            Text("settings.deleteAll.warning".localized)
+            Text("settings.deleteAll.finalWarning".localized)
         }
         .alert("settings.deleteAll.success".localized, isPresented: $showDeleteSuccess) {
             Button("common.ok".localized, role: .cancel) {}
