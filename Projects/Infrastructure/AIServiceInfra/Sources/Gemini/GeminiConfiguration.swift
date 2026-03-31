@@ -55,7 +55,7 @@ public struct GeminiConfiguration: Sendable {
         }
         self.timeoutInterval = timeoutInterval
         self.maxRetries = max(0, maxRetries)
-        self.retryBaseDelay = retryBaseDelay
+        self.retryBaseDelay = max(0, retryBaseDelay)
     }
 
     /// API Key validation

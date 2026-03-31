@@ -110,7 +110,6 @@ public actor GeminiClient {
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(body)
 
-        var lastError: Error?
         for attempt in 0...configuration.maxRetries {
             if attempt > 0 {
                 let delay = configuration.retryBaseDelay * pow(2.0, Double(attempt - 1))
@@ -130,13 +129,11 @@ public actor GeminiClient {
 
             // Retryable: 429 (rate limited) and 5xx (server errors)
             if httpResponse.statusCode == 429 {
-                lastError = GeminiError.rateLimited
                 if attempt < configuration.maxRetries { continue }
                 throw GeminiError.rateLimited
             }
 
             if (500...599).contains(httpResponse.statusCode) {
-                lastError = GeminiError.httpError(httpResponse.statusCode)
                 if attempt < configuration.maxRetries { continue }
                 throw GeminiError.httpError(httpResponse.statusCode)
             }
@@ -153,7 +150,8 @@ public actor GeminiClient {
             return try JSONDecoder().decode(GeminiResponse.self, from: data)
         }
 
-        throw lastError ?? GeminiError.invalidResponse
+        // maxRetries가 0인 경우 루프를 한 번만 실행하므로 여기 도달 불가하지만 컴파일러 충족용
+        throw GeminiError.invalidResponse
     }
 }
 
