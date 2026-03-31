@@ -86,7 +86,7 @@ struct GoalProgressSmallView: View {
         .padding(.vertical, 5)
         .background(
             Capsule()
-                .fill(Color.orange.opacity(0.12))
+                .fill(Color.widgetWarning.opacity(0.12))
         )
     }
 }

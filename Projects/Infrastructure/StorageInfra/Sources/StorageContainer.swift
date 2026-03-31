@@ -69,7 +69,7 @@ public final class StorageContainer {
                 ofItemAtPath: directoryURL.path
             )
         } catch {
-            logger.warning("파일 보호 속성 적용 실패: \(error.localizedDescription)")
+            logger.warning("파일 보호 속성 적용 실패: \(error)")
         }
     }
 
@@ -82,7 +82,7 @@ public final class StorageContainer {
             )
             return
         } catch {
-            Self.logger.warning("ModelContainer 초기화 실패, 손상된 스토어 삭제 후 재시도합니다. 오류: \(error.localizedDescription)")
+            Self.logger.warning("ModelContainer 초기화 실패, 손상된 스토어 삭제 후 재시도합니다. 오류: \(error)")
         }
 
         // 2차 시도: 손상된 스토어 삭제 후 재시도
@@ -95,7 +95,7 @@ public final class StorageContainer {
             Self.logger.warning("손상된 스토어 삭제 후 ModelContainer 재초기화에 성공하였습니다.")
             return
         } catch {
-            Self.logger.error("손상된 스토어 삭제 후 재시도도 실패하였습니다. 인메모리 폴백으로 전환합니다. 오류: \(error.localizedDescription)")
+            Self.logger.error("손상된 스토어 삭제 후 재시도도 실패하였습니다. 인메모리 폴백으로 전환합니다. 오류: \(error)")
         }
 
         // 3차 시도: 인메모리 폴백
@@ -113,7 +113,7 @@ public final class StorageContainer {
             }
         } catch {
             // 인메모리 컨테이너마저 실패하는 경우는 SwiftData 자체 결함이므로 크래시 허용
-            Self.logger.critical("인메모리 ModelContainer 생성도 실패하였습니다. 복구 불가능한 오류입니다: \(error.localizedDescription)")
+            Self.logger.critical("인메모리 ModelContainer 생성도 실패하였습니다. 복구 불가능한 오류입니다: \(error)")
             fatalError("인메모리 ModelContainer 생성 실패 (복구 불가능): \(error)")
         }
     }
@@ -131,7 +131,7 @@ public final class StorageContainer {
                     try fileManager.removeItem(atPath: filePath)
                     logger.warning("손상된 스토어 파일을 삭제하였습니다: \(URL(fileURLWithPath: filePath).lastPathComponent)")
                 } catch {
-                    logger.error("스토어 파일 '\(URL(fileURLWithPath: filePath).lastPathComponent)' 삭제 중 오류 발생: \(error.localizedDescription)")
+                    logger.error("스토어 파일 '\(URL(fileURLWithPath: filePath).lastPathComponent)' 삭제 중 오류 발생: \(error)")
                 }
             }
         }

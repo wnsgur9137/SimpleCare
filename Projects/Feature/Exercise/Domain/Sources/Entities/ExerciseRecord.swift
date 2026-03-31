@@ -205,8 +205,10 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         self.userProfileId = userProfileId
         self.exerciseType = exerciseType
         self.intensity = intensity
-        self.durationMinutes = durationMinutes
-        self.userWeightKg = userWeightKg
+        let clampedDuration = max(1, durationMinutes)
+        let clampedWeight = max(0, userWeightKg)
+        self.durationMinutes = clampedDuration
+        self.userWeightKg = clampedWeight
         self.date = date
         self.notes = notes
         self.customExerciseName = customExerciseName
@@ -220,8 +222,8 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
             self.caloriesBurned = Self.calculateCalories(
                 exerciseType: exerciseType,
                 intensity: intensity,
-                durationMinutes: durationMinutes,
-                weightKg: userWeightKg,
+                durationMinutes: clampedDuration,
+                weightKg: clampedWeight,
                 customMET: customMET
             )
         }
@@ -235,6 +237,7 @@ public struct ExerciseRecord: Identifiable, Equatable, Sendable {
         weightKg: Double,
         customMET: Double? = nil
     ) -> Int {
+        guard durationMinutes > 0, weightKg > 0 else { return 0 }
         let baseMET = customMET ?? exerciseType.baseMET
         let intensityMultiplier: Double
         switch intensity {

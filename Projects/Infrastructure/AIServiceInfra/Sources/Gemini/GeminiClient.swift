@@ -110,29 +110,48 @@ public actor GeminiClient {
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(body)
 
-        let (data, response) = try await session.data(for: request)
+        for attempt in 0...configuration.maxRetries {
+            if attempt > 0 {
+                let delay = configuration.retryBaseDelay * pow(2.0, Double(attempt - 1))
+                try await Task.sleep(for: .seconds(delay))
+            }
 
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw GeminiError.invalidResponse
-        }
+            let (data, response) = try await session.data(for: request)
 
-        if httpResponse.statusCode == 403 {
-            throw GeminiError.invalidAPIKey
-        }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw GeminiError.invalidResponse
+            }
 
-        if httpResponse.statusCode == 429 {
-            throw GeminiError.rateLimited
-        }
+            // Non-retryable errors
+            if httpResponse.statusCode == 403 {
+                throw GeminiError.invalidAPIKey
+            }
 
-        guard (200...299).contains(httpResponse.statusCode) else {
-            if let errorResponse = try? JSONDecoder().decode(GeminiErrorResponse.self, from: data) {
-                throw GeminiError.apiError(errorResponse.error.message)
-            } else {
+            // Retryable: 429 (rate limited) and 5xx (server errors)
+            if httpResponse.statusCode == 429 {
+                if attempt < configuration.maxRetries { continue }
+                throw GeminiError.rateLimited
+            }
+
+            if (500...599).contains(httpResponse.statusCode) {
+                if attempt < configuration.maxRetries { continue }
                 throw GeminiError.httpError(httpResponse.statusCode)
             }
+
+            // Non-retryable client errors
+            guard (200...299).contains(httpResponse.statusCode) else {
+                if let errorResponse = try? JSONDecoder().decode(GeminiErrorResponse.self, from: data) {
+                    throw GeminiError.apiError(errorResponse.error.message)
+                } else {
+                    throw GeminiError.httpError(httpResponse.statusCode)
+                }
+            }
+
+            return try JSONDecoder().decode(GeminiResponse.self, from: data)
         }
 
-        return try JSONDecoder().decode(GeminiResponse.self, from: data)
+        // maxRetries가 0인 경우 루프를 한 번만 실행하므로 여기 도달 불가하지만 컴파일러 충족용
+        throw GeminiError.invalidResponse
     }
 }
 
